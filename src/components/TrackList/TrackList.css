@@ -1,0 +1,105 @@
+.tracks-container {
+  height: 75vh;
+  width: 50%;
+  overflow-y: scroll;
+  margin-top: 1em;
+  padding-right: 1em;
+  width: 100%;
+}
+
+.track {
+  display: flex;
+  flex-direction: column;
+  padding: 1.5em 1em;
+  cursor: pointer;
+  border-radius: 2px;
+  position: relative;
+}
+
+.track::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: var(--clr-gray);
+}
+
+.track-name {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--clr-orange);
+}
+
+.track-sub {
+  margin-top: 0.5em;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.track-artists {
+  font-size: 1.2rem;
+  font-weight: 300;
+}
+
+.track-number {
+  font-size: 1.5rem;
+  font-weight: 400;
+  color: var(--clr-orange);
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: var(--clr-gray);
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--clr-orange);
+}
+
+@supports (scrollbar-color: var(--clr-orange) var(--clr-gray)) {
+  * {
+    scrollbar-color: var(--clr-orange) var(--clr-gray);
+    scrollbar-width: thin;
+  }
+}
+
+.selected-track {
+  transition: all 250ms ease-in-out;
+  background-color: var(--clr-gray);
+}
+
+.selected-track .track-name {
+  color: var(--clr-white);
+}
+
+.selected-track .track-artists {
+  color: var(--clr-white);
+}
+
+.selected-track .track-number {
+  color: var(--clr-white);
+}
+
+@media (max-width: 776px) {
+  .tracks-container {
+    height: 60vh;
+  }
+
+  .track-name {
+    font-size: 1.5rem;
+  }
+
+  .track-artists {
+    font-size: 1rem;
+  }
+
+  .track-number {
+    font-size: 1.2rem;
+  }
+}

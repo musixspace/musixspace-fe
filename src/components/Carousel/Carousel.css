@@ -1,0 +1,9 @@
+.img-container {
+  width: 100%;
+  text-align: center;
+}
+
+.img-container > img {
+  width: 80%;
+  height: auto;
+}
