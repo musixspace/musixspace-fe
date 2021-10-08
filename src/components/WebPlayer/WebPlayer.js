@@ -13,7 +13,6 @@ const WebPlayer = ({ url, prevPlay, nextPlay, shufflePlay }) => {
   const [isPlaying, setIsPlaying] = useState(false);
 
   const togglePlayPause = () => {
-    const ip = isPlaying;
     if (isPlaying) {
       audioPlayer.current.pause();
     } else {

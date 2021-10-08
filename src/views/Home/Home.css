@@ -32,19 +32,6 @@
   align-items: center;
 }
 
-.image-container > button {
-  position: relative;
-  outline: none;
-  border: none;
-  font-size: calc(var(--base-font-size) * 4);
-  width: 50px;
-  height: 50px;
-  background-color: transparent;
-  display: grid;
-  place-items: center;
-  cursor: pointer;
-}
-
 .image-box {
   flex: 1 1 80%;
   position: relative;
@@ -63,19 +50,21 @@
 }
 
 .image-box > img:nth-child(1) {
-  margin-left: 4em;
-  margin-top: 4em;
+  margin-left: 3em;
+  margin-top: 3em;
   z-index: 1;
 }
 
 .image-box > img:nth-child(2) {
-  margin-left: 2em;
-  margin-top: 2em;
+  margin-left: 1em;
+  margin-top: 1em;
   z-index: 5;
 }
 
 .image-box > img:nth-child(3) {
   z-index: 10;
+  margin-left: -1em;
+  margin-top: -1em;
 }
 
 .hide {
