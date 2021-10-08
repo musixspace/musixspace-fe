@@ -19,13 +19,13 @@ audio {
 .controls > button {
   outline: none;
   border: none;
-  font-size: 2rem;
+  font-size: calc(var(--base-font-size) * 3);
   background-color: transparent;
   cursor: pointer;
   display: flex;
   justify-content: center;
   align-items: center;
-  color: var(--clr-gray);
+  color: var(--clr-black);
   padding: 0.3em;
 }
 

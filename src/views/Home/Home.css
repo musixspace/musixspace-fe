@@ -1,55 +1,127 @@
 .home {
   height: 90vh;
   display: flex;
-  justify-content: space-evenly;
+  padding: 1em 5em;
+  justify-content: space-between;
   align-items: center;
 }
 
 .content {
-  max-width: 50ch;
+  max-width: 45ch;
 }
 
 .content > p:first-child {
-  font-weight: 700;
-  font-size: 4rem;
+  font-size: calc(var(--base-font-size) * 8);
 }
 
 .content > p:nth-child(2) {
-  font-size: 2rem;
-  font-weight: 700;
-  margin-top: 1em;
+  font-family: var(--f-circ-pro), sans-serif;
+  font-size: calc(var(--base-font-size) * 4);
+  margin-top: 2em;
+  max-width: 20ch;
   color: var(--clr-green);
 }
 
-.image-container > img {
+.image-container {
   width: 100%;
-  max-height: 600px;
+  height: 100%;
+  display: flex;
+  justify-content: space-evenly;
+  gap: 2em;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.image-container > button {
+  position: relative;
+  outline: none;
+  border: none;
+  font-size: calc(var(--base-font-size) * 4);
+  width: 50px;
+  height: 50px;
+  background-color: transparent;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+
+.image-box {
+  flex: 1 1 80%;
+  position: relative;
+  height: 85%;
+  z-index: 0;
+  margin-top: -1em;
+  display: grid;
+  place-items: center;
+}
+
+.image-box > img {
+  position: absolute;
+  height: 100%;
+  object-fit: contain;
+  transition: all 350ms ease-in-out;
+}
+
+.image-box > img:nth-child(1) {
+  margin-left: 4em;
+  margin-top: 4em;
+  z-index: 1;
+}
+
+.image-box > img:nth-child(2) {
+  margin-left: 2em;
+  margin-top: 2em;
+  z-index: 5;
+}
+
+.image-box > img:nth-child(3) {
+  z-index: 10;
+}
+
+.hide {
+  transform: translateX(5000px);
 }
 
 @media (max-width: 1075px) {
   .home {
     padding: 1.5em;
     flex-direction: column;
+    gap: 2em;
   }
 
   .content > p:first-child {
-    font-size: 3rem;
+    font-size: calc(var(--base-font-size) * 6);
   }
 
   .content > p:nth-child(2) {
-    font-size: 1.5rem;
+    font-size: calc(var(--base-font-size) * 3);
+  }
+
+  .image-container {
+    flex-direction: column;
+  }
+
+  .image-box {
+    margin-left: -2em;
+  }
+}
+
+@media (max-width: 776px) {
+  .home {
+    height: 90vh;
   }
 }
 
 @media (max-width: 576px) {
-  .home {
-    padding: 1.5em;
-  }
   .content > p:first-child {
-    font-size: 2rem;
+    font-size: calc(var(--base-font-size) * 4);
   }
 
   .content > p:nth-child(2) {
-    font-size: 1rem;
+    font-size: calc(var(--base-font-size) * 2);
+  }
+
+  .image-box {
+    transform: scale(0.9);
   }
 }

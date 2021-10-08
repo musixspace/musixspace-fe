@@ -6,19 +6,33 @@
 
 .dashboard {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  flex-wrap: wrap;
-  align-items: center;
+  grid-template-columns: 3fr 4fr 2fr;
+  place-items: center;
   gap: 2em;
 }
 
-.dashboard > div {
-  flex: 1 1 45%;
+.heading {
+  font-size: calc(var(--base-font-size) * 6);
 }
 
-.heading {
-  font-size: 3.5rem;
-  font-weight: 700;
+.heading > div {
+  margin-top: 1rem;
+}
+
+.heading > div > p {
+  font-family: var(--f-circ-pro), sans-serif;
+  font-size: calc(var(--base-font-size) * 3.5);
+  color: var(--clr-orange);
+}
+
+#export {
+  font-family: var(--f-circ-pro), sans-serif;
+  font-size: calc(var(--base-font-size) * 2.5);
+  color: var(--clr-orange);
+  padding: 0.4em 1.5em;
+  border-radius: 100px;
+  outline: none;
+  border: none;
 }
 
 .dashboard > div:first-child {
@@ -30,17 +44,25 @@
 @media (max-width: 776px) {
   .dashboard-container {
     height: 100%;
-    padding: 1.5em;
+    padding: 0.5em 1.5em;
   }
 
   .dashboard {
     display: flex;
     flex-direction: column;
-    margin-top: 1em;
   }
 
   .heading {
-    font-size: 2.5rem;
+    font-size: calc(var(--base-font-size) * 5);
+    text-align: center;
+  }
+
+  .heading > div > p {
+    font-size: calc(var(--base-font-size) * 3);
+  }
+
+  #export {
+    font-size: calc(var(--base-font-size) * 2.25);
   }
 
   .dashboard > div:first-child {

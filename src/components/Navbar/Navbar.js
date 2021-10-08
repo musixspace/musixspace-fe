@@ -22,9 +22,9 @@ const Navbar = () => {
       <div className="nav-title">Musixspace</div>
       {location.pathname !== "/" ? (
         <ul className={`nav-ul ${showLinks ? "" : "hide"}`}>
-          <li className="nav-li">Match</li>
-          <li className="nav-li">Discord</li>
           <li className="nav-li">Contact</li>
+          <li className="nav-li">Discord</li>
+          <li className="nav-li">Match</li>
           <li className="nav-li" onClick={handleLogout}>
             Logout
           </li>

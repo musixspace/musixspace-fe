@@ -98,9 +98,14 @@ const Dashboard = () => {
     }
   };
 
+  const handleShufflePlay = () => {
+    let total = topTracks.length;
+    let rnd = Math.floor(Math.random() * total);
+    setCurrentTrack(topTracks[rnd].id);
+  };
+
   return (
     <div className="dashboard-container">
-      <div className="heading">Your Top Tracks</div>
       {topTracks && topTracks.length > 0 && (
         <div className="dashboard">
           <div>
@@ -113,9 +118,17 @@ const Dashboard = () => {
               url={audioUrl}
               prevPlay={handlePrevPlay}
               nextPlay={handleNextPlay}
+              shufflePlay={handleShufflePlay}
             />
           </div>
           <Carousel data={images} currentTrack={currentTrack} />
+          <div className="heading">
+            <p>Your Top Tracks Radio</p>
+            <div>
+              <p>30 sec</p>
+              <button id="export">Export</button>
+            </div>
+          </div>
         </div>
       )}
     </div>

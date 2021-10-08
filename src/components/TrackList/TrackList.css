@@ -1,5 +1,5 @@
 .tracks-container {
-  height: 75vh;
+  height: 80vh;
   width: 50%;
   overflow-y: scroll;
   margin-top: 1em;
@@ -9,11 +9,16 @@
 
 .track {
   display: flex;
-  flex-direction: column;
-  padding: 1.5em 1em;
+  justify-content: space-between;
+  align-items: flex-end;
   cursor: pointer;
+  padding: 0 1em 1em 0;
   border-radius: 2px;
   position: relative;
+}
+
+.track:not(:first-child) {
+  padding: 1em 1em 1em 0;
 }
 
 .track::after {
@@ -22,31 +27,30 @@
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 2px;
-  background-color: var(--clr-gray);
+  height: calc(var(--base-font-size) / 4);
+  background-color: var(--clr-white);
 }
 
 .track-name {
-  font-size: 1.8rem;
-  font-weight: 700;
+  font-size: calc(var(--base-font-size) * 4);
   color: var(--clr-orange);
 }
 
 .track-sub {
-  margin-top: 0.5em;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
 }
 
 .track-artists {
-  font-size: 1.2rem;
-  font-weight: 300;
+  font-family: var(--f-circ-pro), sans-serif;
+  font-weight: bold;
+  font-size: calc(var(--base-font-size) * 2.5);
 }
 
 .track-number {
-  font-size: 1.5rem;
-  font-weight: 400;
+  font-family: var(--f-circ-spotify-bold), sans-serif;
+  font-weight: bold;
+  font-size: calc(var(--base-font-size) * 3);
   color: var(--clr-orange);
 }
 
@@ -71,7 +75,6 @@
 
 .selected-track {
   transition: all 250ms ease-in-out;
-  background-color: var(--clr-gray);
 }
 
 .selected-track .track-name {
@@ -92,14 +95,14 @@
   }
 
   .track-name {
-    font-size: 1.5rem;
+    font-size: calc(var(--base-font-size) * 2);
   }
 
   .track-artists {
-    font-size: 1rem;
+    font-size: calc(var(--base-font-size) * 1.25);
   }
 
   .track-number {
-    font-size: 1.2rem;
+    font-size: calc(var(--base-font-size) * 1.5);
   }
 }

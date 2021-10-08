@@ -10,8 +10,7 @@ nav {
 }
 
 .nav-title {
-  font-weight: 700;
-  font-size: 1.8rem;
+  font-size: calc(var(--base-font-size) * 4.5);
 }
 
 .ham {
@@ -25,10 +24,14 @@ nav {
   position: relative;
 }
 
+.nav-ul.hide {
+  transform: scaleY(1);
+}
+
 .nav-li {
   margin-left: 2em;
-  font-size: 1.2rem;
-  font-weight: 400;
+  font-family: var(--f-circ-pro), sans-serif;
+  font-size: calc(var(--base-font-size) * 2.25);
   cursor: pointer;
   position: relative;
 }
@@ -67,9 +70,13 @@ nav {
     align-items: center;
   }
 
+  .nav-title {
+    font-size: calc(var(--base-font-size) * 3.5);
+  }
+
   .ham {
     display: block;
-    font-size: 2rem;
+    font-size: calc(var(--base-font-size) * 3.5);
     padding-top: 10px;
     cursor: pointer;
   }
@@ -94,7 +101,7 @@ nav {
   .nav-li {
     margin: 0;
     padding: 1em;
-    font-size: 1.5rem;
+    font-size: calc(var(--base-font-size) * 2);
     width: 100%;
   }
 

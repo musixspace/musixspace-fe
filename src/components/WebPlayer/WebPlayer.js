@@ -5,9 +5,10 @@ import {
   AiFillStepForward,
   AiFillStepBackward,
 } from "react-icons/ai";
+import { IoIosShuffle } from "react-icons/io";
 import "./WebPlayer.css";
 
-const WebPlayer = ({ url, prevPlay, nextPlay }) => {
+const WebPlayer = ({ url, prevPlay, nextPlay, shufflePlay }) => {
   const audioPlayer = useRef();
   const [isPlaying, setIsPlaying] = useState(false);
 
@@ -30,7 +31,12 @@ const WebPlayer = ({ url, prevPlay, nextPlay }) => {
 
   return (
     <div className="audio-container">
-      <audio ref={audioPlayer} src={`${url}.mp3`} preload="metadata" />
+      <audio
+        ref={audioPlayer}
+        src={`${url}.mp3`}
+        preload="metadata"
+        onEnded={nextPlay}
+      />
       <div className="controls">
         <button onClick={prevPlay}>
           <AiFillStepBackward />
@@ -40,6 +46,9 @@ const WebPlayer = ({ url, prevPlay, nextPlay }) => {
         </button>
         <button onClick={nextPlay}>
           <AiFillStepForward />
+        </button>
+        <button onClick={shufflePlay}>
+          <IoIosShuffle />
         </button>
       </div>
     </div>
