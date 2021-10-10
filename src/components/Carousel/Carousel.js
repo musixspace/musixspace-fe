@@ -1,5 +1,4 @@
 import React from "react";
-import "./Carousel.css";
 
 const Carousel = ({ data, currentTrack }) => {
   if (Object.keys(data).length > 0 && currentTrack)

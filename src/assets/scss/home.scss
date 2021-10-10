@@ -1,0 +1,123 @@
+.home {
+  height: 90vh;
+  display: flex;
+  padding: 1em 5em;
+  justify-content: space-between;
+  align-items: center;
+
+  .content {
+    max-width: 45ch;
+
+    & p:first-child {
+      font-size: calc(var(--base-font-size) * 8);
+    }
+
+    & p:nth-child(2) {
+      font-family: var(--f-circ-pro), sans-serif;
+      font-size: calc(var(--base-font-size) * 4);
+      margin-top: 2em;
+      max-width: 20ch;
+      color: var(--clr-green);
+    }
+  }
+
+  .image-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: space-evenly;
+    gap: 2em;
+    flex-wrap: wrap;
+    align-items: center;
+
+    .image-box {
+      flex: 1 1 80%;
+      position: relative;
+      height: 85%;
+      z-index: 0;
+      margin-top: -1em;
+      display: grid;
+      place-items: center;
+
+      img {
+        position: absolute;
+        height: 100%;
+        object-fit: contain;
+        transition: all 350ms ease-in-out;
+      }
+
+      img:nth-child(1) {
+        margin-left: 3em;
+        margin-top: 3em;
+        z-index: 1;
+      }
+
+      img:nth-child(2) {
+        margin-left: 1em;
+        margin-top: 1em;
+        z-index: 5;
+      }
+
+      img:nth-child(3) {
+        z-index: 10;
+        margin-left: -1em;
+        margin-top: -1em;
+      }
+
+      .hide {
+        transform: translateX(5000px);
+      }
+    }
+  }
+}
+
+@media (max-width: 1075px) {
+  .home {
+    padding: 1.5em;
+    flex-direction: column;
+    gap: 2em;
+
+    .content {
+      & p:first-child {
+        font-size: calc(var(--base-font-size) * 6);
+      }
+
+      & p:nth-child(2) {
+        font-size: calc(var(--base-font-size) * 3);
+      }
+    }
+
+    .image-container {
+      flex-direction: column;
+      .image-box {
+        margin-left: -2em;
+      }
+    }
+  }
+}
+
+@media (max-width: 776px) {
+  .home {
+    height: 90vh;
+  }
+}
+
+@media (max-width: 576px) {
+  .home {
+    .content {
+      p:first-child {
+        font-size: calc(var(--base-font-size) * 4);
+      }
+
+      p:nth-child(2) {
+        font-size: calc(var(--base-font-size) * 2);
+      }
+    }
+
+    .image-container {
+      .image-box {
+        transform: scale(0.9);
+      }
+    }
+  }
+}

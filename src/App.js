@@ -5,7 +5,6 @@ import {
   Route,
   Switch,
 } from "react-router-dom";
-import "./App.css";
 import Navbar from "./components/Navbar/Navbar";
 import useAuth from "./useAuth";
 import Dashboard from "./views/Dashboard/Dashboard";

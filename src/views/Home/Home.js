@@ -2,33 +2,32 @@ import React, { useEffect } from "react";
 import img1 from "../../assets/images/arjit.png";
 import img2 from "../../assets/images/image 224.png";
 import img3 from "../../assets/images/image 231.png";
-import "./Home.css";
 
 const Home = () => {
   const slideAnimation = () => {
-    const images = document.querySelectorAll(".image-box > img")
+    const images = document.querySelectorAll(".image-box > img");
     setTimeout(() => {
-      images[2].classList.add("hide")
+      images[2].classList.add("hide");
       setTimeout(() => {
-        images[1].classList.add("hide")
+        images[1].classList.add("hide");
         setTimeout(() => {
-          images[0].classList.add("hide")
+          images[0].classList.add("hide");
           setTimeout(() => {
-            images.forEach(item => {
-              item.classList.remove("hide")
-            })
-          }, 5000)
-        }, 10000)
+            images.forEach((item) => {
+              item.classList.remove("hide");
+            });
+          }, 5000);
+        }, 10000);
       }, 10000);
-    }, 5000)
-  }
+    }, 5000);
+  };
 
   useEffect(() => {
-    slideAnimation()
+    slideAnimation();
     setInterval(() => {
-      slideAnimation()  
+      slideAnimation();
     }, 35000);
-  }, [])
+  }, []);
 
   return (
     <div className="home">

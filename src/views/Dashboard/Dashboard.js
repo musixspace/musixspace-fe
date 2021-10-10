@@ -4,7 +4,6 @@ import SpotifyWebApi from "spotify-web-api-node";
 import Carousel from "../../components/Carousel/Carousel";
 import TrackList from "../../components/TrackList/TrackList";
 import WebPlayer from "../../components/WebPlayer/WebPlayer";
-import "./Dashboard.css";
 
 const spotifyApi = new SpotifyWebApi({
   clientId: process.env.REACT_APP_CLIENT_ID,
@@ -55,7 +54,11 @@ const Dashboard = () => {
       .then((res) => {
         console.log(res);
         setCurrentTrack(trackId);
-        setAudioUrl(res.body.preview_url);
+        if (res.body.preview_url) {
+          setAudioUrl(res.body.preview_url);
+        } else {
+          handleNextPlay();
+        }
       })
       .catch((err) => console.log(err));
   };
@@ -72,7 +75,7 @@ const Dashboard = () => {
       }
     });
 
-    console.log(index);
+    // console.log(index);
 
     if (index === 0) {
       setCurrentTrack(topTracks[topTracks.length - 1].id);
@@ -89,7 +92,7 @@ const Dashboard = () => {
       }
     });
 
-    console.log(index);
+    // console.log(index);
 
     if (index === topTracks.length - 1) {
       setCurrentTrack(topTracks[0].id);
@@ -106,7 +109,7 @@ const Dashboard = () => {
 
   return (
     <div className="dashboard-container">
-      {topTracks && topTracks.length > 0 && (
+      {topTracks && topTracks.length > 0 && currentTrack && (
         <div className="dashboard">
           <div>
             <TrackList

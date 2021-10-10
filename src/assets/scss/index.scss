@@ -1,3 +1,11 @@
+@import "fonts.scss";
+@import "dashboard.scss";
+@import "home.scss";
+@import "./components/navbar.scss";
+@import "./components//carousel.scss";
+@import "./components/tracklist.scss";
+@import "./components/webplayer.scss";
+
 :root {
   /* Colors */
   --bg-home: #ffc055;

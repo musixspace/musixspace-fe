@@ -1,5 +1,4 @@
 import React from "react";
-import "./TrackList.css";
 
 const TrackList = ({ currentTrack, tracks, changeTrack }) => {
   return (

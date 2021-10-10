@@ -6,7 +6,6 @@ import {
   AiFillStepBackward,
 } from "react-icons/ai";
 import { IoIosShuffle } from "react-icons/io";
-import "./WebPlayer.css";
 
 const WebPlayer = ({ url, prevPlay, nextPlay, shufflePlay }) => {
   const audioPlayer = useRef();
