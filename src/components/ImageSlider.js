@@ -1,9 +1,10 @@
 import React, { useEffect } from "react";
-import img1 from "../../assets/images/arjit.png";
-import img2 from "../../assets/images/image 224.png";
-import img3 from "../../assets/images/image 231.png";
+import img1 from "../assets/images/image1.png";
+import img2 from "../assets/images/image2.png";
+import img3 from "../assets/images/image3.png";
+import img4 from "../assets/images/image4.png";
 
-const Home = () => {
+const ImageSlider = ({ page }) => {
   const slideAnimation = () => {
     const images = document.querySelectorAll(".image-box > img");
     setTimeout(() => {
@@ -24,26 +25,33 @@ const Home = () => {
 
   useEffect(() => {
     slideAnimation();
-    setInterval(() => {
+    const interval = setInterval(() => {
       slideAnimation();
     }, 35000);
+
+    return () => {
+      console.log("Cleanup running...");
+      clearInterval(interval);
+    };
   }, []);
 
   return (
-    <div className="home">
-      <div className="content">
-        <p>Come, join the music revolution.</p>
-        <p>Form cross border companionships with the shared taste in music.</p>
-      </div>
-      <div className="image-container">
+    <div className="image-container">
+      {page === 1 ? (
         <div className="image-box">
           <img src={img1} alt="Dummy" />
           <img src={img2} alt="Dummy" />
           <img src={img3} alt="Dummy" />
         </div>
-      </div>
+      ) : (
+        <div className="image-box">
+          <img src={img2} alt="Dummy" />
+          <img src={img3} alt="Dummy" />
+          <img src={img4} alt="Dummy" />
+        </div>
+      )}
     </div>
   );
 };
 
-export default Home;
+export default ImageSlider;

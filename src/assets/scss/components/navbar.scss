@@ -46,18 +46,28 @@ nav {
         background-color: var(--clr-black);
       }
 
-      &:hover::after {
+      &:hover::after,
+      &:focus::after {
         transform: scaleX(1);
       }
     }
   }
 
-  &.nav-dark {
-    background-color: var(--bg-dashboard);
+  &.nav-top-tracks {
+    background-color: var(--bg-top-tracks);
     color: var(--clr-gray);
 
     > .nav-ul > .nav-li::after {
       background-color: var(--clr-gray);
+    }
+  }
+
+  &.nav-insights {
+    background-color: var(--bg-insights);
+    color: var(--clr-dark-blue);
+
+    > .nav-ul > .nav-li::after {
+      background-color: var(--clr-dark-blue);
     }
   }
 }
@@ -94,8 +104,8 @@ nav {
 
       .nav-li {
         margin: 0;
-        padding: 1em;
-        font-size: calc(var(--base-font-size) * 2);
+        padding: 1em 1.5em;
+        font-size: calc(var(--base-font-size) * 2.5);
         width: 100%;
         &::after {
           all: unset;

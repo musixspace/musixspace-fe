@@ -1,17 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router";
-import SpotifyWebApi from "spotify-web-api-node";
-import Carousel from "../../components/Carousel/Carousel";
-import TrackList from "../../components/TrackList/TrackList";
-import WebPlayer from "../../components/WebPlayer/WebPlayer";
+import Carousel from "../components/Carousel";
+import Navbar from "../components/Navbar";
+import TrackList from "../components/TrackList";
+import WebPlayer from "../components/WebPlayer";
+import { spotifyApi } from "../util/spotify";
 
-const spotifyApi = new SpotifyWebApi({
-  clientId: process.env.REACT_APP_CLIENT_ID,
-  clientSecret: process.env.REACT_REDIRECT_URI,
-  redirectUri: process.env.REACT_REDIRECT_URI,
-});
-
-const Dashboard = () => {
+const TopTracks = () => {
   const history = useHistory();
   const [topTracks, setTopTracks] = useState(null);
   const [currentTrack, setCurrentTrack] = useState("");
@@ -108,34 +103,40 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="dashboard-container">
-      {topTracks && topTracks.length > 0 && currentTrack && (
-        <div className="dashboard">
-          <div>
-            <TrackList
-              currentTrack={currentTrack}
-              tracks={topTracks}
-              changeTrack={handleTrackChange}
-            />
-            <WebPlayer
-              url={audioUrl}
-              prevPlay={handlePrevPlay}
-              nextPlay={handleNextPlay}
-              shufflePlay={handleShufflePlay}
-            />
-          </div>
-          <Carousel data={images} currentTrack={currentTrack} />
-          <div className="heading">
-            <p>Your Top Tracks Radio</p>
+    <div
+      className="wrapper"
+      style={{ backgroundColor: "var(--bg-top-tracks)" }}
+    >
+      <Navbar />
+      <div className="dashboard-container">
+        {topTracks && topTracks.length > 0 && currentTrack && (
+          <div className="dashboard">
             <div>
-              <p>30 sec</p>
-              <button id="export">Export</button>
+              <TrackList
+                currentTrack={currentTrack}
+                tracks={topTracks}
+                changeTrack={handleTrackChange}
+              />
+              <WebPlayer
+                url={audioUrl}
+                prevPlay={handlePrevPlay}
+                nextPlay={handleNextPlay}
+                shufflePlay={handleShufflePlay}
+              />
+            </div>
+            <Carousel data={images} currentTrack={currentTrack} />
+            <div className="heading">
+              <p>Your Top Tracks Radio</p>
+              <div>
+                <p>30 sec</p>
+                <button id="export">Export</button>
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 };
 
-export default Dashboard;
+export default TopTracks;

@@ -39,9 +39,9 @@ const WebPlayer = ({ url, prevPlay, nextPlay, shufflePlay }) => {
         <button onClick={prevPlay}>
           <AiFillStepBackward />
         </button>
-        <button onClick={togglePlayPause}>
+        {/* <button onClick={togglePlayPause}>
           {isPlaying ? <AiOutlinePause /> : <AiFillCaretRight />}
-        </button>
+        </button> */}
         <button onClick={nextPlay}>
           <AiFillStepForward />
         </button>

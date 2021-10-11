@@ -27,7 +27,8 @@
       padding: 0.3em;
     }
 
-    button:hover {
+    button:hover,
+    button:focus {
       background-color: var(--clr-white);
       color: var(--clr-black);
       border-radius: 50%;

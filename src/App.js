@@ -5,10 +5,10 @@ import {
   Route,
   Switch,
 } from "react-router-dom";
-import Navbar from "./components/Navbar/Navbar";
 import useAuth from "./useAuth";
-import Dashboard from "./views/Dashboard/Dashboard";
-import Home from "./views/Home/Home";
+import Home from "./views/Home";
+import Insights from "./views/Insights";
+import TopTracks from "./views/TopTracks";
 
 const code = new URLSearchParams(window.location.search).get("code");
 
@@ -18,7 +18,7 @@ const App = () => {
   const callAuth = () => {
     console.log("Access Token is ", accessToken);
     localStorage.setItem("accessToken", accessToken);
-    window.location.href = window.location.origin + "/dashboard";
+    window.location.href = window.location.origin + "/insights";
   };
 
   useEffect(() => {
@@ -29,21 +29,12 @@ const App = () => {
 
   return (
     <Router>
-      <div
-        className="wrapper"
-        style={
-          window.location.pathname.includes("dashboard")
-            ? { backgroundColor: "var(--bg-dashboard)" }
-            : { backgroundColor: "var(--bg-home)" }
-        }
-      >
-        <Navbar />
-        <Switch>
-          {accessToken && <Redirect to="/dashboard" />}
-          <Route exact path="/dashboard" component={Dashboard} />
-          <Route exact path="/" component={Home} />
-        </Switch>
-      </div>
+      <Switch>
+        {accessToken && <Redirect to="/insights" />}
+        <Route exact path="/insights" component={Insights} />
+        <Route exact path="/top-tracks" component={TopTracks} />
+        <Route exact path="/" component={Home} />
+      </Switch>
     </Router>
   );
 };

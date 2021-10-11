@@ -1,20 +1,26 @@
 @import "fonts.scss";
 @import "dashboard.scss";
 @import "home.scss";
+@import "insights.scss";
 @import "./components/navbar.scss";
 @import "./components//carousel.scss";
 @import "./components/tracklist.scss";
 @import "./components/webplayer.scss";
+@import "./components/imageSlider.scss";
 
 :root {
   /* Colors */
   --bg-home: #ffc055;
-  --bg-dashboard: #483048;
+  --bg-top-tracks: #483048;
+  --bg-insights: #ffc7cc;
+
   --clr-black: #000000;
   --clr-white: #ffffff;
   --clr-green: #418671;
   --clr-gray: #ac91c1;
   --clr-orange: #f18a21;
+  --clr-dark-blue: #1c2b5a;
+  --clr-dark-orange: #ff5834;
 
   /* Fonts */
   --f-circ-spotify-bold: "Circular Spotify Tx T Bold";
@@ -38,7 +44,6 @@ body {
   font-weight: normal;
   font-size: calc(var(--base-font-size) * 2);
   overflow-x: hidden;
-  /* letter-spacing: -0.05em; */
 }
 
 .wrapper {

@@ -1,7 +1,18 @@
 import React, { useState } from "react";
-import { useLocation } from "react-router-dom";
-import { loginUrl } from "../../util/spotify";
-import { FiMenu } from "react-icons/fi";
+import { Link, useLocation } from "react-router-dom";
+import { loginUrl } from "../util/spotify";
+import { FiMenu, FiX } from "react-icons/fi";
+
+const themeSwitch = (str) => {
+  switch (str) {
+    case "/top-tracks":
+      return "nav-top-tracks";
+    case "/insights":
+      return "nav-insights";
+    default:
+      return "";
+  }
+};
 
 const Navbar = () => {
   const location = useLocation();
@@ -17,13 +28,16 @@ const Navbar = () => {
   };
 
   return (
-    <nav className={location.pathname !== "/" ? "nav-dark" : ""}>
+    <nav className={themeSwitch(location.pathname)}>
       <div className="nav-title">Musixspace</div>
       {location.pathname !== "/" ? (
         <ul className={`nav-ul ${showLinks ? "" : "hide"}`}>
-          <li className="nav-li">Contact</li>
+          <li className="nav-li">
+            <Link to="insights">Insights</Link>
+          </li>
+          <li className="nav-li">Discover</li>
+          <li className="nav-li">My Space</li>
           <li className="nav-li">Discord</li>
-          <li className="nav-li">Match</li>
           <li className="nav-li" onClick={handleLogout}>
             Logout
           </li>
@@ -37,7 +51,7 @@ const Navbar = () => {
         </ul>
       )}
       <div onClick={toggleMenu} className="ham">
-        <FiMenu />
+        {showLinks ? <FiX /> : <FiMenu />}
       </div>
     </nav>
   );
