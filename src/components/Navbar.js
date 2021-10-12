@@ -9,6 +9,8 @@ const themeSwitch = (str) => {
       return "nav-top-tracks";
     case "/insights":
       return "nav-insights";
+    case "/about":
+      return "nav-about";
     default:
       return "";
   }
@@ -30,21 +32,26 @@ const Navbar = () => {
   return (
     <nav className={themeSwitch(location.pathname)}>
       <div className="nav-title">Musixspace</div>
-      {location.pathname !== "/" ? (
+      {localStorage.getItem("accessToken") ? (
         <ul className={`nav-ul ${showLinks ? "" : "hide"}`}>
           <li className="nav-li">
-            <Link to="insights">Insights</Link>
+            <Link to="/insights">Insights</Link>
           </li>
           <li className="nav-li">Discover</li>
           <li className="nav-li">My Space</li>
           <li className="nav-li">Discord</li>
+          <li className="nav-li">
+            <Link to="/about">About</Link>
+          </li>
           <li className="nav-li" onClick={handleLogout}>
             Logout
           </li>
         </ul>
       ) : (
         <ul className={`nav-ul ${showLinks ? "" : "hide"}`}>
-          <li className="nav-li">About</li>
+          <li className="nav-li">
+            <Link to="/about">About</Link>
+          </li>
           <li className="nav-li">
             <a href={loginUrl}>Login</a>
           </li>

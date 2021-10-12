@@ -1,11 +1,27 @@
 .img-container {
-  width: 100%;
+  position: relative;
+  width: 600px;
   height: 100%;
-  display: grid;
-  place-items: center;
-  text-align: center;
+  margin-left: 5em;
 
   img {
+    position: absolute;
+    left: 0;
+    top: 0;
     width: 100%;
+    height: 100%;
+    transform: scale(0.9);
+  }
+
+  @media (max-width: 776px) {
+    margin-left: 0;
+    width: 100%;
+    height: auto;
+
+    img {
+      position: relative;
+      aspect-ratio: initial;
+      transform: scale(1);
+    }
   }
 }

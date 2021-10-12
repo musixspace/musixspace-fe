@@ -6,6 +6,7 @@ import {
   Switch,
 } from "react-router-dom";
 import useAuth from "./useAuth";
+import About from "./views/About";
 import Home from "./views/Home";
 import Insights from "./views/Insights";
 import TopTracks from "./views/TopTracks";
@@ -33,6 +34,7 @@ const App = () => {
         {accessToken && <Redirect to="/insights" />}
         <Route exact path="/insights" component={Insights} />
         <Route exact path="/top-tracks" component={TopTracks} />
+        <Route exact path="/about" component={About} />
         <Route exact path="/" component={Home} />
       </Switch>
     </Router>

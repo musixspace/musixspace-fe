@@ -2,6 +2,7 @@
 @import "dashboard.scss";
 @import "home.scss";
 @import "insights.scss";
+@import "about.scss";
 @import "./components/navbar.scss";
 @import "./components//carousel.scss";
 @import "./components/tracklist.scss";
@@ -13,19 +14,22 @@
   --bg-home: #ffc055;
   --bg-top-tracks: #483048;
   --bg-insights: #ffc7cc;
+  --bg-about: #1d2d5b;
 
   --clr-black: #000000;
   --clr-white: #ffffff;
   --clr-green: #418671;
   --clr-gray: #ac91c1;
   --clr-orange: #f18a21;
+  --clr-pink: #fbc9cc;
   --clr-dark-blue: #1c2b5a;
   --clr-dark-orange: #ff5834;
+  --clr-dark-pink: #e8638d;
 
   /* Fonts */
   --f-circ-spotify-bold: "Circular Spotify Tx T Bold";
   --f-circ-spotify: "Circular Spotify Tx T Black";
-  --f-circ-pro: "Circular Pro Medium";
+  --f-circ-pro: "Circular Std Medium Regular";
 
   /* Base Font Size */
   --base-font-size: 8px;

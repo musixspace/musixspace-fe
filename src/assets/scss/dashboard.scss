@@ -1,5 +1,5 @@
 .dashboard-container {
-  padding: 1em 5em;
+  padding: 2em 5em;
   height: 90vh;
   color: var(--clr-gray);
 
@@ -7,7 +7,7 @@
     display: grid;
     grid-template-columns: 3fr 4fr 2fr;
     place-items: center;
-    gap: 2em;
+    gap: 1em;
 
     .heading {
       font-size: calc(var(--base-font-size) * 6);
