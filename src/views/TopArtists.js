@@ -1,33 +1,34 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router";
+import ArtistList from "../components/ArtistList";
 import Carousel from "../components/Carousel";
 import Navbar from "../components/Navbar";
-import TrackList from "../components/TrackList";
 import WebPlayer from "../components/WebPlayer";
 import { spotifyApi } from "../util/spotify";
 
-const TopTracks = () => {
+const TopArtists = () => {
   const history = useHistory();
-  const [topTracks, setTopTracks] = useState(null);
-  const [currentTrack, setCurrentTrack] = useState("");
-  const [audioUrl, setAudioUrl] = useState("");
+
+  const [topArtists, setTopArtists] = useState(null);
   const [images, setImages] = useState(null);
+  const [currentArtist, setCurrentArtist] = useState("");
+  const [audioUrl, setAudioUrl] = useState("");
 
   useEffect(() => {
     const accessToken = localStorage.getItem("accessToken");
     if (accessToken) {
       spotifyApi.setAccessToken(accessToken);
       spotifyApi
-        .getMyTopTracks({ time_range: "long_term", limit: 30 })
+        .getMyTopArtists({ time_range: "long_term", limit: 30 })
         .then((res) => {
           console.log(res);
           let imgArr = [];
           res.body.items.forEach((item) => {
-            imgArr.push({ id: item.id, url: item.album.images[0].url });
+            imgArr.push({ id: item.id, url: item.images[0].url });
           });
           setImages(imgArr);
-          setTopTracks(res.body.items);
-          setCurrentTrack(res.body.items[0].id);
+          setTopArtists(res.body.items);
+          setCurrentArtist(res.body.items[0].id);
         })
         .catch((err) => {
           console.log(err);
@@ -38,19 +39,27 @@ const TopTracks = () => {
   }, []);
 
   useEffect(() => {
-    if (currentTrack) {
-      changeTrack(currentTrack);
+    if (currentArtist) {
+      changeArtist(currentArtist);
     }
-  }, [currentTrack]);
+  }, [currentArtist]);
 
-  const changeTrack = (trackId) => {
+  const changeArtist = (artistId) => {
     spotifyApi
-      .getTrack(trackId, { market: "IN" })
+      .getArtistTopTracks(artistId, "IN")
       .then((res) => {
         console.log(res);
-        setCurrentTrack(trackId);
-        if (res.body.preview_url) {
-          setAudioUrl(res.body.preview_url);
+        let url = "";
+        const tracks = res.body.tracks;
+        for (let i = 0; i < tracks.length; i++) {
+          if (tracks[i].preview_url) {
+            url = tracks[i].preview_url;
+            break;
+          }
+        }
+        setCurrentArtist(artistId);
+        if (url) {
+          setAudioUrl(url);
         } else {
           handleNextPlay();
         }
@@ -58,14 +67,14 @@ const TopTracks = () => {
       .catch((err) => console.log(err));
   };
 
-  const handleTrackChange = (trackId) => {
-    setCurrentTrack(trackId);
+  const handleArtistChange = (artistId) => {
+    setCurrentArtist(artistId);
   };
 
   const handlePrevPlay = () => {
     let index;
-    topTracks.forEach((item, ind) => {
-      if (item.id === currentTrack) {
+    topArtists.forEach((item, ind) => {
+      if (item.id === currentArtist) {
         index = ind;
       }
     });
@@ -73,33 +82,33 @@ const TopTracks = () => {
     // console.log(index);
 
     if (index === 0) {
-      setCurrentTrack(topTracks[topTracks.length - 1].id);
+      setCurrentArtist(topArtists[topArtists.length - 1].id);
     } else {
-      setCurrentTrack(topTracks[index - 1].id);
+      setCurrentArtist(topArtists[index - 1].id);
     }
   };
 
   const handleNextPlay = () => {
     let index;
-    topTracks.forEach((item, ind) => {
-      if (item.id === currentTrack) {
+    topArtists.forEach((item, ind) => {
+      if (item.id === currentArtist) {
         index = ind;
       }
     });
 
     // console.log(index);
 
-    if (index === topTracks.length - 1) {
-      setCurrentTrack(topTracks[0].id);
+    if (index === topArtists.length - 1) {
+      setCurrentArtist(topArtists[0].id);
     } else {
-      setCurrentTrack(topTracks[index + 1].id);
+      setCurrentArtist(topArtists[index + 1].id);
     }
   };
 
   const handleShufflePlay = () => {
-    let total = topTracks.length;
+    let total = topArtists.length;
     let rnd = Math.floor(Math.random() * total);
-    setCurrentTrack(topTracks[rnd].id);
+    setCurrentArtist(topArtists[rnd].id);
   };
 
   return (
@@ -109,13 +118,13 @@ const TopTracks = () => {
     >
       <Navbar />
       <div className="dashboard-container">
-        {topTracks && topTracks.length > 0 && currentTrack && (
+        {topArtists && topArtists.length > 0 && currentArtist && (
           <div className="dashboard">
             <div>
-              <TrackList
-                currentTrack={currentTrack}
-                tracks={topTracks}
-                changeTrack={handleTrackChange}
+              <ArtistList
+                currentArtist={currentArtist}
+                artists={topArtists}
+                changeArtist={handleArtistChange}
               />
               <WebPlayer
                 url={audioUrl}
@@ -124,13 +133,9 @@ const TopTracks = () => {
                 shufflePlay={handleShufflePlay}
               />
             </div>
-            <Carousel data={images} current={currentTrack} />
+            <Carousel data={images} current={currentArtist} />
             <div className="heading">
-              <p>Your Top Tracks Radio</p>
-              <div>
-                <p>30 sec</p>
-                <button id="export">Export</button>
-              </div>
+              <p>Your Top Artists Radio</p>
             </div>
           </div>
         )}
@@ -139,4 +144,4 @@ const TopTracks = () => {
   );
 };
 
-export default TopTracks;
+export default TopArtists;

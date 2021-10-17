@@ -17,7 +17,7 @@ const ImageSlider = ({ page }) => {
             images.forEach((item) => {
               item.classList.remove("hide");
             });
-          }, 5000);
+          }, 2000);
         }, 10000);
       }, 10000);
     }, 5000);
@@ -27,7 +27,7 @@ const ImageSlider = ({ page }) => {
     slideAnimation();
     const interval = setInterval(() => {
       slideAnimation();
-    }, 35000);
+    }, 27000);
 
     return () => {
       console.log("Cleanup running...");

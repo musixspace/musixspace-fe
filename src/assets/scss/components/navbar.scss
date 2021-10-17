@@ -3,8 +3,9 @@ nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1.5em 5em;
-  position: relative;
+  padding: 1.5em 6em;
+  position: fixed;
+  z-index: 10;
   height: 10vh;
   background-color: var(--bg-home);
 
@@ -23,14 +24,13 @@ nav {
     position: relative;
 
     &.hide {
-      transform: scaleY(1);
+      transform: translateX(0);
     }
 
     .nav-li {
       margin-left: 2em;
       font-family: var(--f-circ-pro), sans-serif;
       font-size: calc(var(--base-font-size) * 2.25);
-      // font-weight: bold;
       cursor: pointer;
       position: relative;
 
@@ -58,6 +58,10 @@ nav {
     background-color: var(--bg-top-tracks);
     color: var(--clr-gray);
 
+    .nav-ul {
+      color: var(--clr-gray);
+    }
+
     > .nav-ul > .nav-li::after {
       background-color: var(--clr-gray);
     }
@@ -76,8 +80,25 @@ nav {
     background-color: var(--bg-about);
     color: var(--clr-pink);
 
+    .nav-ul {
+      color: var(--clr-pink);
+    }
+
     > .nav-ul > .nav-li::after {
       background-color: var(--clr-pink);
+    }
+  }
+
+  &.nav-discover {
+    background-color: var(--clr-black);
+    color: var(--clr-white);
+
+    .nav-ul {
+      color: var(--clr-white);
+    }
+
+    > .nav-ul > .nav-li::after {
+      background-color: var(--clr-white);
     }
   }
 }
@@ -108,8 +129,7 @@ nav {
       width: 100%;
       background-color: var(--clr-black);
       color: var(--bg-home);
-      transition: transform 300ms ease-in-out;
-      transform-origin: top;
+      transition: transform 350ms ease-in-out;
       z-index: 5;
 
       .nav-li {
@@ -121,11 +141,19 @@ nav {
           all: unset;
         }
       }
+
       .nav-li + .nav-li {
         border-top: 2px solid var(--clr-gray);
       }
+
       &.hide {
-        transform: scaleY(0);
+        transform: translateX(1000px);
+      }
+    }
+
+    &.nav-insights {
+      .nav-ul {
+        color: var(--clr-pink);
       }
     }
   }

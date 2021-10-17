@@ -5,10 +5,13 @@ import { FiMenu, FiX } from "react-icons/fi";
 
 const themeSwitch = (str) => {
   switch (str) {
-    case "/top-tracks":
+    case "/insights/toptracks":
+    case "/insights/topartists":
       return "nav-top-tracks";
     case "/insights":
       return "nav-insights";
+    case "/discover":
+      return "nav-discover";
     case "/about":
       return "nav-about";
     default:
@@ -31,18 +34,21 @@ const Navbar = () => {
 
   return (
     <nav className={themeSwitch(location.pathname)}>
-      <div className="nav-title">Musixspace</div>
+      <div className="nav-title">
+        <Link to={localStorage.getItem("accessToken") ? "/insights" : "/"}>
+          Musixspace
+        </Link>
+      </div>
       {localStorage.getItem("accessToken") ? (
         <ul className={`nav-ul ${showLinks ? "" : "hide"}`}>
           <li className="nav-li">
             <Link to="/insights">Insights</Link>
           </li>
-          <li className="nav-li">Discover</li>
+          <li className="nav-li">
+            <Link to="/discover">Discover</Link>
+          </li>
           <li className="nav-li">My Space</li>
           <li className="nav-li">Discord</li>
-          <li className="nav-li">
-            <Link to="/about">About</Link>
-          </li>
           <li className="nav-li" onClick={handleLogout}>
             Logout
           </li>

@@ -1,22 +1,19 @@
 .about {
   color: var(--clr-pink);
-  padding: 1em 5em;
+  padding: 1em 6em;
+  margin-top: 10vh;
 
   .person {
+    padding-block: 2em;
     display: flex;
     justify-content: space-between;
     align-items: center;
     gap: 1em;
-    height: 85vh;
 
     .content {
       width: 30ch;
       > p {
         font-size: calc(var(--base-font-size) * 8);
-
-        @media (max-width: 776px) {
-          font-size: calc(var(--base-font-size) * 4);
-        }
       }
 
       > p:last-child {
@@ -24,10 +21,6 @@
         font-family: var(--f-circ-pro), sans-serif;
         color: var(--clr-dark-pink);
         font-size: calc(var(--base-font-size) * 4);
-
-        @media (max-width: 776px) {
-          font-size: calc(var(--base-font-size) * 2);
-        }
       }
     }
 
@@ -38,43 +31,55 @@
       align-items: center;
       gap: 2em;
 
-      img {
-        width: 80%;
-        transform: scale(0.85);
-
-        @media (max-width: 776px) {
-          transform: scale(1);
-          width: 100%;
-        }
-      }
-
       > p {
         width: 7ch;
         font-size: calc(var(--base-font-size) * 8);
-
-        @media (max-width: 1256px) {
-          display: none;
-        }
       }
-
-      @media (max-width: 776px) {
-        margin-left: 0;
-        gap: 0;
-      }
-    }
-
-    @media (max-width: 776px) {
-      height: auto;
-      flex-direction: column;
-      justify-content: center;
     }
   }
 
   .person + .person {
     margin-top: 2em;
   }
+}
 
-  @media (max-width: 776px) {
+@media (max-width: 1256px) {
+  .about {
+    .person {
+      .person-img {
+        > p {
+          display: none;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 776px) {
+  .about {
     padding: 1em 1.5em;
+
+    .person {
+      flex-direction: column;
+
+      .content {
+        > p {
+          font-size: calc(var(--base-font-size) * 5);
+        }
+
+        > p:last-child {
+          font-size: calc(var(--base-font-size) * 3.5);
+        }
+      }
+
+      .person-img {
+        margin-left: 0;
+        gap: 0;
+
+        img {
+          width: 100%;
+        }
+      }
+    }
   }
 }

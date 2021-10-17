@@ -1,0 +1,474 @@
+.discover-container {
+  margin-top: 10vh;
+  height: 90vh;
+  padding: 2em 6em;
+  font-family: var(--f-circ-pro), sans-serif;
+  color: var(--clr-white);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+  .searchbar {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 10fr 1fr;
+
+    > div:nth-child(2) {
+      width: 100%;
+      > div {
+        transform: scale(0.9);
+        position: relative;
+        input {
+          font-family: var(--f-circ-pro), sans-serif;
+          width: 100%;
+          border-radius: 100px;
+          outline: none;
+          border: none;
+          font-size: 1.5rem;
+          padding: 0.6em 3em;
+        }
+        svg {
+          position: absolute;
+          color: var(--clr-black);
+          font-size: 28px;
+
+          &:first-child {
+            left: 25px;
+            top: 13px;
+          }
+
+          &:last-child {
+            right: 25px;
+            top: 13px;
+            cursor: pointer;
+          }
+        }
+      }
+    }
+  }
+
+  .discover {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: 1fr 10fr 1fr;
+
+    .prev,
+    .next {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      font-size: 2rem;
+
+      svg {
+        cursor: pointer;
+      }
+    }
+
+    .next {
+      justify-content: flex-end;
+    }
+
+    .mobile-visible {
+      display: none;
+    }
+
+    .user {
+      border-radius: 50px;
+      overflow: hidden;
+      transform: scale(0.9);
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      .image-container {
+        width: 50%;
+        position: relative;
+        z-index: 1;
+
+        > img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+
+        .overlap {
+          position: absolute;
+          z-index: 2;
+          left: 0;
+          top: 0;
+          width: 100%;
+          height: 100%;
+
+          > img {
+            position: absolute;
+            z-index: 5;
+            top: 20px;
+            left: 20px;
+          }
+
+          > button {
+            outline: none;
+            border: none;
+            font-size: calc(var(--base-font-size) * 2);
+            font-weight: bold;
+            padding: 0.4em 1em;
+            background-color: var(--clr-white);
+            border-radius: 100px;
+
+            position: absolute;
+            z-index: 5;
+            bottom: 20px;
+            right: 20px;
+          }
+        }
+      }
+
+      .content-container {
+        width: 50%;
+        height: 100%;
+        background-color: var(--clr-maroon);
+        padding: 3em 4em;
+        display: flex;
+        justify-content: space-evenly;
+        align-items: flex-start;
+        flex-direction: column;
+
+        .main-content {
+          .name {
+            font-family: var(--f-circ-spotify), sans-serif;
+            font-size: calc(var(--base-font-size) * 4.5);
+          }
+
+          .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1em;
+
+            .tag {
+              background-color: var(--clr-white);
+              padding: 0.5em 1em;
+              color: var(--clr-black);
+              text-transform: capitalize;
+              border-radius: 100px;
+              font-size: calc(var(--base-font-size) * 2);
+              margin-top: 0.5em;
+            }
+          }
+
+          .bio {
+            margin-top: 1em;
+            font-size: calc(var(--base-font-size) * 2);
+          }
+        }
+
+        .inner-content {
+          .anthem {
+            margin-top: 2em;
+            .title {
+              font-size: calc(var(--base-font-size) * 3);
+            }
+
+            .anthem-content {
+              margin-top: 1em;
+              display: flex;
+              justify-content: flex-start;
+              align-items: center;
+              gap: 1em;
+
+              .anthem-image {
+                width: 128px;
+                height: 128px;
+
+                img {
+                  height: 100%;
+                  width: 100%;
+                  object-fit: cover;
+                }
+              }
+
+              > div:not(.anthem-image) {
+                .anthem-title {
+                  font-size: calc(var(--base-font-size) * 2);
+                }
+
+                .anthem-album {
+                  margin-top: 0.4em;
+                  font-size: calc(var(--base-font-size) * 1.75);
+                }
+              }
+            }
+          }
+
+          .interests {
+            margin-top: 2em;
+            .title {
+              font-size: calc(var(--base-font-size) * 3);
+            }
+
+            .list {
+              margin-top: 1em;
+              display: flex;
+              flex-wrap: wrap;
+              gap: 1em;
+
+              .artist {
+                background-color: var(--clr-black);
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                gap: 1em;
+                border-radius: 100px;
+                padding-right: 1em;
+                > div {
+                  width: 32px;
+                  height: 32px;
+                  border-radius: 100px;
+                  overflow: hidden;
+                  img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                  }
+                }
+
+                span {
+                  font-size: calc(var(--base-font-size) * 1.75);
+                }
+              }
+            }
+
+            .common {
+              margin-top: 1em;
+              text-align: center;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 1024px) {
+  .discover-container {
+    .discover {
+      .user {
+        position: relative;
+        z-index: 1;
+
+        .image-container {
+          width: 100%;
+          position: relative;
+          z-index: 2;
+
+          .overlap {
+            > button {
+              top: 20px;
+              right: 20px;
+              bottom: unset;
+            }
+          }
+        }
+
+        .content-container {
+          background-blend-mode: color;
+          background: linear-gradient(#ffffff01, var(--clr-maroon));
+          // background: linear-gradient(#ffffff01 30%, var(--clr-maroon) 70%);
+          width: 100%;
+          height: 70%;
+          position: absolute;
+          top: 30%;
+          z-index: 5;
+          padding: 2em;
+          justify-content: flex-end;
+          align-items: flex-start;
+          gap: 1em;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 976px) {
+  .discover-container {
+    .discover {
+      .prev,
+      .next {
+        font-size: 1.5rem;
+      }
+
+      .user {
+        .image-container {
+          .overlap {
+            > button {
+              font-size: calc(var(--base-font-size) * 1.75);
+            }
+          }
+        }
+        .content-container {
+          .main-content {
+            .name {
+              font-size: calc(var(--base-font-size) * 3.5);
+            }
+
+            .tags {
+              .tag {
+                font-size: calc(var(--base-font-size) * 1.75);
+              }
+            }
+
+            .bio {
+              font-size: calc(var(--base-font-size) * 1.75);
+            }
+          }
+
+          .inner-content {
+            margin-top: 1em;
+            gap: 1em;
+
+            > div {
+              flex: 1 1 40%;
+            }
+            .anthem {
+              margin-top: 0;
+              .title {
+                font-size: calc(var(--base-font-size) * 2.5);
+              }
+
+              .anthem-content {
+                > div:not(.anthem-image) {
+                  .anthem-title {
+                    font-size: calc(var(--base-font-size) * 1.75);
+                  }
+
+                  .anthem-album {
+                    margin-top: 0.4em;
+                    font-size: calc((var(--base-font-size) * 1.75 * 7) / 8);
+                  }
+                }
+              }
+            }
+
+            .interests {
+              margin-top: 1em;
+              .title {
+                font-size: calc(var(--base-font-size) * 2.5);
+              }
+
+              .list {
+                .artist {
+                  span {
+                    font-size: calc(var(--base-font-size) * 1.5);
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 776px) {
+  .discover-container {
+    padding: 1em 1.5em;
+  }
+}
+
+@media (max-width: 678px) {
+  .discover-container {
+    .searchbar {
+      display: block;
+      > div:nth-child(2) {
+        width: 100%;
+        > div {
+          transform: scale(1);
+          width: 100%;
+
+          input {
+            font-size: 1rem;
+            padding: 0.6em 2.5em;
+          }
+
+          svg {
+            font-size: 18px;
+
+            &:first-child {
+              left: 15px;
+              top: 9px;
+            }
+
+            &:last-child {
+              right: 15px;
+              top: 9px;
+            }
+          }
+        }
+      }
+
+      > div:not(:nth-child(2)) {
+        display: none;
+      }
+    }
+
+    .discover {
+      margin-top: 1em;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+
+      .next,
+      .prev {
+        display: none;
+      }
+
+      .mobile-visible {
+        display: flex;
+        justify-content: space-evenly;
+        align-items: center;
+        color: var(--clr-white);
+        width: 100%;
+        font-size: 1.5rem;
+        margin-top: 0.8em;
+      }
+
+      .user {
+        transform: scale(1);
+        height: 100%;
+        border-radius: 20px;
+        .content-container {
+          height: 80%;
+          top: 21%;
+
+          .inner-content {
+            .anthem {
+              .anthem-content {
+                .anthem-image {
+                  width: 60px;
+                  height: 60px;
+                }
+              }
+            }
+
+            .interests {
+              .list {
+                gap: 0.4em;
+                .artist {
+                  > div {
+                    width: 24px;
+                    height: 24px;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

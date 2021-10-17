@@ -30,9 +30,11 @@ const Insights = () => {
           <p>Hola, {name}!</p>
           <div className="pages">
             <p>
-              <Link to="/top-tracks">Top Tracks Radio</Link>
+              <Link to="/insights/toptracks">Top Tracks Radio</Link>
             </p>
-            <p>Top Artists Radio</p>
+            <p>
+              <Link to="/insights/topartists">Top Artists Radio</Link>
+            </p>
             <p>Surprise Me!</p>
             <p>Mood Radio</p>
           </div>

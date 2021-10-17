@@ -7,8 +7,10 @@ import {
 } from "react-router-dom";
 import useAuth from "./useAuth";
 import About from "./views/About";
+import Discover from "./views/Discover";
 import Home from "./views/Home";
 import Insights from "./views/Insights";
+import TopArtists from "./views/TopArtists";
 import TopTracks from "./views/TopTracks";
 
 const code = new URLSearchParams(window.location.search).get("code");
@@ -32,8 +34,10 @@ const App = () => {
     <Router>
       <Switch>
         {accessToken && <Redirect to="/insights" />}
+        <Route exact path="/insights/topartists" component={TopArtists} />
+        <Route exact path="/insights/toptracks" component={TopTracks} />
         <Route exact path="/insights" component={Insights} />
-        <Route exact path="/top-tracks" component={TopTracks} />
+        <Route exact path="/discover" component={Discover} />
         <Route exact path="/about" component={About} />
         <Route exact path="/" component={Home} />
       </Switch>

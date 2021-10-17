@@ -7,7 +7,7 @@ const people = [
   {
     id: 1,
     name: "Amaya Srivastava",
-    position: "Founder & CEO",
+    position: "Hipster, Rockstar, Design",
     img: img1,
   },
   {
