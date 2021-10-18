@@ -1,7 +1,7 @@
 .tracks-container {
   height: 75vh;
   overflow-y: scroll;
-  width: 100%;
+  width: 80%;
   position: relative;
 
   &::-webkit-scrollbar {
@@ -92,6 +92,7 @@
 @media (max-width: 776px) {
   .tracks-container {
     height: 60vh;
+    width: 100%;
 
     .track {
       .track-sub {

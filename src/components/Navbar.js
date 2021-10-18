@@ -7,6 +7,7 @@ const themeSwitch = (str) => {
   switch (str) {
     case "/insights/toptracks":
     case "/insights/topartists":
+    case "/insights/surprise":
       return "nav-top-tracks";
     case "/insights":
       return "nav-insights";
@@ -18,6 +19,13 @@ const themeSwitch = (str) => {
       return "";
   }
 };
+
+const loggedInLinks = [
+  { name: "Insights", path: "/insights" },
+  { name: "Discover", path: "/discover" },
+  { name: "My Space", path: "/myspace" },
+  { name: "Discord", path: "/discord" },
+];
 
 const Navbar = () => {
   const location = useLocation();
@@ -41,21 +49,27 @@ const Navbar = () => {
       </div>
       {localStorage.getItem("accessToken") ? (
         <ul className={`nav-ul ${showLinks ? "" : "hide"}`}>
-          <li className="nav-li">
-            <Link to="/insights">Insights</Link>
-          </li>
-          <li className="nav-li">
-            <Link to="/discover">Discover</Link>
-          </li>
-          <li className="nav-li">My Space</li>
-          <li className="nav-li">Discord</li>
+          {loggedInLinks.map((item) => (
+            <li
+              key={item.name}
+              className={`nav-li ${
+                location.pathname === item.path ? "underline" : ""
+              }`}
+            >
+              <Link to={item.path}>{item.name}</Link>
+            </li>
+          ))}
           <li className="nav-li" onClick={handleLogout}>
             Logout
           </li>
         </ul>
       ) : (
         <ul className={`nav-ul ${showLinks ? "" : "hide"}`}>
-          <li className="nav-li">
+          <li
+            className={`nav-li ${
+              location.pathname === "/about" ? "underline" : ""
+            }`}
+          >
             <Link to="/about">About</Link>
           </li>
           <li className="nav-li">

@@ -52,6 +52,12 @@ nav {
         transform: scaleX(1);
       }
     }
+
+    .nav-li.underline {
+      &::after {
+        transform: scaleX(1);
+      }
+    }
   }
 
   &.nav-top-tracks {

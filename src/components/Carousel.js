@@ -28,15 +28,9 @@ const Carousel = ({ data, current }) => {
 
   useEffect(() => {
     if (data.length > 0) {
-      console.log(data);
-      console.log(current);
       getImages();
     }
   }, [data, current]);
-
-  useEffect(() => {
-    console.log(images);
-  }, [images]);
 
   if (data.length > 0 && images.img1 && current)
     return (

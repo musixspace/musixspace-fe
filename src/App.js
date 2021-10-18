@@ -10,6 +10,7 @@ import About from "./views/About";
 import Discover from "./views/Discover";
 import Home from "./views/Home";
 import Insights from "./views/Insights";
+import SurpriseMe from "./views/SurpriseMe";
 import TopArtists from "./views/TopArtists";
 import TopTracks from "./views/TopTracks";
 
@@ -34,6 +35,7 @@ const App = () => {
     <Router>
       <Switch>
         {accessToken && <Redirect to="/insights" />}
+        <Route exact path="/insights/surprise" component={SurpriseMe} />
         <Route exact path="/insights/topartists" component={TopArtists} />
         <Route exact path="/insights/toptracks" component={TopTracks} />
         <Route exact path="/insights" component={Insights} />
