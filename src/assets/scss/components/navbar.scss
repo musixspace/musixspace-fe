@@ -123,6 +123,11 @@ nav {
     }
   }
 
+  &.nav-transparent {
+    color: var(--clr-white);
+    background-color: transparent;
+  }
+
   &.nav-top-tracks {
     background-color: var(--bg-top-tracks);
     color: var(--clr-gray);

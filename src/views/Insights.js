@@ -44,7 +44,9 @@ const Insights = () => {
             <p>
               <Link to="/insights/surprise">Surprise Me!</Link>
             </p>
-            <p>Mood Radio</p>
+            <p>
+              <Link to="/insights/mood">Mood Radio</Link>
+            </p>
           </div>
         </div>
         <ImageSlider page={2} />
