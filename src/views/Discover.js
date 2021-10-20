@@ -86,6 +86,21 @@ const user = [
   },
 ];
 
+// const handleTouchStart = (e) => {
+//   console.log("Touch Start");
+//   console.log(e);
+// };
+
+// const handleTouchMove = (e) => {
+//   console.log("Touch Move");
+//   console.log(e);
+// };
+
+// const handleTouchEnd = (e) => {
+//   console.log("Touch end");
+//   console.log(e);
+// };
+
 const Discover = () => {
   const [search, setSearch] = useState("");
   const [current, setCurrent] = useState(0);

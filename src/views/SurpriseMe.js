@@ -4,6 +4,7 @@ import Carousel from "../components/Carousel";
 import Navbar from "../components/Navbar";
 import TrackList from "../components/TrackList";
 import WebPlayer from "../components/WebPlayer";
+import { handleLogout } from "../util/functions";
 import { spotifyApi } from "../util/spotify";
 
 const SurpriseMe = () => {
@@ -44,7 +45,9 @@ const SurpriseMe = () => {
             });
         })
         .catch((err) => {
-          console.log(err);
+          if (err?.body?.error?.status === 401) {
+            handleLogout();
+          }
         });
     } else {
       history.push("/");
@@ -69,7 +72,12 @@ const SurpriseMe = () => {
           handleNextPlay();
         }
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.log(err);
+        if (err?.body?.error?.status === 401) {
+          handleLogout();
+        }
+      });
   };
 
   const handleTrackChange = (trackId) => {
@@ -140,7 +148,7 @@ const SurpriseMe = () => {
             </div>
             <Carousel data={images} current={currentTrack} />
             <div className="heading">
-              <p>Top Surprise Tracks Radio</p>
+              <p>Surprise Tracks Radio</p>
             </div>
           </div>
         )}

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import ImageSlider from "../components/ImageSlider";
 import Navbar from "../components/Navbar";
+import { handleLogout } from "../util/functions";
 import { spotifyApi } from "../util/spotify";
 
 const Insights = () => {
@@ -18,7 +19,12 @@ const Insights = () => {
             setName(res.body.display_name);
           }
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          console.log(err);
+          if (err?.body?.error?.status === 401) {
+            handleLogout();
+          }
+        });
     }
   }, []);
 

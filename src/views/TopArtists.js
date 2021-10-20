@@ -4,6 +4,7 @@ import ArtistList from "../components/ArtistList";
 import Carousel from "../components/Carousel";
 import Navbar from "../components/Navbar";
 import WebPlayer from "../components/WebPlayer";
+import { handleLogout } from "../util/functions";
 import { spotifyApi } from "../util/spotify";
 
 const TopArtists = () => {
@@ -32,6 +33,9 @@ const TopArtists = () => {
         })
         .catch((err) => {
           console.log(err);
+          if (err?.body?.error?.status === 401) {
+            handleLogout();
+          }
         });
     } else {
       history.push("/");
@@ -64,7 +68,12 @@ const TopArtists = () => {
           handleNextPlay();
         }
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.log(err);
+        if (err?.body?.error?.status === 401) {
+          handleLogout();
+        }
+      });
   };
 
   const handleArtistChange = (artistId) => {

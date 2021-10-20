@@ -1,7 +1,9 @@
 import React, { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
-import { loginUrl } from "../util/spotify";
 import { FiMenu, FiX } from "react-icons/fi";
+import { Link, useLocation } from "react-router-dom";
+import profile from "../assets/images/image4.png";
+import { handleLogout } from "../util/functions";
+import { loginUrl } from "../util/spotify";
 
 const themeSwitch = (str) => {
   switch (str) {
@@ -31,10 +33,7 @@ const Navbar = () => {
   const location = useLocation();
   const [showLinks, setShowLinks] = useState(false);
 
-  const handleLogout = () => {
-    localStorage.removeItem("accessToken");
-    window.location = "/";
-  };
+  const [openProfile, setOpenProfile] = useState(false);
 
   const toggleMenu = () => {
     setShowLinks((prev) => !prev);
@@ -48,23 +47,55 @@ const Navbar = () => {
         </Link>
       </div>
       {localStorage.getItem("accessToken") ? (
-        <ul className={`nav-ul ${showLinks ? "" : "hide"}`}>
-          {loggedInLinks.map((item) => (
-            <li
-              key={item.name}
-              className={`nav-li ${
-                location.pathname === item.path ? "underline" : ""
-              }`}
-            >
-              <Link to={item.path}>{item.name}</Link>
+        <>
+          <ul className={`nav-ul ${showLinks ? "" : "hide"}`}>
+            {loggedInLinks.map((item) => (
+              <li
+                key={item.name}
+                className={`nav-li ${
+                  location.pathname === item.path ? "underline" : ""
+                }`}
+              >
+                <Link to={item.path}>{item.name}</Link>
+              </li>
+            ))}
+            <li className="nav-li mobile">
+              <Link to="/about">About</Link>
             </li>
-          ))}
-          <li className="nav-li" onClick={handleLogout}>
-            Logout
-          </li>
-        </ul>
+            <li className="nav-li mobile" onClick={handleLogout}>
+              Logout
+            </li>
+            <div className="profile">
+              <div
+                className="profile-img"
+                onClick={() => setOpenProfile((prev) => !prev)}
+              >
+                <img src={profile} alt="Profile" />
+              </div>
+              {openProfile && (
+                <ul className="profile-ul">
+                  <li className="profile-li">
+                    <Link to="/about">About</Link>
+                  </li>
+                  <li className="profile-li" onClick={handleLogout}>
+                    Logout
+                  </li>
+                </ul>
+              )}
+            </div>
+          </ul>
+          <div className="profile-small">
+            <div
+              className="profile-img"
+              onClick={() => setOpenProfile((prev) => !prev)}
+            >
+              <img src={profile} alt="Profile" />
+            </div>
+          </div>
+        </>
       ) : (
         <ul className={`nav-ul ${showLinks ? "" : "hide"}`}>
+          <li className="nav-li">Discord</li>
           <li
             className={`nav-li ${
               location.pathname === "/about" ? "underline" : ""
@@ -78,7 +109,21 @@ const Navbar = () => {
         </ul>
       )}
       <div onClick={toggleMenu} className="ham">
-        {showLinks ? <FiX /> : <FiMenu />}
+        {localStorage.getItem("accessToken") ? (
+          showLinks ? (
+            <FiX />
+          ) : (
+            <div className="profile">
+              <div className="profile-img">
+                <img src={profile} alt="Profile" />
+              </div>
+            </div>
+          )
+        ) : showLinks ? (
+          <FiX />
+        ) : (
+          <FiMenu />
+        )}
       </div>
     </nav>
   );

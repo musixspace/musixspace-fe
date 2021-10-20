@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import {
   AiFillCaretRight,
-  AiOutlinePause,
-  AiFillStepForward,
   AiFillStepBackward,
+  AiFillStepForward,
+  AiOutlinePause,
 } from "react-icons/ai";
 import { IoIosShuffle } from "react-icons/io";
 
