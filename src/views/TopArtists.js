@@ -25,7 +25,7 @@ const TopArtists = () => {
           console.log(res);
           let imgArr = [];
           res.body.items.forEach((item) => {
-            imgArr.push({ id: item.id, url: item.images[0].url });
+            imgArr.push({ id: item.id, url: item.images.length>=1?item.images[0].url:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRd-y-IJN8glQlf1qoU01dEgGPUa0d1-sjfWg&usqp=CAU" });
           });
           setImages(imgArr);
           setTopArtists(res.body.items);
