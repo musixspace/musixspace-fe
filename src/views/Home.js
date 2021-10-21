@@ -1,6 +1,8 @@
 import React from "react";
 import ImageSlider from "../components/ImageSlider";
 import Navbar from "../components/Navbar";
+import { FaSpotify } from "react-icons/fa";
+import { loginUrl } from "../util/spotify";
 
 const Home = () => {
   return (
@@ -12,6 +14,12 @@ const Home = () => {
           <p>
             Form cross border companionships with the shared taste in music.
           </p>
+          <a href={loginUrl}>
+            <span>
+              <FaSpotify />
+            </span>
+            <span>Login with Spotify</span>
+          </a>
         </div>
         <ImageSlider page={1} />
       </div>

@@ -4,8 +4,7 @@ import Carousel from "../components/Carousel";
 import Navbar from "../components/Navbar";
 import TrackList from "../components/TrackList";
 import WebPlayer from "../components/WebPlayer";
-import { handleLogout } from "../util/functions";
-import { spotifyApi } from "../util/spotify";
+import { axiosInstance } from "../util/axiosConfig";
 
 const TopTracks = () => {
   const history = useHistory();
@@ -17,23 +16,21 @@ const TopTracks = () => {
   useEffect(() => {
     const accessToken = localStorage.getItem("accessToken");
     if (accessToken) {
-      spotifyApi.setAccessToken(accessToken);
-      spotifyApi
-        .getMyTopTracks({ time_range: "long_term", limit: 30 })
+      axiosInstance
+        .get("/me/top/tracks?time_range=long_term&limit=30")
         .then((res) => {
-          console.log(res);
-          let imgArr = [];
-          res.body.items.forEach((item) => {
-            imgArr.push({ id: item.id, url: item.album.images[0].url });
-          });
-          setImages(imgArr);
-          setTopTracks(res.body.items);
-          setCurrentTrack(res.body.items[0].id);
+          if (res.status === 200) {
+            let imgArr = [];
+            res.data.items.forEach((item) => {
+              imgArr.push({ id: item.id, url: item.album.images[0].url });
+            });
+            setImages(imgArr);
+            setTopTracks(res.data.items);
+            setCurrentTrack(res.data.items[0].id);
+          }
         })
         .catch((err) => {
-          if (err?.body?.error?.status === 401) {
-            handleLogout();
-          }
+          console.log(err);
         });
     } else {
       history.push("/");
@@ -47,22 +44,20 @@ const TopTracks = () => {
   }, [currentTrack]);
 
   const changeTrack = (trackId) => {
-    spotifyApi
-      .getTrack(trackId, { market: "IN" })
+    axiosInstance
+      .get(`/tracks/${trackId}?market=IN`)
       .then((res) => {
-        console.log(res);
-        setCurrentTrack(trackId);
-        if (res.body.preview_url) {
-          setAudioUrl(res.body.preview_url);
-        } else {
-          handleNextPlay();
+        if (res.status === 200) {
+          setCurrentTrack(trackId);
+          if (res.data.preview_url) {
+            setAudioUrl(res.data.preview_url);
+          } else {
+            handleNextPlay();
+          }
         }
       })
       .catch((err) => {
         console.log(err);
-        if (err?.body?.error?.status === 401) {
-          handleLogout();
-        }
       });
   };
 

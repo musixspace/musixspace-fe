@@ -4,8 +4,7 @@ import ArtistList from "../components/ArtistList";
 import Carousel from "../components/Carousel";
 import Navbar from "../components/Navbar";
 import WebPlayer from "../components/WebPlayer";
-import { handleLogout } from "../util/functions";
-import { spotifyApi } from "../util/spotify";
+import { axiosInstance } from "../util/axiosConfig";
 
 const TopArtists = () => {
   const history = useHistory();
@@ -18,30 +17,27 @@ const TopArtists = () => {
   useEffect(() => {
     const accessToken = localStorage.getItem("accessToken");
     if (accessToken) {
-      spotifyApi.setAccessToken(accessToken);
-      spotifyApi
-        .getMyTopArtists({ time_range: "long_term", limit: 30 })
+      axiosInstance
+        .get("/me/top/artists?time_range=long_term&limit=30")
         .then((res) => {
-          console.log(res);
-          let imgArr = [];
-          res.body.items.forEach((item) => {
-            imgArr.push({
-              id: item.id,
-              url:
-                item.images.length >= 1
-                  ? item.images[0].url
-                  : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRd-y-IJN8glQlf1qoU01dEgGPUa0d1-sjfWg&usqp=CAU",
+          if (res.status === 200) {
+            let imgArr = [];
+            res.data.items.forEach((item) => {
+              imgArr.push({
+                id: item.id,
+                url:
+                  item.images.length >= 1
+                    ? item.images[0].url
+                    : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRd-y-IJN8glQlf1qoU01dEgGPUa0d1-sjfWg&usqp=CAU",
+              });
             });
-          });
-          setImages(imgArr);
-          setTopArtists(res.body.items);
-          setCurrentArtist(res.body.items[0].id);
+            setImages(imgArr);
+            setTopArtists(res.data.items);
+            setCurrentArtist(res.data.items[0].id);
+          }
         })
         .catch((err) => {
           console.log(err);
-          if (err?.body?.error?.status === 401) {
-            handleLogout();
-          }
         });
     } else {
       history.push("/");
@@ -55,30 +51,28 @@ const TopArtists = () => {
   }, [currentArtist]);
 
   const changeArtist = (artistId) => {
-    spotifyApi
-      .getArtistTopTracks(artistId, "IN")
+    axiosInstance
+      .get(`/artists/${artistId}/top-tracks?market=IN`)
       .then((res) => {
-        console.log(res);
-        let url = "";
-        const tracks = res.body.tracks;
-        for (let i = 0; i < tracks.length; i++) {
-          if (tracks[i].preview_url) {
-            url = tracks[i].preview_url;
-            break;
+        if (res.status === 200) {
+          let url = "";
+          const tracks = res.data.tracks;
+          for (let i = 0; i < tracks.length; i++) {
+            if (tracks[i].preview_url) {
+              url = tracks[i].preview_url;
+              break;
+            }
           }
-        }
-        setCurrentArtist(artistId);
-        if (url) {
-          setAudioUrl(url);
-        } else {
-          handleNextPlay();
+          setCurrentArtist(artistId);
+          if (url) {
+            setAudioUrl(url);
+          } else {
+            handleNextPlay();
+          }
         }
       })
       .catch((err) => {
         console.log(err);
-        if (err?.body?.error?.status === 401) {
-          handleLogout();
-        }
       });
   };
 

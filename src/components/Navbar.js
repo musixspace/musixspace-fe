@@ -3,7 +3,6 @@ import { FiMenu, FiX } from "react-icons/fi";
 import { Link, useLocation } from "react-router-dom";
 import profile from "../assets/images/image4.png";
 import { handleLogout } from "../util/functions";
-import { loginUrl } from "../util/spotify";
 
 const themeSwitch = (str) => {
   switch (str) {
@@ -99,9 +98,6 @@ const Navbar = () => {
         </>
       ) : (
         <ul className={`nav-ul ${showLinks ? "" : "hide"}`}>
-          <li className="nav-li">
-            <a href={loginUrl}>Login</a>
-          </li>
           <li className="nav-li">Discord</li>
           <li
             className={`nav-li ${

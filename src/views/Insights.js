@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import ImageSlider from "../components/ImageSlider";
 import Navbar from "../components/Navbar";
-import { handleLogout } from "../util/functions";
-import { spotifyApi } from "../util/spotify";
+import { axiosInstance } from "../util/axiosConfig";
 
 const Insights = () => {
   const [name, setName] = useState("");
@@ -11,19 +10,16 @@ const Insights = () => {
   useEffect(() => {
     const accessToken = localStorage.getItem("accessToken");
     if (accessToken) {
-      spotifyApi.setAccessToken(accessToken);
-      spotifyApi
-        .getMe()
+      axiosInstance
+        .get("/me")
         .then((res) => {
-          if (res.statusCode === 200) {
-            setName(res.body.display_name);
+          console.log(res);
+          if (res.status === 200) {
+            setName(res.data.display_name);
           }
         })
         .catch((err) => {
           console.log(err);
-          if (err?.body?.error?.status === 401) {
-            handleLogout();
-          }
         });
     }
   }, []);
