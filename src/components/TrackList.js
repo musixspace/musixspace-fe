@@ -9,6 +9,7 @@ const TrackList = ({ currentTrack, tracks, changeTrack }) => {
       while (!children[index].classList.contains("selected-track")) {
         index++;
       }
+      // console.log(index);
       if (index) {
         children = container.querySelector(
           `.track:nth-child(${index + 1})`
