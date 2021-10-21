@@ -19,11 +19,12 @@ import TopTracks from "./views/TopTracks";
 const code = new URLSearchParams(window.location.search).get("code");
 
 const App = () => {
-  const accessToken = useAuth(code);
+  const { accessToken, refreshToken } = useAuth(code);
 
   const callAuth = () => {
     console.log("Access Token is ", accessToken);
     localStorage.setItem("accessToken", accessToken);
+    localStorage.setItem("refreshToken", refreshToken);
     window.location.href = window.location.origin + "/insights";
   };
 
