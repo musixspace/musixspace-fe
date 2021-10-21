@@ -14,7 +14,7 @@
     // border: 2px solid white;
 
     .heading {
-      margin-left: 1em;
+      margin-left: 1.5em;
       font-size: calc(var(--base-font-size) * 6);
 
       div {
@@ -37,11 +37,63 @@
         }
       }
     }
+
     > div:first-child {
       width: 100%;
       display: flex;
       justify-content: flex-start;
       align-items: center;
+      .mood-tracker {
+        height: 75vh;
+        display: flex;
+        justify-content: space-evenly;
+        align-items: center;
+        flex-direction: column;
+
+        .main {
+          width: 100%;
+          text-align: right;
+
+          > span:first-child {
+            font-size: calc(var(--base-font-size) * 10);
+          }
+
+          > span:nth-child(2) {
+            text-transform: capitalize;
+            font-size: calc(var(--base-font-size) * 6);
+          }
+        }
+
+        .inner {
+          display: grid;
+          grid-template-columns: 1fr 2fr;
+
+          .content {
+            p > span {
+              text-transform: capitalize;
+            }
+
+            p:first-child {
+              font-size: calc(var(--base-font-size) * 3);
+              color: var(--clr-white);
+            }
+
+            p:nth-child(2) {
+              font-size: calc(var(--base-font-size) * 6);
+            }
+
+            p:nth-child(3) {
+              font-size: calc(var(--base-font-size) * 4);
+              color: var(--clr-red);
+            }
+
+            p:nth-child(4) {
+              font-size: calc(var(--base-font-size) * 3);
+              color: var(--clr-white);
+            }
+          }
+        }
+      }
     }
   }
 }
@@ -73,6 +125,47 @@
 
       > div:first-child {
         flex-direction: column;
+
+        .mood-tracker {
+          height: auto;
+          width: 100%;
+          justify-content: flex-start;
+
+          .main {
+            text-align: left;
+            > span:first-child {
+              font-size: calc(var(--base-font-size) * 6);
+            }
+
+            > span:nth-child(2) {
+              font-size: calc(var(--base-font-size) * 4);
+            }
+          }
+
+          .inner {
+            display: block;
+            width: 100%;
+
+            .content {
+              margin-top: 1em;
+              p:first-child {
+                font-size: calc(var(--base-font-size) * 2.5);
+              }
+
+              p:nth-child(2) {
+                font-size: calc(var(--base-font-size) * 4);
+              }
+
+              p:nth-child(3) {
+                font-size: calc(var(--base-font-size) * 3);
+              }
+
+              p:nth-child(4) {
+                font-size: calc(var(--base-font-size) * 2.5);
+              }
+            }
+          }
+        }
       }
     }
   }

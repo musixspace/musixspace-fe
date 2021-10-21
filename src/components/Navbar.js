@@ -7,9 +7,12 @@ import { loginUrl } from "../util/spotify";
 
 const themeSwitch = (str) => {
   switch (str) {
+    case "/readytorock":
+      return "nav-transparent";
     case "/insights/toptracks":
     case "/insights/topartists":
     case "/insights/surprise":
+    case "/insights/mood":
       return "nav-top-tracks";
     case "/insights":
       return "nav-insights";
@@ -49,16 +52,17 @@ const Navbar = () => {
       {localStorage.getItem("accessToken") ? (
         <>
           <ul className={`nav-ul ${showLinks ? "" : "hide"}`}>
-            {loggedInLinks.map((item) => (
-              <li
-                key={item.name}
-                className={`nav-li ${
-                  location.pathname === item.path ? "underline" : ""
-                }`}
-              >
-                <Link to={item.path}>{item.name}</Link>
-              </li>
-            ))}
+            {location.pathname !== "/readytorock" &&
+              loggedInLinks.map((item) => (
+                <li
+                  key={item.name}
+                  className={`nav-li ${
+                    location.pathname === item.path ? "underline" : ""
+                  }`}
+                >
+                  <Link to={item.path}>{item.name}</Link>
+                </li>
+              ))}
             <li className="nav-li mobile">
               <Link to="/about">About</Link>
             </li>
@@ -95,6 +99,9 @@ const Navbar = () => {
         </>
       ) : (
         <ul className={`nav-ul ${showLinks ? "" : "hide"}`}>
+          <li className="nav-li">
+            <a href={loginUrl}>Login</a>
+          </li>
           <li className="nav-li">Discord</li>
           <li
             className={`nav-li ${
@@ -102,9 +109,6 @@ const Navbar = () => {
             }`}
           >
             <Link to="/about">About</Link>
-          </li>
-          <li className="nav-li">
-            <a href={loginUrl}>Login</a>
           </li>
         </ul>
       )}

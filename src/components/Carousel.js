@@ -32,7 +32,7 @@ const Carousel = ({ data, current }) => {
     }
   }, [data, current]);
 
-  if (data.length > 0 && images.img1 && current)
+  if (data.length > 0 && images.img1 && current !== "")
     return (
       <div className="img-container">
         <img src={images.img1} alt="Poster" />

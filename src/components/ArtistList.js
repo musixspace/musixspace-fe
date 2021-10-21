@@ -1,6 +1,26 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 const ArtistList = ({ currentArtist, artists, changeArtist }) => {
+  useEffect(() => {
+    if (currentArtist) {
+      const container = document.querySelector(".tracks-container");
+      let children = container.children;
+      let index = 0;
+      while (!children[index].classList.contains("selected-track")) {
+        index++;
+      }
+      // console.log(index);
+      if (index) {
+        children = container.querySelector(
+          `.track:nth-child(${index + 1})`
+        ).offsetTop;
+        container.scrollTo({ top: children, behavior: "smooth" });
+      } else {
+        container.scrollTo({ top: 0, behavior: "smooth" });
+      }
+    }
+  }, [currentArtist]);
+
   return (
     <div className="tracks-container">
       {artists.map((item, ind) => (

@@ -1,0 +1,142 @@
+.readyToRock {
+  background: url("../images/readytorock.png") no-repeat;
+  background-size: cover;
+  width: 100%;
+  height: 100vh;
+  padding: 2em 5em;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+  .container {
+    padding-top: 5em;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    .title {
+      font-family: var(--f-circ-spotify);
+      font-size: calc(var(--base-font-size) * 8);
+      color: var(--clr-white);
+    }
+
+    .input-fields {
+      width: 620px;
+      margin-top: 6em;
+
+      > div {
+        position: relative;
+
+        input {
+          width: 100%;
+          font-size: calc(var(--base-font-size) * 2.75);
+          font-family: var(--f-circ-pro);
+          padding: 0.6em 3em;
+          outline: none;
+          border: none;
+          border-radius: 100px;
+
+          &::-webkit-input-placeholder,
+          &::placeholder {
+            color: var(--clr-black);
+          }
+        }
+
+        svg {
+          position: absolute;
+          left: 25px;
+          top: 50%;
+          font-size: calc(var(--base-font-size) * 2.5);
+          transform: translateY(-50%);
+        }
+      }
+
+      > div:not(:first-child) {
+        margin-top: 2em;
+      }
+    }
+
+    .button-div {
+      width: 620px;
+      margin-top: 2em;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+
+      button {
+        border: none;
+        outline: none;
+        text-transform: uppercase;
+        font-family: var(--f-circ-pro);
+        font-size: calc(var(--base-font-size) * 2);
+        padding: 0.8em 2em;
+        border-radius: 100px;
+        background-color: var(--clr-white);
+      }
+    }
+  }
+}
+
+@media (max-width: 976px) {
+  .readyToRock {
+    .container {
+      width: 100%;
+      .title {
+        font-size: calc(var(--base-font-size) * 6);
+      }
+
+      .input-fields {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        > div {
+          width: 80%;
+          input {
+            font-size: calc(var(--base-font-size) * 2.5);
+          }
+        }
+      }
+
+      .button-div {
+        width: 80%;
+
+        button {
+          font-size: calc(var(--base-font-size) * 1.75);
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 776px) {
+  .readyToRock {
+    padding: 1em 1.5em;
+    .container {
+      .title {
+        font-size: calc(var(--base-font-size) * 5);
+      }
+
+      .input-fields {
+        width: 100%;
+
+        > div {
+          width: 100%;
+          input {
+            font-size: calc(var(--base-font-size) * 2.25);
+          }
+        }
+      }
+
+      .button-div {
+        width: 100%;
+
+        button {
+          font-size: calc(var(--base-font-size) * 1.55);
+        }
+      }
+    }
+  }
+}
