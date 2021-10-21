@@ -99,6 +99,9 @@ const Navbar = () => {
         </>
       ) : (
         <ul className={`nav-ul ${showLinks ? "" : "hide"}`}>
+          <li className="nav-li">
+            <a href={loginUrl}>Login</a>
+          </li>
           <li className="nav-li">Discord</li>
           <li
             className={`nav-li ${
@@ -106,9 +109,6 @@ const Navbar = () => {
             }`}
           >
             <Link to="/about">About</Link>
-          </li>
-          <li className="nav-li">
-            <a href={loginUrl}>Login</a>
           </li>
         </ul>
       )}

@@ -52,14 +52,15 @@
 
         .main {
           width: 100%;
+          text-align: right;
 
           > span:first-child {
-            font-size: calc(var(--base-font-size) * 12);
+            font-size: calc(var(--base-font-size) * 10);
           }
 
           > span:nth-child(2) {
             text-transform: capitalize;
-            font-size: calc(var(--base-font-size) * 8);
+            font-size: calc(var(--base-font-size) * 6);
           }
         }
 
@@ -131,6 +132,7 @@
           justify-content: flex-start;
 
           .main {
+            text-align: left;
             > span:first-child {
               font-size: calc(var(--base-font-size) * 6);
             }
