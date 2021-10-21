@@ -1,10 +1,16 @@
-import React from "react";
+import React, { useEffect } from "react";
 import ImageSlider from "../components/ImageSlider";
 import Navbar from "../components/Navbar";
 import { FaSpotify } from "react-icons/fa";
 import { loginUrl } from "../util/spotify";
 
 const Home = () => {
+  useEffect(() => {
+    if (localStorage.getItem("accessToken")) {
+      window.location.href = window.location.origin + "/insights";
+    }
+  }, []);
+
   return (
     <div className="wrapper" style={{ backgroundColor: "var(--bg-home)" }}>
       <Navbar />
