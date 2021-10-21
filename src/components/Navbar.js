@@ -51,6 +51,16 @@ const Navbar = () => {
       {localStorage.getItem("accessToken") ? (
         <>
           <ul className={`nav-ul ${showLinks ? "" : "hide"}`}>
+            <div className="mobile-top">
+              <div className="profile">
+                <div className="profile-img">
+                  <img src={profile} alt="Profile" />
+                </div>
+              </div>
+              <div onClick={toggleMenu}>
+                <FiX />
+              </div>
+            </div>
             {location.pathname !== "/readytorock" &&
               loggedInLinks.map((item) => (
                 <li
@@ -110,15 +120,11 @@ const Navbar = () => {
       )}
       <div onClick={toggleMenu} className="ham">
         {localStorage.getItem("accessToken") ? (
-          showLinks ? (
-            <FiX />
-          ) : (
-            <div className="profile">
-              <div className="profile-img">
-                <img src={profile} alt="Profile" />
-              </div>
+          <div className="profile">
+            <div className="profile-img">
+              <img src={profile} alt="Profile" />
             </div>
-          )
+          </div>
         ) : showLinks ? (
           <FiX />
         ) : (
