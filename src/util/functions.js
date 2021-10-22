@@ -1,5 +1,5 @@
 export const handleLogout = () => {
   localStorage.removeItem("accessToken");
-  localStorage.removeItem("refreshToken");
+  localStorage.removeItem("spotifyId");
   window.location = "/";
 };

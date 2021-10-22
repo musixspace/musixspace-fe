@@ -34,7 +34,7 @@ const App = () => {
   return (
     <Router>
       <Switch>
-        {accessToken && <Redirect to="/insights" />}
+        {/*{accessToken && <Redirect to="/insights" />}*/}
         <Route exact path="/readytorock" component={ReadyToRock} />
         <Route exact path="/insights/mood" component={MoodRadio} />
         <Route exact path="/insights/surprise" component={SurpriseMe} />

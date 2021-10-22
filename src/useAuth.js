@@ -17,6 +17,10 @@ const useAuth = (code) => {
           if (response.data.isnew) {
             window.location.href = window.location.origin + "/readytorock";
           }
+          else
+          {
+            window.location.href = window.location.origin + "/insights";
+          }
         })
         .catch((err) => {
           console.log(err);
