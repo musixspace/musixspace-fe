@@ -3,8 +3,6 @@ import { useEffect, useState } from "react";
 
 const useAuth = (code) => {
   const [accessToken, setAccessToken] = useState(null);
-  const [refreshToken, setRefreshToken] = useState(null);
-  const [expiresIn, setExpiresIn] = useState();
 
   useEffect(() => {
     if (code) {
@@ -14,10 +12,11 @@ const useAuth = (code) => {
           window.history.pushState({}, null, "/");
           console.log(response.data);
           setAccessToken(response.data.accessToken);
-          setRefreshToken(response.data.refreshToken);
           localStorage.setItem("accessToken", response.data.accessToken);
-          localStorage.setItem("refreshToken", response.data.refreshToken);
-          setExpiresIn(response.data.expiresIn);
+          localStorage.setItem("spotifyId", response.data.spotify_id);
+          if (response.data.isnew) {
+            window.location.href = window.location.origin + "/readytorock";
+          }
         })
         .catch((err) => {
           console.log(err);
@@ -28,29 +27,29 @@ const useAuth = (code) => {
 
   // Update 'accessToken' with the help of 'refreshToken' when 'expireIn' time expires
   // Because of this user doesnot have to reLogin after(in this case 3600s = 1hr) its accessToken expires because below code will updates accessToken
-  useEffect(() => {
-    if (!refreshToken || !expiresIn) {
-      return;
-    }
+  // useEffect(() => {
+  //   if (!refreshToken || !expiresIn) {
+  //     return;
+  //   }
 
-    let interval = setInterval(() => {
-      axios
-        .post(`${process.env.REACT_APP_BACKEND_URI}/refresh`, { refreshToken })
-        .then((response) => {
-          // console.log(response.data);
-          setAccessToken(response.data.accessToken);
-          setExpiresIn(response.data.expiresIn);
-        })
-        .catch(() => {
-          window.location = "/";
-        });
-    }, (expiresIn - 60) * 1000); // 1 min before expire Time and multiplying it with 1000 becoz to convert it in miliseconds
+  //   let interval = setInterval(() => {
+  //     axios
+  //       .post(`${process.env.REACT_APP_BACKEND_URI}/refresh`, { refreshToken })
+  //       .then((response) => {
+  //         // console.log(response.data);
+  //         setAccessToken(response.data.accessToken);
+  //         setExpiresIn(response.data.expiresIn);
+  //       })
+  //       .catch(() => {
+  //         window.location = "/";
+  //       });
+  //   }, (expiresIn - 60) * 1000); // 1 min before expire Time and multiplying it with 1000 becoz to convert it in miliseconds
 
-    // This will make sure that if for some reason our refreshtoken or expireTime changes before an actual Refresh then it will clear the interval so that we don't use the incorrect expireTime or refreshtoken
-    return () => clearInterval(interval);
-  }, [refreshToken, expiresIn]);
+  //   // This will make sure that if for some reason our refreshtoken or expireTime changes before an actual Refresh then it will clear the interval so that we don't use the incorrect expireTime or refreshtoken
+  //   return () => clearInterval(interval);
+  // }, [refreshToken, expiresIn]);
 
-  return { accessToken, refreshToken };
+  return { accessToken };
 };
 
 export default useAuth;

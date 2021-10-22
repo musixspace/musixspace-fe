@@ -22,7 +22,7 @@ const App = () => {
   const { accessToken } = useAuth(code);
 
   const callAuth = () => {
-    window.location.href = window.location.origin + "/insights";
+    // window.location.href = window.location.origin + "/insights";
   };
 
   useEffect(() => {
