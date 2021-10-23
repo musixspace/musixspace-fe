@@ -19,31 +19,41 @@
       width: 100%;
       > div {
         transform: scale(0.9);
+        display: flex;
+        justify-content: flex-end;
         position: relative;
+
         input {
           font-family: var(--f-circ-pro), sans-serif;
-          width: 100%;
+          width: 30%;
           border-radius: 100px;
           outline: none;
           border: none;
           font-size: 1.5rem;
           padding: 0.6em 3em;
+          transition: all 250ms ease-in-out;
+
+          &:focus-within {
+            width: 100%;
+          }
         }
-        svg {
+        > svg {
           position: absolute;
           color: var(--clr-black);
           font-size: 28px;
-
-          &:first-child {
-            left: 25px;
-            top: 13px;
-          }
+          right: 280px;
+          top: 13px;
+          transition: all 250ms ease-in-out;
 
           &:last-child {
             right: 25px;
             top: 13px;
             cursor: pointer;
           }
+        }
+
+        input:focus ~ svg:not(:last-child) {
+          left: 25px;
         }
       }
     }

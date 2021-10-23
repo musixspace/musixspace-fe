@@ -133,13 +133,13 @@ const Discover = () => {
           <div></div>
           <div>
             <div>
-              <FiSearch />
               <input
                 value={search}
                 onChange={handleSearch}
                 type="text"
                 placeholder="Discover your friends and artists"
               />
+              <FiSearch />
               <FiX onClick={() => setSearch("")} />
             </div>
           </div>
