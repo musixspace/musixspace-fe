@@ -13,48 +13,43 @@
   .searchbar {
     width: 100%;
     display: grid;
+    grid-gap: 2em;
     grid-template-columns: 1fr 10fr 1fr;
 
     > div:nth-child(2) {
-      width: 100%;
-      > div {
-        transform: scale(0.9);
-        display: flex;
-        justify-content: flex-end;
-        position: relative;
+      margin-left: auto;
+      padding: 0.6em 1em;
+      border-radius: 100px;
+      width: 30%;
+      background-color: var(--clr-white);
+      transition: all 250ms ease-in-out;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
 
-        input {
-          font-family: var(--f-circ-pro), sans-serif;
-          width: 30%;
-          border-radius: 100px;
-          outline: none;
-          border: none;
-          font-size: 1.5rem;
-          padding: 0.6em 3em;
-          transition: all 250ms ease-in-out;
+      > svg {
+        color: var(--clr-black);
 
-          &:focus-within {
-            width: 100%;
-          }
-        }
-        > svg {
-          position: absolute;
-          color: var(--clr-black);
-          font-size: 28px;
-          right: 280px;
-          top: 13px;
-          transition: all 250ms ease-in-out;
-
-          &:last-child {
-            right: 25px;
-            top: 13px;
-            cursor: pointer;
-          }
+        &:first-child {
+          margin-right: 0.5em;
+          font-size: calc(var(--base-font-size) * 3);
         }
 
-        input:focus ~ svg:not(:last-child) {
-          left: 25px;
+        &:last-child {
+          margin-left: 0.5em;
+          font-size: calc(var(--base-font-size) * 3);
         }
+      }
+
+      > input {
+        width: 100%;
+        border: none;
+        outline: none;
+        font-size: calc(var(--base-font-size) * 2.75);
+      }
+
+      &:focus-within {
+        width: 100%;
       }
     }
   }
@@ -63,6 +58,7 @@
     width: 100%;
     height: 100%;
     display: grid;
+    grid-gap: 2em;
     grid-template-columns: 1fr 10fr 1fr;
 
     .prev,
@@ -88,7 +84,7 @@
     .user {
       border-radius: 50px;
       overflow: hidden;
-      transform: scale(0.9);
+      transform: scaleY(0.9);
 
       display: flex;
       justify-content: center;
@@ -121,8 +117,6 @@
           }
 
           > button {
-            outline: none;
-            border: none;
             font-size: calc(var(--base-font-size) * 2);
             font-weight: bold;
             padding: 0.4em 1em;
@@ -396,7 +390,7 @@
       > div:nth-child(2) {
         width: 100%;
         > div {
-          transform: scale(1);
+          transform: scaleY(1);
           width: 100%;
 
           input {
@@ -431,6 +425,7 @@
       justify-content: center;
       align-items: center;
       flex-direction: column;
+      gap: 0;
 
       .next,
       .prev {
@@ -448,7 +443,7 @@
       }
 
       .user {
-        transform: scale(1);
+        transform: scaleY(1);
         height: 100%;
         border-radius: 20px;
         .content-container {

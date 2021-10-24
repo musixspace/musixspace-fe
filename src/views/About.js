@@ -1,7 +1,7 @@
 import React from "react";
 import Navbar from "../components/Navbar";
-import img1 from "../assets/images/image3.png";
-import img2 from "../assets/images/image2.png";
+import img1 from "../assets/images/artists/image3.png";
+import img2 from "../assets/images/artists/image2.png";
 
 const people = [
   {

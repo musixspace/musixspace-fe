@@ -15,7 +15,8 @@ const Insights = () => {
         .then((res) => {
           console.log(res);
           if (res.status === 200) {
-            setName(res.data.display_name);
+            let name = res.data.display_name.split(" ")[0];
+            setName(name);
           }
         })
         .catch((err) => {

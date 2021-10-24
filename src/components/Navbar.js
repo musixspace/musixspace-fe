@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { FiMenu, FiX } from "react-icons/fi";
 import { Link, useLocation } from "react-router-dom";
-import profile from "../assets/images/image4.png";
+import profile from "../assets/images/artists/image4.png";
 import { handleLogout } from "../util/functions";
 
 const themeSwitch = (str) => {
@@ -16,6 +16,7 @@ const themeSwitch = (str) => {
     case "/insights":
       return "nav-insights";
     case "/discover":
+    case "/rolling":
       return "nav-discover";
     case "/about":
       return "nav-about";
@@ -62,6 +63,7 @@ const Navbar = () => {
               </div>
             </div>
             {location.pathname !== "/readytorock" &&
+              location.pathname !== "/rolling" &&
               loggedInLinks.map((item) => (
                 <li
                   key={item.name}

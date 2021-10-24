@@ -12,6 +12,7 @@ import Home from "./views/Home";
 import Insights from "./views/Insights";
 import MoodRadio from "./views/MoodRadio";
 import ReadyToRock from "./views/ReadyToRock";
+import Rolling from "./views/Rolling";
 import SurpriseMe from "./views/SurpriseMe";
 import TopArtists from "./views/TopArtists";
 import TopTracks from "./views/TopTracks";
@@ -36,6 +37,7 @@ const App = () => {
       <Switch>
         {accessToken && <Redirect to="/insights" />}
         <Route exact path="/readytorock" component={ReadyToRock} />
+        <Route exact path="/rolling" component={Rolling} />
         <Route exact path="/insights/mood" component={MoodRadio} />
         <Route exact path="/insights/surprise" component={SurpriseMe} />
         <Route exact path="/insights/topartists" component={TopArtists} />

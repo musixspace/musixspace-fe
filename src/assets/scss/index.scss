@@ -5,6 +5,7 @@
 @import "about.scss";
 @import "readytorock.scss";
 @import "discover.scss";
+@import "rolling.scss";
 @import "./components/navbar.scss";
 @import "./components//carousel.scss";
 @import "./components/tracklist.scss";
@@ -65,5 +66,7 @@ a {
 }
 
 button {
+  outline: none;
+  border: none;
   cursor: pointer;
 }
