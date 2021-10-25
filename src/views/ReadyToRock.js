@@ -18,11 +18,12 @@ const ReadyToRock = () => {
       bio: data.anthem,
       spotify_id: localStorage.getItem("spotifyId"),
     };
+   console.log("tokenaaa: "+localStorage.getItem("accessToken"));
     axios
       .post(`${process.env.REACT_APP_BACKEND_URI}/newstar`, payload, {
         headers: {
-          "Content-Type": "application/json",
-          jwt_token: localStorage.getItem("accessToken"),
+          //"Content-Type": "application/json",
+         "jwt_token" : localStorage.getItem("accessToken"),
         },
       })
       .then((res) => {

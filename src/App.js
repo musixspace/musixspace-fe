@@ -19,6 +19,7 @@ import TopTracks from "./views/TopTracks";
 const code = new URLSearchParams(window.location.search).get("code");
 
 const App = () => {
+  console.log("code: "+code);
   const { accessToken } = useAuth(code);
 
   const callAuth = () => {

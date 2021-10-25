@@ -6,6 +6,7 @@ const useAuth = (code) => {
 
   useEffect(() => {
     if (code) {
+      console.log("link is"+`${process.env.REACT_APP_BACKEND_URI}/login`);
       axios
         .post(`${process.env.REACT_APP_BACKEND_URI}/login`, { code })
         .then((response) => {
