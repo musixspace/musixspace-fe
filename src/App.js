@@ -11,6 +11,7 @@ import Discover from "./views/Discover";
 import Home from "./views/Home";
 import Insights from "./views/Insights";
 import MoodRadio from "./views/MoodRadio";
+import MySpace from "./views/MySpace";
 import ReadyToRock from "./views/ReadyToRock";
 import Rolling from "./views/Rolling";
 import SurpriseMe from "./views/SurpriseMe";
@@ -46,6 +47,7 @@ const App = () => {
         <Route exact path="/discover" component={Discover} />
         <Route exact path="/about" component={About} />
         <Route exact path="/" component={Home} />
+        <Route path="/:username" component={MySpace} />
       </Switch>
     </Router>
   );

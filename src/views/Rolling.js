@@ -18,20 +18,7 @@ const traits = [
 ];
 
 const Rolling = () => {
-  const [search, setSearch] = useState("");
   const [selectedTraits, setSelectedTraits] = useState([]);
-  const [traitsList, setTraitsList] = useState(traits);
-
-  useEffect(() => {
-    if (search !== "") {
-      const newArr = traits.filter((item) =>
-        item.name.toLowerCase().includes(search.toLowerCase())
-      );
-      setTraitsList(newArr);
-    } else {
-      setTraitsList(traits);
-    }
-  }, [search]);
 
   const handleSelectTrait = (id) => {
     let flag = false;
@@ -60,19 +47,9 @@ const Rolling = () => {
       <div className="rolling">
         <div className="container">
           <p>Choose 3 personality traits</p>
-          <div className="searchbar">
-            <FiSearch />
-            <input
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              type="text"
-              placeholder="Search here"
-            />
-            <FiX onClick={() => setSearch("")} />
-          </div>
           <div className="traits-container">
-            {traitsList.length > 0 ? (
-              traitsList.map((trait) => (
+            {traits.length > 0 ? (
+              traits.map((trait) => (
                 <div
                   key={trait.id}
                   className="trait"

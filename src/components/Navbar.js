@@ -19,9 +19,8 @@ const themeSwitch = (str) => {
     case "/rolling":
       return "nav-discover";
     case "/about":
-      return "nav-about";
     default:
-      return "";
+      return "nav-about";
   }
 };
 
@@ -43,7 +42,11 @@ const Navbar = () => {
   };
 
   return (
-    <nav className={themeSwitch(location.pathname)}>
+    <nav
+      className={
+        location.pathname === "/" ? "" : themeSwitch(location.pathname)
+      }
+    >
       <div className="nav-title">
         <Link to={localStorage.getItem("accessToken") ? "/insights" : "/"}>
           Musixspace
