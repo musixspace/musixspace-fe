@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import { FiSearch, FiSkipBack, FiSkipForward, FiX } from "react-icons/fi";
-import flume from "../assets/images/flume.png";
-import image1 from "../assets/images/image1.png";
-import image2 from "../assets/images/image2.png";
-import image3 from "../assets/images/image3.png";
-import image4 from "../assets/images/image4.png";
-import image5 from "../assets/images/image5.png";
-import lewis from "../assets/images/lewis.png";
+import flume from "../assets/images/artists/flume.png";
+import image1 from "../assets/images/artists/image1.png";
+import image2 from "../assets/images/artists/image2.png";
+import image3 from "../assets/images/artists/image3.png";
+import image4 from "../assets/images/artists/image4.png";
+import image5 from "../assets/images/artists/image5.png";
+import lewis from "../assets/images/artists/lewis.png";
 import logoWhite from "../assets/images/logo-white.png";
-import prateek from "../assets/images/prateek.png";
+import prateek from "../assets/images/artists/prateek.png";
 import Navbar from "../components/Navbar";
 
 const user = [
@@ -132,16 +132,14 @@ const Discover = () => {
         <div className="searchbar">
           <div></div>
           <div>
-            <div>
-              <FiSearch />
-              <input
-                value={search}
-                onChange={handleSearch}
-                type="text"
-                placeholder="Discover your friends and artists"
-              />
-              <FiX onClick={() => setSearch("")} />
-            </div>
+            <FiSearch />
+            <input
+              value={search}
+              onChange={handleSearch}
+              type="text"
+              placeholder="Discover your friends"
+            />
+            <FiX onClick={() => setSearch("")} />
           </div>
           <div></div>
         </div>

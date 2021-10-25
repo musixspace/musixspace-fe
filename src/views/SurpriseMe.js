@@ -17,17 +17,13 @@ const SurpriseMe = () => {
     const accessToken = localStorage.getItem("accessToken");
     if (accessToken) {
       axiosInstance
-        .get("/me/top/artists?time_range=long_term&limit=30")
+        .get("/me/top/tracks?time_range=long_term&limit=5")
         .then((res) => {
           if (res.status === 200) {
-            const artists = res.data.items
-              .map((artist) => artist.id)
-              .slice(0, 5);
+            const tracks = res.data.items.map((track) => track.id);
 
             axiosInstance
-              .get(
-                `/recommendations?min_enery=0.4&min_popularity=50&seed_artists=${artists.toString()}`
-              )
+              .get(`/recommendations?seed_tracks=${tracks.toString()}&limit=30`)
               .then((topTracks) => {
                 if (topTracks.status === 200) {
                   let imgArr = [];
