@@ -5,119 +5,206 @@ import Navbar from "../components/Navbar";
 import TrackList from "../components/TrackList";
 import WebPlayer from "../components/WebPlayer";
 import { axiosInstance } from "../util/axiosConfig";
+import axios from "axios";
 
 const SurpriseMe = () => {
-  const history = useHistory();
-  const [topRecommendations, setTopRecommendations] = useState(null);
-  const [currentTrack, setCurrentTrack] = useState("");
-  const [audioUrl, setAudioUrl] = useState("");
-  const [images, setImages] = useState(null);
+    const history = useHistory();
+    const [topRecommendations, setTopRecommendations] = useState(null);
+    const [currentTrack, setCurrentTrack] = useState("");
+    const [audioUrl, setAudioUrl] = useState("");
+    const [images, setImages] = useState(null);
 
-  useEffect(() => {
-    const accessToken = localStorage.getItem("accessToken");
-    if (accessToken) {
-      axiosInstance
-        .get("/me/top/tracks?time_range=long_term&limit=5")
-        .then((res) => {
-          if (res.status === 200) {
-            const tracks = res.data.items.map((track) => track.id);
+    useEffect(() => {
+        const accessToken = localStorage.getItem("accessToken");
+        if (accessToken) {
 
-            axiosInstance
-              .get(`/recommendations?seed_tracks=${tracks.toString()}&limit=30`)
-              .then((topTracks) => {
-                if (topTracks.status === 200) {
-                  let imgArr = [];
-                  topTracks.data.tracks.forEach((item) => {
-                    imgArr.push({ id: item.id, url: item.album.images[0].url });
-                  });
-                  setImages(imgArr);
-                  setTopRecommendations(topTracks.data.tracks);
-                  setCurrentTrack(topTracks.data.tracks[0].id);
-                }
-              })
-              .catch((err) => {
-                console.log(err);
-              });
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    } else {
-      history.push("/");
-    }
-  }, []);
 
-  useEffect(() => {
-    if (currentTrack) {
-      changeTrack(currentTrack);
-    }
-  }, [currentTrack]);
+            const payload = {
+                pip: "https://api.spotify.com/v1/me/top/tracks?time_range=long_term&limit=5",
+                spotify_id: localStorage.getItem("spotifyId"),
+            };
 
-  const changeTrack = (trackId) => {
-    axiosInstance
-      .get(`/tracks/${trackId}?market=IN`)
-      .then((res) => {
-        if (res.status === 200) {
-          setCurrentTrack(trackId);
-          if (res.data.preview_url) {
-            setAudioUrl(res.data.preview_url);
-          } else {
-            handleNextPlay();
-          }
+
+            axios
+                .post(`${process.env.REACT_APP_BACKEND_URI}/spotifyget`, payload, {
+                    headers: {
+                        //"Content-Type": "application/json",
+                        "jwt_token": localStorage.getItem("accessToken"),
+                    },
+                })
+                .then((res) => {
+                    if (res.status === 200) {
+                        const tracks = res.data.items.map((track) => track.id);
+
+
+                        const payload2 = {
+                            pip: `https://api.spotify.com/v1/recommendations?seed_tracks=${tracks.toString()}&limit=30`,
+                            spotify_id: localStorage.getItem("spotifyId"),
+                        };
+
+
+                        axios
+                            .post(`${process.env.REACT_APP_BACKEND_URI}/spotifyget`, payload2, {
+                                headers: {
+                                    //"Content-Type": "application/json",
+                                    "jwt_token": localStorage.getItem("accessToken"),
+                                },
+                            })
+                            .then((topTracks) => {
+                                // res=res.output;
+                                // res=res.data.data;
+                                console.log(topTracks);
+                                if (topTracks.status === 200) {
+                                    let imgArr = [];
+                                    topTracks.data.tracks.forEach((item) => {
+                                        imgArr.push({ id: item.id, url: item.album.images[0].url });
+                                    });
+                                    setImages(imgArr);
+                                    setTopRecommendations(topTracks.data.tracks);
+                                    setCurrentTrack(topTracks.data.tracks[0].id);
+                                }
+                            })
+                            .catch((err) => {
+                                console.log(err);
+                            });
+                    }
+
+
+
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+
+
+
+        } else {
+            history.push("/");
         }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
+    }, []);
 
-  const handleTrackChange = (trackId) => {
-    setCurrentTrack(trackId);
-  };
+    useEffect(() => {
+        if (currentTrack) {
+            changeTrack(currentTrack);
+        }
+    }, [currentTrack]);
 
-  const handlePrevPlay = () => {
-    let index;
-    topRecommendations.forEach((item, ind) => {
-      if (item.id === currentTrack) {
-        index = ind;
-      }
-    });
+    const changeTrack = (trackId) => {
+        // axiosInstance
+        //   .get(`/tracks/${trackId}?market=IN`)
+        //   .then((res) => {
+        //     if (res.status === 200) {
+        //       setCurrentTrack(trackId);
+        //       if (res.data.preview_url) {
+        //         setAudioUrl(res.data.preview_url);
+        //       } else {
+        //         handleNextPlay();
+        //       }
+        //     }
+        //   })
+        //   .catch((err) => {
+        //     console.log(err);
+        //   });
 
-    // console.log(index);
+        const payload = {
+            pip: `https://api.spotify.com/v1/tracks/${trackId}?market=IN`,
+            spotify_id: localStorage.getItem("spotifyId"),
+        };
 
-    if (index === 0) {
-      setCurrentTrack(topRecommendations[topRecommendations.length - 1].id);
-    } else {
-      setCurrentTrack(topRecommendations[index - 1].id);
-    }
-  };
 
-  const handleNextPlay = () => {
-    let index;
-    topRecommendations.forEach((item, ind) => {
-      if (item.id === currentTrack) {
-        index = ind;
-      }
-    });
+        axios
+            .post(`${process.env.REACT_APP_BACKEND_URI}/spotifyget`, payload, {
+                headers: {
+                    //"Content-Type": "application/json",
+                    "jwt_token": localStorage.getItem("accessToken"),
+                },
+            })
+            .then((res) => {
+                if (res.status === 200) {
+                    setCurrentTrack(trackId);
+                    if (res.data.preview_url) {
+                        setAudioUrl(res.data.preview_url);
+                    } else {
+                        handleNextPlay();
+                    }
+                }
+            })
+            .catch((err) => {
+                console.log(err);
+            });
 
-    // console.log(index);
 
-    if (index === topRecommendations.length - 1) {
-      setCurrentTrack(topRecommendations[0].id);
-    } else {
-      setCurrentTrack(topRecommendations[index + 1].id);
-    }
-  };
+        // axios
+        //  .post(`${process.env.REACT_APP_BACKEND_URI}/tracks/${trackId}?market=IN`, {
+        //    headers: {
+        //      //"Content-Type": "application/json",
+        //     "jwt_token" : localStorage.getItem("accessToken"),
+        //    },
+        //  })
+        //  .then((res) => {
+        //    if (res.status === 200) {
+        //      setCurrentTrack(trackId);
+        //      if (res.data.preview_url) {
+        //        setAudioUrl(res.data.preview_url);
+        //      } else {
+        //        handleNextPlay();
+        //      }
+        //    }
+        //  })
+        //  .catch((err) => {
+        //    console.log(err);
+        //  });
 
-  const handleShufflePlay = () => {
-    let total = topRecommendations.length;
-    let rnd = Math.floor(Math.random() * total);
-    setCurrentTrack(topRecommendations[rnd].id);
-  };
 
-  return (
-    <div
+
+    };
+
+    const handleTrackChange = (trackId) => {
+        setCurrentTrack(trackId);
+    };
+
+    const handlePrevPlay = () => {
+        let index;
+        topRecommendations.forEach((item, ind) => {
+            if (item.id === currentTrack) {
+                index = ind;
+            }
+        });
+
+        // console.log(index);
+
+        if (index === 0) {
+            setCurrentTrack(topRecommendations[topRecommendations.length - 1].id);
+        } else {
+            setCurrentTrack(topRecommendations[index - 1].id);
+        }
+    };
+
+    const handleNextPlay = () => {
+        let index;
+        topRecommendations.forEach((item, ind) => {
+            if (item.id === currentTrack) {
+                index = ind;
+            }
+        });
+
+        // console.log(index);
+
+        if (index === topRecommendations.length - 1) {
+            setCurrentTrack(topRecommendations[0].id);
+        } else {
+            setCurrentTrack(topRecommendations[index + 1].id);
+        }
+    };
+
+    const handleShufflePlay = () => {
+        let total = topRecommendations.length;
+        let rnd = Math.floor(Math.random() * total);
+        setCurrentTrack(topRecommendations[rnd].id);
+    };
+
+    return (
+        <div
       className="wrapper"
       style={{ backgroundColor: "var(--bg-top-tracks)" }}
     >
@@ -146,7 +233,7 @@ const SurpriseMe = () => {
         )}
       </div>
     </div>
-  );
+    );
 };
 
 export default SurpriseMe;

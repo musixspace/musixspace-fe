@@ -5,123 +5,156 @@ import Carousel from "../components/Carousel";
 import Navbar from "../components/Navbar";
 import WebPlayer from "../components/WebPlayer";
 import { axiosInstance } from "../util/axiosConfig";
+import axios from "axios";
 
 const TopArtists = () => {
-  const history = useHistory();
+    const history = useHistory();
 
-  const [topArtists, setTopArtists] = useState(null);
-  const [images, setImages] = useState(null);
-  const [currentArtist, setCurrentArtist] = useState("");
-  const [audioUrl, setAudioUrl] = useState("");
+    const [topArtists, setTopArtists] = useState(null);
+    const [images, setImages] = useState(null);
+    const [currentArtist, setCurrentArtist] = useState("");
+    const [audioUrl, setAudioUrl] = useState("");
 
-  useEffect(() => {
-    const accessToken = localStorage.getItem("accessToken");
-    if (accessToken) {
-      axiosInstance
-        .get("/me/top/artists?time_range=long_term&limit=30")
-        .then((res) => {
-          if (res.status === 200) {
-            let imgArr = [];
-            res.data.items.forEach((item) => {
-              imgArr.push({
-                id: item.id,
-                url:
-                  item.images.length >= 1
-                    ? item.images[0].url
-                    : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRd-y-IJN8glQlf1qoU01dEgGPUa0d1-sjfWg&usqp=CAU",
-              });
-            });
-            setImages(imgArr);
-            setTopArtists(res.data.items);
-            setCurrentArtist(res.data.items[0].id);
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    } else {
-      history.push("/");
-    }
-  }, []);
+    useEffect(() => {
+        const accessToken = localStorage.getItem("accessToken");
+        if (accessToken) {
 
-  useEffect(() => {
-    if (currentArtist) {
-      changeArtist(currentArtist);
-    }
-  }, [currentArtist]);
 
-  const changeArtist = (artistId) => {
-    axiosInstance
-      .get(`/artists/${artistId}/top-tracks?market=IN`)
-      .then((res) => {
-        if (res.status === 200) {
-          let url = "";
-          const tracks = res.data.tracks;
-          for (let i = 0; i < tracks.length; i++) {
-            if (tracks[i].preview_url) {
-              url = tracks[i].preview_url;
-              break;
-            }
-          }
-          setCurrentArtist(artistId);
-          if (url) {
-            setAudioUrl(url);
-          } else {
-            handleNextPlay();
-          }
+            const payload = {
+                pip: "https://api.spotify.com/v1/me/top/artists?time_range=long_term&limit=30",
+                spotify_id: localStorage.getItem("spotifyId"),
+            };
+
+
+            axios
+                .post(`${process.env.REACT_APP_BACKEND_URI}/spotifyget`, payload, {
+                    headers: {
+                        //"Content-Type": "application/json",
+                        "jwt_token": localStorage.getItem("accessToken"),
+                    },
+                })
+                .then((res) => {
+                    // res=res.output;
+                    // res=res.data.data;
+                    if (res.status === 200) {
+                        let imgArr = [];
+                        res.data.items.forEach((item) => {
+                            imgArr.push({
+                                id: item.id,
+                                url: item.images.length >= 1 ?
+                                    item.images[0].url :
+                                    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRd-y-IJN8glQlf1qoU01dEgGPUa0d1-sjfWg&usqp=CAU",
+                            });
+                        });
+                        setImages(imgArr);
+                        setTopArtists(res.data.items);
+                        setCurrentArtist(res.data.items[0].id);
+                    }
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+
+
+        } else {
+            history.push("/");
         }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
+    }, []);
 
-  const handleArtistChange = (artistId) => {
-    setCurrentArtist(artistId);
-  };
+    useEffect(() => {
+        if (currentArtist) {
+            changeArtist(currentArtist);
+        }
+    }, [currentArtist]);
 
-  const handlePrevPlay = () => {
-    let index;
-    topArtists.forEach((item, ind) => {
-      if (item.id === currentArtist) {
-        index = ind;
-      }
-    });
+    const changeArtist = (artistId) => {
 
-    // console.log(index);
 
-    if (index === 0) {
-      setCurrentArtist(topArtists[topArtists.length - 1].id);
-    } else {
-      setCurrentArtist(topArtists[index - 1].id);
-    }
-  };
+        const payload = {
+            pip: `https://api.spotify.com/v1/artists/${artistId}/top-tracks?market=IN`,
+            spotify_id: localStorage.getItem("spotifyId"),
+        };
 
-  const handleNextPlay = () => {
-    let index;
-    topArtists.forEach((item, ind) => {
-      if (item.id === currentArtist) {
-        index = ind;
-      }
-    });
 
-    // console.log(index);
+        axios
+            .post(`${process.env.REACT_APP_BACKEND_URI}/spotifyget`, payload, {
+                headers: {
+                    //"Content-Type": "application/json",
+                    "jwt_token": localStorage.getItem("accessToken"),
+                },
+            })
+            .then((res) => {
+                if (res.status === 200) {
+                    let url = "";
+                    const tracks = res.data.tracks;
+                    for (let i = 0; i < tracks.length; i++) {
+                        if (tracks[i].preview_url) {
+                            url = tracks[i].preview_url;
+                            break;
+                        }
+                    }
+                    setCurrentArtist(artistId);
+                    if (url) {
+                        setAudioUrl(url);
+                    } else {
+                        handleNextPlay();
+                    }
+                }
+            })
+            .catch((err) => {
+                console.log(err);
+            });
 
-    if (index === topArtists.length - 1) {
-      setCurrentArtist(topArtists[0].id);
-    } else {
-      setCurrentArtist(topArtists[index + 1].id);
-    }
-  };
 
-  const handleShufflePlay = () => {
-    let total = topArtists.length;
-    let rnd = Math.floor(Math.random() * total);
-    setCurrentArtist(topArtists[rnd].id);
-  };
 
-  return (
-    <div
+    };
+
+    const handleArtistChange = (artistId) => {
+        setCurrentArtist(artistId);
+    };
+
+    const handlePrevPlay = () => {
+        let index;
+        topArtists.forEach((item, ind) => {
+            if (item.id === currentArtist) {
+                index = ind;
+            }
+        });
+
+        // console.log(index);
+
+        if (index === 0) {
+            setCurrentArtist(topArtists[topArtists.length - 1].id);
+        } else {
+            setCurrentArtist(topArtists[index - 1].id);
+        }
+    };
+
+    const handleNextPlay = () => {
+        let index;
+        topArtists.forEach((item, ind) => {
+            if (item.id === currentArtist) {
+                index = ind;
+            }
+        });
+
+        // console.log(index);
+
+        if (index === topArtists.length - 1) {
+            setCurrentArtist(topArtists[0].id);
+        } else {
+            setCurrentArtist(topArtists[index + 1].id);
+        }
+    };
+
+    const handleShufflePlay = () => {
+        let total = topArtists.length;
+        let rnd = Math.floor(Math.random() * total);
+        setCurrentArtist(topArtists[rnd].id);
+    };
+
+    return (
+        <div
       className="wrapper"
       style={{ backgroundColor: "var(--bg-top-tracks)" }}
     >
@@ -150,7 +183,7 @@ const TopArtists = () => {
         )}
       </div>
     </div>
-  );
+    );
 };
 
 export default TopArtists;
