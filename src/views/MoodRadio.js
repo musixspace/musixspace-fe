@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import Carousel from "../components/Carousel";
-import Navbar from "../components/Navbar";
 import WebPlayer from "../components/WebPlayer";
 
 const moods = [
@@ -92,54 +91,48 @@ const MoodRadio = () => {
   };
 
   return (
-    <div
-      className="wrapper"
-      style={{ backgroundColor: "var(--bg-top-tracks)" }}
-    >
-      <Navbar />
-      <div className="dashboard-container">
-        {moods && moods.length > 0 && currentTrack !== "" && (
-          <div className="dashboard">
-            <div>
-              <div className="mood-tracker">
-                <div className="main">
-                  <span>{moods[currentTrack].total}% </span>
-                  <span>{moods[currentTrack].type}</span>
-                </div>
-                <div className="inner">
-                  <div className="dummy"></div>
-                  <div className="content">
-                    <p>
-                      Your Most <span>{moods[currentTrack].type}</span> Song!
-                    </p>
-                    <p>{moods[currentTrack].name}</p>
-                    <p>{moods[currentTrack].artist}</p>
-                    <p>
-                      {moods[currentTrack].value}
-                      {"% "}
-                      <span>{moods[currentTrack].type}</span>
-                    </p>
-                  </div>
+    <div className="dashboard-container">
+      {moods && moods.length > 0 && currentTrack !== "" && (
+        <div className="dashboard">
+          <div>
+            <div className="mood-tracker">
+              <div className="main">
+                <span>{moods[currentTrack].total}% </span>
+                <span>{moods[currentTrack].type}</span>
+              </div>
+              <div className="inner">
+                <div className="dummy"></div>
+                <div className="content">
+                  <p>
+                    Your Most <span>{moods[currentTrack].type}</span> Song!
+                  </p>
+                  <p>{moods[currentTrack].name}</p>
+                  <p>{moods[currentTrack].artist}</p>
+                  <p>
+                    {moods[currentTrack].value}
+                    {"% "}
+                    <span>{moods[currentTrack].type}</span>
+                  </p>
                 </div>
               </div>
-              <WebPlayer
-                url={audioUrl}
-                prevPlay={handlePrevPlay}
-                nextPlay={handleNextPlay}
-                shufflePlay={handleShufflePlay}
-              />
             </div>
-            <Carousel data={images} current={currentTrack} />
-            <div className="heading">
-              <p>Your Mood Radio</p>
-              <div>
-                <p>30 sec</p>
-                <button id="export">Export</button>
-              </div>
+            <WebPlayer
+              url={audioUrl}
+              prevPlay={handlePrevPlay}
+              nextPlay={handleNextPlay}
+              shufflePlay={handleShufflePlay}
+            />
+          </div>
+          <Carousel data={images} current={currentTrack} />
+          <div className="heading">
+            <p>Your Mood Radio</p>
+            <div>
+              <p>30 sec</p>
+              <button id="export">Export</button>
             </div>
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 };

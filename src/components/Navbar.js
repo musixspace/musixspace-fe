@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { FiMenu, FiX } from "react-icons/fi";
 import { Link, useLocation } from "react-router-dom";
+import { useRecoilState } from "recoil";
 import profile from "../assets/images/artists/image4.png";
-import { handleLogout } from "../util/functions";
+import { openSidebarAtom } from "../recoil/openSidebarAtom";
 
 const themeSwitch = (str) => {
   switch (str) {
@@ -33,7 +34,7 @@ const loggedInLinks = [
 
 const Navbar = () => {
   const location = useLocation();
-  const [showLinks, setShowLinks] = useState(false);
+  const [showLinks, setShowLinks] = useRecoilState(openSidebarAtom);
 
   const [openProfile, setOpenProfile] = useState(false);
 
@@ -80,8 +81,8 @@ const Navbar = () => {
             <li className="nav-li mobile">
               <Link to="/about">About</Link>
             </li>
-            <li className="nav-li mobile" onClick={handleLogout}>
-              Logout
+            <li className="nav-li mobile">
+              <Link to="/logout">Logout</Link>
             </li>
             <div className="profile">
               <div
@@ -95,8 +96,8 @@ const Navbar = () => {
                   <li className="profile-li">
                     <Link to="/about">About</Link>
                   </li>
-                  <li className="profile-li" onClick={handleLogout}>
-                    Logout
+                  <li className="profile-li">
+                    <Link to="/logout">Logout</Link>
                   </li>
                 </ul>
               )}
@@ -113,6 +114,16 @@ const Navbar = () => {
         </>
       ) : (
         <ul className={`nav-ul ${showLinks ? "" : "hide"}`}>
+          <div className="mobile-top">
+            <div className="profile">
+              <div className="profile-img">
+                <img src={profile} alt="Profile" />
+              </div>
+            </div>
+            <div onClick={toggleMenu}>
+              <FiX />
+            </div>
+          </div>
           <li className="nav-li">Discord</li>
           <li
             className={`nav-li ${

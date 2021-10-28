@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { FiCheck, FiSearch, FiX } from "react-icons/fi";
-import Navbar from "../components/Navbar";
+import React, { useState } from "react";
+import { FiCheck } from "react-icons/fi";
 import ambivert from "../assets/images/bgs/ambi.png";
 import extrovert from "../assets/images/bgs/extrovert.png";
 import party from "../assets/images/bgs/party.png";
@@ -42,37 +41,34 @@ const Rolling = () => {
   };
 
   return (
-    <div className="wrapper" style={{ backgroundColor: "var(--clr-black)" }}>
-      <Navbar />
-      <div className="rolling">
-        <div className="container">
-          <p>Choose 3 personality traits</p>
-          <div className="traits-container">
-            {traits.length > 0 ? (
-              traits.map((trait) => (
-                <div
-                  key={trait.id}
-                  className="trait"
-                  onClick={() => handleSelectTrait(trait.id)}
-                >
-                  {selectedTraits.includes(trait.id) ? (
-                    <div className="check">
-                      <FiCheck />
-                    </div>
-                  ) : null}
-                  <div className="image-container">
-                    <img src={trait.img} alt={trait.name} />
+    <div className="rolling">
+      <div className="container">
+        <p>Choose 3 personality traits</p>
+        <div className="traits-container">
+          {traits.length > 0 ? (
+            traits.map((trait) => (
+              <div
+                key={trait.id}
+                className="trait"
+                onClick={() => handleSelectTrait(trait.id)}
+              >
+                {selectedTraits.includes(trait.id) ? (
+                  <div className="check">
+                    <FiCheck />
                   </div>
-                  <p>{trait.name}</p>
+                ) : null}
+                <div className="image-container">
+                  <img src={trait.img} alt={trait.name} />
                 </div>
-              ))
-            ) : (
-              <div className="empty">No results found</div>
-            )}
-          </div>
-          <div className="button-container">
-            <button>Get me rolling</button>
-          </div>
+                <p>{trait.name}</p>
+              </div>
+            ))
+          ) : (
+            <div className="empty">No results found</div>
+          )}
+        </div>
+        <div className="button-container">
+          <button>Get me rolling</button>
         </div>
       </div>
     </div>

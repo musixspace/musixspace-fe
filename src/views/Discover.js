@@ -7,9 +7,8 @@ import image3 from "../assets/images/artists/image3.png";
 import image4 from "../assets/images/artists/image4.png";
 import image5 from "../assets/images/artists/image5.png";
 import lewis from "../assets/images/artists/lewis.png";
-import logoWhite from "../assets/images/logo-white.png";
 import prateek from "../assets/images/artists/prateek.png";
-import Navbar from "../components/Navbar";
+import logoWhite from "../assets/images/logo-white.png";
 
 const user = [
   {
@@ -126,93 +125,90 @@ const Discover = () => {
   };
 
   return (
-    <div className="wrapper" style={{ backgroundColor: "var(--clr-black)" }}>
-      <Navbar />
-      <div className="discover-container">
-        <div className="searchbar">
-          <div></div>
-          <div>
-            <FiSearch />
-            <input
-              value={search}
-              onChange={handleSearch}
-              type="text"
-              placeholder="Discover your friends"
-            />
-            <FiX onClick={() => setSearch("")} />
-          </div>
-          <div></div>
+    <div className="discover-container">
+      <div className="searchbar">
+        <div></div>
+        <div>
+          <FiSearch />
+          <input
+            value={search}
+            onChange={handleSearch}
+            type="text"
+            placeholder="Discover your friends"
+          />
+          <FiX onClick={() => setSearch("")} />
         </div>
-        <div className="discover">
-          <div className="prev">
-            <FiSkipBack onClick={handlePrevUser} />
-          </div>
-          <div className="user">
-            <div className="image-container">
-              <img src={user[current].img} alt={user[current].name} />
-              <div className="overlap">
-                <img src={logoWhite} alt="Musixspace Logo" />
-                <button>View Space</button>
-              </div>
+        <div></div>
+      </div>
+      <div className="discover">
+        <div className="prev">
+          <FiSkipBack onClick={handlePrevUser} />
+        </div>
+        <div className="user">
+          <div className="image-container">
+            <img src={user[current].img} alt={user[current].name} />
+            <div className="overlap">
+              <img src={logoWhite} alt="Musixspace Logo" />
+              <button>View Space</button>
             </div>
-            <div className="content-container">
-              <div className="main-content">
-                <div className="name">{user[current].name}</div>
-                <div className="tags">
-                  {user[current].tags.map((tag) => (
-                    <div key={tag} className="tag">
-                      {tag}
+          </div>
+          <div className="content-container">
+            <div className="main-content">
+              <div className="name">{user[current].name}</div>
+              <div className="tags">
+                {user[current].tags.map((tag) => (
+                  <div key={tag} className="tag">
+                    {tag}
+                  </div>
+                ))}
+              </div>
+              <div className="bio">"{user[current].bio}"</div>
+            </div>
+            <div className="inner-content">
+              <div className="anthem">
+                <div className="title">{user[current].name}'s Anthem</div>
+                <div className="anthem-content">
+                  <div className="anthem-image">
+                    <img
+                      src={user[current].anthem.img}
+                      alt={user[current].anthem.title}
+                    />
+                  </div>
+                  <div>
+                    <div className="anthem-title">
+                      {user[current].anthem.title}
+                    </div>
+                    <div className="anthem-album">
+                      {user[current].anthem.album}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="interests">
+                <div className="title">{user[current].name} X You</div>
+                <div className="list">
+                  {user[current].artists.map((item) => (
+                    <div key={item.name} className="artist">
+                      <div>
+                        <img src={item.img} alt={item.name} />
+                      </div>
+                      <span>{item.name}</span>
                     </div>
                   ))}
                 </div>
-                <div className="bio">"{user[current].bio}"</div>
-              </div>
-              <div className="inner-content">
-                <div className="anthem">
-                  <div className="title">{user[current].name}'s Anthem</div>
-                  <div className="anthem-content">
-                    <div className="anthem-image">
-                      <img
-                        src={user[current].anthem.img}
-                        alt={user[current].anthem.title}
-                      />
-                    </div>
-                    <div>
-                      <div className="anthem-title">
-                        {user[current].anthem.title}
-                      </div>
-                      <div className="anthem-album">
-                        {user[current].anthem.album}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="interests">
-                  <div className="title">{user[current].name} X You</div>
-                  <div className="list">
-                    {user[current].artists.map((item) => (
-                      <div key={item.name} className="artist">
-                        <div>
-                          <img src={item.img} alt={item.name} />
-                        </div>
-                        <span>{item.name}</span>
-                      </div>
-                    ))}
-                  </div>
-                  <div className="common">
-                    +{user[current].common} common interests
-                  </div>
+                <div className="common">
+                  +{user[current].common} common interests
                 </div>
               </div>
             </div>
           </div>
-          <div className="next">
-            <FiSkipForward onClick={handleNextUser} />
-          </div>
-          <div className="mobile-visible">
-            <FiSkipBack onClick={handlePrevUser} />
-            <FiSkipForward onClick={handleNextUser} />
-          </div>
+        </div>
+        <div className="next">
+          <FiSkipForward onClick={handleNextUser} />
+        </div>
+        <div className="mobile-visible">
+          <FiSkipBack onClick={handlePrevUser} />
+          <FiSkipForward onClick={handleNextUser} />
         </div>
       </div>
     </div>

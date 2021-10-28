@@ -1,10 +1,8 @@
 import { useEffect } from "react";
-import {
-  BrowserRouter as Router,
-  Redirect,
-  Route,
-  Switch,
-} from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import Logout from "./components/Logout";
+import Navbar from "./components/Navbar";
+import Wrapper from "./components/Wrapper";
 import useAuth from "./useAuth";
 import About from "./views/About";
 import Discover from "./views/Discover";
@@ -21,7 +19,7 @@ import TopTracks from "./views/TopTracks";
 const code = new URLSearchParams(window.location.search).get("code");
 
 const App = () => {
-  console.log("code: "+code);
+  console.log("code: " + code);
   const { accessToken } = useAuth(code);
 
   const callAuth = () => {
@@ -34,22 +32,30 @@ const App = () => {
     }
   }, [accessToken]);
 
+  useEffect(() => {
+    console.log("Path changed");
+    console.log(window.location.pathname);
+  }, [window.location.pathname]);
+
   return (
     <Router>
-      <Switch>
-        {/*{accessToken && <Redirect to="/insights" />}*/}
-        <Route exact path="/readytorock" component={ReadyToRock} />
-        <Route exact path="/rolling" component={Rolling} />
-        <Route exact path="/insights/mood" component={MoodRadio} />
-        <Route exact path="/insights/surprise" component={SurpriseMe} />
-        <Route exact path="/insights/topartists" component={TopArtists} />
-        <Route exact path="/insights/toptracks" component={TopTracks} />
-        <Route exact path="/insights" component={Insights} />
-        <Route exact path="/discover" component={Discover} />
-        <Route exact path="/about" component={About} />
-        <Route exact path="/" component={Home} />
-        <Route path="/:username" component={MySpace} />
-      </Switch>
+      <Wrapper>
+        <Switch>
+          {/*{accessToken && <Redirect to="/insights" />}*/}
+          <Route exact path="/readytorock" component={ReadyToRock} />
+          <Route exact path="/rolling" component={Rolling} />
+          <Route exact path="/insights/mood" component={MoodRadio} />
+          <Route exact path="/insights/surprise" component={SurpriseMe} />
+          <Route exact path="/insights/topartists" component={TopArtists} />
+          <Route exact path="/insights/toptracks" component={TopTracks} />
+          <Route exact path="/insights" component={Insights} />
+          <Route exact path="/discover" component={Discover} />
+          <Route exact path="/about" component={About} />
+          <Route exact path="/logout" component={Logout} />
+          <Route exact path="/" component={Home} />
+          <Route path="/:username" component={MySpace} />
+        </Switch>
+      </Wrapper>
     </Router>
   );
 };
