@@ -61,9 +61,7 @@ const MoodRadio = () => {
 
   useEffect(() => {
     if (currentTrack !== "") {
-      console.log(currentTrack);
       const track = moods.find((item) => item.id === currentTrack);
-      console.log(track);
       setAudioUrl(track.preview_url);
     }
   }, [currentTrack]);

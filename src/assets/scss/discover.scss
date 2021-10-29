@@ -18,6 +18,7 @@
 
     > div:nth-child(2) {
       margin-left: auto;
+      margin-right: 5%;
       padding: 0.6em 1em;
       border-radius: 100px;
       width: 30%;
@@ -49,7 +50,7 @@
       }
 
       &:focus-within {
-        width: 100%;
+        width: 90%;
       }
     }
   }
@@ -84,7 +85,7 @@
     .user {
       border-radius: 50px;
       overflow: hidden;
-      transform: scaleY(0.9);
+      transform: scale(0.9);
 
       display: flex;
       justify-content: center;
@@ -389,8 +390,9 @@
       display: block;
       > div:nth-child(2) {
         width: 100%;
+        // margin: 0 5%;
         > div {
-          transform: scaleY(1);
+          transform: scale(1);
           width: 100%;
 
           input {
@@ -411,6 +413,11 @@
               top: 9px;
             }
           }
+        }
+
+        &:focus-within {
+          width: 100%;
+          margin: 0;
         }
       }
 
@@ -443,7 +450,7 @@
       }
 
       .user {
-        transform: scaleY(1);
+        transform: scale(1);
         height: 100%;
         border-radius: 20px;
         .content-container {

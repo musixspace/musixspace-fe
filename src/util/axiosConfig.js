@@ -1,34 +1,38 @@
 import axios from "axios";
-import { handleLogout } from "./functions";
 
 export const axiosInstance = axios.create({
-  baseURL: "https://api.spotify.com/v1",
-  timeout: 1000,
+  baseURL: `${process.env.REACT_APP_BACKEND_URI}`,
+  // timeout: 1000,
 });
 
 axiosInstance.interceptors.request.use(
   function (config) {
     config.headers = {
       ...config.headers,
-      Authorization: "Bearer " + localStorage.getItem("accessToken"),
+      jwt_token: localStorage.getItem("accessToken"),
       "Content-Type": "application/json",
     };
-    // you can also do other modification in config
+    config.data = {
+      ...config.data,
+      spotify_id: localStorage.getItem("spotifyId"),
+    };
     return config;
   },
   function (error) {
+    console.log(error);
     return Promise.reject(error);
   }
 );
 
 axiosInstance.interceptors.response.use(
   function (response) {
-    if (response.status === 401) {
-      handleLogout();
-    }
     return response;
   },
   function (error) {
+    console.log(error.response);
+    if (error.response.status >= 400 && error.response.status < 500) {
+      window.location.href = window.location.origin + "/logout";
+    }
     return Promise.reject(error);
   }
 );

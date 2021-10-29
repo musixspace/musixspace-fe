@@ -1,14 +1,22 @@
 .about {
   color: var(--clr-pink);
   padding: 1em 6em;
-  margin-top: 10vh;
+  overflow-y: scroll;
+  height: 100vh;
+  scroll-snap-type: y mandatory;
+
+  &::-webkit-scrollbar {
+    position: relative;
+    z-index: 100;
+  }
 
   .person {
-    padding-block: 2em;
+    scroll-snap-align: start;
+    padding-top: 2em;
+    height: 100vh;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 1em;
 
     .content {
       width: 30ch;
@@ -37,10 +45,6 @@
       }
     }
   }
-
-  .person + .person {
-    margin-top: 2em;
-  }
 }
 
 @media (max-width: 1256px) {
@@ -57,24 +61,27 @@
 
 @media (max-width: 776px) {
   .about {
-    padding: 1em 1.5em;
+    padding: 1em 1em 1em 1.5em;
 
     .person {
       flex-direction: column;
+      justify-content: center;
 
       .content {
+        width: 100%;
         > p {
-          font-size: calc(var(--base-font-size) * 5);
+          font-size: calc(var(--base-font-size) * 4);
         }
 
         > p:last-child {
-          font-size: calc(var(--base-font-size) * 3.5);
+          font-size: calc(var(--base-font-size) * 3);
         }
       }
 
       .person-img {
         margin-left: 0;
         gap: 0;
+        width: 100%;
 
         img {
           width: 100%;

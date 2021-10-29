@@ -1,25 +1,23 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { axiosInstance } from "./util/axiosConfig";
 
 const useAuth = (code) => {
   const [accessToken, setAccessToken] = useState(null);
 
   useEffect(() => {
     if (code) {
-      console.log("link is"+`${process.env.REACT_APP_BACKEND_URI}/login`);
-      axios
-        .post(`${process.env.REACT_APP_BACKEND_URI}/login`, { code })
+      axiosInstance
+        .post("/login", { code })
         .then((response) => {
           window.history.pushState({}, null, "/");
           console.log(response.data);
           setAccessToken(response.data.accessToken);
           localStorage.setItem("accessToken", response.data.accessToken);
-          localStorage.setItem("spotifyId", response.data.spotify_id);
-          if (response.data.isnew) {
+          localStorage.setItem("spotifyId", response.data.spotifyId);
+          if (response.data.isNew) {
             window.location.href = window.location.origin + "/readytorock";
-          }
-          else
-          {
+          } else {
             window.location.href = window.location.origin + "/insights";
           }
         })

@@ -1,7 +1,5 @@
-import { useEffect } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Logout from "./components/Logout";
-import Navbar from "./components/Navbar";
 import Wrapper from "./components/Wrapper";
 import useAuth from "./useAuth";
 import About from "./views/About";
@@ -19,29 +17,12 @@ import TopTracks from "./views/TopTracks";
 const code = new URLSearchParams(window.location.search).get("code");
 
 const App = () => {
-  console.log("code: " + code);
-  const { accessToken } = useAuth(code);
-
-  const callAuth = () => {
-    // window.location.href = window.location.origin + "/insights";
-  };
-
-  useEffect(() => {
-    if (accessToken) {
-      callAuth();
-    }
-  }, [accessToken]);
-
-  useEffect(() => {
-    console.log("Path changed");
-    console.log(window.location.pathname);
-  }, [window.location.pathname]);
+  useAuth(code);
 
   return (
     <Router>
       <Wrapper>
         <Switch>
-          {/*{accessToken && <Redirect to="/insights" />}*/}
           <Route exact path="/readytorock" component={ReadyToRock} />
           <Route exact path="/rolling" component={Rolling} />
           <Route exact path="/insights/mood" component={MoodRadio} />

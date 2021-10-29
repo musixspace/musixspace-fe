@@ -1,7 +1,8 @@
-import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaMusic } from "react-icons/fa";
 import { GoMail, GoPencil } from "react-icons/go";
+import useDebounceCallback from "../hooks/useDebounce";
+import { axiosInstance } from "../util/axiosConfig";
 
 const ReadyToRock = () => {
   const [data, setData] = useState({
@@ -10,6 +11,16 @@ const ReadyToRock = () => {
     anthem: "",
   });
 
+  const apiCall = useDebounceCallback((value) => {
+    console.log("Here is the data ", value);
+  }, 1000);
+
+  useEffect(() => {
+    if (data.anthem) {
+      apiCall(data.anthem);
+    }
+  }, [data.anthem]);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const payload = {
@@ -17,14 +28,8 @@ const ReadyToRock = () => {
       bio: data.anthem,
       spotify_id: localStorage.getItem("spotifyId"),
     };
-    console.log("tokenaaa: " + localStorage.getItem("accessToken"));
-    axios
-      .post(`${process.env.REACT_APP_BACKEND_URI}/newstar`, payload, {
-        headers: {
-          //"Content-Type": "application/json",
-          jwt_token: localStorage.getItem("accessToken"),
-        },
-      })
+    axiosInstance
+      .post("/newstar", payload)
       .then((res) => {
         console.log(res);
         window.location.href = window.location.origin + "/insights";

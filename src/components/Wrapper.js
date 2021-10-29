@@ -45,8 +45,7 @@ const Wrapper = (props) => {
           className="loading-div"
           style={{ backgroundColor: `var(${themeSwitch(location.pathname)})` }}
         >
-          <div class="lds-ellipsis">
-            <div></div>
+          <div className="lds-facebook">
             <div></div>
             <div></div>
             <div></div>

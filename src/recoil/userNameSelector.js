@@ -4,7 +4,8 @@ import { userState } from "./userAtom";
 export const userNameSelector = selector({
   key: "userNameSelector",
   get: ({ get }) => {
-    const { username } = get(userState);
-    return username.split(" ")[0];
+    const { displayName } = get(userState);
+    if (displayName) return displayName.split(" ")[0];
+    return "";
   },
 });

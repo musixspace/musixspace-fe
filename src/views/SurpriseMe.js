@@ -48,15 +48,11 @@ const SurpriseMe = () => {
                   payload2,
                   {
                     headers: {
-                      //"Content-Type": "application/json",
                       jwt_token: localStorage.getItem("accessToken"),
                     },
                   }
                 )
                 .then((topTracks) => {
-                  // res=res.output;
-                  // res=res.data.data;
-                  console.log(topTracks);
                   if (topTracks.status === 200) {
                     let imgArr = [];
                     topTracks.data.tracks.forEach((item) => {

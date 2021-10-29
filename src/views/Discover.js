@@ -134,7 +134,7 @@ const Discover = () => {
             value={search}
             onChange={handleSearch}
             type="text"
-            placeholder="Discover your friends"
+            placeholder="Looking for someone?"
           />
           <FiX onClick={() => setSearch("")} />
         </div>
