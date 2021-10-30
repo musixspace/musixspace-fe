@@ -59,7 +59,6 @@ const SurpriseMe = () => {
     const newSong = surpriseTracksInfo.tracks.filter(
       (song) => song.song_id === trackId
     );
-    console.log(newSong);
     if (newSong[0].preview_url) {
       setAudioUrl(newSong[0].preview_url);
     } else {

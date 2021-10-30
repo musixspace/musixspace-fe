@@ -1,14 +1,7 @@
 .about {
   color: var(--clr-pink);
   padding: 1em 6em;
-  overflow-y: scroll;
   height: 100vh;
-  scroll-snap-type: y mandatory;
-
-  &::-webkit-scrollbar {
-    position: relative;
-    z-index: 100;
-  }
 
   .person {
     scroll-snap-align: start;
