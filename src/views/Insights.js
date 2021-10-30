@@ -20,7 +20,7 @@ const Insights = () => {
         setLoading(true);
 
         axiosInstance
-          .post("/me")
+          .post("/users")
           .then((res) => {
             console.log(res.data);
             if (res.status === 200) {
