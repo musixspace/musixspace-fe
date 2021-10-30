@@ -25,10 +25,10 @@ const ArtistList = ({ currentArtist, artists, changeArtist }) => {
     <div className="tracks-container">
       {artists.map((item, ind) => (
         <div
-          key={item.id}
-          onClick={() => changeArtist(item.id)}
+          key={item.artist_id}
+          onClick={() => changeArtist(item.artist_id)}
           className={`track ${
-            currentArtist === item.id ? "selected-track" : ""
+            currentArtist === item.artist_id ? "selected-track" : ""
           }`}
         >
           <div className="track-sub">

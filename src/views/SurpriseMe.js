@@ -1,4 +1,3 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router";
 import { useRecoilState, useSetRecoilState } from "recoil";
@@ -7,6 +6,7 @@ import TrackList from "../components/TrackList";
 import WebPlayer from "../components/WebPlayer";
 import { loadingAtom } from "../recoil/loadingAtom";
 import { surpriseTracksAtom } from "../recoil/surpriseTracksAtom";
+import { axiosInstance } from "../util/axiosConfig";
 
 const SurpriseMe = () => {
   const history = useHistory();
@@ -17,70 +17,32 @@ const SurpriseMe = () => {
   const [audioUrl, setAudioUrl] = useState("");
 
   useEffect(() => {
+    console.log(surpriseTracksInfo, currentTrack, audioUrl);
     const accessToken = localStorage.getItem("accessToken");
     if (accessToken) {
       if (!surpriseTracksInfo.tracks) {
         setLoading(true);
-        const payload = {
-          pip: "https://api.spotify.com/v1/me/top/tracks?time_range=long_term&limit=5",
-          spotify_id: localStorage.getItem("spotifyId"),
-        };
 
-        axios
-          .post(`${process.env.REACT_APP_BACKEND_URI}/spotifyget`, payload, {
-            headers: {
-              //"Content-Type": "application/json",
-              jwt_token: localStorage.getItem("accessToken"),
-            },
-          })
+        axiosInstance
+          .post("/recommendation")
           .then((res) => {
-            if (res.status === 200) {
-              const tracks = res.data.items.map((track) => track.id);
-
-              const payload2 = {
-                pip: `https://api.spotify.com/v1/recommendations?seed_tracks=${tracks.toString()}&limit=30`,
-                spotify_id: localStorage.getItem("spotifyId"),
-              };
-
-              axios
-                .post(
-                  `${process.env.REACT_APP_BACKEND_URI}/spotifyget`,
-                  payload2,
-                  {
-                    headers: {
-                      jwt_token: localStorage.getItem("accessToken"),
-                    },
-                  }
-                )
-                .then((topTracks) => {
-                  if (topTracks.status === 200) {
-                    let imgArr = [];
-                    topTracks.data.tracks.forEach((item) => {
-                      imgArr.push({
-                        id: item.id,
-                        url: item.album.images[0].url,
-                      });
-                    });
-                    setSurpriseTracksInfo({
-                      tracks: topTracks.data.tracks,
-                      images: imgArr,
-                    });
-                    setCurrentTrack(topTracks.data.tracks[0].id);
-                  }
-                })
-                .catch((err) => {
-                  console.log(err);
-                })
-                .finally(() => {
-                  setLoading(false);
-                });
-            }
+            const songs = res.data.songs;
+            let imgArr = [];
+            songs.forEach((song) => {
+              imgArr.push({ id: song.song_id, url: song.image_url });
+            });
+            setSurpriseTracksInfo({
+              tracks: songs,
+              images: imgArr,
+            });
+            setCurrentTrack(songs[0].song_id);
+            setLoading(false);
           })
           .catch((err) => {
             console.log(err);
           });
       } else {
-        setCurrentTrack(surpriseTracksInfo.tracks[0].id);
+        setCurrentTrack(surpriseTracksInfo.tracks[0].song_id);
       }
     } else {
       history.push("/");
@@ -94,31 +56,15 @@ const SurpriseMe = () => {
   }, [currentTrack]);
 
   const changeTrack = (trackId) => {
-    const payload = {
-      pip: `https://api.spotify.com/v1/tracks/${trackId}?market=IN`,
-      spotify_id: localStorage.getItem("spotifyId"),
-    };
-
-    axios
-      .post(`${process.env.REACT_APP_BACKEND_URI}/spotifyget`, payload, {
-        headers: {
-          //"Content-Type": "application/json",
-          jwt_token: localStorage.getItem("accessToken"),
-        },
-      })
-      .then((res) => {
-        if (res.status === 200) {
-          setCurrentTrack(trackId);
-          if (res.data.preview_url) {
-            setAudioUrl(res.data.preview_url);
-          } else {
-            handleNextPlay();
-          }
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    const newSong = surpriseTracksInfo.tracks.filter(
+      (song) => song.song_id === trackId
+    );
+    console.log(newSong);
+    if (newSong[0].preview_url) {
+      setAudioUrl(newSong[0].preview_url);
+    } else {
+      handleNextPlay();
+    }
   };
 
   const handleTrackChange = (trackId) => {
@@ -128,7 +74,7 @@ const SurpriseMe = () => {
   const handlePrevPlay = () => {
     let index;
     surpriseTracksInfo.tracks.forEach((item, ind) => {
-      if (item.id === currentTrack) {
+      if (item.song_id === currentTrack) {
         index = ind;
       }
     });
@@ -137,17 +83,17 @@ const SurpriseMe = () => {
 
     if (index === 0) {
       setCurrentTrack(
-        surpriseTracksInfo.tracks[surpriseTracksInfo.tracks.length - 1].id
+        surpriseTracksInfo.tracks[surpriseTracksInfo.tracks.length - 1].song_id
       );
     } else {
-      setCurrentTrack(surpriseTracksInfo.tracks[index - 1].id);
+      setCurrentTrack(surpriseTracksInfo.tracks[index - 1].song_id);
     }
   };
 
   const handleNextPlay = () => {
     let index;
     surpriseTracksInfo.tracks.forEach((item, ind) => {
-      if (item.id === currentTrack) {
+      if (item.song_id === currentTrack) {
         index = ind;
       }
     });
@@ -155,16 +101,16 @@ const SurpriseMe = () => {
     // console.log(index);
 
     if (index === surpriseTracksInfo.tracks.length - 1) {
-      setCurrentTrack(surpriseTracksInfo.tracks[0].id);
+      setCurrentTrack(surpriseTracksInfo.tracks[0].song_id);
     } else {
-      setCurrentTrack(surpriseTracksInfo.tracks[index + 1].id);
+      setCurrentTrack(surpriseTracksInfo.tracks[index + 1].song_id);
     }
   };
 
   const handleShufflePlay = () => {
     let total = surpriseTracksInfo.tracks.length;
     let rnd = Math.floor(Math.random() * total);
-    setCurrentTrack(surpriseTracksInfo.tracks[rnd].id);
+    setCurrentTrack(surpriseTracksInfo.tracks[rnd].song_id);
   };
 
   return (

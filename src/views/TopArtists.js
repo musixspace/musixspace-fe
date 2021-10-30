@@ -7,6 +7,7 @@ import Carousel from "../components/Carousel";
 import WebPlayer from "../components/WebPlayer";
 import { loadingAtom } from "../recoil/loadingAtom";
 import { topArtistsAtom } from "../recoil/topArtistsAtom";
+import { axiosInstance } from "../util/axiosConfig";
 
 const TopArtists = () => {
   const history = useHistory();
@@ -21,44 +22,34 @@ const TopArtists = () => {
     if (accessToken) {
       if (!topArtistsInfo.artists) {
         setLoading(true);
-        const payload = {
-          pip: "https://api.spotify.com/v1/me/top/artists?time_range=long_term&limit=30",
-          spotify_id: localStorage.getItem("spotifyId"),
-        };
-
-        axios
-          .post(`${process.env.REACT_APP_BACKEND_URI}/spotifyget`, payload, {
-            headers: {
-              jwt_token: localStorage.getItem("accessToken"),
-            },
-          })
+        axiosInstance
+          .post("/topartists_long")
           .then((res) => {
             if (res.status === 200) {
+              const artists = res.data.artists;
               let imgArr = [];
-              res.data.items.forEach((item) => {
+              artists.forEach((artist) => {
                 imgArr.push({
-                  id: item.id,
+                  id: artist.artist_id,
                   url:
-                    item.images.length >= 1
-                      ? item.images[0].url
-                      : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRd-y-IJN8glQlf1qoU01dEgGPUa0d1-sjfWg&usqp=CAU",
+                    artist.image_url ||
+                    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRd-y-IJN8glQlf1qoU01dEgGPUa0d1-sjfWg&usqp=CAU",
                 });
               });
+
               setTopArtistsInfo({
-                artists: res.data.items,
+                artists: artists,
                 images: imgArr,
               });
-              setCurrentArtist(res.data.items[0].id);
+              setCurrentArtist(artists[0].artist_id);
+              setLoading(false);
             }
           })
           .catch((err) => {
             console.log(err);
-          })
-          .finally(() => {
-            setLoading(false);
           });
       } else {
-        setCurrentArtist(topArtistsInfo.artists[0].id);
+        setCurrentArtist(topArtistsInfo.artists[0].artist_id);
       }
     } else {
       history.push("/");
@@ -72,39 +63,23 @@ const TopArtists = () => {
   }, [currentArtist]);
 
   const changeArtist = (artistId) => {
-    const payload = {
-      pip: `https://api.spotify.com/v1/artists/${artistId}/top-tracks?market=IN`,
-      spotify_id: localStorage.getItem("spotifyId"),
-    };
+    const newArtist = topArtistsInfo.artists.filter(
+      (artist) => artist.artist_id === artistId
+    );
 
-    axios
-      .post(`${process.env.REACT_APP_BACKEND_URI}/spotifyget`, payload, {
-        headers: {
-          //"Content-Type": "application/json",
-          jwt_token: localStorage.getItem("accessToken"),
-        },
-      })
-      .then((res) => {
-        if (res.status === 200) {
-          let url = "";
-          const tracks = res.data.tracks;
-          for (let i = 0; i < tracks.length; i++) {
-            if (tracks[i].preview_url) {
-              url = tracks[i].preview_url;
-              break;
-            }
-          }
-          setCurrentArtist(artistId);
-          if (url) {
-            setAudioUrl(url);
-          } else {
-            handleNextPlay();
-          }
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    let songUrl = null;
+    for (let i = 0; i < newArtist[0].user_songs.length; i++) {
+      if (newArtist[0].user_songs[i].preview_url) {
+        songUrl = newArtist[0].user_songs[i].preview_url;
+        break;
+      }
+    }
+
+    if (songUrl) {
+      setAudioUrl(songUrl);
+    } else {
+      handleNextPlay();
+    }
   };
 
   const handleArtistChange = (artistId) => {
@@ -114,7 +89,7 @@ const TopArtists = () => {
   const handlePrevPlay = () => {
     let index;
     topArtistsInfo.artists.forEach((item, ind) => {
-      if (item.id === currentArtist) {
+      if (item.artist_id === currentArtist) {
         index = ind;
       }
     });
@@ -123,17 +98,17 @@ const TopArtists = () => {
 
     if (index === 0) {
       setCurrentArtist(
-        topArtistsInfo.artists[topArtistsInfo.artists.length - 1].id
+        topArtistsInfo.artists[topArtistsInfo.artists.length - 1].artist_id
       );
     } else {
-      setCurrentArtist(topArtistsInfo.artists[index - 1].id);
+      setCurrentArtist(topArtistsInfo.artists[index - 1].artist_id);
     }
   };
 
   const handleNextPlay = () => {
     let index;
     topArtistsInfo.artists.forEach((item, ind) => {
-      if (item.id === currentArtist) {
+      if (item.artist_id === currentArtist) {
         index = ind;
       }
     });
@@ -141,16 +116,16 @@ const TopArtists = () => {
     // console.log(index);
 
     if (index === topArtistsInfo.artists.length - 1) {
-      setCurrentArtist(topArtistsInfo.artists[0].id);
+      setCurrentArtist(topArtistsInfo.artists[0].artist_id);
     } else {
-      setCurrentArtist(topArtistsInfo.artists[index + 1].id);
+      setCurrentArtist(topArtistsInfo.artists[index + 1].artist_id);
     }
   };
 
   const handleShufflePlay = () => {
     let total = topArtistsInfo.artists.length;
     let rnd = Math.floor(Math.random() * total);
-    setCurrentArtist(topArtistsInfo.artists[rnd].id);
+    setCurrentArtist(topArtistsInfo.artists[rnd].artist_id);
   };
 
   return (

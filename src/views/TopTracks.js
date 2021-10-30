@@ -7,6 +7,7 @@ import TrackList from "../components/TrackList";
 import WebPlayer from "../components/WebPlayer";
 import { loadingAtom } from "../recoil/loadingAtom";
 import { topTracksAtom } from "../recoil/topTracksAtom";
+import { axiosInstance } from "../util/axiosConfig";
 
 const TopTracks = () => {
   const history = useHistory();
@@ -20,39 +21,29 @@ const TopTracks = () => {
     if (accessToken) {
       if (!topTracksInfo.tracks) {
         setLoading(true);
-        const payload = {
-          pip: "https://api.spotify.com/v1/me/top/tracks?time_range=long_term&limit=30",
-          spotify_id: localStorage.getItem("spotifyId"),
-        };
 
-        axios
-          .post(`${process.env.REACT_APP_BACKEND_URI}/spotifyget`, payload, {
-            headers: {
-              //"Content-Type": "application/json",
-              jwt_token: localStorage.getItem("accessToken"),
-            },
-          })
+        axiosInstance
+          .post("/toptracks_long")
           .then((res) => {
             if (res.status === 200) {
+              const songs = res.data.songs;
               let imgArr = [];
-              res.data.items.forEach((item) => {
-                imgArr.push({ id: item.id, url: item.album.images[0].url });
+              songs.forEach((item) => {
+                imgArr.push({ id: item.song_id, url: item.image_url });
               });
               setTopTracksInfo({
-                tracks: res.data.items,
+                tracks: songs,
                 images: imgArr,
               });
-              setCurrentTrack(res.data.items[0].id);
+              setCurrentTrack(songs[0].song_id);
+              setLoading(false);
             }
           })
           .catch((err) => {
             console.log(err);
-          })
-          .finally(() => {
-            setLoading(false);
           });
       } else {
-        setCurrentTrack(topTracksInfo.tracks[0].id);
+        setCurrentTrack(topTracksInfo.tracks[0].song_id);
       }
     } else {
       history.push("/");
@@ -66,31 +57,36 @@ const TopTracks = () => {
   }, [currentTrack]);
 
   const changeTrack = (trackId) => {
-    const payload = {
-      pip: `https://api.spotify.com/v1/tracks/${trackId}?market=IN`,
-      spotify_id: localStorage.getItem("spotifyId"),
-    };
+    const newSong = topTracksInfo.tracks.filter(
+      (item) => item.song_id === trackId
+    );
 
-    axios
-      .post(`${process.env.REACT_APP_BACKEND_URI}/spotifyget`, payload, {
-        headers: {
-          //"Content-Type": "application/json",
-          jwt_token: localStorage.getItem("accessToken"),
-        },
-      })
-      .then((res) => {
-        if (res.status === 200) {
-          setCurrentTrack(trackId);
-          if (res.data.preview_url) {
-            setAudioUrl(res.data.preview_url);
-          } else {
-            handleNextPlay();
-          }
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    if (newSong[0].preview_url) {
+      setAudioUrl(newSong[0].preview_url);
+    } else {
+      handleNextPlay();
+    }
+
+    // axios
+    //   .post(`${process.env.REACT_APP_BACKEND_URI}/spotifyget`, payload, {
+    //     headers: {
+    //       //"Content-Type": "application/json",
+    //       jwt_token: localStorage.getItem("accessToken"),
+    //     },
+    //   })
+    //   .then((res) => {
+    //     if (res.status === 200) {
+    //       setCurrentTrack(trackId);
+    //       if (res.data.preview_url) {
+    //         setAudioUrl(res.data.preview_url);
+    //       } else {
+    //         handleNextPlay();
+    //       }
+    //     }
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
   };
 
   const handleTrackChange = (trackId) => {
@@ -100,7 +96,7 @@ const TopTracks = () => {
   const handlePrevPlay = () => {
     let index;
     topTracksInfo.tracks.forEach((item, ind) => {
-      if (item.id === currentTrack) {
+      if (item.song_id === currentTrack) {
         index = ind;
       }
     });
@@ -108,16 +104,18 @@ const TopTracks = () => {
     // console.log(index);
 
     if (index === 0) {
-      setCurrentTrack(topTracksInfo.tracks[topTracksInfo.tracks.length - 1].id);
+      setCurrentTrack(
+        topTracksInfo.tracks[topTracksInfo.tracks.length - 1].song_id
+      );
     } else {
-      setCurrentTrack(topTracksInfo.tracks[index - 1].id);
+      setCurrentTrack(topTracksInfo.tracks[index - 1].song_id);
     }
   };
 
   const handleNextPlay = () => {
     let index;
     topTracksInfo.tracks.forEach((item, ind) => {
-      if (item.id === currentTrack) {
+      if (item.song_id === currentTrack) {
         index = ind;
       }
     });
@@ -125,16 +123,16 @@ const TopTracks = () => {
     // console.log(index);
 
     if (index === topTracksInfo.tracks.length - 1) {
-      setCurrentTrack(topTracksInfo.tracks[0].id);
+      setCurrentTrack(topTracksInfo.tracks[0].song_id);
     } else {
-      setCurrentTrack(topTracksInfo.tracks[index + 1].id);
+      setCurrentTrack(topTracksInfo.tracks[index + 1].song_id);
     }
   };
 
   const handleShufflePlay = () => {
     let total = topTracksInfo.tracks.length;
     let rnd = Math.floor(Math.random() * total);
-    setCurrentTrack(topTracksInfo.tracks[rnd].id);
+    setCurrentTrack(topTracksInfo.tracks[rnd].song_id);
   };
 
   return (
