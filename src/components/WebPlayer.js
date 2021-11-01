@@ -7,7 +7,7 @@ import {
 } from "react-icons/ai";
 import { IoIosShuffle } from "react-icons/io";
 
-const WebPlayer = ({ url, prevPlay, nextPlay, shufflePlay }) => {
+const WebPlayer = ({ url, prevPlay, nextPlay, shufflePlay, noControls }) => {
   const audioPlayer = useRef();
   const [isPlaying, setIsPlaying] = useState(false);
 
@@ -35,20 +35,22 @@ const WebPlayer = ({ url, prevPlay, nextPlay, shufflePlay }) => {
         preload="metadata"
         onEnded={nextPlay}
       />
-      <div className="controls">
-        <button onClick={prevPlay}>
-          <AiFillStepBackward />
-        </button>
-        <button onClick={togglePlayPause}>
-          {isPlaying ? <AiOutlinePause /> : <AiFillCaretRight />}
-        </button>
-        <button onClick={nextPlay}>
-          <AiFillStepForward />
-        </button>
-        <button onClick={shufflePlay}>
-          <IoIosShuffle />
-        </button>
-      </div>
+      {!noControls && (
+        <div className="controls">
+          <button onClick={prevPlay}>
+            <AiFillStepBackward />
+          </button>
+          <button onClick={togglePlayPause}>
+            {isPlaying ? <AiOutlinePause /> : <AiFillCaretRight />}
+          </button>
+          <button onClick={nextPlay}>
+            <AiFillStepForward />
+          </button>
+          <button onClick={shufflePlay}>
+            <IoIosShuffle />
+          </button>
+        </div>
+      )}
     </div>
   );
 };

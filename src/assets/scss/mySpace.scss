@@ -1,38 +1,37 @@
 .mySpace {
-  height: 90vh;
   margin-top: 10vh;
   padding: 2em 6em;
   font-family: var(--f-circ-pro), sans-serif;
   color: var(--clr-pink);
 
-  .intro {
+  > .intro {
     display: flex;
     justify-content: space-around;
     align-items: center;
 
-    .image-container {
+    > .image-container {
       width: 460px;
       height: 580px;
-      img {
+      > img {
         width: 100%;
         height: 100%;
         object-fit: cover;
       }
     }
 
-    .content-container {
+    > .content-container {
       height: 100%;
       display: flex;
       justify-content: space-between;
       align-items: flex-end;
       flex-direction: column;
-      .main {
+      > .main {
         > p {
           font-size: calc(var(--base-font-size) * 8);
           font-family: var(--f-circ-spotify), sans-serif;
         }
 
-        .sub {
+        > .sub {
           display: flex;
           justify-content: space-between;
           align-items: center;
@@ -43,13 +42,13 @@
             color: var(--clr-white);
           }
 
-          .traits-container {
+          > .traits-container {
             font-size: calc(var(--base-font-size) * 2);
             display: flex;
             justify-content: space-evenly;
             align-items: center;
 
-            .trait {
+            > .trait {
               text-transform: capitalize;
               padding: 0.4em 1em;
               background-color: var(--clr-dark-pink);
@@ -61,7 +60,7 @@
         }
       }
 
-      .middle {
+      > .middle {
         margin-top: 5em;
         width: 450px;
 
@@ -75,9 +74,9 @@
           font-size: calc(var(--base-font-size) * 4);
         }
 
-        .button-container {
+        > .button-container {
           text-align: right;
-          button {
+          > button {
             text-align: right;
             margin-top: 0.6em;
             background-color: var(--clr-dark-pink);
@@ -90,14 +89,14 @@
         }
       }
 
-      .anthem-container {
+      > .anthem-container {
         margin-top: 5em;
         display: flex;
         justify-content: flex-end;
         align-items: center;
         width: 100%;
 
-        .content {
+        > .content {
           height: 100%;
           text-align: right;
 
@@ -131,15 +130,381 @@
           }
         }
 
-        .image-container {
+        > .image-container {
           margin-left: 2em;
           width: 128px;
           height: 128px;
 
-          img {
+          > img {
             width: 100%;
             height: 100%;
             object-fit: cover;
+          }
+        }
+      }
+    }
+  }
+
+  > .topTracks,
+  > .topArtists {
+    margin-top: 5em;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    > .upper-container {
+      width: 100%;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      > .title {
+        font-size: calc(var(--base-font-size) * 6);
+        width: max-content;
+        position: relative;
+
+        &::after {
+          position: absolute;
+          content: "";
+          width: 80%;
+          left: 10%;
+          bottom: -5px;
+          height: 4px;
+          background-color: var(--clr-dark-pink);
+        }
+      }
+    }
+
+    > .songs-container {
+      margin-top: 2em;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+
+      > .prev,
+      > .next {
+        background-color: transparent;
+        color: var(--clr-white);
+        font-size: calc(var(--base-font-size) * 4);
+      }
+
+      > .tracks-container {
+        all: unset;
+        margin: 0 2em;
+        padding: 1em 0;
+        display: flex;
+        overflow-y: hidden;
+        gap: 2em;
+        scroll-behavior: smooth;
+
+        &::-webkit-scrollbar {
+          display: none;
+        }
+
+        @supports (scrollbar-color: var(--clr-orange) var(--clr-gray)) {
+          * {
+            scrollbar-width: none;
+          }
+        }
+
+        > .track {
+          all: unset;
+          &::after {
+            all: unset;
+          }
+          overflow: hidden;
+          min-width: 254px;
+          height: 254px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          position: relative;
+          border-radius: 10px;
+          z-index: 1;
+
+          > .image-container {
+            all: unset;
+            width: 248px;
+            height: 248px;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 4px solid transparent;
+            > img {
+              all: unset;
+              width: 100%;
+              height: 100%;
+              object-fit: cover;
+            }
+
+            &.selected {
+              border: 4px solid var(--clr-dark-pink);
+            }
+          }
+
+          > .content-container {
+            all: unset;
+
+            position: absolute;
+            z-index: 10;
+            left: 4px;
+            top: 4px;
+            width: calc(100% - 8px);
+            height: calc(100% - 8px);
+            background-color: rgba($color: #000000, $alpha: 0.2);
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            gap: 0.5em;
+
+            > .title {
+              text-align: center;
+              font-family: var(--f-circ-spotify), sans-serif;
+              font-size: calc(var(--base-font-size) * 3.5);
+              color: var(--clr-white);
+            }
+
+            > .sub {
+              font-size: calc(var(--base-font-size) * 2);
+              color: var(--clr-white);
+            }
+          }
+
+          > .controls {
+            position: absolute;
+            z-index: 105;
+            bottom: 10px;
+            right: 10px;
+            width: 40px;
+            height: 40px;
+            border-radius: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: var(--clr-white);
+
+            > svg {
+              font-size: calc(var(--base-font-size) * 3);
+              color: var(--clr-black);
+            }
+          }
+        }
+      }
+    }
+  }
+
+  > .topArtists {
+    > .songs-container {
+      > .tracks-container {
+        > .track {
+          height: 350px !important;
+          display: flex;
+          justify-content: flex-start;
+          align-items: center;
+          flex-direction: column;
+          position: relative;
+          gap: 0;
+          > .image-container {
+            border-radius: 100%;
+            height: 248px;
+            width: 248px;
+            border: 4px solid transparent;
+            overflow: hidden;
+
+            > img {
+              width: 100%;
+              height: 100%;
+              object-fit: cover;
+            }
+          }
+
+          > .content-container {
+            display: block;
+            // border: 2px solid red;
+            position: relative !important;
+            z-index: 1;
+            background-color: transparent;
+            height: auto;
+            margin-top: 2em;
+
+            > .title {
+              font-size: calc(var(--base-font-size) * 3);
+            }
+          }
+
+          .controls {
+            top: 230px;
+            right: 105px;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 1248px) {
+  > .mySpace {
+    > .intro {
+      > .content-container {
+        > .main {
+          > p {
+            font-size: calc(var(--base-font-size) * 6);
+          }
+
+          > .sub {
+            > span {
+              font-size: calc(var(--base-font-size) * 2.5);
+            }
+
+            > .traits-container {
+              font-size: calc(var(--base-font-size) * 1.75);
+            }
+          }
+        }
+
+        > .middle {
+          width: 100%;
+
+          > p {
+            font-size: calc(var(--base-font-size) * 3);
+          }
+
+          > .button-container {
+            > button {
+              font-size: calc(var(--base-font-size) * 2);
+            }
+          }
+        }
+
+        > .anthem-container {
+          > .content {
+            > div {
+              font-size: calc(var(--base-font-size) * 2.5);
+            }
+
+            > p:nth-child(1) {
+              font-size: calc(var(--base-font-size) * 2);
+            }
+
+            > p:nth-child(2) {
+              font-size: calc(var(--base-font-size) * 1.75);
+            }
+          }
+
+          > .image-container {
+            width: 96px;
+            height: 96px;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 1075px) {
+  .mySpace {
+    > .intro {
+      flex-direction: column;
+      > .image-container {
+        width: 60%;
+        height: auto;
+      }
+
+      > .content-container {
+        margin-top: 2em;
+        width: 100%;
+        align-items: flex-start;
+        justify-content: flex-start;
+
+        > .main {
+          width: 100%;
+        }
+
+        > .middle {
+          margin-top: 1.5em;
+
+          > p {
+            text-align: left;
+          }
+
+          > .button-container {
+            text-align: left;
+          }
+        }
+
+        > .anthem-container {
+          margin-top: 1.5em;
+          width: 100%;
+          justify-content: space-between;
+          flex-direction: row-reverse;
+
+          > .image-container {
+            margin-left: 0;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 776px) {
+  .mySpace {
+    padding: 1em 1.5em;
+    > .intro {
+      > .image-container {
+        width: 100%;
+      }
+      > .content-container {
+        > .main {
+          > p {
+            font-size: calc(var(--base-font-size) * 4);
+          }
+
+          > .sub {
+            > span {
+              font-size: calc(var(--base-font-size) * 2);
+            }
+
+            > .traits-container {
+              font-size: calc(var(--base-font-size) * 1.5);
+            }
+          }
+        }
+
+        > .middle {
+          width: 100%;
+
+          > p {
+            font-size: calc(var(--base-font-size) * 3);
+          }
+
+          > .button-container {
+            > button {
+              font-size: calc(var(--base-font-size) * 2);
+            }
+          }
+        }
+
+        > .anthem-container {
+          > .content {
+            > div {
+              font-size: calc(var(--base-font-size) * 2.5);
+            }
+
+            > p:nth-child(1) {
+              font-size: calc(var(--base-font-size) * 2);
+            }
+
+            > p:nth-child(2) {
+              font-size: calc(var(--base-font-size) * 1.75);
+            }
+          }
+
+          > .image-container {
+            width: 96px;
+            height: 96px;
           }
         }
       }
