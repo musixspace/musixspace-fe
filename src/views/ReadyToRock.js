@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { FaMusic } from "react-icons/fa";
 import { GoMail, GoPencil } from "react-icons/go";
+import { useHistory } from "react-router";
 import useDebounceCallback from "../hooks/useDebounce";
 import { axiosInstance } from "../util/axiosConfig";
 
 const ReadyToRock = () => {
+  const history = useHistory();
   const [data, setData] = useState({
     email: "",
     username: "",
@@ -32,7 +34,7 @@ const ReadyToRock = () => {
       .post("/newstar", payload)
       .then((res) => {
         console.log(res);
-        window.location.href = window.location.origin + "/insights";
+        history.push("/rolling");
       })
       .catch((err) => {
         console.log(err);

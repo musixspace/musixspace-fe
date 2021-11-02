@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { AiFillCaretRight, AiOutlinePause } from "react-icons/ai";
 import { FiSkipBack, FiSkipForward } from "react-icons/fi";
-import { useRecoilState, useSetRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import image3 from "../assets/images/artists/image3.png";
 import image5 from "../assets/images/artists/image5.png";
 import WebPlayer from "../components/WebPlayer";
+import useTopArtists from "../hooks/useTopArtists";
+import useTopTracks from "../hooks/useTopTracks";
 import { loadingAtom } from "../recoil/loadingAtom";
-import { topArtistsAtom, topArtistsLongAtom } from "../recoil/topArtistsAtom";
+import { topArtistsLongAtom } from "../recoil/topArtistsAtom";
 import { topTracksLongAtom } from "../recoil/topTracksAtom";
 import { axiosInstance } from "../util/axiosConfig";
 
@@ -24,68 +26,24 @@ const user = {
 };
 
 const MySpace = () => {
-  const [topTracks, setTopTracks] = useRecoilState(topTracksLongAtom);
-  const [topArtists, setTopArtists] = useRecoilState(topArtistsLongAtom);
+  const { getTopTracksLong } = useTopTracks();
+  const { getTopArtistsLong } = useTopArtists();
+  const topTracks = useRecoilValue(topTracksLongAtom);
+  // const topArtists = useRecoilValue(topArtistsLongAtom);
   const [currentSong, setCurrentSong] = useState({
     songId: null,
     audioUrl: null,
   });
-  const setLoading = useSetRecoilState(loadingAtom);
 
   useEffect(() => {
     if (!topTracks.tracks) {
-      setLoading(true);
-
-      axiosInstance
-        .post("/toptracks_long")
-        .then((res) => {
-          if (res.status === 200) {
-            const songs = res.data.songs;
-            let imgArr = [];
-            songs.forEach((item) => {
-              imgArr.push({ id: item.song_id, url: item.image_url });
-            });
-            setTopTracks({
-              tracks: songs,
-              images: imgArr,
-            });
-            setLoading(false);
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      getTopTracksLong();
     }
 
-    if (!topArtists.artists) {
-      setLoading(true);
-      axiosInstance
-        .post("/topartists_long")
-        .then((res) => {
-          if (res.status === 200) {
-            const artists = res.data.artists;
-            let imgArr = [];
-            artists.forEach((artist) => {
-              imgArr.push({
-                id: artist.artist_id,
-                url:
-                  artist.image_url ||
-                  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRd-y-IJN8glQlf1qoU01dEgGPUa0d1-sjfWg&usqp=CAU",
-              });
-            });
-
-            setTopArtists({
-              artists: artists,
-              images: imgArr,
-            });
-            setLoading(false);
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-  }, []);
+    // if (!topArtists.artists) {
+    //   getTopArtistsLong();
+    // }
+  }, [topTracks]);
 
   const onLeftClicked = (selector) => {
     document.querySelector(selector).scrollBy(-1000, 0);
@@ -183,7 +141,7 @@ const MySpace = () => {
                   <div className="content-container">
                     <div className="title">{item.name}</div>
                     <div className="sub">
-                      {item.song_artists.map((i) => i.name).join(",")}
+                      {item.artists.map((i) => i.name).join(", ")}
                     </div>
                   </div>
                   {item.preview_url && (
@@ -215,7 +173,7 @@ const MySpace = () => {
           </button>
         </div>
       </div>
-      <div className="topArtists">
+      {/* <div className="topArtists">
         <div className="upper-container">
           <div className="title">Top Artists</div>
         </div>
@@ -268,7 +226,7 @@ const MySpace = () => {
             <FiSkipForward />
           </button>
         </div>
-      </div>
+      </div> */}
       <WebPlayer
         url={currentSong.audioUrl}
         nextPlay={() => setCurrentSong({ songId: null, audioUrl: null })}

@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useLocation } from "react-router";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { loadingAtom } from "../recoil/loadingAtom";
 import { openSidebarAtom } from "../recoil/openSidebarAtom";
 import Navbar from "./Navbar";
@@ -30,7 +30,14 @@ const themeSwitch = (str) => {
 const Wrapper = (props) => {
   const location = useLocation();
   const sidebarOpen = useRecoilValue(openSidebarAtom);
-  const loading = useRecoilValue(loadingAtom);
+  const [loading, setLoading] = useRecoilState(loadingAtom);
+
+  useEffect(() => {
+    if (loading) {
+      setLoading(false);
+    }
+  }, [location.pathname]);
+
   return (
     <div
       className="wrapper"

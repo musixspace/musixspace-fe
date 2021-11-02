@@ -1,22 +1,28 @@
 import React, { useState } from "react";
 import { FiCheck } from "react-icons/fi";
+import { useHistory } from "react-router";
 import ambivert from "../assets/images/bgs/ambi.png";
+import easy from "../assets/images/bgs/easy.png";
 import extrovert from "../assets/images/bgs/extrovert.png";
+import introvert from "../assets/images/bgs/introvert.png";
+import lonewolf from "../assets/images/bgs/lonewolf.png";
 import party from "../assets/images/bgs/party.png";
-import easy from "../assets/images/bgs/readytorock.png";
+import quiet from "../assets/images/bgs/quiet.png";
+import weirdo from "../assets/images/bgs/weirdo.png";
 
 const traits = [
-  { id: 1, name: "introvert", img: ambivert },
+  { id: 1, name: "introvert", img: introvert },
   { id: 2, name: "easy going", img: easy },
   { id: 3, name: "extrovert", img: extrovert },
   { id: 4, name: "party animal", img: party },
   { id: 5, name: "ambivert", img: ambivert },
-  { id: 6, name: "lone wolf", img: easy },
-  { id: 7, name: "quiet", img: extrovert },
-  { id: 8, name: "weirdo", img: party },
+  { id: 6, name: "lone wolf", img: lonewolf },
+  { id: 7, name: "quiet", img: quiet },
+  { id: 8, name: "weirdo", img: weirdo },
 ];
 
 const Rolling = () => {
+  const history = useHistory();
   const [selectedTraits, setSelectedTraits] = useState([]);
 
   const handleSelectTrait = (id) => {
@@ -38,6 +44,11 @@ const Rolling = () => {
         setSelectedTraits(newArr);
       }
     }
+  };
+
+  const onHanldeSubmit = () => {
+    console.log(selectedTraits);
+    history.push("/insights");
   };
 
   return (
@@ -68,7 +79,12 @@ const Rolling = () => {
           )}
         </div>
         <div className="button-container">
-          <button>Get me rolling</button>
+          <button
+            onClick={onHanldeSubmit}
+            className={`${selectedTraits.length < 3 ? "hide" : ""}`}
+          >
+            Get me rolling
+          </button>
         </div>
       </div>
     </div>
