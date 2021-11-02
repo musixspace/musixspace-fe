@@ -1,53 +1,24 @@
 import React, { useEffect, useState } from "react";
-import { useHistory } from "react-router";
-import { useRecoilState, useSetRecoilState } from "recoil";
+import { useRecoilValue } from "recoil";
 import Carousel from "../components/Carousel";
 import TrackList from "../components/TrackList";
 import WebPlayer from "../components/WebPlayer";
-import { loadingAtom } from "../recoil/loadingAtom";
-import { topTracksAtom } from "../recoil/topTracksAtom";
-import { axiosInstance } from "../util/axiosConfig";
+import useTopTracks from "../hooks/useTopTracks";
+import { topTracksLongAtom } from "../recoil/topTracksAtom";
 
 const TopTracks = () => {
-  const history = useHistory();
-  const setLoading = useSetRecoilState(loadingAtom);
+  const { getTopTracksLong } = useTopTracks();
   const [currentTrack, setCurrentTrack] = useState("");
   const [audioUrl, setAudioUrl] = useState("");
-  const [topTracksInfo, setTopTracksInfo] = useRecoilState(topTracksAtom);
+  const topTracksLong = useRecoilValue(topTracksLongAtom);
 
   useEffect(() => {
-    const accessToken = localStorage.getItem("accessToken");
-    if (accessToken) {
-      if (!topTracksInfo.tracks) {
-        setLoading(true);
-
-        axiosInstance
-          .post("/toptracks_long")
-          .then((res) => {
-            if (res.status === 200) {
-              const songs = res.data.songs;
-              let imgArr = [];
-              songs.forEach((item) => {
-                imgArr.push({ id: item.song_id, url: item.image_url });
-              });
-              setTopTracksInfo({
-                tracks: songs,
-                images: imgArr,
-              });
-              setCurrentTrack(songs[0].song_id);
-              setLoading(false);
-            }
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      } else {
-        setCurrentTrack(topTracksInfo.tracks[0].song_id);
-      }
+    if (!topTracksLong.tracks) {
+      getTopTracksLong();
     } else {
-      history.push("/");
+      setCurrentTrack(topTracksLong.tracks[0].song_id);
     }
-  }, []);
+  }, [topTracksLong]);
 
   useEffect(() => {
     if (currentTrack) {
@@ -56,7 +27,7 @@ const TopTracks = () => {
   }, [currentTrack]);
 
   const changeTrack = (trackId) => {
-    const newSong = topTracksInfo.tracks.filter(
+    const newSong = topTracksLong.tracks.filter(
       (item) => item.song_id === trackId
     );
 
@@ -65,27 +36,6 @@ const TopTracks = () => {
     } else {
       handleNextPlay();
     }
-
-    // axios
-    //   .post(`${process.env.REACT_APP_BACKEND_URI}/spotifyget`, payload, {
-    //     headers: {
-    //       //"Content-Type": "application/json",
-    //       jwt_token: localStorage.getItem("accessToken"),
-    //     },
-    //   })
-    //   .then((res) => {
-    //     if (res.status === 200) {
-    //       setCurrentTrack(trackId);
-    //       if (res.data.preview_url) {
-    //         setAudioUrl(res.data.preview_url);
-    //       } else {
-    //         handleNextPlay();
-    //       }
-    //     }
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
   };
 
   const handleTrackChange = (trackId) => {
@@ -94,7 +44,7 @@ const TopTracks = () => {
 
   const handlePrevPlay = () => {
     let index;
-    topTracksInfo.tracks.forEach((item, ind) => {
+    topTracksLong.tracks.forEach((item, ind) => {
       if (item.song_id === currentTrack) {
         index = ind;
       }
@@ -104,16 +54,16 @@ const TopTracks = () => {
 
     if (index === 0) {
       setCurrentTrack(
-        topTracksInfo.tracks[topTracksInfo.tracks.length - 1].song_id
+        topTracksLong.tracks[topTracksLong.tracks.length - 1].song_id
       );
     } else {
-      setCurrentTrack(topTracksInfo.tracks[index - 1].song_id);
+      setCurrentTrack(topTracksLong.tracks[index - 1].song_id);
     }
   };
 
   const handleNextPlay = () => {
     let index;
-    topTracksInfo.tracks.forEach((item, ind) => {
+    topTracksLong.tracks.forEach((item, ind) => {
       if (item.song_id === currentTrack) {
         index = ind;
       }
@@ -121,27 +71,27 @@ const TopTracks = () => {
 
     // console.log(index);
 
-    if (index === topTracksInfo.tracks.length - 1) {
-      setCurrentTrack(topTracksInfo.tracks[0].song_id);
+    if (index === topTracksLong.tracks.length - 1) {
+      setCurrentTrack(topTracksLong.tracks[0].song_id);
     } else {
-      setCurrentTrack(topTracksInfo.tracks[index + 1].song_id);
+      setCurrentTrack(topTracksLong.tracks[index + 1].song_id);
     }
   };
 
   const handleShufflePlay = () => {
-    let total = topTracksInfo.tracks.length;
+    let total = topTracksLong.tracks.length;
     let rnd = Math.floor(Math.random() * total);
-    setCurrentTrack(topTracksInfo.tracks[rnd].song_id);
+    setCurrentTrack(topTracksLong.tracks[rnd].song_id);
   };
 
   return (
     <div className="dashboard-container">
-      {topTracksInfo.tracks && topTracksInfo.tracks.length > 0 && currentTrack && (
+      {topTracksLong.tracks && topTracksLong.tracks.length > 0 && currentTrack && (
         <div className="dashboard">
           <div>
             <TrackList
               currentTrack={currentTrack}
-              tracks={topTracksInfo.tracks}
+              tracks={topTracksLong.tracks}
               changeTrack={handleTrackChange}
             />
             <WebPlayer
@@ -151,7 +101,7 @@ const TopTracks = () => {
               shufflePlay={handleShufflePlay}
             />
           </div>
-          <Carousel data={topTracksInfo.images} current={currentTrack} />
+          <Carousel data={topTracksLong.images} current={currentTrack} />
           <div className="heading">
             <p>Your Top Tracks Radio</p>
             <div>

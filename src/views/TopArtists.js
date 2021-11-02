@@ -1,60 +1,25 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useHistory } from "react-router";
-import { useRecoilState, useSetRecoilState } from "recoil";
+import { useRecoilValue } from "recoil";
 import ArtistList from "../components/ArtistList";
 import Carousel from "../components/Carousel";
 import WebPlayer from "../components/WebPlayer";
-import { loadingAtom } from "../recoil/loadingAtom";
-import { topArtistsAtom } from "../recoil/topArtistsAtom";
-import { axiosInstance } from "../util/axiosConfig";
+import useTopArtists from "../hooks/useTopArtists";
+import { topArtistsLongAtom } from "../recoil/topArtistsAtom";
 
 const TopArtists = () => {
-  const history = useHistory();
-  const setLoading = useSetRecoilState(loadingAtom);
+  const { getTopArtistsLong } = useTopArtists();
+  const topArtistsLong = useRecoilValue(topArtistsLongAtom);
 
   const [currentArtist, setCurrentArtist] = useState("");
   const [audioUrl, setAudioUrl] = useState("");
-  const [topArtistsInfo, setTopArtistsInfo] = useRecoilState(topArtistsAtom);
 
   useEffect(() => {
-    const accessToken = localStorage.getItem("accessToken");
-    if (accessToken) {
-      if (!topArtistsInfo.artists) {
-        setLoading(true);
-        axiosInstance
-          .post("/topartists_long")
-          .then((res) => {
-            if (res.status === 200) {
-              const artists = res.data.artists;
-              let imgArr = [];
-              artists.forEach((artist) => {
-                imgArr.push({
-                  id: artist.artist_id,
-                  url:
-                    artist.image_url ||
-                    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRd-y-IJN8glQlf1qoU01dEgGPUa0d1-sjfWg&usqp=CAU",
-                });
-              });
-
-              setTopArtistsInfo({
-                artists: artists,
-                images: imgArr,
-              });
-              setCurrentArtist(artists[0].artist_id);
-              setLoading(false);
-            }
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      } else {
-        setCurrentArtist(topArtistsInfo.artists[0].artist_id);
-      }
+    if (!topArtistsLong.artists) {
+      getTopArtistsLong();
     } else {
-      history.push("/");
+      setCurrentArtist(topArtistsLong.artists[0].artist_id);
     }
-  }, []);
+  }, [topArtistsLong]);
 
   useEffect(() => {
     if (currentArtist) {
@@ -63,7 +28,7 @@ const TopArtists = () => {
   }, [currentArtist]);
 
   const changeArtist = (artistId) => {
-    const newArtist = topArtistsInfo.artists.filter(
+    const newArtist = topArtistsLong.artists.filter(
       (artist) => artist.artist_id === artistId
     );
 
@@ -88,7 +53,7 @@ const TopArtists = () => {
 
   const handlePrevPlay = () => {
     let index;
-    topArtistsInfo.artists.forEach((item, ind) => {
+    topArtistsLong.artists.forEach((item, ind) => {
       if (item.artist_id === currentArtist) {
         index = ind;
       }
@@ -98,16 +63,16 @@ const TopArtists = () => {
 
     if (index === 0) {
       setCurrentArtist(
-        topArtistsInfo.artists[topArtistsInfo.artists.length - 1].artist_id
+        topArtistsLong.artists[topArtistsLong.artists.length - 1].artist_id
       );
     } else {
-      setCurrentArtist(topArtistsInfo.artists[index - 1].artist_id);
+      setCurrentArtist(topArtistsLong.artists[index - 1].artist_id);
     }
   };
 
   const handleNextPlay = () => {
     let index;
-    topArtistsInfo.artists.forEach((item, ind) => {
+    topArtistsLong.artists.forEach((item, ind) => {
       if (item.artist_id === currentArtist) {
         index = ind;
       }
@@ -115,29 +80,29 @@ const TopArtists = () => {
 
     // console.log(index);
 
-    if (index === topArtistsInfo.artists.length - 1) {
-      setCurrentArtist(topArtistsInfo.artists[0].artist_id);
+    if (index === topArtistsLong.artists.length - 1) {
+      setCurrentArtist(topArtistsLong.artists[0].artist_id);
     } else {
-      setCurrentArtist(topArtistsInfo.artists[index + 1].artist_id);
+      setCurrentArtist(topArtistsLong.artists[index + 1].artist_id);
     }
   };
 
   const handleShufflePlay = () => {
-    let total = topArtistsInfo.artists.length;
+    let total = topArtistsLong.artists.length;
     let rnd = Math.floor(Math.random() * total);
-    setCurrentArtist(topArtistsInfo.artists[rnd].artist_id);
+    setCurrentArtist(topArtistsLong.artists[rnd].artist_id);
   };
 
   return (
     <div className="dashboard-container">
-      {topArtistsInfo.artists &&
-        topArtistsInfo.artists.length > 0 &&
+      {topArtistsLong.artists &&
+        topArtistsLong.artists.length > 0 &&
         currentArtist && (
           <div className="dashboard">
             <div>
               <ArtistList
                 currentArtist={currentArtist}
-                artists={topArtistsInfo.artists}
+                artists={topArtistsLong.artists}
                 changeArtist={handleArtistChange}
               />
               <WebPlayer
@@ -147,7 +112,7 @@ const TopArtists = () => {
                 shufflePlay={handleShufflePlay}
               />
             </div>
-            <Carousel data={topArtistsInfo.images} current={currentArtist} />
+            <Carousel data={topArtistsLong.images} current={currentArtist} />
             <div className="heading">
               <p>Your Top Artists Radio</p>
             </div>

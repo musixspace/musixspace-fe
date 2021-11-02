@@ -1,4 +1,4 @@
-import { atom } from "recoil";
+import { atom, selector } from "recoil";
 
 export const userState = atom({
   key: "userState",
@@ -6,5 +6,14 @@ export const userState = atom({
     displayName: null,
     image: null,
     username: null,
+  },
+});
+
+export const userNameSelector = selector({
+  key: "userNameSelector",
+  get: ({ get }) => {
+    const { displayName } = get(userState);
+    if (displayName) return displayName.split(" ")[0];
+    return "";
   },
 });

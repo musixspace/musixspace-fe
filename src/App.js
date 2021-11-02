@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Logout from "./components/Logout";
 import Wrapper from "./components/Wrapper";
-import useAuth from "./useAuth";
+import useAuth from "./hooks/useAuth";
 import About from "./views/About";
 import Discover from "./views/Discover";
 import Home from "./views/Home";

@@ -1,53 +1,24 @@
 import React, { useEffect, useState } from "react";
-import { useHistory } from "react-router";
-import { useRecoilState, useSetRecoilState } from "recoil";
+import { useRecoilValue } from "recoil";
 import Carousel from "../components/Carousel";
 import TrackList from "../components/TrackList";
 import WebPlayer from "../components/WebPlayer";
-import { loadingAtom } from "../recoil/loadingAtom";
+import useTopTracks from "../hooks/useTopTracks";
 import { surpriseTracksAtom } from "../recoil/surpriseTracksAtom";
-import { axiosInstance } from "../util/axiosConfig";
 
 const SurpriseMe = () => {
-  const history = useHistory();
-  const setLoading = useSetRecoilState(loadingAtom);
-  const [surpriseTracksInfo, setSurpriseTracksInfo] =
-    useRecoilState(surpriseTracksAtom);
+  const surpriseTracksInfo = useRecoilValue(surpriseTracksAtom);
+  const { getRecommendations } = useTopTracks();
   const [currentTrack, setCurrentTrack] = useState("");
   const [audioUrl, setAudioUrl] = useState("");
 
   useEffect(() => {
-    console.log(surpriseTracksInfo, currentTrack, audioUrl);
-    const accessToken = localStorage.getItem("accessToken");
-    if (accessToken) {
-      if (!surpriseTracksInfo.tracks) {
-        setLoading(true);
-
-        axiosInstance
-          .post("/recommendation")
-          .then((res) => {
-            const songs = res.data.songs;
-            let imgArr = [];
-            songs.forEach((song) => {
-              imgArr.push({ id: song.song_id, url: song.image_url });
-            });
-            setSurpriseTracksInfo({
-              tracks: songs,
-              images: imgArr,
-            });
-            setCurrentTrack(songs[0].song_id);
-            setLoading(false);
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      } else {
-        setCurrentTrack(surpriseTracksInfo.tracks[0].song_id);
-      }
+    if (!surpriseTracksInfo.tracks) {
+      getRecommendations();
     } else {
-      history.push("/");
+      setCurrentTrack(surpriseTracksInfo.tracks[0].song_id);
     }
-  }, []);
+  }, [surpriseTracksInfo]);
 
   useEffect(() => {
     if (currentTrack) {

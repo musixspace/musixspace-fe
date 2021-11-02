@@ -34,7 +34,7 @@ const TrackList = ({ currentTrack, tracks, changeTrack }) => {
           <div className="track-sub">
             <div className="track-name">{item.name}</div>
             <div className="track-artists">
-              {item.song_artists.map((artist) => artist.name).join(", ")}
+              {item.artists.map((artist) => artist.name).join(", ")}
             </div>
           </div>
           <div className="track-number">{`#${ind + 1}`}</div>

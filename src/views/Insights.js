@@ -1,11 +1,9 @@
-import axios from "axios";
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import ImageSlider from "../components/ImageSlider";
 import { loadingAtom } from "../recoil/loadingAtom";
-import { userState } from "../recoil/userAtom";
-import { userNameSelector } from "../recoil/userNameSelector";
+import { userNameSelector, userState } from "../recoil/userAtom";
 import { axiosInstance } from "../util/axiosConfig";
 
 const Insights = () => {

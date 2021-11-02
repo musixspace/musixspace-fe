@@ -6,8 +6,8 @@ import image3 from "../assets/images/artists/image3.png";
 import image5 from "../assets/images/artists/image5.png";
 import WebPlayer from "../components/WebPlayer";
 import { loadingAtom } from "../recoil/loadingAtom";
-import { topTracksAtom } from "../recoil/topTracksAtom";
-import { topArtistsAtom } from "../recoil/topArtistsAtom";
+import { topArtistsAtom, topArtistsLongAtom } from "../recoil/topArtistsAtom";
+import { topTracksLongAtom } from "../recoil/topTracksAtom";
 import { axiosInstance } from "../util/axiosConfig";
 
 const user = {
@@ -24,8 +24,8 @@ const user = {
 };
 
 const MySpace = () => {
-  const [topTracks, setTopTracks] = useRecoilState(topTracksAtom);
-  const [topArtists, setTopArtists] = useRecoilState(topArtistsAtom);
+  const [topTracks, setTopTracks] = useRecoilState(topTracksLongAtom);
+  const [topArtists, setTopArtists] = useRecoilState(topArtistsLongAtom);
   const [currentSong, setCurrentSong] = useState({
     songId: null,
     audioUrl: null,

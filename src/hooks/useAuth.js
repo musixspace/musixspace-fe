@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSetRecoilState } from "recoil";
-import { loadingAtom } from "./recoil/loadingAtom";
-import { axiosInstance } from "./util/axiosConfig";
+import { loadingAtom } from "../recoil/loadingAtom";
+import { axiosInstance } from "../util/axiosConfig";
 
 const useAuth = (code) => {
   const [accessToken, setAccessToken] = useState(null);
