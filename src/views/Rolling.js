@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { FiCheck } from "react-icons/fi";
 import { useHistory } from "react-router";
+import { axiosInstance } from "../util/axiosConfig";
 import ambivert from "../assets/images/bgs/ambi.png";
 import easy from "../assets/images/bgs/easy.png";
 import extrovert from "../assets/images/bgs/extrovert.png";
@@ -47,8 +48,17 @@ const Rolling = () => {
   };
 
   const onHanldeSubmit = () => {
-    console.log(selectedTraits);
-    history.push("/insights");
+    let plist = traits.map((item) => {
+      if (selectedTraits.includes(item.id)) return item.name;
+      return null;
+    });
+    plist = plist.filter((item) => item);
+    axiosInstance
+      .post("/traits", { plist })
+      .then((res) => {
+        history.push("/insights");
+      })
+      .catch((err) => console.log(err));
   };
 
   return (
