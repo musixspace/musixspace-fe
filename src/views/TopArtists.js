@@ -32,13 +32,7 @@ const TopArtists = () => {
       (artist) => artist.artist_id === artistId
     );
 
-    let songUrl = null;
-    for (let i = 0; i < newArtist[0].user_songs.length; i++) {
-      if (newArtist[0].user_songs[i].preview_url) {
-        songUrl = newArtist[0].user_songs[i].preview_url;
-        break;
-      }
-    }
+    let songUrl = newArtist[0].toptrack_url;
 
     if (songUrl) {
       setAudioUrl(songUrl);
