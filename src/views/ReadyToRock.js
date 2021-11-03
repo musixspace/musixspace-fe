@@ -10,25 +10,37 @@ const ReadyToRock = () => {
   const [data, setData] = useState({
     email: "",
     username: "",
-    anthem: "",
+    anthem: {
+      id: null,
+      name: "",
+    },
   });
 
+  const [anthemStore, setAnthemStore] = useState([]);
+
   const apiCall = useDebounceCallback((value) => {
-    console.log("Here is the data ", value);
+    axiosInstance
+      .post("/search", { query: value })
+      .then((res) => {
+        console.log(res.data);
+        setAnthemStore(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }, 1000);
 
   useEffect(() => {
-    if (data.anthem) {
-      apiCall(data.anthem);
+    if (!data.anthem.id && data.anthem.name) {
+      apiCall(data.anthem.name);
     }
-  }, [data.anthem]);
+  }, [data.anthem.name]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const payload = {
       handle: data.username,
-      bio: data.anthem,
-      spotify_id: localStorage.getItem("spotifyId"),
+      bio: data.anthem.id,
     };
     axiosInstance
       .post("/newstar", payload)
@@ -67,15 +79,46 @@ const ReadyToRock = () => {
           <div>
             <FaMusic />
             <input
-              value={data.anthem}
-              onChange={(e) => setData({ ...data, anthem: e.target.value })}
+              value={data.anthem.name}
+              onChange={(e) =>
+                setData({ ...data, anthem: { id: null, name: e.target.value } })
+              }
               type="text"
               placeholder="Your Anthem"
             />
           </div>
+          {anthemStore.length > 0 && (
+            <ul className="anthem-options">
+              {!data.anthem.id &&
+                anthemStore.map((item) => (
+                  <li
+                    key={item.id}
+                    onClick={() => {
+                      setData({
+                        ...data,
+                        anthem: { id: item.id, name: item.name },
+                      });
+                      setAnthemStore([]);
+                    }}
+                  >
+                    <div className="image-container">
+                      <img src={item.image_url} alt={item.name} />
+                    </div>
+                    <span>{item.name}</span>
+                  </li>
+                ))}
+            </ul>
+          )}
         </div>
         <div className="button-div">
-          <button type="submit">I'm Ready</button>
+          <button
+            type="submit"
+            className={`${
+              data.username && data.anthem.id && data.email ? "" : "hide"
+            }`}
+          >
+            I'm Ready
+          </button>
         </div>
       </form>
     </div>
