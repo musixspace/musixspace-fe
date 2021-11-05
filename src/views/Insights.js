@@ -25,7 +25,7 @@ const Insights = () => {
               setUser({
                 displayName: res.data?.display_name,
                 username: res.data?.username,
-                image: res.data?.image_url,
+                image: res.data.image_url ? res.data.image_url : "default",
               });
               setLoading(false);
             }

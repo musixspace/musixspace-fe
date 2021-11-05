@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { FiMenu, FiX } from "react-icons/fi";
 import { Link, useLocation } from "react-router-dom";
-import { useRecoilState } from "recoil";
-import profile from "../assets/images/artists/image4.png";
+import { useRecoilState, useRecoilValue } from "recoil";
+import profile from "../assets/images/logo-black.png";
 import { openSidebarAtom } from "../recoil/openSidebarAtom";
+import { userState } from "../recoil/userAtom";
 
 const themeSwitch = (str) => {
   switch (str) {
@@ -34,6 +35,7 @@ const loggedInLinks = [
 
 const Navbar = () => {
   const location = useLocation();
+  const { image: image_url } = useRecoilValue(userState);
   const [showLinks, setShowLinks] = useRecoilState(openSidebarAtom);
 
   const [openProfile, setOpenProfile] = useState(false);
@@ -59,7 +61,10 @@ const Navbar = () => {
             <div className="mobile-top">
               <div className="profile">
                 <div className="profile-img">
-                  <img src={profile} alt="Profile" />
+                  <img
+                    src={image_url === "default" ? profile : image_url}
+                    alt="Profile"
+                  />
                 </div>
               </div>
               <div onClick={toggleMenu}>
@@ -89,7 +94,10 @@ const Navbar = () => {
                 className="profile-img"
                 onClick={() => setOpenProfile((prev) => !prev)}
               >
-                <img src={profile} alt="Profile" />
+                <img
+                  src={image_url === "default" ? profile : image_url}
+                  alt="Profile"
+                />
               </div>
               {openProfile && (
                 <ul className="profile-ul">
@@ -108,7 +116,10 @@ const Navbar = () => {
               className="profile-img"
               onClick={() => setOpenProfile((prev) => !prev)}
             >
-              <img src={profile} alt="Profile" />
+              <img
+                src={image_url === "default" ? profile : image_url}
+                alt="Profile"
+              />
             </div>
           </div>
         </>
@@ -117,7 +128,10 @@ const Navbar = () => {
           <div className="mobile-top">
             <div className="profile">
               <div className="profile-img">
-                <img src={profile} alt="Profile" />
+                <img
+                  src={image_url === "default" ? profile : image_url}
+                  alt="Profile"
+                />
               </div>
             </div>
             <div onClick={toggleMenu}>
@@ -138,7 +152,10 @@ const Navbar = () => {
         {localStorage.getItem("accessToken") ? (
           <div className="profile">
             <div className="profile-img">
-              <img src={profile} alt="Profile" />
+              <img
+                src={image_url === "default" ? profile : image_url}
+                alt="Profile"
+              />
             </div>
           </div>
         ) : showLinks ? (

@@ -10,7 +10,9 @@ import useTopTracks from "../hooks/useTopTracks";
 import { loadingAtom } from "../recoil/loadingAtom";
 import { topArtistsLongAtom } from "../recoil/topArtistsAtom";
 import { topTracksLongAtom } from "../recoil/topTracksAtom";
+import { userState } from "../recoil/userAtom";
 import { paddedNumbers } from "../util/functions";
+import logo from "../assets/images/logo-black.png";
 
 const user = {
   name: "Amaya Srivastava",
@@ -27,6 +29,7 @@ const user = {
 
 const MySpace = () => {
   const setLoading = useSetRecoilState(loadingAtom);
+  const profile = useRecoilValue(userState);
   const { getTopTracksLong } = useTopTracks();
   const { getTopArtistsLong } = useTopArtists();
   const topTracks = useRecoilValue(topTracksLongAtom);
@@ -174,11 +177,14 @@ const MySpace = () => {
     <div className="mySpace">
       <div className="intro">
         <div className="image-container">
-          <img src={user.img} alt={`${user.name}'s Image'`} />
+          <img
+            src={profile.image === "default" ? logo : profile.image}
+            alt={`${user.name}'s Image'`}
+          />
         </div>
         <div className="content-container">
           <div className="main">
-            <p>{user.name}</p>
+            <p>{profile.displayName}</p>
             <div className="sub">
               <span>{user.matches} matches</span>
               <div className="traits-container">
@@ -191,14 +197,16 @@ const MySpace = () => {
             </div>
           </div>
           <div className="middle">
-            <p>{user.handle}</p>
+            <p>{profile.username}</p>
             <div className="button-container">
               <button>Match</button>
             </div>
           </div>
           <div className="anthem-container">
             <div className="content">
-              <div>{`${user.name.trim().split(" ")[0]}'s Anthem`}</div>
+              <div>{`${
+                profile.displayName.trim().split(" ")[0]
+              }'s Anthem`}</div>
               <p>{user.anthem.title}</p>
               <p>{user.anthem.album}</p>
             </div>
