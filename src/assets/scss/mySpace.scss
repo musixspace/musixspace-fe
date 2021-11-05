@@ -118,12 +118,12 @@
             }
           }
 
-          > p:nth-child(1) {
+          > p:nth-child(2) {
             color: var(--clr-white);
             font-size: calc(var(--base-font-size) * 2.25);
           }
 
-          > p:nth-child(2) {
+          > p:nth-child(3) {
             color: var(--clr-dark-pink);
             font-size: calc(var(--base-font-size) * 2);
           }
@@ -442,11 +442,11 @@
               font-size: calc(var(--base-font-size) * 2.5);
             }
 
-            > p:nth-child(1) {
+            > p:nth-child(2) {
               font-size: calc(var(--base-font-size) * 2);
             }
 
-            > p:nth-child(2) {
+            > p:nth-child(3) {
               font-size: calc(var(--base-font-size) * 1.75);
             }
           }
@@ -613,13 +613,21 @@
   .mySpace {
     padding: 1em 1.5em;
     > .intro {
+      position: relative;
       > .image-container {
         width: 100%;
       }
       > .content-container {
+        position: absolute;
+        justify-content: flex-end;
+        padding: 1em;
+        margin-top: 0;
+        background-blend-mode: color;
+        background: linear-gradient(#ffffff01, var(--clr-maroon));
         > .main {
           > p {
             font-size: calc(var(--base-font-size) * 3.5);
+            color: var(--clr-white);
           }
 
           > .sub {
@@ -637,12 +645,12 @@
           width: 100%;
 
           > p {
-            font-size: calc(var(--base-font-size) * 2.75);
+            font-size: calc(var(--base-font-size) * 2.5);
           }
 
           > .button-container {
             > button {
-              font-size: calc(var(--base-font-size) * 1.75);
+              font-size: calc(var(--base-font-size) * 1.5);
             }
           }
         }
@@ -651,13 +659,16 @@
           > .content {
             > div {
               font-size: calc(var(--base-font-size) * 2.25);
-            }
-
-            > p:nth-child(1) {
-              font-size: calc(var(--base-font-size) * 1.75);
+              color: var(--clr-white);
             }
 
             > p:nth-child(2) {
+              color: var(--clr-pink);
+              font-size: calc(var(--base-font-size) * 2);
+            }
+
+            > p:nth-child(3) {
+              color: var(--clr-white);
               font-size: calc(var(--base-font-size) * 1.5);
             }
           }
@@ -672,6 +683,7 @@
 
     > .topTracks,
     > .topArtists {
+      margin-top: 2em;
       > .upper-container {
         > .title {
           font-size: calc(var(--base-font-size) * 2.75);
@@ -737,6 +749,9 @@
     }
 
     > .topArtists {
+      > .metadata-container {
+        margin-top: -1em;
+      }
       > .songs-container {
         > .tracks-container {
           > .track {
