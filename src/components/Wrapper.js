@@ -56,8 +56,6 @@ const Wrapper = (props) => {
             <div></div>
             <div></div>
             <div></div>
-            <div></div>
-            <div></div>
           </div>
         </div>
       ) : (

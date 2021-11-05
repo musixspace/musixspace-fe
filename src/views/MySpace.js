@@ -10,11 +10,12 @@ import useTopTracks from "../hooks/useTopTracks";
 import { loadingAtom } from "../recoil/loadingAtom";
 import { topArtistsLongAtom } from "../recoil/topArtistsAtom";
 import { topTracksLongAtom } from "../recoil/topTracksAtom";
-import { userState } from "../recoil/userAtom";
+import { userNameSelector, userState } from "../recoil/userAtom";
 import { paddedNumbers } from "../util/functions";
 import logo from "../assets/images/logo-black.png";
+import useProfile from "../hooks/useProfile";
 
-const user = {
+const userP = {
   name: "Amaya Srivastava",
   matches: 12,
   img: image3,
@@ -29,9 +30,11 @@ const user = {
 
 const MySpace = () => {
   const setLoading = useSetRecoilState(loadingAtom);
-  const profile = useRecoilValue(userState);
+  const displayName = useRecoilValue(userNameSelector);
+  const { getUserProfile } = useProfile();
   const { getTopTracksLong } = useTopTracks();
   const { getTopArtistsLong } = useTopArtists();
+  const user = useRecoilValue(userState);
   const topTracks = useRecoilValue(topTracksLongAtom);
   const topArtists = useRecoilValue(topArtistsLongAtom);
   const [currentSong, setCurrentSong] = useState({
@@ -48,16 +51,20 @@ const MySpace = () => {
 
   useEffect(() => {
     setLoading(true);
+    if (!user.displayName) {
+      getUserProfile();
+    }
+
     if (!topTracks.tracks && !topArtists.artists) {
-      getTopTracksLong(true);
+      getTopTracksLong();
     }
 
     if (!topArtists.artists) {
-      getTopArtistsLong(true);
+      getTopArtistsLong();
     }
 
     setLoading(false);
-  }, [topTracks.tracks, topArtists.artists]);
+  }, [topTracks.tracks, topArtists.artists, user.displayName]);
 
   useEffect(() => {
     if (currentSong.songId && currentSong.list) {
@@ -175,256 +182,263 @@ const MySpace = () => {
 
   return (
     <div className="mySpace">
-      <div className="intro">
-        <div className="image-container">
-          <img
-            src={profile.image === "default" ? logo : profile.image}
-            alt={`${user.name}'s Image'`}
-          />
+      {user.displayName && (
+        <div className="intro">
+          <div className="image-container">
+            <img src={user.image || logo} alt={`${displayName}'s Image'`} />
+          </div>
+          <div className="content-container">
+            <div className="main">
+              <p>{user.displayName}</p>
+              <div className="sub">
+                <span>12 matches</span>
+                <div className="traits-container">
+                  {user.traits &&
+                    user.traits.length > 0 &&
+                    user.traits.map((trait) => (
+                      <div key={trait} className="trait">
+                        {trait}
+                      </div>
+                    ))}
+                </div>
+              </div>
+            </div>
+            <div className="middle">
+              <p>{user.username}</p>
+              <div className="button-container">
+                <button>Match</button>
+              </div>
+            </div>
+            <div className="anthem-container">
+              <div className="content">
+                <div>{`${displayName}'s Anthem`}</div>
+                <p>{userP.anthem.title}</p>
+                <p>{userP.anthem.album}</p>
+              </div>
+              <div className="image-container">
+                <img src={userP.anthem.img} alt={`${displayName}'s Anthem'`} />
+              </div>
+            </div>
+          </div>
         </div>
-        <div className="content-container">
-          <div className="main">
-            <p>{profile.displayName}</p>
-            <div className="sub">
-              <span>{user.matches} matches</span>
-              <div className="traits-container">
-                {user.traits.map((trait) => (
-                  <div key={trait} className="trait">
-                    {trait}
+      )}
+      {topTracks.tracks && topTracks.tracks.length > 0 && (
+        <div className="topTracks">
+          <div className="upper-container">
+            <div className="title">Top Tracks</div>
+          </div>
+          <div className="songs-container">
+            <button
+              className="prev"
+              onClick={() =>
+                onLeftClicked(
+                  ".topTracks > .songs-container > .tracks-container"
+                )
+              }
+            >
+              <FiSkipBack />
+            </button>
+            <div className="tracks-container">
+              {topTracks.tracks &&
+                topTracks.tracks.map((item, idx) => (
+                  <div key={item.song_id} id={item.song_id} className="track">
+                    <div
+                      className={`image-container ${
+                        item.song_id === currentSong.songId ? "selected" : ""
+                      }`}
+                    >
+                      <img src={item.image_url} alt={item.name} />
+                    </div>
+                    <div className="content-container">
+                      <div className="title">{item.name}</div>
+                      <div className="sub">
+                        {item.artists.map((i) => i.name).join(", ")}
+                      </div>
+                    </div>
+                    {item.preview_url && (
+                      <button
+                        className="controls"
+                        onClick={() =>
+                          item.song_id === currentSong.songId
+                            ? handlePause()
+                            : handleSetAndPlayTrack(
+                                idx + 1,
+                                item.song_id,
+                                item.preview_url
+                              )
+                        }
+                      >
+                        {item.song_id === currentSong.songId ? (
+                          <AiOutlinePause />
+                        ) : (
+                          <AiFillCaretRight />
+                        )}
+                      </button>
+                    )}
                   </div>
                 ))}
+            </div>
+            <button
+              className="next"
+              onClick={() =>
+                onRightClicked(
+                  ".topTracks > .songs-container > .tracks-container"
+                )
+              }
+            >
+              <FiSkipForward />
+            </button>
+          </div>
+          {topTracks.tracks && topTracks.tracks.length > 0 && (
+            <div className="metadata-container">
+              <div className="dots-container">
+                <div
+                  className={`dot ${
+                    songNumber.tracks <= parseInt(topTracks.tracks.length / 3)
+                      ? "highlight"
+                      : ""
+                  }`}
+                ></div>
+                <div
+                  className={`dot ${
+                    songNumber.tracks > parseInt(topTracks.tracks.length / 3) &&
+                    songNumber.tracks <=
+                      parseInt((2 * topTracks.tracks.length) / 3)
+                      ? "highlight"
+                      : ""
+                  }`}
+                ></div>
+                <div
+                  className={`dot ${
+                    songNumber.tracks >
+                      parseInt((2 * topTracks.tracks.length) / 3) &&
+                    songNumber.tracks <= topTracks.tracks.length
+                      ? "highlight"
+                      : ""
+                  }`}
+                ></div>
+              </div>
+              <div className="song-number">
+                <span>{`${paddedNumbers(songNumber.tracks)}`}</span>
+                <span>{`/${topTracks.tracks && topTracks.tracks.length}`}</span>
               </div>
             </div>
-          </div>
-          <div className="middle">
-            <p>{profile.username}</p>
-            <div className="button-container">
-              <button>Match</button>
-            </div>
-          </div>
-          <div className="anthem-container">
-            <div className="content">
-              <div>{`${
-                profile.displayName.trim().split(" ")[0]
-              }'s Anthem`}</div>
-              <p>{user.anthem.title}</p>
-              <p>{user.anthem.album}</p>
-            </div>
-            <div className="image-container">
-              <img
-                src={user.anthem.img}
-                alt={`${user.name.trim().split(" ")[0]}'s Anthem'`}
-              />
-            </div>
-          </div>
+          )}
         </div>
-      </div>
-      <div className="topTracks">
-        <div className="upper-container">
-          <div className="title">Top Tracks</div>
-        </div>
-        <div className="songs-container">
-          <button
-            className="prev"
-            onClick={() =>
-              onLeftClicked(".topTracks > .songs-container > .tracks-container")
-            }
-          >
-            <FiSkipBack />
-          </button>
-          <div className="tracks-container">
-            {topTracks.tracks &&
-              topTracks.tracks.map((item, idx) => (
-                <div key={item.song_id} id={item.song_id} className="track">
+      )}
+      {topArtists.artists && topArtists.artists.length > 0 && (
+        <div className="topArtists">
+          <div className="upper-container">
+            <div className="title">Top Artists</div>
+          </div>
+          <div className="genres-container">
+            {currentSong.genre &&
+              currentSong.genre.length > 0 &&
+              currentSong.genre.map((genre) => (
+                <div key={genre} className="genre">
+                  {genre}
+                </div>
+              ))}
+          </div>
+          <div className="songs-container">
+            <button
+              className="prev"
+              onClick={() =>
+                onLeftClicked(
+                  ".topArtists > .songs-container > .tracks-container"
+                )
+              }
+            >
+              <FiSkipBack />
+            </button>
+            <div className="tracks-container">
+              {topArtists.artists &&
+                topArtists.artists.map((item, idx) => (
                   <div
-                    className={`image-container ${
-                      item.song_id === currentSong.songId ? "selected" : ""
-                    }`}
+                    key={item.artist_id}
+                    id={item.artist_id}
+                    className="track"
                   >
-                    <img src={item.image_url} alt={item.name} />
-                  </div>
-                  <div className="content-container">
-                    <div className="title">{item.name}</div>
-                    <div className="sub">
-                      {item.artists.map((i) => i.name).join(", ")}
+                    <div
+                      className={`image-container ${
+                        item.artist_id === currentSong.songId ? "selected" : ""
+                      }`}
+                    >
+                      <img src={item.image_url} alt={item.name} />
                     </div>
+                    <div className="content-container">
+                      <div className="title">{item.name}</div>
+                    </div>
+                    {item.toptrack_url && (
+                      <button
+                        className="controls"
+                        onClick={() =>
+                          item.artist_id === currentSong.songId
+                            ? handlePause()
+                            : handleSetAndPlayArtist(idx + 1, item)
+                        }
+                      >
+                        {item.artist_id === currentSong.songId ? (
+                          <AiOutlinePause />
+                        ) : (
+                          <AiFillCaretRight />
+                        )}
+                      </button>
+                    )}
                   </div>
-                  {item.preview_url && (
-                    <button
-                      className="controls"
-                      onClick={() =>
-                        item.song_id === currentSong.songId
-                          ? handlePause()
-                          : handleSetAndPlayTrack(
-                              idx + 1,
-                              item.song_id,
-                              item.preview_url
-                            )
-                      }
-                    >
-                      {item.song_id === currentSong.songId ? (
-                        <AiOutlinePause />
-                      ) : (
-                        <AiFillCaretRight />
-                      )}
-                    </button>
-                  )}
-                </div>
-              ))}
-          </div>
-          <button
-            className="next"
-            onClick={() =>
-              onRightClicked(
-                ".topTracks > .songs-container > .tracks-container"
-              )
-            }
-          >
-            <FiSkipForward />
-          </button>
-        </div>
-        {topTracks.tracks && topTracks.tracks.length > 0 && (
-          <div className="metadata-container">
-            <div className="dots-container">
-              <div
-                className={`dot ${
-                  songNumber.tracks <= parseInt(topTracks.tracks.length / 3)
-                    ? "highlight"
-                    : ""
-                }`}
-              ></div>
-              <div
-                className={`dot ${
-                  songNumber.tracks > parseInt(topTracks.tracks.length / 3) &&
-                  songNumber.tracks <=
-                    parseInt((2 * topTracks.tracks.length) / 3)
-                    ? "highlight"
-                    : ""
-                }`}
-              ></div>
-              <div
-                className={`dot ${
-                  songNumber.tracks >
-                    parseInt((2 * topTracks.tracks.length) / 3) &&
-                  songNumber.tracks <= topTracks.tracks.length
-                    ? "highlight"
-                    : ""
-                }`}
-              ></div>
+                ))}
             </div>
-            <div className="song-number">
-              <span>{`${paddedNumbers(songNumber.tracks)}`}</span>
-              <span>{`/${topTracks.tracks && topTracks.tracks.length}`}</span>
-            </div>
+            <button
+              className="next"
+              onClick={() =>
+                onRightClicked(
+                  ".topArtists > .songs-container > .tracks-container"
+                )
+              }
+            >
+              <FiSkipForward />
+            </button>
           </div>
-        )}
-      </div>
-      <div className="topArtists">
-        <div className="upper-container">
-          <div className="title">Top Artists</div>
-        </div>
-        <div className="genres-container">
-          {currentSong.genre &&
-            currentSong.genre.length > 0 &&
-            currentSong.genre.map((genre) => (
-              <div key={genre} className="genre">
-                {genre}
+          {topArtists.artists && topArtists.artists.length > 0 && (
+            <div className="metadata-container">
+              <div className="dots-container">
+                <div
+                  className={`dot ${
+                    songNumber.artists <=
+                    parseInt(topArtists.artists.length / 3)
+                      ? "highlight"
+                      : ""
+                  }`}
+                ></div>
+                <div
+                  className={`dot ${
+                    songNumber.artists > topArtists.artists.length / 3 &&
+                    songNumber.artists <=
+                      parseInt(2 * topArtists.artists.length) / 3
+                      ? "highlight"
+                      : ""
+                  }`}
+                ></div>
+                <div
+                  className={`dot ${
+                    songNumber.artists >
+                      parseInt(2 * topArtists.artists.length) / 3 &&
+                    songNumber.artists <= topArtists.artists.length
+                      ? "highlight"
+                      : ""
+                  }`}
+                ></div>
               </div>
-            ))}
-        </div>
-        <div className="songs-container">
-          <button
-            className="prev"
-            onClick={() =>
-              onLeftClicked(
-                ".topArtists > .songs-container > .tracks-container"
-              )
-            }
-          >
-            <FiSkipBack />
-          </button>
-          <div className="tracks-container">
-            {topArtists.artists &&
-              topArtists.artists.map((item, idx) => (
-                <div key={item.artist_id} id={item.artist_id} className="track">
-                  <div
-                    className={`image-container ${
-                      item.artist_id === currentSong.songId ? "selected" : ""
-                    }`}
-                  >
-                    <img src={item.image_url} alt={item.name} />
-                  </div>
-                  <div className="content-container">
-                    <div className="title">{item.name}</div>
-                  </div>
-                  {item.toptrack_url && (
-                    <button
-                      className="controls"
-                      onClick={() =>
-                        item.artist_id === currentSong.songId
-                          ? handlePause()
-                          : handleSetAndPlayArtist(idx + 1, item)
-                      }
-                    >
-                      {item.artist_id === currentSong.songId ? (
-                        <AiOutlinePause />
-                      ) : (
-                        <AiFillCaretRight />
-                      )}
-                    </button>
-                  )}
-                </div>
-              ))}
-          </div>
-          <button
-            className="next"
-            onClick={() =>
-              onRightClicked(
-                ".topArtists > .songs-container > .tracks-container"
-              )
-            }
-          >
-            <FiSkipForward />
-          </button>
-        </div>
-        {topArtists.artists && topArtists.artists.length > 0 && (
-          <div className="metadata-container">
-            <div className="dots-container">
-              <div
-                className={`dot ${
-                  songNumber.artists <= parseInt(topArtists.artists.length / 3)
-                    ? "highlight"
-                    : ""
-                }`}
-              ></div>
-              <div
-                className={`dot ${
-                  songNumber.artists > topArtists.artists.length / 3 &&
-                  songNumber.artists <=
-                    parseInt(2 * topArtists.artists.length) / 3
-                    ? "highlight"
-                    : ""
-                }`}
-              ></div>
-              <div
-                className={`dot ${
-                  songNumber.artists >
-                    parseInt(2 * topArtists.artists.length) / 3 &&
-                  songNumber.artists <= topArtists.artists.length
-                    ? "highlight"
-                    : ""
-                }`}
-              ></div>
+              <div className="song-number">
+                <span>{`${paddedNumbers(songNumber.artists)}`}</span>
+                <span>{`/${
+                  topArtists.artists && topArtists.artists.length
+                }`}</span>
+              </div>
             </div>
-            <div className="song-number">
-              <span>{`${paddedNumbers(songNumber.artists)}`}</span>
-              <span>{`/${
-                topArtists.artists && topArtists.artists.length
-              }`}</span>
-            </div>
-          </div>
-        )}
-      </div>
+          )}
+        </div>
+      )}
       {currentSong.audioUrl && (
         <WebPlayer
           url={currentSong.audioUrl}

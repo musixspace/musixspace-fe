@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { FaSpotify } from "react-icons/fa";
 import ImageSlider from "../components/ImageSlider";
 import { loginUrl } from "../util/spotify";

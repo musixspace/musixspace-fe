@@ -61,10 +61,7 @@ const Navbar = () => {
             <div className="mobile-top">
               <div className="profile">
                 <div className="profile-img">
-                  <img
-                    src={image_url === "default" ? profile : image_url}
-                    alt="Profile"
-                  />
+                  <img src={image_url || profile} alt="Profile" />
                 </div>
               </div>
               <div onClick={toggleMenu}>
@@ -94,10 +91,7 @@ const Navbar = () => {
                 className="profile-img"
                 onClick={() => setOpenProfile((prev) => !prev)}
               >
-                <img
-                  src={image_url === "default" ? profile : image_url}
-                  alt="Profile"
-                />
+                <img src={image_url || profile} alt="Profile" />
               </div>
               {openProfile && (
                 <ul className="profile-ul">
@@ -116,10 +110,7 @@ const Navbar = () => {
               className="profile-img"
               onClick={() => setOpenProfile((prev) => !prev)}
             >
-              <img
-                src={image_url === "default" ? profile : image_url}
-                alt="Profile"
-              />
+              <img src={image_url || profile} alt="Profile" />
             </div>
           </div>
         </>
@@ -128,10 +119,7 @@ const Navbar = () => {
           <div className="mobile-top">
             <div className="profile">
               <div className="profile-img">
-                <img
-                  src={image_url === "default" ? profile : image_url}
-                  alt="Profile"
-                />
+                <img src={image_url || profile} alt="Profile" />
               </div>
             </div>
             <div onClick={toggleMenu}>
@@ -152,10 +140,7 @@ const Navbar = () => {
         {localStorage.getItem("accessToken") ? (
           <div className="profile">
             <div className="profile-img">
-              <img
-                src={image_url === "default" ? profile : image_url}
-                alt="Profile"
-              />
+              <img src={image_url || profile} alt="Profile" />
             </div>
           </div>
         ) : showLinks ? (

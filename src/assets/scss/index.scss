@@ -117,18 +117,6 @@ body {
     animation-duration: 1.3s;
   }
 
-  .loader > div:nth-child(4) {
-    transform: scaleY(0.6);
-    animation-delay: 150ms;
-    animation-duration: 1.2s;
-  }
-
-  .loader > div:nth-child(5) {
-    transform: scaleY(0.1);
-    animation-delay: 100ms;
-    animation-duration: 1.4s;
-  }
-
   @keyframes bounce {
     0% {
       transform: scaleY(inherit);
@@ -138,6 +126,17 @@ body {
     }
     100% {
       transform: scaleY(inherit);
+    }
+  }
+
+  @media (max-width: 776px) {
+    .loader {
+      width: 100px;
+      height: 60px;
+    }
+
+    .loader > div {
+      width: 10px;
     }
   }
 }

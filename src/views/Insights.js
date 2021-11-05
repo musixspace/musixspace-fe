@@ -1,39 +1,17 @@
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilValue } from "recoil";
 import ImageSlider from "../components/ImageSlider";
-import { loadingAtom } from "../recoil/loadingAtom";
-import { userNameSelector, userState } from "../recoil/userAtom";
-import { axiosInstance } from "../util/axiosConfig";
+import useProfile from "../hooks/useProfile";
+import { userNameSelector } from "../recoil/userAtom";
 
 const Insights = () => {
   const displayName = useRecoilValue(userNameSelector);
-  const [user, setUser] = useRecoilState(userState);
-  const setLoading = useSetRecoilState(loadingAtom);
+  const { getUserProfile } = useProfile();
 
   useEffect(() => {
-    const accessToken = localStorage.getItem("accessToken");
-    if (accessToken) {
-      if (!user.displayName) {
-        setLoading(true);
-
-        axiosInstance
-          .post("/users")
-          .then((res) => {
-            console.log(res.data);
-            if (res.status === 200) {
-              setUser({
-                displayName: res.data?.display_name,
-                username: res.data?.username,
-                image: res.data.image_url ? res.data.image_url : "default",
-              });
-              setLoading(false);
-            }
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      }
+    if (!displayName) {
+      getUserProfile();
     }
   }, []);
 
