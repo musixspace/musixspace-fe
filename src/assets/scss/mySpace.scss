@@ -313,6 +313,45 @@
         }
       }
     }
+
+    > .metadata-container {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 1em;
+
+      > .dots-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 0.2em;
+
+        > .dot {
+          width: 10px;
+          height: 10px;
+          border-radius: 100%;
+          background-color: var(--clr-gray-2);
+
+          &.highlight {
+            background-color: var(--clr-white);
+          }
+        }
+      }
+
+      > .song-number {
+        color: var(--clr-white);
+
+        > span:nth-child(1) {
+          font-size: calc(var(--base-font-size) * 4.5);
+          color: var(--clr-dark-pink);
+        }
+
+        > span:nth-child(2) {
+          font-size: calc(var(--base-font-size) * 3);
+        }
+      }
+    }
   }
 
   > .topArtists {
@@ -471,6 +510,26 @@
           }
         }
       }
+
+      > .metadata-container {
+        > .dots-container {
+          > .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 100%;
+          }
+        }
+
+        > .song-number {
+          > span:nth-child(1) {
+            font-size: calc(var(--base-font-size) * 4);
+          }
+
+          > span:nth-child(2) {
+            font-size: calc(var(--base-font-size) * 2.75);
+          }
+        }
+      }
     }
 
     > .topArtists {
@@ -623,7 +682,8 @@
         gap: 0.4em;
 
         > .genre {
-          padding: 0.2em 0.8em;
+          font-size: calc(var(--base-font-size) * 1.5);
+          padding: 0.4em 0.8em;
         }
       }
 
@@ -650,6 +710,27 @@
                 font-size: calc(var(--base-font-size) * 1.2);
               }
             }
+          }
+        }
+      }
+
+      > .metadata-container {
+        margin-top: 0.2em;
+        > .dots-container {
+          > .dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 100%;
+          }
+        }
+
+        > .song-number {
+          > span:nth-child(1) {
+            font-size: calc(var(--base-font-size) * 3);
+          }
+
+          > span:nth-child(2) {
+            font-size: calc(var(--base-font-size) * 2);
           }
         }
       }

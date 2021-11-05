@@ -10,6 +10,7 @@ import useTopTracks from "../hooks/useTopTracks";
 import { loadingAtom } from "../recoil/loadingAtom";
 import { topArtistsLongAtom } from "../recoil/topArtistsAtom";
 import { topTracksLongAtom } from "../recoil/topTracksAtom";
+import { paddedNumbers } from "../util/functions";
 
 const user = {
   name: "Amaya Srivastava",
@@ -35,6 +36,11 @@ const MySpace = () => {
     audioUrl: null,
     list: "topTracks",
     genre: [],
+  });
+
+  const [songNumber, setSongNumber] = useState({
+    tracks: 1,
+    artists: 1,
   });
 
   useEffect(() => {
@@ -92,6 +98,16 @@ const MySpace = () => {
     document.querySelector(selector).scrollBy(1000, 0);
   };
 
+  const handleSetAndPlayArtist = (num, item) => {
+    setSongNumber({ ...songNumber, artists: num });
+    handlePlayArtist(item);
+  };
+
+  const handleSetAndPlayTrack = (num, songId, audioUrl) => {
+    setSongNumber({ ...songNumber, tracks: num });
+    handlePlaySong(songId, audioUrl);
+  };
+
   const handlePlaySong = (songId, audioUrl, list = "topTracks", genre = []) => {
     setCurrentSong({
       ...currentSong,
@@ -111,10 +127,6 @@ const MySpace = () => {
     );
   };
 
-  useEffect(() => {
-    console.log(currentSong);
-  }, [currentSong]);
-
   const handleNextPlay = () => {
     if (topTracks && topTracks.tracks && currentSong.list === "topTracks") {
       const track = topTracks.tracks.find(
@@ -122,11 +134,13 @@ const MySpace = () => {
       );
       const index = topTracks.tracks.indexOf(track);
       if (index + 1 !== topTracks.tracks.length) {
+        setSongNumber({ ...songNumber, tracks: index + 2 });
         handlePlaySong(
           topTracks.tracks[index + 1].song_id,
           topTracks.tracks[index + 1].preview_url
         );
       } else {
+        setSongNumber({ ...songNumber, tracks: 1 });
         handlePlaySong(
           topTracks.tracks[0].song_id,
           topTracks.tracks[0].preview_url
@@ -138,8 +152,10 @@ const MySpace = () => {
       );
       const index = topArtists.artists.indexOf(artist);
       if (index + 1 !== topArtists.artists.length) {
+        setSongNumber({ ...songNumber, artists: index + 2 });
         handlePlayArtist(topArtists.artists[index + 1]);
       } else {
+        setSongNumber({ ...songNumber, artists: 1 });
         handlePlayArtist(topArtists.artists[0]);
       }
     }
@@ -210,7 +226,7 @@ const MySpace = () => {
           </button>
           <div className="tracks-container">
             {topTracks.tracks &&
-              topTracks.tracks.map((item) => (
+              topTracks.tracks.map((item, idx) => (
                 <div key={item.song_id} id={item.song_id} className="track">
                   <div
                     className={`image-container ${
@@ -231,7 +247,11 @@ const MySpace = () => {
                       onClick={() =>
                         item.song_id === currentSong.songId
                           ? handlePause()
-                          : handlePlaySong(item.song_id, item.preview_url)
+                          : handleSetAndPlayTrack(
+                              idx + 1,
+                              item.song_id,
+                              item.preview_url
+                            )
                       }
                     >
                       {item.song_id === currentSong.songId ? (
@@ -255,6 +275,41 @@ const MySpace = () => {
             <FiSkipForward />
           </button>
         </div>
+        {topTracks.tracks && topTracks.tracks.length > 0 && (
+          <div className="metadata-container">
+            <div className="dots-container">
+              <div
+                className={`dot ${
+                  songNumber.tracks <= parseInt(topTracks.tracks.length / 3)
+                    ? "highlight"
+                    : ""
+                }`}
+              ></div>
+              <div
+                className={`dot ${
+                  songNumber.tracks > parseInt(topTracks.tracks.length / 3) &&
+                  songNumber.tracks <=
+                    parseInt((2 * topTracks.tracks.length) / 3)
+                    ? "highlight"
+                    : ""
+                }`}
+              ></div>
+              <div
+                className={`dot ${
+                  songNumber.tracks >
+                    parseInt((2 * topTracks.tracks.length) / 3) &&
+                  songNumber.tracks <= topTracks.tracks.length
+                    ? "highlight"
+                    : ""
+                }`}
+              ></div>
+            </div>
+            <div className="song-number">
+              <span>{`${paddedNumbers(songNumber.tracks)}`}</span>
+              <span>{`/${topTracks.tracks && topTracks.tracks.length}`}</span>
+            </div>
+          </div>
+        )}
       </div>
       <div className="topArtists">
         <div className="upper-container">
@@ -282,7 +337,7 @@ const MySpace = () => {
           </button>
           <div className="tracks-container">
             {topArtists.artists &&
-              topArtists.artists.map((item) => (
+              topArtists.artists.map((item, idx) => (
                 <div key={item.artist_id} id={item.artist_id} className="track">
                   <div
                     className={`image-container ${
@@ -300,7 +355,7 @@ const MySpace = () => {
                       onClick={() =>
                         item.artist_id === currentSong.songId
                           ? handlePause()
-                          : handlePlayArtist(item)
+                          : handleSetAndPlayArtist(idx + 1, item)
                       }
                     >
                       {item.artist_id === currentSong.songId ? (
@@ -324,6 +379,43 @@ const MySpace = () => {
             <FiSkipForward />
           </button>
         </div>
+        {topArtists.artists && topArtists.artists.length > 0 && (
+          <div className="metadata-container">
+            <div className="dots-container">
+              <div
+                className={`dot ${
+                  songNumber.artists <= parseInt(topArtists.artists.length / 3)
+                    ? "highlight"
+                    : ""
+                }`}
+              ></div>
+              <div
+                className={`dot ${
+                  songNumber.artists > topArtists.artists.length / 3 &&
+                  songNumber.artists <=
+                    parseInt(2 * topArtists.artists.length) / 3
+                    ? "highlight"
+                    : ""
+                }`}
+              ></div>
+              <div
+                className={`dot ${
+                  songNumber.artists >
+                    parseInt(2 * topArtists.artists.length) / 3 &&
+                  songNumber.artists <= topArtists.artists.length
+                    ? "highlight"
+                    : ""
+                }`}
+              ></div>
+            </div>
+            <div className="song-number">
+              <span>{`${paddedNumbers(songNumber.artists)}`}</span>
+              <span>{`/${
+                topArtists.artists && topArtists.artists.length
+              }`}</span>
+            </div>
+          </div>
+        )}
       </div>
       {currentSong.audioUrl && (
         <WebPlayer

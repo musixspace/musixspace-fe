@@ -1,5 +1,4 @@
-export const handleLogout = () => {
-  localStorage.removeItem("accessToken");
-  localStorage.removeItem("spotifyId");
-  window.location = "/";
+export const paddedNumbers = (num) => {
+  if (num < 10) return `0${num}`;
+  return `${num}`;
 };
