@@ -10,10 +10,16 @@ export const topArtistsLongAtom = atom({
 
 export const topArtistsMediumAtom = atom({
   key: "topArtistsMediumAtom",
-  default: null,
+  default: {
+    artists: null,
+    images: null,
+  },
 });
 
 export const topArtistsShortAtom = atom({
   key: "topArtistsShortAtom",
-  default: null,
+  default: {
+    artists: null,
+    images: null,
+  },
 });

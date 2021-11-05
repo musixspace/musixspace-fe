@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Logout from "./components/Logout";
 import Wrapper from "./components/Wrapper";
@@ -18,6 +19,18 @@ const code = new URLSearchParams(window.location.search).get("code");
 
 const App = () => {
   useAuth(code);
+
+  useEffect(() => {
+    console.log("Entered here 1");
+    if (
+      localStorage.getItem("accessToken") &&
+      !window.location.href.includes("insights") &&
+      !sessionStorage.getItem("newUser")
+    ) {
+      console.log("Entered here 2");
+      window.location = window.location.origin + "/insights";
+    }
+  }, []);
 
   return (
     <Router>

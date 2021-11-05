@@ -89,16 +89,16 @@
       max-width: 100%;
 
       p:first-child {
-        font-size: calc(var(--base-font-size) * 5);
+        font-size: calc(var(--base-font-size) * 4);
       }
 
       p:nth-child(2) {
         max-width: 100%;
-        font-size: calc(var(--base-font-size) * 3);
+        font-size: calc(var(--base-font-size) * 2.75);
       }
 
       a {
-        font-size: calc(var(--base-font-size) * 2.5);
+        font-size: calc(var(--base-font-size) * 2.25);
       }
     }
   }

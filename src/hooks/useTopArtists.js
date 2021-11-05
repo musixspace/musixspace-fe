@@ -13,8 +13,10 @@ const useTopArtists = () => {
   const setTAMedium = useSetRecoilState(topArtistsMediumAtom);
   const setTAShort = useSetRecoilState(topArtistsShortAtom);
 
-  const getTopArtistsLong = () => {
-    setLoading(true);
+  const getTopArtistsLong = (removeLoader) => {
+    if (!removeLoader) {
+      setLoading(true);
+    }
     axiosInstance
       .post("/topartists_long")
       .then((res) => {
@@ -34,7 +36,9 @@ const useTopArtists = () => {
             artists: artists,
             images: imgArr,
           });
-          setLoading(false);
+          if (!removeLoader) {
+            setLoading(false);
+          }
         }
       })
       .catch((err) => {
@@ -42,15 +46,32 @@ const useTopArtists = () => {
       });
   };
 
-  const getTopArtistsMedium = () => {
-    setLoading(true);
+  const getTopArtistsMedium = (removeLoader) => {
+    if (!removeLoader) {
+      setLoading(true);
+    }
     axiosInstance
       .post("/topartists_medium")
       .then((res) => {
         if (res.status === 200) {
           const artists = res.data.artists;
-          setTAMedium(artists);
-          setLoading(false);
+          let imgArr = [];
+          artists.forEach((artist) => {
+            imgArr.push({
+              id: artist.artist_id,
+              url:
+                artist.image_url ||
+                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRd-y-IJN8glQlf1qoU01dEgGPUa0d1-sjfWg&usqp=CAU",
+            });
+          });
+
+          setTAMedium({
+            artists: artists,
+            images: imgArr,
+          });
+          if (!removeLoader) {
+            setLoading(false);
+          }
         }
       })
       .catch((err) => {
@@ -58,15 +79,32 @@ const useTopArtists = () => {
       });
   };
 
-  const getTopArtistsShort = () => {
-    setLoading(true);
+  const getTopArtistsShort = (removeLoader) => {
+    if (!removeLoader) {
+      setLoading(true);
+    }
     axiosInstance
       .post("/topartists_short")
       .then((res) => {
         if (res.status === 200) {
           const artists = res.data.artists;
-          setTAShort(artists);
-          setLoading(false);
+          let imgArr = [];
+          artists.forEach((artist) => {
+            imgArr.push({
+              id: artist.artist_id,
+              url:
+                artist.image_url ||
+                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRd-y-IJN8glQlf1qoU01dEgGPUa0d1-sjfWg&usqp=CAU",
+            });
+          });
+
+          setTAShort({
+            artists: artists,
+            images: imgArr,
+          });
+          if (!removeLoader) {
+            setLoading(false);
+          }
         }
       })
       .catch((err) => {

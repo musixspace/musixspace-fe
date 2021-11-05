@@ -2,18 +2,18 @@
   position: absolute;
   left: 1.4em;
 
-  audio {
+  > audio {
     visibility: hidden;
   }
 
-  .controls {
+  > .controls {
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
     gap: 2em;
 
-    button {
+    > button {
       font-size: calc(var(--base-font-size) * 3.5);
       background-color: transparent;
       cursor: pointer;
@@ -24,8 +24,8 @@
       padding: 0.3em;
     }
 
-    button:hover,
-    button:focus {
+    > button:hover,
+    > button:focus {
       background-color: var(--clr-white);
       color: var(--clr-black);
       border-radius: 50%;
@@ -37,11 +37,14 @@
   .audio-container {
     all: unset;
     position: relative;
-    .controls {
+    > .controls {
       margin-top: 2em;
       width: 100%;
       align-items: center;
       flex-direction: row;
+      > button {
+        font-size: calc(var(--base-font-size) * 3);
+      }
     }
   }
 }

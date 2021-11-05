@@ -15,8 +15,10 @@ const useTopTracks = () => {
   const setTTShort = useSetRecoilState(topTracksShortAtom);
   const setRecommendations = useSetRecoilState(surpriseTracksAtom);
 
-  const getTopTracksLong = () => {
-    setLoading(true);
+  const getTopTracksLong = (removeLoader = false) => {
+    if (!removeLoader) {
+      setLoading(true);
+    }
     axiosInstance
       .post("toptracks_long")
       .then((res) => {
@@ -30,42 +32,68 @@ const useTopTracks = () => {
             tracks: songs,
             images: imgArr,
           });
-          setLoading(false);
+          if (!removeLoader) {
+            setLoading(false);
+          }
         }
       })
       .catch((err) => console.log(err));
   };
 
-  const getTopTracksMedium = () => {
-    setLoading(true);
+  const getTopTracksMedium = (removeLoader) => {
+    if (!removeLoader) {
+      setLoading(true);
+    }
     axiosInstance
       .post("toptracks_medium")
       .then((res) => {
         if (res.status === 200) {
           const songs = res.data.songs;
-          setTTMedium(songs);
-          setLoading(false);
+          let imgArr = [];
+          songs.forEach((item) => {
+            imgArr.push({ id: item.song_id, url: item.image_url });
+          });
+          setTTMedium({
+            tracks: songs,
+            images: imgArr,
+          });
+          if (!removeLoader) {
+            setLoading(false);
+          }
         }
       })
       .catch((err) => console.log(err));
   };
 
-  const getTopTracksShort = () => {
-    setLoading(true);
+  const getTopTracksShort = (removeLoader) => {
+    if (!removeLoader) {
+      setLoading(true);
+    }
     axiosInstance
       .post("toptracks_short")
       .then((res) => {
         if (res.status === 200) {
           const songs = res.data.songs;
-          setTTShort(songs);
-          setLoading(false);
+          let imgArr = [];
+          songs.forEach((item) => {
+            imgArr.push({ id: item.song_id, url: item.image_url });
+          });
+          setTTShort({
+            tracks: songs,
+            images: imgArr,
+          });
+          if (!removeLoader) {
+            setLoading(false);
+          }
         }
       })
       .catch((err) => console.log(err));
   };
 
-  const getRecommendations = () => {
-    setLoading(true);
+  const getRecommendations = (removeLoader) => {
+    if (!removeLoader) {
+      setLoading(true);
+    }
     axiosInstance
       .post("/recommendation")
       .then((res) => {
@@ -78,7 +106,9 @@ const useTopTracks = () => {
           tracks: songs,
           images: imgArr,
         });
-        setLoading(false);
+        if (!removeLoader) {
+          setLoading(false);
+        }
       })
       .catch((err) => {
         console.log(err);

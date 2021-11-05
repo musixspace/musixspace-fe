@@ -170,7 +170,7 @@
     padding: 1em 1.5em;
     .container {
       .title {
-        font-size: calc(var(--base-font-size) * 5);
+        font-size: calc(var(--base-font-size) * 4);
       }
 
       .input-fields {
@@ -179,7 +179,7 @@
         > div {
           width: 100%;
           input {
-            font-size: calc(var(--base-font-size) * 2.25);
+            font-size: calc(var(--base-font-size) * 2.2);
           }
         }
       }

@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { AiFillCaretRight, AiOutlinePause } from "react-icons/ai";
 import { FiSkipBack, FiSkipForward } from "react-icons/fi";
-import { useRecoilValue } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import image3 from "../assets/images/artists/image3.png";
 import image5 from "../assets/images/artists/image5.png";
 import WebPlayer from "../components/WebPlayer";
 import useTopArtists from "../hooks/useTopArtists";
 import useTopTracks from "../hooks/useTopTracks";
+import { loadingAtom } from "../recoil/loadingAtom";
 import { topArtistsLongAtom } from "../recoil/topArtistsAtom";
 import { topTracksLongAtom } from "../recoil/topTracksAtom";
 
@@ -24,6 +25,7 @@ const user = {
 };
 
 const MySpace = () => {
+  const setLoading = useSetRecoilState(loadingAtom);
   const { getTopTracksLong } = useTopTracks();
   const { getTopArtistsLong } = useTopArtists();
   const topTracks = useRecoilValue(topTracksLongAtom);
@@ -32,29 +34,21 @@ const MySpace = () => {
     songId: null,
     audioUrl: null,
     list: "topTracks",
+    genre: [],
   });
 
   useEffect(() => {
-    if (!topTracks.tracks) {
-      getTopTracksLong();
-    } else if (
-      topTracks.tracks.length > 0 &&
-      !currentSong.songId &&
-      currentSong.list === "topTracks"
-    ) {
-      setCurrentSong({
-        ...currentSong,
-        songId: topTracks.tracks[0].song_id,
-        audioUrl: topTracks.tracks[0].preview_url,
-      });
+    setLoading(true);
+    if (!topTracks.tracks && !topArtists.artists) {
+      getTopTracksLong(true);
     }
-  }, [topTracks.tracks]);
 
-  useEffect(() => {
     if (!topArtists.artists) {
-      getTopArtistsLong();
+      getTopArtistsLong(true);
     }
-  }, [topArtists.artists]);
+
+    setLoading(false);
+  }, [topTracks.tracks, topArtists.artists]);
 
   useEffect(() => {
     if (currentSong.songId && currentSong.list) {
@@ -68,13 +62,11 @@ const MySpace = () => {
           ".topArtists > .songs-container > .tracks-container"
         );
       }
-      console.log(container);
       let children = container.children;
       let index = 0;
       while (children[index].id !== currentSong.songId) {
         index++;
       }
-      // console.log(index);
       if (index) {
         const leftOffset = container.querySelector(
           `.track:nth-child(${index + 1})`
@@ -100,14 +92,28 @@ const MySpace = () => {
     document.querySelector(selector).scrollBy(1000, 0);
   };
 
-  const handlePlaySong = (songId, audioUrl, list = "topTracks") => {
-    setCurrentSong({ ...currentSong, songId, audioUrl, list });
+  const handlePlaySong = (songId, audioUrl, list = "topTracks", genre = []) => {
+    setCurrentSong({
+      ...currentSong,
+      songId,
+      audioUrl,
+      list,
+      genre,
+    });
   };
 
   const handlePlayArtist = (artist) => {
-    // console.log(artist);
-    handlePlaySong(artist.artist_id, artist.toptrack_url, "topArtists");
+    handlePlaySong(
+      artist.artist_id,
+      artist.toptrack_url,
+      "topArtists",
+      artist.genres
+    );
   };
+
+  useEffect(() => {
+    console.log(currentSong);
+  }, [currentSong]);
 
   const handleNextPlay = () => {
     if (topTracks && topTracks.tracks && currentSong.list === "topTracks") {
@@ -140,7 +146,12 @@ const MySpace = () => {
   };
 
   const handlePause = () => {
-    setCurrentSong({ songId: null, audioUrl: null, list: null });
+    setCurrentSong({
+      ...currentSong,
+      songId: null,
+      audioUrl: null,
+      list: null,
+    });
   };
 
   return (
@@ -249,6 +260,15 @@ const MySpace = () => {
         <div className="upper-container">
           <div className="title">Top Artists</div>
         </div>
+        <div className="genres-container">
+          {currentSong.genre &&
+            currentSong.genre.length > 0 &&
+            currentSong.genre.map((genre) => (
+              <div key={genre} className="genre">
+                {genre}
+              </div>
+            ))}
+        </div>
         <div className="songs-container">
           <button
             className="prev"
@@ -312,7 +332,7 @@ const MySpace = () => {
           noControls={true}
         />
       )}
-      {!currentSong.audioUrl && handleNextPlay()}
+      {currentSong.songId && !currentSong.audioUrl && handleNextPlay()}
     </div>
   );
 };

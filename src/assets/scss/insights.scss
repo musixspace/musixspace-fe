@@ -84,15 +84,15 @@
     .content {
       width: 100%;
       > p {
-        font-size: calc(var(--base-font-size) * 5);
+        font-size: calc(var(--base-font-size) * 4);
       }
 
       .pages {
-        margin-top: 2em;
+        margin-top: 1em;
         width: 100%;
 
         > .pages-li {
-          font-size: calc(var(--base-font-size) * 3.5);
+          font-size: calc(var(--base-font-size) * 3);
         }
       }
     }

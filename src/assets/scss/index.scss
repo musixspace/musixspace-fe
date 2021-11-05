@@ -64,7 +64,7 @@ body {
 
 .dark-overlay {
   @media (max-width: 776px) {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     background-color: rgba($color: #000000, $alpha: 0.5);
@@ -81,41 +81,62 @@ body {
   justify-content: center;
   align-items: center;
 
-  .lds-facebook {
-    display: inline-block;
-    position: relative;
-    width: 80px;
+  .loader {
+    width: 150px;
     height: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 0.2em;
   }
-  .lds-facebook div {
-    display: inline-block;
-    position: absolute;
-    left: 8px;
-    width: 16px;
-    background: #fff;
-    animation: lds-facebook 1.2s cubic-bezier(0, 0.5, 0.5, 1) infinite;
+
+  .loader > div {
+    width: 20px;
+    height: 100%;
+    background-color: var(--clr-white);
+    transform-origin: bottom;
+    animation: linear infinite alternate bounce;
   }
-  .lds-facebook div:nth-child(1) {
-    left: 8px;
-    animation-delay: -0.24s;
+
+  .loader > div:nth-child(1) {
+    transform: scaleY(0.2);
+    animation-delay: 10ms;
+    animation-duration: 1s;
   }
-  .lds-facebook div:nth-child(2) {
-    left: 32px;
-    animation-delay: -0.12s;
+
+  .loader > div:nth-child(2) {
+    transform: scaleY(0.8);
+    animation-delay: 80ms;
+    animation-duration: 1.1s;
   }
-  .lds-facebook div:nth-child(3) {
-    left: 56px;
-    animation-delay: 0;
+
+  .loader > div:nth-child(3) {
+    transform: scaleY(0.4);
+    animation-delay: 40ms;
+    animation-duration: 1.3s;
   }
-  @keyframes lds-facebook {
+
+  .loader > div:nth-child(4) {
+    transform: scaleY(0.6);
+    animation-delay: 150ms;
+    animation-duration: 1.2s;
+  }
+
+  .loader > div:nth-child(5) {
+    transform: scaleY(0.1);
+    animation-delay: 100ms;
+    animation-duration: 1.4s;
+  }
+
+  @keyframes bounce {
     0% {
-      top: 8px;
-      height: 64px;
+      transform: scaleY(inherit);
     }
-    50%,
+    50% {
+      transform: scaleY(1);
+    }
     100% {
-      top: 24px;
-      height: 32px;
+      transform: scaleY(inherit);
     }
   }
 }

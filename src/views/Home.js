@@ -4,12 +4,6 @@ import ImageSlider from "../components/ImageSlider";
 import { loginUrl } from "../util/spotify";
 
 const Home = () => {
-  useEffect(() => {
-    if (localStorage.getItem("accessToken")) {
-      window.location.href = window.location.origin + "/insights";
-    }
-  }, []);
-
   return (
     <div className="home">
       <div className="content">

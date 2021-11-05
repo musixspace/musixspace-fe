@@ -110,16 +110,16 @@
 
       .heading {
         margin-left: 0;
-        font-size: calc(var(--base-font-size) * 5);
+        font-size: calc(var(--base-font-size) * 4);
         text-align: center;
 
         div {
           p {
-            font-size: calc(var(--base-font-size) * 3);
+            font-size: calc(var(--base-font-size) * 2.75);
           }
 
           #export {
-            font-size: calc(var(--base-font-size) * 2.25);
+            font-size: calc(var(--base-font-size) * 2);
           }
         }
       }
@@ -135,11 +135,11 @@
           .main {
             text-align: left;
             > span:first-child {
-              font-size: calc(var(--base-font-size) * 6);
+              font-size: calc(var(--base-font-size) * 5.5);
             }
 
             > span:nth-child(2) {
-              font-size: calc(var(--base-font-size) * 4);
+              font-size: calc(var(--base-font-size) * 3.5);
             }
           }
 
@@ -150,19 +150,19 @@
             .content {
               margin-top: 1em;
               p:first-child {
-                font-size: calc(var(--base-font-size) * 2.5);
+                font-size: calc(var(--base-font-size) * 2.25);
               }
 
               p:nth-child(2) {
-                font-size: calc(var(--base-font-size) * 4);
+                font-size: calc(var(--base-font-size) * 3.5);
               }
 
               p:nth-child(3) {
-                font-size: calc(var(--base-font-size) * 3);
+                font-size: calc(var(--base-font-size) * 2.75);
               }
 
               p:nth-child(4) {
-                font-size: calc(var(--base-font-size) * 2.5);
+                font-size: calc(var(--base-font-size) * 2.25);
               }
             }
           }

@@ -10,10 +10,16 @@ export const topTracksLongAtom = atom({
 
 export const topTracksMediumAtom = atom({
   key: "topTracksMediumAtom",
-  default: null,
+  default: {
+    tracks: null,
+    images: null,
+  },
 });
 
 export const topTracksShortAtom = atom({
   key: "topTracksShortAtom",
-  default: null,
+  default: {
+    tracks: null,
+    images: null,
+  },
 });

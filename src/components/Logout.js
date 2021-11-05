@@ -40,6 +40,7 @@ const Logout = () => {
     resetUser();
     localStorage.removeItem("accessToken");
     localStorage.removeItem("spotifyId");
+    sessionStorage.removeItem("newUser");
     setTimeout(() => {
       setLoading(false);
       history.push("/");

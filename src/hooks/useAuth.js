@@ -15,6 +15,7 @@ const useAuth = (code) => {
           setAccessToken(response.data.accessToken);
           localStorage.setItem("accessToken", response.data.accessToken);
           localStorage.setItem("spotifyId", response.data.spotifyId);
+          sessionStorage.setItem("newUser", response.data.isNew);
           console.log(response.data.isNew);
           if (response.data.isNew) {
             console.log(window.location.origin);
