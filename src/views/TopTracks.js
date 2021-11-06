@@ -5,6 +5,7 @@ import TrackList from "../components/TrackList";
 import WebPlayer from "../components/WebPlayer";
 import useTopTracks from "../hooks/useTopTracks";
 import { topTracksLongAtom } from "../recoil/topTracksAtom";
+import { axiosInstance } from "../util/axiosConfig";
 
 const TopTracks = () => {
   const { getTopTracksLong } = useTopTracks();
@@ -78,6 +79,17 @@ const TopTracks = () => {
     }
   };
 
+  const handleExport = () => {
+    axiosInstance
+      .post("/create_playlist", { query: "top_tracks" })
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   const handleShufflePlay = () => {
     let total = topTracksLong.tracks.length;
     let rnd = Math.floor(Math.random() * total);
@@ -106,7 +118,9 @@ const TopTracks = () => {
             <p>Your Top Tracks Radio</p>
             <div>
               <p>30 sec</p>
-              <button id="export">Export</button>
+              <button id="export" onClick={handleExport}>
+                Export
+              </button>
             </div>
           </div>
         </div>

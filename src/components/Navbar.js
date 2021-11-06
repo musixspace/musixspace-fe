@@ -44,6 +44,12 @@ const Navbar = () => {
     setShowLinks((prev) => !prev);
   };
 
+  const onHandleLinkClick = () => {
+    if (showLinks) {
+      setShowLinks(false);
+    }
+  };
+
   return (
     <nav
       className={
@@ -51,7 +57,10 @@ const Navbar = () => {
       }
     >
       <div className="nav-title">
-        <Link to={localStorage.getItem("accessToken") ? "/insights" : "/"}>
+        <Link
+          onClick={onHandleLinkClick}
+          to={localStorage.getItem("accessToken") ? "/insights" : "/"}
+        >
           Musixspace
         </Link>
       </div>
@@ -77,14 +86,20 @@ const Navbar = () => {
                     location.pathname === item.path ? "underline" : ""
                   }`}
                 >
-                  <Link to={item.path}>{item.name}</Link>
+                  <Link onClick={onHandleLinkClick} to={item.path}>
+                    {item.name}
+                  </Link>
                 </li>
               ))}
             <li className="nav-li mobile">
-              <Link to="/about">About</Link>
+              <Link onClick={onHandleLinkClick} to="/about">
+                About
+              </Link>
             </li>
             <li className="nav-li mobile">
-              <Link to="/logout">Logout</Link>
+              <Link onClick={onHandleLinkClick} to="/logout">
+                Logout
+              </Link>
             </li>
             <div className="profile">
               <div
@@ -96,10 +111,14 @@ const Navbar = () => {
               {openProfile && (
                 <ul className="profile-ul">
                   <li className="profile-li">
-                    <Link to="/about">About</Link>
+                    <Link onClick={onHandleLinkClick} to="/about">
+                      About
+                    </Link>
                   </li>
                   <li className="profile-li">
-                    <Link to="/logout">Logout</Link>
+                    <Link onClick={onHandleLinkClick} to="/logout">
+                      Logout
+                    </Link>
                   </li>
                 </ul>
               )}
@@ -132,7 +151,9 @@ const Navbar = () => {
               location.pathname === "/about" ? "underline" : ""
             }`}
           >
-            <Link to="/about">About</Link>
+            <Link onClick={onHandleLinkClick} to="/about">
+              About
+            </Link>
           </li>
         </ul>
       )}

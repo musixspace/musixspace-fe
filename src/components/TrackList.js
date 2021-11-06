@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { paddedNumbers } from "../util/functions";
 
 const TrackList = ({ currentTrack, tracks, changeTrack }) => {
   useEffect(() => {
@@ -37,7 +38,7 @@ const TrackList = ({ currentTrack, tracks, changeTrack }) => {
               {item.artists.map((artist) => artist.name).join(", ")}
             </div>
           </div>
-          <div className="track-number">{`#${ind + 1}`}</div>
+          <div className="track-number">{`#${paddedNumbers(ind + 1)}`}</div>
         </div>
       ))}
     </div>

@@ -5,6 +5,7 @@ import TrackList from "../components/TrackList";
 import WebPlayer from "../components/WebPlayer";
 import useTopTracks from "../hooks/useTopTracks";
 import { surpriseTracksAtom } from "../recoil/surpriseTracksAtom";
+import { axiosInstance } from "../util/axiosConfig";
 
 const SurpriseMe = () => {
   const surpriseTracksInfo = useRecoilValue(surpriseTracksAtom);
@@ -83,6 +84,17 @@ const SurpriseMe = () => {
     setCurrentTrack(surpriseTracksInfo.tracks[rnd].song_id);
   };
 
+  const handleExport = () => {
+    axiosInstance
+      .post("/create_playlist", { query: "surprise_me" })
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   return (
     <div className="dashboard-container">
       {surpriseTracksInfo.tracks &&
@@ -105,6 +117,11 @@ const SurpriseMe = () => {
             <Carousel data={surpriseTracksInfo.images} current={currentTrack} />
             <div className="heading">
               <p>Surprise Tracks Radio</p>
+              <div>
+                <button id="export" onClick={handleExport}>
+                  Export
+                </button>
+              </div>
             </div>
           </div>
         )}
