@@ -168,6 +168,8 @@ const MySpace = () => {
         setSongNumber({ ...songNumber, artists: 1 });
         handlePlayArtist(topArtists.artists[0]);
       }
+    } else {
+      setCurrentSong({ ...currentSong, songId: null, audioUrl: null });
     }
   };
 
@@ -212,11 +214,37 @@ const MySpace = () => {
             <div className="anthem-container">
               <div className="content">
                 <div>{`${displayName}'s Anthem`}</div>
-                <p>{userP.anthem.title}</p>
-                <p>{userP.anthem.album}</p>
+                <p>{user.anthem.name}</p>
+                <p>{user.anthem.artists.map((item) => item.name).join(", ")}</p>
               </div>
-              <div className="image-container">
-                <img src={userP.anthem.img} alt={`${displayName}'s Anthem'`} />
+              <div
+                className={`image-container ${
+                  user.anthem.song_id === currentSong.songId ? "highlight" : ""
+                }`}
+              >
+                <img
+                  src={user.anthem.image_url}
+                  alt={`${displayName}'s Anthem'`}
+                />
+                {user.anthem.preview_url && (
+                  <button
+                    onClick={() =>
+                      user.anthem.song_id === currentSong.songId
+                        ? handlePause()
+                        : handlePlaySong(
+                            user.anthem.song_id,
+                            user.anthem.preview_url,
+                            null
+                          )
+                    }
+                  >
+                    {user.anthem.song_id === currentSong.songId ? (
+                      <AiOutlinePause />
+                    ) : (
+                      <AiFillCaretRight />
+                    )}
+                  </button>
+                )}
               </div>
             </div>
           </div>

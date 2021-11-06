@@ -21,6 +21,7 @@ const useProfile = () => {
             username: res.data?.username,
             image: res.data.image_url,
             traits: res.data.traits,
+            anthem: res.data.anthem,
           });
           if (!removeLoader) {
             setLoading(false);
