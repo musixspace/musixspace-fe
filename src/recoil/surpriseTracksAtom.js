@@ -7,3 +7,8 @@ export const surpriseTracksAtom = atom({
     images: null,
   },
 });
+
+export const moodRadioAtom = atom({
+  key: "moodRadioAtom",
+  default: null,
+});
