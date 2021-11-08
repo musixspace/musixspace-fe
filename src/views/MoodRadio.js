@@ -1,17 +1,20 @@
 import React, { useEffect, useState } from "react";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import Carousel from "../components/Carousel";
 import WebPlayer from "../components/WebPlayer";
 import { moodRadioAtom } from "../recoil/surpriseTracksAtom";
 import { axiosInstance } from "../util/axiosConfig";
+import { loadingAtom } from "../recoil/loadingAtom";
 
 const MoodRadio = () => {
+  const setLoading = useSetRecoilState(loadingAtom);
   const [currentTrack, setCurrentTrack] = useState("");
   const [audioUrl, setAudioUrl] = useState("");
   const [data, setData] = useRecoilState(moodRadioAtom);
 
   useEffect(() => {
     if (!data) {
+      setLoading(true);
       axiosInstance
         .post("/mood_radio")
         .then((res) => {
@@ -52,6 +55,7 @@ const MoodRadio = () => {
           });
           setData(finalData);
           setCurrentTrack(0);
+          setLoading(false);
         })
         .catch((err) => {
           console.log(err);
