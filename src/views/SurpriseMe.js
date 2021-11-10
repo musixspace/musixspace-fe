@@ -1,15 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { useRecoilValue } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import Carousel from "../components/Carousel";
 import ExportPlaylistModal from "../components/ExportPlaylistModal";
 import TrackList from "../components/TrackList";
 import WebPlayer from "../components/WebPlayer";
 import useTopTracks from "../hooks/useTopTracks";
+import { alertAtom } from "../recoil/alertAtom";
 import { surpriseTracksAtom } from "../recoil/surpriseTracksAtom";
+import { axiosInstance } from "../util/axiosConfig";
 import { setMediaSession } from "../util/functions";
 
 const SurpriseMe = () => {
   const surpriseTracksInfo = useRecoilValue(surpriseTracksAtom);
+  const setAlert = useSetRecoilState(alertAtom);
   const { getRecommendations } = useTopTracks();
   const [currentTrack, setCurrentTrack] = useState("");
   const [audioUrl, setAudioUrl] = useState("");
@@ -46,11 +49,11 @@ const SurpriseMe = () => {
   }, [audioUrl]);
 
   const changeTrack = (trackId) => {
-    const newSong = surpriseTracksInfo.tracks.filter(
+    const newSong = surpriseTracksInfo.tracks.find(
       (song) => song.song_id === trackId
     );
-    if (newSong[0].preview_url) {
-      setAudioUrl(newSong[0].preview_url);
+    if (newSong.preview_url) {
+      setAudioUrl(newSong.preview_url);
     } else {
       handleNextPlay();
     }
@@ -104,15 +107,15 @@ const SurpriseMe = () => {
 
   const handleExport = (name) => {
     setOpenModal(false);
-    console.log(name);
-    // axiosInstance
-    //   .post("/create_playlist", { query: "surprise_me" })
-    //   .then((res) => {
-    //     console.log(res);
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
+    // console.log(name);
+    axiosInstance
+      .post("/create_playlist", { query: "surprise_me", playlist_name: name })
+      .then((res) => {
+        setAlert({ open: true, message: res.data, type: "success" });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return (

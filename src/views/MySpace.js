@@ -92,22 +92,16 @@ const MySpace = () => {
           (item) => item.song_id === currentSong.songId
         );
         const artist = ct.artists.map((ar) => ar.name).join(", ");
-        setMediaSession(
-          ct.name,
-          artist,
-          ct.image_url,
-          () => {},
-          handleNextPlay
-        );
+        setMediaSession(ct.name, artist, ct.image_url, null, handleNextPlay);
       } else if (currentSong.list === "topArtists") {
         const ct = topArtists.artists.find(
           (item) => item.artist_id === currentSong.songId
         );
         setMediaSession(
-          `Top ${ct.name} Song`,
+          ct.toptrack.name,
           ct.name,
           ct.image_url,
-          () => {},
+          null,
           handleNextPlay
         );
       } else if (
@@ -121,8 +115,8 @@ const MySpace = () => {
           user.anthem.name,
           artist,
           user.anthem.image_url,
-          () => {},
-          () => {}
+          null,
+          null
         );
       }
     }
@@ -159,7 +153,7 @@ const MySpace = () => {
   const handlePlayArtist = (artist) => {
     handlePlaySong(
       artist.artist_id,
-      artist.toptrack_url,
+      artist.toptrack ? artist.toptrack.preview_url : null,
       "topArtists",
       artist.genres
     );
@@ -425,7 +419,7 @@ const MySpace = () => {
                     <div className="content-container">
                       <div className="title">{item.name}</div>
                     </div>
-                    {item.toptrack_url && (
+                    {item.toptrack && item.toptrack.preview_url && (
                       <button
                         className="controls"
                         onClick={() =>

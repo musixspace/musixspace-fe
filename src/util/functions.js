@@ -23,7 +23,9 @@ export const setMediaSession = (
 
   for (const [action, handler] of actionHandlers) {
     try {
-      navigator.mediaSession.setActionHandler(action, handler);
+      if (handler) {
+        navigator.mediaSession.setActionHandler(action, handler);
+      }
     } catch (error) {
       console.log(`The media action ${action} is not supported yet!`);
     }

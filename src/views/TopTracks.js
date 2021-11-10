@@ -1,15 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { useRecoilValue } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import Carousel from "../components/Carousel";
 import ExportPlaylistModal from "../components/ExportPlaylistModal";
 import TrackList from "../components/TrackList";
 import WebPlayer from "../components/WebPlayer";
 import useTopTracks from "../hooks/useTopTracks";
 import { topTracksLongAtom } from "../recoil/topTracksAtom";
+import { axiosInstance } from "../util/axiosConfig";
 import { setMediaSession } from "../util/functions";
+import { alertAtom } from "../recoil/alertAtom";
 
 const TopTracks = () => {
   const { getTopTracksLong } = useTopTracks();
+  const setAlert = useSetRecoilState(alertAtom);
   const [currentTrack, setCurrentTrack] = useState("");
   const [audioUrl, setAudioUrl] = useState("");
   const topTracksLong = useRecoilValue(topTracksLongAtom);
@@ -47,12 +50,12 @@ const TopTracks = () => {
   }, [audioUrl]);
 
   const changeTrack = (trackId) => {
-    const newSong = topTracksLong.tracks.filter(
+    const newSong = topTracksLong.tracks.find(
       (item) => item.song_id === trackId
     );
 
-    if (newSong[0].preview_url) {
-      setAudioUrl(newSong[0].preview_url);
+    if (newSong.preview_url) {
+      setAudioUrl(newSong.preview_url);
     } else {
       handleNextPlay();
     }
@@ -100,15 +103,15 @@ const TopTracks = () => {
 
   const handleExport = (name) => {
     setOpenModal(false);
-    console.log(name);
-    // axiosInstance
-    //   .post("/create_playlist", { query: "top_tracks" })
-    //   .then((res) => {
-    //     console.log(res);
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
+    // console.log(name);
+    axiosInstance
+      .post("/create_playlist", { query: "top_tracks", playlist_name: name })
+      .then((res) => {
+        setAlert({ open: true, message: res.data, type: "success" });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   const handleShufflePlay = () => {

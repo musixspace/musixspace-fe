@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { FaMusic } from "react-icons/fa";
 import { GoMail, GoPencil } from "react-icons/go";
-import { useHistory } from "react-router";
+import { useHistory, withRouter, Redirect } from "react-router";
 import useDebounceCallback from "../hooks/useDebounce";
 import { axiosInstance } from "../util/axiosConfig";
+// import { Redirect } from "react-router-dom";
 
 const ReadyToRock = () => {
   const history = useHistory();
@@ -29,6 +30,18 @@ const ReadyToRock = () => {
         console.log(err);
       });
   }, 1000);
+
+  useEffect(() => {
+    const flag = sessionStorage.getItem("newUser");
+    console.log(typeof flag);
+    if (flag === "false") {
+      if (localStorage.getItem("accessToken")) {
+        history.push("/insights");
+      } else {
+        history.push("/");
+      }
+    }
+  }, []);
 
   useEffect(() => {
     if (!data.anthem.id && data.anthem.name) {
@@ -81,7 +94,10 @@ const ReadyToRock = () => {
             <input
               value={data.anthem.name}
               onChange={(e) =>
-                setData({ ...data, anthem: { id: null, name: e.target.value } })
+                setData({
+                  ...data,
+                  anthem: { id: null, name: e.target.value },
+                })
               }
               type="text"
               placeholder="Your Anthem"
@@ -125,4 +141,4 @@ const ReadyToRock = () => {
   );
 };
 
-export default ReadyToRock;
+export default withRouter(ReadyToRock);

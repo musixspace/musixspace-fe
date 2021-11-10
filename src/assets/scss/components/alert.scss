@@ -3,6 +3,7 @@
   z-index: 100;
   top: 90%;
   left: 50%;
+  width: max-content;
   transition: transform 300ms ease-in-out;
   transform: translateX(-50%);
   padding: 0.6em 2em;
@@ -39,5 +40,20 @@
 
   &.hide {
     transform: translateY(1000px);
+  }
+}
+
+@media (max-width: 776px) {
+  .alert {
+    width: 90%;
+    .message {
+      font-size: calc(var(--base-font-size) * 2.25);
+    }
+
+    > div:nth-child(2) {
+      > svg {
+        font-size: calc(var(--base-font-size) * 2);
+      }
+    }
   }
 }

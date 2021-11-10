@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FiCheck } from "react-icons/fi";
 import { useHistory } from "react-router";
 import { axiosInstance } from "../util/axiosConfig";
@@ -26,6 +26,18 @@ const Rolling = () => {
   const history = useHistory();
   const [selectedTraits, setSelectedTraits] = useState([]);
 
+  useEffect(() => {
+    const flag = sessionStorage.getItem("newUser");
+    console.log(typeof flag);
+    if (flag === "false") {
+      if (localStorage.getItem("accessToken")) {
+        history.push("/insights");
+      } else {
+        history.push("/");
+      }
+    }
+  }, []);
+
   const handleSelectTrait = (id) => {
     let flag = false;
     let index = null;
@@ -47,7 +59,7 @@ const Rolling = () => {
     }
   };
 
-  const onHanldeSubmit = () => {
+  const onHandleSubmit = () => {
     let plist = traits.map((item) => {
       if (selectedTraits.includes(item.id)) return item.name;
       return null;
@@ -90,7 +102,7 @@ const Rolling = () => {
         </div>
         <div className="button-container">
           <button
-            onClick={onHanldeSubmit}
+            onClick={onHandleSubmit}
             className={`${selectedTraits.length < 3 ? "hide" : ""}`}
           >
             Get me rolling

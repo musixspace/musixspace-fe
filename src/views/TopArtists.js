@@ -35,7 +35,7 @@ const TopArtists = () => {
       );
 
       setMediaSession(
-        `Top ${ct.name} Song`,
+        ct.toptrack.name,
         ct.name,
         ct.image_url,
         handlePrevPlay,
@@ -45,11 +45,11 @@ const TopArtists = () => {
   }, [audioUrl]);
 
   const changeArtist = (artistId) => {
-    const newArtist = topArtistsLong.artists.filter(
+    const newArtist = topArtistsLong.artists.find(
       (artist) => artist.artist_id === artistId
     );
 
-    let songUrl = newArtist[0].toptrack_url;
+    let songUrl = newArtist.toptrack ? newArtist.toptrack.preview_url : null;
 
     if (songUrl) {
       setAudioUrl(songUrl);
