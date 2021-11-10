@@ -1,7 +1,7 @@
 .alert {
   position: fixed;
   z-index: 100;
-  top: 90%;
+  bottom: 5vh;
   left: 50%;
   width: max-content;
   transition: transform 300ms ease-in-out;
@@ -39,13 +39,15 @@
   }
 
   &.hide {
-    transform: translateY(1000px);
+    transform: translateX(0) translateY(1000px);
   }
 }
 
 @media (max-width: 776px) {
   .alert {
-    width: 90%;
+    max-width: 90%;
+    top: 10vh;
+    bottom: unset;
     .message {
       font-size: calc(var(--base-font-size) * 2.25);
     }
@@ -54,6 +56,10 @@
       > svg {
         font-size: calc(var(--base-font-size) * 2);
       }
+    }
+
+    &.hide {
+      transform: translateX(1000px);
     }
   }
 }

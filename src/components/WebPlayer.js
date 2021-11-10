@@ -14,8 +14,10 @@ const WebPlayer = ({ url, prevPlay, nextPlay, shufflePlay, noControls }) => {
   const togglePlayPause = () => {
     if (isPlaying) {
       audioPlayer.current.pause();
+      navigator.mediaSession.playbackState = "paused";
     } else {
       audioPlayer.current.play();
+      navigator.mediaSession.playbackState = "playing";
     }
     setIsPlaying((prev) => !prev);
   };
@@ -23,6 +25,14 @@ const WebPlayer = ({ url, prevPlay, nextPlay, shufflePlay, noControls }) => {
   useEffect(() => {
     if (url) {
       audioPlayer.current.play();
+      navigator.mediaSession.setActionHandler("play", () => {
+        audioPlayer.current.play();
+        setIsPlaying(true);
+      });
+      navigator.mediaSession.setActionHandler("pause", () => {
+        audioPlayer.current.pause();
+        setIsPlaying(false);
+      });
       setIsPlaying(true);
     }
   }, [url]);

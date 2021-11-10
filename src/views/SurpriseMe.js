@@ -111,7 +111,13 @@ const SurpriseMe = () => {
     axiosInstance
       .post("/create_playlist", { query: "surprise_me", playlist_name: name })
       .then((res) => {
-        setAlert({ open: true, message: res.data, type: "success" });
+        if (res.status === 200) {
+          setAlert({
+            open: true,
+            message: `${name} created successfully!`,
+            type: "success",
+          });
+        }
       })
       .catch((err) => {
         console.log(err);
