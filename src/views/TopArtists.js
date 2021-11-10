@@ -5,6 +5,7 @@ import Carousel from "../components/Carousel";
 import WebPlayer from "../components/WebPlayer";
 import useTopArtists from "../hooks/useTopArtists";
 import { topArtistsLongAtom } from "../recoil/topArtistsAtom";
+import { setMediaSession } from "../util/functions";
 
 const TopArtists = () => {
   const { getTopArtistsLong } = useTopArtists();
@@ -26,6 +27,22 @@ const TopArtists = () => {
       changeArtist(currentArtist);
     }
   }, [currentArtist]);
+
+  useEffect(() => {
+    if (audioUrl) {
+      const ct = topArtistsLong.artists.find(
+        (item) => item.artist_id === currentArtist
+      );
+
+      setMediaSession(
+        `Top ${ct.name} Song`,
+        ct.name,
+        ct.image_url,
+        handlePrevPlay,
+        handleNextPlay
+      );
+    }
+  }, [audioUrl]);
 
   const changeArtist = (artistId) => {
     const newArtist = topArtistsLong.artists.filter(

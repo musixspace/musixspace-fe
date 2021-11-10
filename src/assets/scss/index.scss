@@ -12,6 +12,8 @@
 @import "./components/tracklist.scss";
 @import "./components/webplayer.scss";
 @import "./components/imageSlider.scss";
+@import "./components/alert.scss";
+@import "./components/modal.scss";
 
 :root {
   /* Colors */
@@ -34,6 +36,12 @@
   --clr-dark-orange: #ff5834;
   --clr-dark-pink: #e8638d;
 
+  /* Alert Colors */
+  --clr-alert-success: #4caf50;
+  --clr-alert-error: #ef5350;
+  --clr-alert-info: #03a9f4;
+  --clr-alert-warning: #ff9800;
+
   /* Fonts */
   --f-circ-spotify-bold: "Circular Spotify Tx T Bold";
   --f-circ-spotify: "Circular Spotify Tx T Black";
@@ -55,6 +63,8 @@ body {
   font-family: var(--f-circ-spotify), sans-serif;
   font-weight: normal;
   font-size: calc(var(--base-font-size) * 2);
+  // overflow-y: scroll;
+  // scroll-snap-type: y mandatory;
 }
 
 .wrapper {

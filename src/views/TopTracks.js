@@ -1,17 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
 import Carousel from "../components/Carousel";
+import ExportPlaylistModal from "../components/ExportPlaylistModal";
 import TrackList from "../components/TrackList";
 import WebPlayer from "../components/WebPlayer";
 import useTopTracks from "../hooks/useTopTracks";
 import { topTracksLongAtom } from "../recoil/topTracksAtom";
-import { axiosInstance } from "../util/axiosConfig";
+import { setMediaSession } from "../util/functions";
 
 const TopTracks = () => {
   const { getTopTracksLong } = useTopTracks();
   const [currentTrack, setCurrentTrack] = useState("");
   const [audioUrl, setAudioUrl] = useState("");
   const topTracksLong = useRecoilValue(topTracksLongAtom);
+  const [openModal, setOpenModal] = useState(false);
 
   useEffect(() => {
     if (!topTracksLong.tracks) {
@@ -26,6 +28,23 @@ const TopTracks = () => {
       changeTrack(currentTrack);
     }
   }, [currentTrack]);
+
+  useEffect(() => {
+    if (audioUrl) {
+      const ct = topTracksLong.tracks.find(
+        (item) => item.song_id === currentTrack
+      );
+
+      const artist = ct.artists.map((item) => item.name).join(", ");
+      setMediaSession(
+        ct.name,
+        artist,
+        ct.image_url,
+        handlePrevPlay,
+        handleNextPlay
+      );
+    }
+  }, [audioUrl]);
 
   const changeTrack = (trackId) => {
     const newSong = topTracksLong.tracks.filter(
@@ -79,15 +98,17 @@ const TopTracks = () => {
     }
   };
 
-  const handleExport = () => {
-    axiosInstance
-      .post("/create_playlist", { query: "top_tracks" })
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+  const handleExport = (name) => {
+    setOpenModal(false);
+    console.log(name);
+    // axiosInstance
+    //   .post("/create_playlist", { query: "top_tracks" })
+    //   .then((res) => {
+    //     console.log(res);
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
   };
 
   const handleShufflePlay = () => {
@@ -118,12 +139,18 @@ const TopTracks = () => {
             <p>Your Top Tracks Radio</p>
             <div>
               <p>30 sec</p>
-              <button id="export" onClick={handleExport}>
+              <button id="export" onClick={() => setOpenModal(true)}>
                 Export
               </button>
             </div>
           </div>
         </div>
+      )}
+      {openModal && (
+        <ExportPlaylistModal
+          submitData={handleExport}
+          close={() => setOpenModal(false)}
+        />
       )}
     </div>
   );

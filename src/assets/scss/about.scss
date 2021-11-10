@@ -2,6 +2,8 @@
   color: var(--clr-pink);
   padding: 1em 6em;
   height: 100vh;
+  overflow-y: scroll;
+  scroll-snap-type: y mandatory;
 
   .person {
     scroll-snap-align: start;

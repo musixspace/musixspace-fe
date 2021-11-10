@@ -3,6 +3,7 @@ import { useLocation } from "react-router";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { loadingAtom } from "../recoil/loadingAtom";
 import { openSidebarAtom } from "../recoil/openSidebarAtom";
+import Alert from "./Alert";
 import Navbar from "./Navbar";
 
 const themeSwitch = (str) => {
@@ -61,6 +62,7 @@ const Wrapper = (props) => {
       ) : (
         props.children
       )}
+      <Alert />
     </div>
   );
 };

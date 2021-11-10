@@ -1,17 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
 import Carousel from "../components/Carousel";
+import ExportPlaylistModal from "../components/ExportPlaylistModal";
 import TrackList from "../components/TrackList";
 import WebPlayer from "../components/WebPlayer";
 import useTopTracks from "../hooks/useTopTracks";
 import { surpriseTracksAtom } from "../recoil/surpriseTracksAtom";
-import { axiosInstance } from "../util/axiosConfig";
+import { setMediaSession } from "../util/functions";
 
 const SurpriseMe = () => {
   const surpriseTracksInfo = useRecoilValue(surpriseTracksAtom);
   const { getRecommendations } = useTopTracks();
   const [currentTrack, setCurrentTrack] = useState("");
   const [audioUrl, setAudioUrl] = useState("");
+  const [openModal, setOpenModal] = useState(false);
 
   useEffect(() => {
     if (!surpriseTracksInfo.tracks) {
@@ -26,6 +28,22 @@ const SurpriseMe = () => {
       changeTrack(currentTrack);
     }
   }, [currentTrack]);
+
+  useEffect(() => {
+    if (audioUrl) {
+      const ct = surpriseTracksInfo.tracks.find(
+        (item) => item.song_id === currentTrack
+      );
+      const artist = ct.artists.map((item) => item.name).join(", ");
+      setMediaSession(
+        ct.name,
+        artist,
+        ct.image_url,
+        handlePrevPlay,
+        handleNextPlay
+      );
+    }
+  }, [audioUrl]);
 
   const changeTrack = (trackId) => {
     const newSong = surpriseTracksInfo.tracks.filter(
@@ -84,15 +102,17 @@ const SurpriseMe = () => {
     setCurrentTrack(surpriseTracksInfo.tracks[rnd].song_id);
   };
 
-  const handleExport = () => {
-    axiosInstance
-      .post("/create_playlist", { query: "surprise_me" })
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+  const handleExport = (name) => {
+    setOpenModal(false);
+    console.log(name);
+    // axiosInstance
+    //   .post("/create_playlist", { query: "surprise_me" })
+    //   .then((res) => {
+    //     console.log(res);
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
   };
 
   return (
@@ -118,13 +138,19 @@ const SurpriseMe = () => {
             <div className="heading">
               <p>Surprise Tracks Radio</p>
               <div>
-                <button id="export" onClick={handleExport}>
+                <button id="export" onClick={(e) => setOpenModal(true)}>
                   Export
                 </button>
               </div>
             </div>
           </div>
         )}
+      {openModal && (
+        <ExportPlaylistModal
+          submitData={handleExport}
+          close={() => setOpenModal(false)}
+        />
+      )}
     </div>
   );
 };

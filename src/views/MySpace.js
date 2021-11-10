@@ -2,31 +2,16 @@ import React, { useEffect, useState } from "react";
 import { AiFillCaretRight, AiOutlinePause } from "react-icons/ai";
 import { FiSkipBack, FiSkipForward } from "react-icons/fi";
 import { useRecoilValue, useSetRecoilState } from "recoil";
-import image3 from "../assets/images/artists/image3.png";
-import image5 from "../assets/images/artists/image5.png";
+import logo from "../assets/images/logo-black.png";
 import WebPlayer from "../components/WebPlayer";
+import useProfile from "../hooks/useProfile";
 import useTopArtists from "../hooks/useTopArtists";
 import useTopTracks from "../hooks/useTopTracks";
 import { loadingAtom } from "../recoil/loadingAtom";
 import { topArtistsLongAtom } from "../recoil/topArtistsAtom";
 import { topTracksLongAtom } from "../recoil/topTracksAtom";
 import { userNameSelector, userState } from "../recoil/userAtom";
-import { paddedNumbers } from "../util/functions";
-import logo from "../assets/images/logo-black.png";
-import useProfile from "../hooks/useProfile";
-
-const userP = {
-  name: "Amaya Srivastava",
-  matches: 12,
-  img: image3,
-  traits: ["introvert", "easy going"],
-  handle: "thehopelessromantic",
-  anthem: {
-    title: "Nikamma",
-    album: "Lifafa",
-    img: image5,
-  },
-};
+import { paddedNumbers, setMediaSession } from "../util/functions";
 
 const MySpace = () => {
   const setLoading = useSetRecoilState(loadingAtom);
@@ -99,6 +84,49 @@ const MySpace = () => {
       }
     }
   }, [currentSong.songId]);
+
+  useEffect(() => {
+    if (currentSong.audioUrl) {
+      if (currentSong.list === "topTracks") {
+        const ct = topTracks.tracks.find(
+          (item) => item.song_id === currentSong.songId
+        );
+        const artist = ct.artists.map((ar) => ar.name).join(", ");
+        setMediaSession(
+          ct.name,
+          artist,
+          ct.image_url,
+          () => {},
+          handleNextPlay
+        );
+      } else if (currentSong.list === "topArtists") {
+        const ct = topArtists.artists.find(
+          (item) => item.artist_id === currentSong.songId
+        );
+        setMediaSession(
+          `Top ${ct.name} Song`,
+          ct.name,
+          ct.image_url,
+          () => {},
+          handleNextPlay
+        );
+      } else if (
+        currentSong.list === null &&
+        user &&
+        user.anthem &&
+        currentSong.songId === user.anthem.song_id
+      ) {
+        const artist = user.anthem.artists.map((item) => item.name).join(", ");
+        setMediaSession(
+          user.anthem.name,
+          artist,
+          user.anthem.image_url,
+          () => {},
+          () => {}
+        );
+      }
+    }
+  }, [currentSong.audioUrl]);
 
   const onLeftClicked = (selector) => {
     document.querySelector(selector).scrollBy(-1000, 0);

@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import Carousel from "../components/Carousel";
 import WebPlayer from "../components/WebPlayer";
+import { loadingAtom } from "../recoil/loadingAtom";
 import { moodRadioAtom } from "../recoil/surpriseTracksAtom";
 import { axiosInstance } from "../util/axiosConfig";
-import { loadingAtom } from "../recoil/loadingAtom";
 
 const MoodRadio = () => {
   const setLoading = useSetRecoilState(loadingAtom);
@@ -71,6 +71,31 @@ const MoodRadio = () => {
       setAudioUrl(track.preview_url);
     }
   }, [currentTrack]);
+
+  useEffect(() => {
+    if (audioUrl) {
+      const ct = data[currentTrack];
+
+      navigator.mediaSession.metadata = new window.MediaMetadata({
+        title: ct.name,
+        artist: ct.artist,
+        artwork: [{ src: ct.url, sizes: "640x640", type: "image/jpg" }],
+      });
+
+      const actionHandlers = [
+        ["previoustrack", handlePrevPlay],
+        ["nexttrack", handleNextPlay],
+      ];
+
+      for (const [action, handler] of actionHandlers) {
+        try {
+          navigator.mediaSession.setActionHandler(action, handler);
+        } catch (error) {
+          console.log(`The media action ${action} is not supported yet!`);
+        }
+      }
+    }
+  }, [audioUrl]);
 
   const handlePrevPlay = () => {
     if (currentTrack === 0) {
