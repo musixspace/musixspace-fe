@@ -9,7 +9,7 @@ axiosInstance.interceptors.request.use(
   function (config) {
     config.headers = {
       ...config.headers,
-      jwt_token: localStorage.getItem("accessToken"),
+      jwttoken: localStorage.getItem("accessToken"),
       "Content-Type": "application/json",
     };
     config.data = {
