@@ -5,26 +5,26 @@ import ExportPlaylistModal from "../components/ExportPlaylistModal";
 import TrackList from "../components/TrackList";
 import WebPlayer from "../components/WebPlayer";
 import useTopTracks from "../hooks/useTopTracks";
-import { topTracksLongAtom } from "../recoil/topTracksAtom";
 import { axiosInstance } from "../util/axiosConfig";
 import { setMediaSession } from "../util/functions";
 import { alertAtom } from "../recoil/alertAtom";
+import { userState } from "../recoil/userAtom";
 
 const TopTracks = () => {
+  const user = useRecoilValue(userState);
   const { getTopTracksLong } = useTopTracks();
   const setAlert = useSetRecoilState(alertAtom);
   const [currentTrack, setCurrentTrack] = useState("");
   const [audioUrl, setAudioUrl] = useState("");
-  const topTracksLong = useRecoilValue(topTracksLongAtom);
   const [openModal, setOpenModal] = useState(false);
 
   useEffect(() => {
-    if (!topTracksLong.tracks) {
-      getTopTracksLong();
+    if (!user.topTracksLong.tracks) {
+      getTopTracksLong(user.username || localStorage.getItem("handle"));
     } else {
-      setCurrentTrack(topTracksLong.tracks[0].song_id);
+      setCurrentTrack(user.topTracksLong.tracks[0].song_id);
     }
-  }, [topTracksLong]);
+  }, [user.topTracksLong]);
 
   useEffect(() => {
     if (currentTrack) {
@@ -34,7 +34,7 @@ const TopTracks = () => {
 
   useEffect(() => {
     if (audioUrl) {
-      const ct = topTracksLong.tracks.find(
+      const ct = user.topTracksLong.tracks.find(
         (item) => item.song_id === currentTrack
       );
 
@@ -50,7 +50,7 @@ const TopTracks = () => {
   }, [audioUrl]);
 
   const changeTrack = (trackId) => {
-    const newSong = topTracksLong.tracks.find(
+    const newSong = user.topTracksLong.tracks.find(
       (item) => item.song_id === trackId
     );
 
@@ -67,7 +67,7 @@ const TopTracks = () => {
 
   const handlePrevPlay = () => {
     let index;
-    topTracksLong.tracks.forEach((item, ind) => {
+    user.topTracksLong.tracks.forEach((item, ind) => {
       if (item.song_id === currentTrack) {
         index = ind;
       }
@@ -77,16 +77,16 @@ const TopTracks = () => {
 
     if (index === 0) {
       setCurrentTrack(
-        topTracksLong.tracks[topTracksLong.tracks.length - 1].song_id
+        user.topTracksLong.tracks[user.topTracksLong.tracks.length - 1].song_id
       );
     } else {
-      setCurrentTrack(topTracksLong.tracks[index - 1].song_id);
+      setCurrentTrack(user.topTracksLong.tracks[index - 1].song_id);
     }
   };
 
   const handleNextPlay = () => {
     let index;
-    topTracksLong.tracks.forEach((item, ind) => {
+    user.topTracksLong.tracks.forEach((item, ind) => {
       if (item.song_id === currentTrack) {
         index = ind;
       }
@@ -94,10 +94,10 @@ const TopTracks = () => {
 
     // console.log(index);
 
-    if (index === topTracksLong.tracks.length - 1) {
-      setCurrentTrack(topTracksLong.tracks[0].song_id);
+    if (index === user.topTracksLong.tracks.length - 1) {
+      setCurrentTrack(user.topTracksLong.tracks[0].song_id);
     } else {
-      setCurrentTrack(topTracksLong.tracks[index + 1].song_id);
+      setCurrentTrack(user.topTracksLong.tracks[index + 1].song_id);
     }
   };
 
@@ -121,40 +121,42 @@ const TopTracks = () => {
   };
 
   const handleShufflePlay = () => {
-    let total = topTracksLong.tracks.length;
+    let total = user.topTracksLong.tracks.length;
     let rnd = Math.floor(Math.random() * total);
-    setCurrentTrack(topTracksLong.tracks[rnd].song_id);
+    setCurrentTrack(user.topTracksLong.tracks[rnd].song_id);
   };
 
   return (
     <div className="dashboard-container">
-      {topTracksLong.tracks && topTracksLong.tracks.length > 0 && currentTrack && (
-        <div className="dashboard">
-          <div>
-            <TrackList
-              currentTrack={currentTrack}
-              tracks={topTracksLong.tracks}
-              changeTrack={handleTrackChange}
-            />
-            <WebPlayer
-              url={audioUrl}
-              prevPlay={handlePrevPlay}
-              nextPlay={handleNextPlay}
-              shufflePlay={handleShufflePlay}
-            />
-          </div>
-          <Carousel data={topTracksLong.images} current={currentTrack} />
-          <div className="heading">
-            <p>Your Top Tracks Radio</p>
+      {user.topTracksLong.tracks &&
+        user.topTracksLong.tracks.length > 0 &&
+        currentTrack && (
+          <div className="dashboard">
             <div>
-              <p>30 sec</p>
-              <button id="export" onClick={() => setOpenModal(true)}>
-                Export
-              </button>
+              <TrackList
+                currentTrack={currentTrack}
+                tracks={user.topTracksLong.tracks}
+                changeTrack={handleTrackChange}
+              />
+              <WebPlayer
+                url={audioUrl}
+                prevPlay={handlePrevPlay}
+                nextPlay={handleNextPlay}
+                shufflePlay={handleShufflePlay}
+              />
+            </div>
+            <Carousel data={user.topTracksLong.images} current={currentTrack} />
+            <div className="heading">
+              <p>Your Top Tracks Radio</p>
+              <div>
+                <p>30 sec</p>
+                <button id="export" onClick={() => setOpenModal(true)}>
+                  Export
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
       {openModal && (
         <ExportPlaylistModal
           submitData={handleExport}

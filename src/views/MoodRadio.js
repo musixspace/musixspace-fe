@@ -3,17 +3,18 @@ import { useRecoilState, useSetRecoilState } from "recoil";
 import Carousel from "../components/Carousel";
 import WebPlayer from "../components/WebPlayer";
 import { loadingAtom } from "../recoil/loadingAtom";
-import { moodRadioAtom } from "../recoil/surpriseTracksAtom";
+import { userState } from "../recoil/userAtom";
 import { axiosInstance } from "../util/axiosConfig";
 
 const MoodRadio = () => {
   const setLoading = useSetRecoilState(loadingAtom);
+  const [user, setUser] = useRecoilState(userState);
+
   const [currentTrack, setCurrentTrack] = useState("");
   const [audioUrl, setAudioUrl] = useState("");
-  const [data, setData] = useRecoilState(moodRadioAtom);
 
   useEffect(() => {
-    if (!data) {
+    if (!user.moodRadio) {
       setLoading(true);
       axiosInstance
         .post("/mood_radio")
@@ -31,29 +32,32 @@ const MoodRadio = () => {
             if (item.acousticness) {
               obj.type = "acoustic";
               obj.phrase = "most acoustic";
-              obj.value = parseFloat(item.acousticness) * 100;
+              obj.value = (parseFloat(item.acousticness) * 100).toFixed(0);
               obj.total = parseInt(parseFloat(toptracks_data.acoustic) * 100);
             } else if (item.danceability) {
               obj.type = "dance";
               obj.phrase = "most dance";
-              obj.value = parseFloat(item.danceability) * 100;
+              obj.value = (parseFloat(item.danceability) * 100).toFixed(0);
               obj.total = parseInt(parseFloat(toptracks_data.dance) * 100);
             } else if (item.valence) {
               obj.type = "happy";
               obj.phrase = "happiest";
-              obj.value = parseFloat(item.valence) * 100;
+              obj.value = (parseFloat(item.valence) * 100).toFixed(0);
               obj.total = parseInt(parseFloat(toptracks_data.valence) * 100);
             } else if (item.energy) {
               obj.type = "energy";
               obj.phrase = "most energetic";
-              obj.value = parseFloat(item.energy) * 100;
+              obj.value = (parseFloat(item.energy) * 100).toFixed(0);
               obj.total = parseInt(parseFloat(toptracks_data.energy) * 100);
             } else {
             }
 
             return obj;
           });
-          setData(finalData);
+          setUser({
+            ...user,
+            moodRadio: finalData,
+          });
           setCurrentTrack(0);
           setLoading(false);
         })
@@ -67,14 +71,14 @@ const MoodRadio = () => {
 
   useEffect(() => {
     if (currentTrack !== "") {
-      const track = data.find((item) => item.id === currentTrack);
+      const track = user.moodRadio.find((item) => item.id === currentTrack);
       setAudioUrl(track.preview_url);
     }
   }, [currentTrack]);
 
   useEffect(() => {
     if (audioUrl) {
-      const ct = data[currentTrack];
+      const ct = user.moodRadio[currentTrack];
 
       navigator.mediaSession.metadata = new window.MediaMetadata({
         title: ct.name,
@@ -99,48 +103,49 @@ const MoodRadio = () => {
 
   const handlePrevPlay = () => {
     if (currentTrack === 0) {
-      setCurrentTrack(data[data.length - 1].id);
+      setCurrentTrack(user.moodRadio[user.moodRadio.length - 1].id);
     } else {
-      setCurrentTrack(data[currentTrack - 1].id);
+      setCurrentTrack(user.moodRadio[currentTrack - 1].id);
     }
   };
 
   const handleNextPlay = () => {
-    if (currentTrack === data.length - 1) {
-      setCurrentTrack(data[0].id);
+    if (currentTrack === user.moodRadio.length - 1) {
+      setCurrentTrack(user.moodRadio[0].id);
     } else {
-      setCurrentTrack(data[currentTrack + 1].id);
+      setCurrentTrack(user.moodRadio[currentTrack + 1].id);
     }
   };
 
   const handleShufflePlay = () => {
-    let total = data.length;
+    let total = user.moodRadio.length;
     let rnd = Math.floor(Math.random() * total);
-    setCurrentTrack(data[rnd].id);
+    setCurrentTrack(user.moodRadio[rnd].id);
   };
 
   return (
     <div className="dashboard-container mood-radio-container">
-      {data && data.length > 0 && currentTrack !== "" && (
+      {user.moodRadio && user.moodRadio.length > 0 && currentTrack !== "" && (
         <div className="dashboard">
           <div>
             <div className="mood-tracker">
               <div className="main">
-                <span>{data[currentTrack].total}% </span>
-                <span>{data[currentTrack].type}</span>
+                <span>{user.moodRadio[currentTrack].total}% </span>
+                <span>{user.moodRadio[currentTrack].type}</span>
               </div>
               <div className="inner">
                 <div className="dummy"></div>
                 <div className="content">
                   <p>
-                    Your <span>{data[currentTrack].phrase}</span> Song!
+                    Your <span>{user.moodRadio[currentTrack].phrase}</span>{" "}
+                    Song!
                   </p>
-                  <p>{data[currentTrack].name}</p>
-                  <p>{data[currentTrack].artist}</p>
+                  <p>{user.moodRadio[currentTrack].name}</p>
+                  <p>{user.moodRadio[currentTrack].artist}</p>
                   <p>
-                    {data[currentTrack].value}
+                    {user.moodRadio[currentTrack].value}
                     {"% "}
-                    <span>{data[currentTrack].type}</span>
+                    <span>{user.moodRadio[currentTrack].type}</span>
                   </p>
                 </div>
               </div>
@@ -152,7 +157,7 @@ const MoodRadio = () => {
               shufflePlay={handleShufflePlay}
             />
           </div>
-          <Carousel data={data} current={currentTrack} />
+          <Carousel data={user.moodRadio} current={currentTrack} />
           <div className="heading">
             <p>Your Mood Radio</p>
           </div>

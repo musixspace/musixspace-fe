@@ -6,25 +6,26 @@ import TrackList from "../components/TrackList";
 import WebPlayer from "../components/WebPlayer";
 import useTopTracks from "../hooks/useTopTracks";
 import { alertAtom } from "../recoil/alertAtom";
-import { surpriseTracksAtom } from "../recoil/surpriseTracksAtom";
+import { userState } from "../recoil/userAtom";
 import { axiosInstance } from "../util/axiosConfig";
 import { setMediaSession } from "../util/functions";
 
 const SurpriseMe = () => {
-  const surpriseTracksInfo = useRecoilValue(surpriseTracksAtom);
-  const setAlert = useSetRecoilState(alertAtom);
+  const user = useRecoilValue(userState);
   const { getRecommendations } = useTopTracks();
+  const setAlert = useSetRecoilState(alertAtom);
+
   const [currentTrack, setCurrentTrack] = useState("");
   const [audioUrl, setAudioUrl] = useState("");
   const [openModal, setOpenModal] = useState(false);
 
   useEffect(() => {
-    if (!surpriseTracksInfo.tracks) {
-      getRecommendations();
+    if (!user.surpriseTracks.tracks) {
+      getRecommendations(user.username || localStorage.getItem("handle"));
     } else {
-      setCurrentTrack(surpriseTracksInfo.tracks[0].song_id);
+      setCurrentTrack(user.surpriseTracks.tracks[0].song_id);
     }
-  }, [surpriseTracksInfo]);
+  }, [user.surpriseTracks]);
 
   useEffect(() => {
     if (currentTrack) {
@@ -34,7 +35,7 @@ const SurpriseMe = () => {
 
   useEffect(() => {
     if (audioUrl) {
-      const ct = surpriseTracksInfo.tracks.find(
+      const ct = user.surpriseTracks.tracks.find(
         (item) => item.song_id === currentTrack
       );
       const artist = ct.artists.map((item) => item.name).join(", ");
@@ -49,7 +50,7 @@ const SurpriseMe = () => {
   }, [audioUrl]);
 
   const changeTrack = (trackId) => {
-    const newSong = surpriseTracksInfo.tracks.find(
+    const newSong = user.surpriseTracks.tracks.find(
       (song) => song.song_id === trackId
     );
     if (newSong.preview_url) {
@@ -65,7 +66,7 @@ const SurpriseMe = () => {
 
   const handlePrevPlay = () => {
     let index;
-    surpriseTracksInfo.tracks.forEach((item, ind) => {
+    user.surpriseTracks.tracks.forEach((item, ind) => {
       if (item.song_id === currentTrack) {
         index = ind;
       }
@@ -75,16 +76,17 @@ const SurpriseMe = () => {
 
     if (index === 0) {
       setCurrentTrack(
-        surpriseTracksInfo.tracks[surpriseTracksInfo.tracks.length - 1].song_id
+        user.surpriseTracks.tracks[user.surpriseTracks.tracks.length - 1]
+          .song_id
       );
     } else {
-      setCurrentTrack(surpriseTracksInfo.tracks[index - 1].song_id);
+      setCurrentTrack(user.surpriseTracks.tracks[index - 1].song_id);
     }
   };
 
   const handleNextPlay = () => {
     let index;
-    surpriseTracksInfo.tracks.forEach((item, ind) => {
+    user.surpriseTracks.tracks.forEach((item, ind) => {
       if (item.song_id === currentTrack) {
         index = ind;
       }
@@ -92,17 +94,17 @@ const SurpriseMe = () => {
 
     // console.log(index);
 
-    if (index === surpriseTracksInfo.tracks.length - 1) {
-      setCurrentTrack(surpriseTracksInfo.tracks[0].song_id);
+    if (index === user.surpriseTracks.tracks.length - 1) {
+      setCurrentTrack(user.surpriseTracks.tracks[0].song_id);
     } else {
-      setCurrentTrack(surpriseTracksInfo.tracks[index + 1].song_id);
+      setCurrentTrack(user.surpriseTracks.tracks[index + 1].song_id);
     }
   };
 
   const handleShufflePlay = () => {
-    let total = surpriseTracksInfo.tracks.length;
+    let total = user.surpriseTracks.tracks.length;
     let rnd = Math.floor(Math.random() * total);
-    setCurrentTrack(surpriseTracksInfo.tracks[rnd].song_id);
+    setCurrentTrack(user.surpriseTracks.tracks[rnd].song_id);
   };
 
   const handleExport = (name) => {
@@ -126,14 +128,14 @@ const SurpriseMe = () => {
 
   return (
     <div className="dashboard-container">
-      {surpriseTracksInfo.tracks &&
-        surpriseTracksInfo.tracks.length > 0 &&
+      {user.surpriseTracks.tracks &&
+        user.surpriseTracks.tracks.length > 0 &&
         currentTrack && (
           <div className="dashboard">
             <div>
               <TrackList
                 currentTrack={currentTrack}
-                tracks={surpriseTracksInfo.tracks}
+                tracks={user.surpriseTracks.tracks}
                 changeTrack={handleTrackChange}
               />
               <WebPlayer
@@ -143,7 +145,10 @@ const SurpriseMe = () => {
                 shufflePlay={handleShufflePlay}
               />
             </div>
-            <Carousel data={surpriseTracksInfo.images} current={currentTrack} />
+            <Carousel
+              data={user.surpriseTracks.images}
+              current={currentTrack}
+            />
             <div className="heading">
               <p>Surprise Tracks Radio</p>
               <div>

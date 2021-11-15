@@ -4,23 +4,23 @@ import ArtistList from "../components/ArtistList";
 import Carousel from "../components/Carousel";
 import WebPlayer from "../components/WebPlayer";
 import useTopArtists from "../hooks/useTopArtists";
-import { topArtistsLongAtom } from "../recoil/topArtistsAtom";
+import { userState } from "../recoil/userAtom";
 import { setMediaSession } from "../util/functions";
 
 const TopArtists = () => {
+  const user = useRecoilValue(userState);
   const { getTopArtistsLong } = useTopArtists();
-  const topArtistsLong = useRecoilValue(topArtistsLongAtom);
 
   const [currentArtist, setCurrentArtist] = useState("");
   const [audioUrl, setAudioUrl] = useState("");
 
   useEffect(() => {
-    if (!topArtistsLong.artists) {
-      getTopArtistsLong();
+    if (!user.topArtistsLong.artists) {
+      getTopArtistsLong(user.username || localStorage.getItem("handle"));
     } else {
-      setCurrentArtist(topArtistsLong.artists[0].artist_id);
+      setCurrentArtist(user.topArtistsLong.artists[0].artist_id);
     }
-  }, [topArtistsLong]);
+  }, [user.topArtistsLong]);
 
   useEffect(() => {
     if (currentArtist) {
@@ -30,7 +30,7 @@ const TopArtists = () => {
 
   useEffect(() => {
     if (audioUrl) {
-      const ct = topArtistsLong.artists.find(
+      const ct = user.topArtistsLong.artists.find(
         (item) => item.artist_id === currentArtist
       );
 
@@ -45,7 +45,7 @@ const TopArtists = () => {
   }, [audioUrl]);
 
   const changeArtist = (artistId) => {
-    const newArtist = topArtistsLong.artists.find(
+    const newArtist = user.topArtistsLong.artists.find(
       (artist) => artist.artist_id === artistId
     );
 
@@ -64,7 +64,7 @@ const TopArtists = () => {
 
   const handlePrevPlay = () => {
     let index;
-    topArtistsLong.artists.forEach((item, ind) => {
+    user.topArtistsLong.artists.forEach((item, ind) => {
       if (item.artist_id === currentArtist) {
         index = ind;
       }
@@ -74,16 +74,17 @@ const TopArtists = () => {
 
     if (index === 0) {
       setCurrentArtist(
-        topArtistsLong.artists[topArtistsLong.artists.length - 1].artist_id
+        user.topArtistsLong.artists[user.topArtistsLong.artists.length - 1]
+          .artist_id
       );
     } else {
-      setCurrentArtist(topArtistsLong.artists[index - 1].artist_id);
+      setCurrentArtist(user.topArtistsLong.artists[index - 1].artist_id);
     }
   };
 
   const handleNextPlay = () => {
     let index;
-    topArtistsLong.artists.forEach((item, ind) => {
+    user.topArtistsLong.artists.forEach((item, ind) => {
       if (item.artist_id === currentArtist) {
         index = ind;
       }
@@ -91,29 +92,29 @@ const TopArtists = () => {
 
     // console.log(index);
 
-    if (index === topArtistsLong.artists.length - 1) {
-      setCurrentArtist(topArtistsLong.artists[0].artist_id);
+    if (index === user.topArtistsLong.artists.length - 1) {
+      setCurrentArtist(user.topArtistsLong.artists[0].artist_id);
     } else {
-      setCurrentArtist(topArtistsLong.artists[index + 1].artist_id);
+      setCurrentArtist(user.topArtistsLong.artists[index + 1].artist_id);
     }
   };
 
   const handleShufflePlay = () => {
-    let total = topArtistsLong.artists.length;
+    let total = user.topArtistsLong.artists.length;
     let rnd = Math.floor(Math.random() * total);
-    setCurrentArtist(topArtistsLong.artists[rnd].artist_id);
+    setCurrentArtist(user.topArtistsLong.artists[rnd].artist_id);
   };
 
   return (
     <div className="dashboard-container">
-      {topArtistsLong.artists &&
-        topArtistsLong.artists.length > 0 &&
+      {user.topArtistsLong.artists &&
+        user.topArtistsLong.artists.length > 0 &&
         currentArtist && (
           <div className="dashboard">
             <div>
               <ArtistList
                 currentArtist={currentArtist}
-                artists={topArtistsLong.artists}
+                artists={user.topArtistsLong.artists}
                 changeArtist={handleArtistChange}
               />
               <WebPlayer
@@ -123,7 +124,10 @@ const TopArtists = () => {
                 shufflePlay={handleShufflePlay}
               />
             </div>
-            <Carousel data={topArtistsLong.images} current={currentArtist} />
+            <Carousel
+              data={user.topArtistsLong.images}
+              current={currentArtist}
+            />
             <div className="heading">
               <p>Your Top Artists Radio</p>
             </div>

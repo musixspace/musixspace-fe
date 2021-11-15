@@ -101,7 +101,11 @@ const Navbar = () => {
                     location.pathname === item.path ? "underline" : ""
                   }`}
                 >
-                  <Link to={item.path}>{item.name}</Link>
+                  {item.path === "/myspace" && username ? (
+                    <Link to={`/${username}`}>{item.name}</Link>
+                  ) : (
+                    <Link to={item.path}>{item.name}</Link>
+                  )}
                 </li>
               ))}
             <li className="nav-li mobile">

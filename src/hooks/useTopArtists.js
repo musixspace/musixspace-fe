@@ -1,22 +1,23 @@
-import { useSetRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import { loadingAtom } from "../recoil/loadingAtom";
 import {
   topArtistsLongAtom,
   topArtistsMediumAtom,
   topArtistsShortAtom,
 } from "../recoil/topArtistsAtom";
+import { userState } from "../recoil/userAtom";
 import { axiosInstance } from "../util/axiosConfig";
 
 const useTopArtists = () => {
+  const [user, setUser] = useRecoilState(userState);
   const setLoading = useSetRecoilState(loadingAtom);
   const setTALong = useSetRecoilState(topArtistsLongAtom);
   const setTAMedium = useSetRecoilState(topArtistsMediumAtom);
   const setTAShort = useSetRecoilState(topArtistsShortAtom);
 
-  const getTopArtistsLong = (removeLoader) => {
-    if (!removeLoader) {
-      setLoading(true);
-    }
+  const getTopArtistsLong = (handle) => {
+    setLoading(true);
+
     axiosInstance
       .post("/topartists_long")
       .then((res) => {
@@ -31,14 +32,22 @@ const useTopArtists = () => {
                 "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRd-y-IJN8glQlf1qoU01dEgGPUa0d1-sjfWg&usqp=CAU",
             });
           });
-
-          setTALong({
-            artists: artists,
-            images: imgArr,
-          });
-          if (!removeLoader) {
-            setLoading(false);
+          if (handle === user.username) {
+            setUser({
+              ...user,
+              topArtistsLong: {
+                artists: artists,
+                images: imgArr,
+              },
+            });
+          } else {
+            setTALong({
+              artists: artists,
+              images: imgArr,
+            });
           }
+
+          setLoading(false);
         }
       })
       .catch((err) => {
@@ -46,10 +55,9 @@ const useTopArtists = () => {
       });
   };
 
-  const getTopArtistsMedium = (removeLoader) => {
-    if (!removeLoader) {
-      setLoading(true);
-    }
+  const getTopArtistsMedium = (handle) => {
+    setLoading(true);
+
     axiosInstance
       .post("/topartists_medium")
       .then((res) => {
@@ -64,14 +72,22 @@ const useTopArtists = () => {
                 "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRd-y-IJN8glQlf1qoU01dEgGPUa0d1-sjfWg&usqp=CAU",
             });
           });
-
-          setTAMedium({
-            artists: artists,
-            images: imgArr,
-          });
-          if (!removeLoader) {
-            setLoading(false);
+          if (handle === user.username) {
+            setUser({
+              ...user,
+              topArtistsMedium: {
+                artists: artists,
+                images: imgArr,
+              },
+            });
+          } else {
+            setTAMedium({
+              artists: artists,
+              images: imgArr,
+            });
           }
+
+          setLoading(false);
         }
       })
       .catch((err) => {
@@ -79,10 +95,9 @@ const useTopArtists = () => {
       });
   };
 
-  const getTopArtistsShort = (removeLoader) => {
-    if (!removeLoader) {
-      setLoading(true);
-    }
+  const getTopArtistsShort = (handle) => {
+    setLoading(true);
+
     axiosInstance
       .post("/topartists_short")
       .then((res) => {
@@ -97,14 +112,22 @@ const useTopArtists = () => {
                 "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRd-y-IJN8glQlf1qoU01dEgGPUa0d1-sjfWg&usqp=CAU",
             });
           });
-
-          setTAShort({
-            artists: artists,
-            images: imgArr,
-          });
-          if (!removeLoader) {
-            setLoading(false);
+          if (handle === user.username) {
+            setUser({
+              ...user,
+              topArtistsShort: {
+                artists: artists,
+                images: imgArr,
+              },
+            });
+          } else {
+            setTAShort({
+              artists: artists,
+              images: imgArr,
+            });
           }
+
+          setLoading(false);
         }
       })
       .catch((err) => {

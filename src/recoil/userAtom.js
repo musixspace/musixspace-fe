@@ -8,6 +8,35 @@ export const userState = atom({
     username: null,
     traits: [],
     anthem: null,
+    topTracksLong: {
+      tracks: null,
+      images: null,
+    },
+    topTracksMedium: {
+      tracks: null,
+      images: null,
+    },
+    topTracksShort: {
+      tracks: null,
+      images: null,
+    },
+    topArtistsLong: {
+      artists: null,
+      images: null,
+    },
+    topArtistsMedium: {
+      artists: null,
+      images: null,
+    },
+    topArtistsShort: {
+      artists: null,
+      images: null,
+    },
+    surpriseTracks: {
+      tracks: null,
+      images: null,
+    },
+    moodRadio: null,
   },
 });
 
