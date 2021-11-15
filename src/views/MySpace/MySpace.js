@@ -7,11 +7,16 @@ import useTopArtists from "../../hooks/useTopArtists";
 import useTopTracks from "../../hooks/useTopTracks";
 import { topArtistsLongAtom } from "../../recoil/topArtistsAtom";
 import { topTracksLongAtom } from "../../recoil/topTracksAtom";
-import { userNameSelector, userState } from "../../recoil/userAtom";
+import {
+  publicPlaylistsAtom,
+  userNameSelector,
+  userState,
+} from "../../recoil/userAtom";
 import { setMediaSession } from "../../util/functions";
 import ArtistList from "./ArtistList";
-import EditListModal from "./EditListModal";
 import Intro from "./Intro";
+import Playlist from "./Playlist";
+import PlaylistModal from "./PlaylistModal";
 import TrackList from "./TrackList";
 
 const MySpace = () => {
@@ -22,6 +27,7 @@ const MySpace = () => {
   const user = useRecoilValue(userState);
   const topTracks = useRecoilValue(topTracksLongAtom);
   const topArtists = useRecoilValue(topArtistsLongAtom);
+  const publicPlaylists = useRecoilValue(publicPlaylistsAtom);
   const [currentSong, setCurrentSong] = useState({
     songId: null,
     audioUrl: null,
@@ -36,34 +42,36 @@ const MySpace = () => {
     artists: 1,
   });
 
-  const [editPlaylist, setEditPLaylist] = useState({
+  const [modal, setModal] = useState({
     open: false,
     data: null,
   });
 
   const [editMode, setEditMode] = useState(false);
 
-  useCallback(() => {
-    getUserPublicPlaylists();
-  }, [handle]);
-
-  // useEffect(() => {
-  //   getUserPublicPlaylists();
-  // }, []);
-
   useEffect(() => {
     if (!user.displayName) {
       getUserProfile();
     }
+  }, [user.displayName]);
 
+  useEffect(() => {
+    if (handle && handle !== "myspace" && !publicPlaylists) {
+      getUserPublicPlaylists(handle);
+    }
+  }, [handle]);
+
+  useEffect(() => {
     if (!topTracks.tracks && !topArtists.artists) {
       getTopTracksLong();
     }
+  }, [topTracks.tracks]);
 
+  useEffect(() => {
     if (!topArtists.artists) {
       getTopArtistsLong();
     }
-  }, [topTracks.tracks, topArtists.artists, user.displayName]);
+  }, [topArtists.artists]);
 
   useEffect(() => {
     if (currentSong.songId && currentSong.list) {
@@ -218,16 +226,20 @@ const MySpace = () => {
     });
   };
 
-  const onHandleTracksEdit = () => {
-    setEditPLaylist({ open: true, data: topTracks.tracks });
-  };
-
   const handleEditClick = () => {
     if (editMode) {
       setEditMode(false);
     } else {
       setEditMode(true);
     }
+  };
+
+  const openPlaylistModal = (item) => {
+    setModal({
+      ...modal,
+      open: true,
+      data: item,
+    });
   };
 
   return (
@@ -252,7 +264,6 @@ const MySpace = () => {
           onRightClicked={onRightClicked}
         />
       )}
-      {/* handleEdit={onHandleTracksEdit} */}
       {topArtists.artists && topArtists.artists.length > 0 && (
         <ArtistList
           data={topArtists.artists}
@@ -271,17 +282,21 @@ const MySpace = () => {
           noControls={true}
         />
       )}
-      {currentSong.songId && !currentSong.audioUrl && handleNextPlay()}
-      {editPlaylist.open && (
-        <EditListModal
-          data={editPlaylist.data}
-          close={() => setEditPLaylist({ open: false, data: null })}
+      {publicPlaylists && publicPlaylists.length > 0 && (
+        <Playlist
+          data={publicPlaylists}
+          onLeftClicked={onLeftClicked}
+          onRightClicked={onRightClicked}
+          openPlaylistModal={openPlaylistModal}
         />
       )}
-      {user.username === handle && (
-        <button onClick={handleEditClick}>
-          {editMode ? "Save Space" : "Edit Space"}
-        </button>
+      {currentSong.songId && !currentSong.audioUrl && handleNextPlay()}
+      {modal.open && (
+        <PlaylistModal
+          data={modal.data}
+          close={() => setModal({ ...modal, data: null, open: false })}
+          isEdit={false}
+        />
       )}
     </div>
   );

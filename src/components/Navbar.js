@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FiMenu, FiX } from "react-icons/fi";
 import { Link, useLocation } from "react-router-dom";
 import { useRecoilState, useRecoilValue } from "recoil";
@@ -35,7 +35,7 @@ const loggedInLinks = [
 
 const Navbar = () => {
   const location = useLocation();
-  const { image: image_url } = useRecoilValue(userState);
+  const { username, image: image_url } = useRecoilValue(userState);
   const [showLinks, setShowLinks] = useRecoilState(openSidebarAtom);
 
   const [openProfile, setOpenProfile] = useState(false);
@@ -44,11 +44,28 @@ const Navbar = () => {
     setShowLinks((prev) => !prev);
   };
 
-  const onHandleLinkClick = () => {
+  const closeMenu = () => {
     if (showLinks) {
       setShowLinks(false);
     }
+    if (openProfile) {
+      setOpenProfile(false);
+    }
   };
+
+  useEffect(() => {
+    window.addEventListener("click", closeMenu);
+
+    return () => {
+      window.removeEventListener("click", closeMenu);
+    };
+  }, [showLinks, openProfile]);
+
+  useEffect(() => {
+    if (username) {
+      loggedInLinks[2].path = `/${username}`;
+    }
+  }, [username]);
 
   return (
     <nav
@@ -57,10 +74,7 @@ const Navbar = () => {
       }
     >
       <div className="nav-title">
-        <Link
-          onClick={onHandleLinkClick}
-          to={localStorage.getItem("accessToken") ? "/insights" : "/"}
-        >
+        <Link to={localStorage.getItem("accessToken") ? "/insights" : "/"}>
           Musixspace
         </Link>
       </div>
@@ -86,20 +100,14 @@ const Navbar = () => {
                     location.pathname === item.path ? "underline" : ""
                   }`}
                 >
-                  <Link onClick={onHandleLinkClick} to={item.path}>
-                    {item.name}
-                  </Link>
+                  <Link to={item.path}>{item.name}</Link>
                 </li>
               ))}
             <li className="nav-li mobile">
-              <Link onClick={onHandleLinkClick} to="/about">
-                About
-              </Link>
+              <Link to="/about">About</Link>
             </li>
             <li className="nav-li mobile">
-              <Link onClick={onHandleLinkClick} to="/logout">
-                Logout
-              </Link>
+              <Link to="/logout">Logout</Link>
             </li>
             <div className="profile">
               <div
@@ -111,14 +119,10 @@ const Navbar = () => {
               {openProfile && (
                 <ul className="profile-ul">
                   <li className="profile-li">
-                    <Link onClick={onHandleLinkClick} to="/about">
-                      About
-                    </Link>
+                    <Link to="/about">About</Link>
                   </li>
                   <li className="profile-li">
-                    <Link onClick={onHandleLinkClick} to="/logout">
-                      Logout
-                    </Link>
+                    <Link to="/logout">Logout</Link>
                   </li>
                 </ul>
               )}
@@ -151,9 +155,7 @@ const Navbar = () => {
               location.pathname === "/about" ? "underline" : ""
             }`}
           >
-            <Link onClick={onHandleLinkClick} to="/about">
-              About
-            </Link>
+            <Link to="/about">About</Link>
           </li>
         </ul>
       )}

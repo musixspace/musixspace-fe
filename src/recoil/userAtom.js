@@ -11,6 +11,11 @@ export const userState = atom({
   },
 });
 
+export const publicPlaylistsAtom = atom({
+  key: "publicPlaylistsAtom",
+  default: null,
+});
+
 export const userNameSelector = selector({
   key: "userNameSelector",
   get: ({ get }) => {

@@ -1,6 +1,5 @@
 import React from "react";
 import { AiFillCaretRight, AiOutlinePause } from "react-icons/ai";
-import { FaRegEdit } from "react-icons/fa";
 import { FiSkipBack, FiSkipForward } from "react-icons/fi";
 import { paddedNumbers } from "../../util/functions";
 

@@ -8,7 +8,7 @@ const Home = () => {
     <div className="home">
       <div className="content">
         <p>Come, join the music revolution.</p>
-        <p>Form cross border companionships with the shared taste in music.</p>
+        <p>Form cross border companionships with a shared taste in music.</p>
         <a href={loginUrl}>
           <span>
             <FaSpotify />

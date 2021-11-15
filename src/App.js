@@ -8,7 +8,7 @@ import Discover from "./views/Discover";
 import Home from "./views/Home";
 import Insights from "./views/Insights";
 import MoodRadio from "./views/MoodRadio";
-import MySpace from "./views/MySpace";
+import MySpace from "./views/MySpace/MySpace";
 import ReadyToRock from "./views/ReadyToRock";
 import Rolling from "./views/Rolling";
 import SurpriseMe from "./views/SurpriseMe";
@@ -21,7 +21,6 @@ const App = () => {
   useAuth(code);
 
   useEffect(() => {
-    console.log("Entered here 1");
     if (
       localStorage.getItem("accessToken") &&
       !window.location.href.includes("insights") &&
@@ -47,7 +46,7 @@ const App = () => {
           <Route exact path="/about" component={About} />
           <Route exact path="/logout" component={Logout} />
           <Route exact path="/" component={Home} />
-          <Route path="/:username" component={MySpace} />
+          <Route path="/:handle" component={MySpace} />
         </Switch>
       </Wrapper>
     </Router>
