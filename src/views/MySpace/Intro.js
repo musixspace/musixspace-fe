@@ -18,7 +18,6 @@ const Intro = ({
         <div className="main">
           <p>{user.displayName}</p>
           <div className="sub">
-            <span>12 matches</span>
             <div className="traits-container">
               {user.traits &&
                 user.traits.length > 0 &&

@@ -63,6 +63,7 @@ const Navbar = () => {
 
   useEffect(() => {
     if (username) {
+      console.log("Aa gaye yaha");
       loggedInLinks[2].path = `/${username}`;
     }
   }, [username]);

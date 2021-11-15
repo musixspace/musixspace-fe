@@ -41,8 +41,10 @@ const useProfile = () => {
       .get(`/playlists/${username}`)
       .then((res) => {
         if (res.status === 200) {
-          console.log(res.data);
-          setPublicPlaylists(res.data);
+          if (res.data !== "No playlists!") {
+            console.log(res.data);
+            setPublicPlaylists(res.data);
+          }
           setLoading(false);
         }
       })
