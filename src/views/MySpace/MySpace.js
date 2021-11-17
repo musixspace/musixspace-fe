@@ -1,17 +1,11 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import WebPlayer from "../../components/WebPlayer";
 import useProfile from "../../hooks/useProfile";
-import useTopArtists from "../../hooks/useTopArtists";
-import useTopTracks from "../../hooks/useTopTracks";
-import { topArtistsLongAtom } from "../../recoil/topArtistsAtom";
-import { topTracksLongAtom } from "../../recoil/topTracksAtom";
-import {
-  publicPlaylistsAtom,
-  userNameSelector,
-  userState,
-} from "../../recoil/userAtom";
+import { loadingAtom } from "../../recoil/loadingAtom";
+import { userNameSelector, userState } from "../../recoil/userAtom";
+import { axiosInstance } from "../../util/axiosConfig";
 import { setMediaSession } from "../../util/functions";
 import ArtistList from "./ArtistList";
 import Intro from "./Intro";
@@ -20,22 +14,28 @@ import PlaylistModal from "./PlaylistModal";
 import TrackList from "./TrackList";
 
 const MySpace = () => {
+  const { handle } = useParams();
+  const [user, setUser] = useRecoilState(userState);
   const displayName = useRecoilValue(userNameSelector);
-  const { getUserProfile, getUserPublicPlaylists } = useProfile();
-  const { getTopTracksLong } = useTopTracks();
-  const { getTopArtistsLong } = useTopArtists();
-  const user = useRecoilValue(userState);
-  const topTracks = useRecoilValue(topTracksLongAtom);
-  const topArtists = useRecoilValue(topArtistsLongAtom);
-  const publicPlaylists = useRecoilValue(publicPlaylistsAtom);
+  const setLoading = useSetRecoilState(loadingAtom);
+
+  const { getUserProfile } = useProfile();
+
+  const [topTracks, setTopTracks] = useState({
+    tracks: null,
+    images: null,
+  });
+  const [topArtists, setTopArtists] = useState({
+    artists: null,
+    images: null,
+  });
+  const [publicPlaylists, setPublicPlaylists] = useState(null);
   const [currentSong, setCurrentSong] = useState({
     songId: null,
     audioUrl: null,
     list: "topTracks",
     genre: [],
   });
-
-  const { handle } = useParams();
 
   const [songNumber, setSongNumber] = useState({
     tracks: 1,
@@ -56,22 +56,96 @@ const MySpace = () => {
   }, [user.displayName]);
 
   useEffect(() => {
-    if (handle && handle !== "myspace" && !publicPlaylists) {
-      getUserPublicPlaylists(handle);
+    if (handle && handle !== "myspace") {
+      setLoading(true);
+      if (!publicPlaylists) {
+        axiosInstance
+          .get(`/playlists/${handle}`)
+          .then((res) => {
+            if (res.status === 200) {
+              if (res.data !== "No playlists!") {
+                console.log(res.data);
+                setPublicPlaylists(res.data);
+              }
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
+
+      if (!topTracks.tracks) {
+        axiosInstance
+          .get(`toptracks_long/${handle}`)
+          .then((res) => {
+            if (res.status === 200) {
+              const songs = res.data.songs;
+              let imgArr = [];
+              songs.forEach((item) => {
+                imgArr.push({ id: item.song_id, url: item.image_url });
+              });
+              if (
+                handle === user.username ||
+                handle === localStorage.getItem("handle")
+              ) {
+                setUser({
+                  ...user,
+                  topTracksLong: {
+                    images: imgArr,
+                    tracks: songs,
+                  },
+                });
+              }
+              setTopTracks({
+                images: imgArr,
+                tracks: songs,
+              });
+            }
+          })
+          .catch((err) => console.log(err));
+      }
+
+      if (!topArtists.artists) {
+        axiosInstance
+          .get(`/topartists_long/${handle}`)
+          .then((res) => {
+            if (res.status === 200) {
+              const artists = res.data.artists;
+              let imgArr = [];
+              artists.forEach((artist) => {
+                imgArr.push({
+                  id: artist.artist_id,
+                  url:
+                    artist.image_url ||
+                    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRd-y-IJN8glQlf1qoU01dEgGPUa0d1-sjfWg&usqp=CAU",
+                });
+              });
+              if (
+                handle === user.username ||
+                handle === localStorage.getItem("handle")
+              ) {
+                setUser({
+                  ...user,
+                  topArtistsLong: {
+                    artists: artists,
+                    images: imgArr,
+                  },
+                });
+              }
+              setTopArtists({
+                artists: artists,
+                images: imgArr,
+              });
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
+
+      setLoading(false);
     }
   }, [handle]);
-
-  useEffect(() => {
-    if (!topTracks.tracks && !topArtists.artists) {
-      getTopTracksLong();
-    }
-  }, [topTracks.tracks]);
-
-  useEffect(() => {
-    if (!topArtists.artists) {
-      getTopArtistsLong();
-    }
-  }, [topArtists.artists]);
 
   useEffect(() => {
     if (currentSong.songId && currentSong.list) {

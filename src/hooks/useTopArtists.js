@@ -19,7 +19,7 @@ const useTopArtists = () => {
     setLoading(true);
 
     axiosInstance
-      .post("/topartists_long")
+      .get(`/topartists_long/${handle}`)
       .then((res) => {
         if (res.status === 200) {
           const artists = res.data.artists;

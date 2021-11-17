@@ -20,7 +20,7 @@ const useTopTracks = () => {
   const getTopTracksLong = (handle) => {
     setLoading(true);
     axiosInstance
-      .post("toptracks_long")
+      .get(`toptracks_long/${handle}`)
       .then((res) => {
         if (res.status === 200) {
           const songs = res.data.songs;

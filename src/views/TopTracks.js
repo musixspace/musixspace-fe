@@ -19,12 +19,13 @@ const TopTracks = () => {
   const [openModal, setOpenModal] = useState(false);
 
   useEffect(() => {
+    console.log(user);
     if (!user.topTracksLong.tracks) {
       getTopTracksLong(user.username || localStorage.getItem("handle"));
     } else {
       setCurrentTrack(user.topTracksLong.tracks[0].song_id);
     }
-  }, [user.topTracksLong]);
+  }, [user.topTracksLong.tracks]);
 
   useEffect(() => {
     if (currentTrack) {
