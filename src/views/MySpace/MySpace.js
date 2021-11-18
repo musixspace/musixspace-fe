@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilState } from "recoil";
 import WebPlayer from "../../components/WebPlayer";
-import useProfile from "../../hooks/useProfile";
-import { loadingAtom } from "../../recoil/loadingAtom";
-import { userNameSelector, userState } from "../../recoil/userAtom";
+import { userState } from "../../recoil/userAtom";
 import { axiosInstance } from "../../util/axiosConfig";
 import { setMediaSession } from "../../util/functions";
 import ArtistList from "./ArtistList";
@@ -16,20 +14,20 @@ import TrackList from "./TrackList";
 const MySpace = () => {
   const { handle } = useParams();
   const [user, setUser] = useRecoilState(userState);
-  const displayName = useRecoilValue(userNameSelector);
-  const setLoading = useSetRecoilState(loadingAtom);
 
-  const { getUserProfile } = useProfile();
+  const [data, setData] = useState({
+    currentUser: null,
+    publicPlaylists: null,
+    topTracks: {
+      tracks: null,
+      images: null,
+    },
+    topArtists: {
+      artists: null,
+      images: null,
+    },
+  });
 
-  const [topTracks, setTopTracks] = useState({
-    tracks: null,
-    images: null,
-  });
-  const [topArtists, setTopArtists] = useState({
-    artists: null,
-    images: null,
-  });
-  const [publicPlaylists, setPublicPlaylists] = useState(null);
   const [currentSong, setCurrentSong] = useState({
     songId: null,
     audioUrl: null,
@@ -49,23 +47,54 @@ const MySpace = () => {
 
   const [editMode, setEditMode] = useState(false);
 
-  useEffect(() => {
-    if (!user.displayName) {
-      getUserProfile();
-    }
-  }, [user.displayName]);
-
-  useEffect(() => {
+  useEffect(async () => {
+    console.log("Handle changed");
+    console.log(handle);
     if (handle && handle !== "myspace") {
-      setLoading(true);
-      if (!publicPlaylists) {
-        axiosInstance
+      // setLoading(true);
+      let userObj = {};
+      let finalObj = {
+        currentUser: null,
+        publicPlaylists: null,
+        topTracks: null,
+        topArtists: null,
+      };
+
+      if (!data.currentUser) {
+        await axiosInstance
+          .get(`/users/${handle}`)
+          .then((res) => {
+            if (res.status === 200) {
+              if (
+                handle === user.username ||
+                handle === localStorage.getItem("handle")
+              ) {
+                userObj = {
+                  ...userObj,
+                  displayName: res.data?.display_name,
+                  username: res.data?.username,
+                  image: res.data.image_url,
+                  traits: res.data.traits,
+                  anthem: res.data.anthem,
+                };
+              }
+              finalObj.currentUser = { ...res.data };
+              // setCurrentUser({ ...res.data });
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
+
+      if (!data.publicPlaylists) {
+        await axiosInstance
           .get(`/playlists/${handle}`)
           .then((res) => {
             if (res.status === 200) {
               if (res.data !== "No playlists!") {
-                console.log(res.data);
-                setPublicPlaylists(res.data);
+                finalObj.publicPlaylists = res.data;
+                // setPublicPlaylists(res.data);
               }
             }
           })
@@ -74,8 +103,8 @@ const MySpace = () => {
           });
       }
 
-      if (!topTracks.tracks) {
-        axiosInstance
+      if (!data.topTracks.tracks) {
+        await axiosInstance
           .get(`toptracks_long/${handle}`)
           .then((res) => {
             if (res.status === 200) {
@@ -88,25 +117,25 @@ const MySpace = () => {
                 handle === user.username ||
                 handle === localStorage.getItem("handle")
               ) {
-                setUser({
-                  ...user,
+                userObj = {
+                  ...userObj,
                   topTracksLong: {
                     images: imgArr,
                     tracks: songs,
                   },
-                });
+                };
               }
-              setTopTracks({
+              finalObj.topTracks = {
                 images: imgArr,
                 tracks: songs,
-              });
+              };
             }
           })
           .catch((err) => console.log(err));
       }
 
-      if (!topArtists.artists) {
-        axiosInstance
+      if (!data.topArtists.artists) {
+        await axiosInstance
           .get(`/topartists_long/${handle}`)
           .then((res) => {
             if (res.status === 200) {
@@ -124,26 +153,29 @@ const MySpace = () => {
                 handle === user.username ||
                 handle === localStorage.getItem("handle")
               ) {
-                setUser({
-                  ...user,
+                userObj = {
+                  ...userObj,
                   topArtistsLong: {
                     artists: artists,
                     images: imgArr,
                   },
-                });
+                };
               }
-              setTopArtists({
+              finalObj.topArtists = {
                 artists: artists,
                 images: imgArr,
-              });
+              };
             }
           })
           .catch((err) => {
             console.log(err);
           });
       }
-
-      setLoading(false);
+      setUser({
+        ...user,
+        ...userObj,
+      });
+      setData({ ...data, ...finalObj });
     }
   }, [handle]);
 
@@ -184,13 +216,13 @@ const MySpace = () => {
   useEffect(() => {
     if (currentSong.audioUrl) {
       if (currentSong.list === "topTracks") {
-        const ct = topTracks.tracks.find(
+        const ct = data.topTracks.tracks.find(
           (item) => item.song_id === currentSong.songId
         );
         const artist = ct.artists.map((ar) => ar.name).join(", ");
         setMediaSession(ct.name, artist, ct.image_url, null, handleNextPlay);
       } else if (currentSong.list === "topArtists") {
-        const ct = topArtists.artists.find(
+        const ct = data.topArtists.artists.find(
           (item) => item.artist_id === currentSong.songId
         );
         setMediaSession(
@@ -202,15 +234,17 @@ const MySpace = () => {
         );
       } else if (
         currentSong.list === null &&
-        user &&
-        user.anthem &&
-        currentSong.songId === user.anthem.song_id
+        data.currentUser &&
+        data.currentUser.anthem &&
+        currentSong.songId === data.currentUser.anthem.song_id
       ) {
-        const artist = user.anthem.artists.map((item) => item.name).join(", ");
+        const artist = data.currentUser.anthem.artists
+          .map((item) => item.name)
+          .join(", ");
         setMediaSession(
-          user.anthem.name,
+          data.currentUser.anthem.name,
           artist,
-          user.anthem.image_url,
+          data.currentUser.anthem.image_url,
           null,
           null
         );
@@ -256,35 +290,39 @@ const MySpace = () => {
   };
 
   const handleNextPlay = () => {
-    if (topTracks && topTracks.tracks && currentSong.list === "topTracks") {
-      const track = topTracks.tracks.find(
+    if (
+      data.topTracks &&
+      data.topTracks.tracks &&
+      currentSong.list === "topTracks"
+    ) {
+      const track = data.topTracks.tracks.find(
         (item) => item.song_id === currentSong.songId
       );
-      const index = topTracks.tracks.indexOf(track);
-      if (index + 1 !== topTracks.tracks.length) {
+      const index = data.topTracks.tracks.indexOf(track);
+      if (index + 1 !== data.topTracks.tracks.length) {
         setSongNumber({ ...songNumber, tracks: index + 2 });
         handlePlaySong(
-          topTracks.tracks[index + 1].song_id,
-          topTracks.tracks[index + 1].preview_url
+          data.topTracks.tracks[index + 1].song_id,
+          data.topTracks.tracks[index + 1].preview_url
         );
       } else {
         setSongNumber({ ...songNumber, tracks: 1 });
         handlePlaySong(
-          topTracks.tracks[0].song_id,
-          topTracks.tracks[0].preview_url
+          data.topTracks.tracks[0].song_id,
+          data.topTracks.tracks[0].preview_url
         );
       }
     } else if (currentSong.list === "topArtists") {
-      const artist = topArtists.artists.find(
+      const artist = data.topArtists.artists.find(
         (item) => item.artist_id === currentSong.songId
       );
-      const index = topArtists.artists.indexOf(artist);
-      if (index + 1 !== topArtists.artists.length) {
+      const index = data.topArtists.artists.indexOf(artist);
+      if (index + 1 !== data.topArtists.artists.length) {
         setSongNumber({ ...songNumber, artists: index + 2 });
-        handlePlayArtist(topArtists.artists[index + 1]);
+        handlePlayArtist(data.topArtists.artists[index + 1]);
       } else {
         setSongNumber({ ...songNumber, artists: 1 });
-        handlePlayArtist(topArtists.artists[0]);
+        handlePlayArtist(data.topArtists.artists[0]);
       }
     } else {
       setCurrentSong({ ...currentSong, songId: null, audioUrl: null });
@@ -309,6 +347,9 @@ const MySpace = () => {
   };
 
   const openPlaylistModal = (item) => {
+    if (currentSong.audioUrl) {
+      handlePause();
+    }
     setModal({
       ...modal,
       open: true,
@@ -318,18 +359,17 @@ const MySpace = () => {
 
   return (
     <div className="mySpace">
-      {user.displayName && (
+      {data.currentUser && (
         <Intro
-          user={user}
+          user={data.currentUser}
           currentSong={currentSong}
-          displayName={displayName}
           handlePause={handlePause}
           handlePlaySong={handlePlaySong}
         />
       )}
-      {topTracks.tracks && topTracks.tracks.length > 0 && (
+      {data.topTracks.tracks && data.topTracks.tracks.length > 0 && (
         <TrackList
-          data={topTracks.tracks}
+          data={data.topTracks.tracks}
           currentSong={currentSong}
           songNumber={songNumber.tracks}
           handlePause={handlePause}
@@ -338,9 +378,9 @@ const MySpace = () => {
           onRightClicked={onRightClicked}
         />
       )}
-      {topArtists.artists && topArtists.artists.length > 0 && (
+      {data.topArtists.artists && data.topArtists.artists.length > 0 && (
         <ArtistList
-          data={topArtists.artists}
+          data={data.topArtists.artists}
           currentSong={currentSong}
           songNumber={songNumber.artists}
           handlePause={handlePause}
@@ -356,9 +396,9 @@ const MySpace = () => {
           noControls={true}
         />
       )}
-      {publicPlaylists && publicPlaylists.length > 0 && (
+      {data.publicPlaylists && data.publicPlaylists.length > 0 && (
         <Playlist
-          data={publicPlaylists}
+          data={data.publicPlaylists}
           onLeftClicked={onLeftClicked}
           onRightClicked={onRightClicked}
           openPlaylistModal={openPlaylistModal}

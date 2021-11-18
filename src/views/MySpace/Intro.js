@@ -2,21 +2,18 @@ import React from "react";
 import { AiFillCaretRight, AiOutlinePause } from "react-icons/ai";
 import logo from "../../assets/images/logo-black.png";
 
-const Intro = ({
-  user,
-  displayName,
-  currentSong,
-  handlePause,
-  handlePlaySong,
-}) => {
+const Intro = ({ user, currentSong, handlePause, handlePlaySong }) => {
   return (
     <div className="intro">
       <div className="image-container">
-        <img src={user.image || logo} alt={`${displayName}'s Image'`} />
+        <img
+          src={user.image_url || logo}
+          alt={`${user.display_name.split(" ")[0]}'s Image'`}
+        />
       </div>
       <div className="content-container">
         <div className="main">
-          <p>{user.displayName}</p>
+          <p>{user.display_name}</p>
           <div className="sub">
             <div className="traits-container">
               {user.traits &&
@@ -37,7 +34,7 @@ const Intro = ({
         </div>
         <div className="anthem-container">
           <div className="content">
-            <div>{`${displayName}'s Anthem`}</div>
+            <div>{`${user.display_name.split(" ")[0]}'s Anthem`}</div>
             <p>{user.anthem.name}</p>
             <p>{user.anthem.artists.map((item) => item.name).join(", ")}</p>
           </div>
@@ -46,7 +43,10 @@ const Intro = ({
               user.anthem.song_id === currentSong.songId ? "highlight" : ""
             }`}
           >
-            <img src={user.anthem.image_url} alt={`${displayName}'s Anthem'`} />
+            <img
+              src={user.anthem.image_url}
+              alt={`${user.display_name.split(" ")[0]}'s Anthem'`}
+            />
             {user.anthem.preview_url && (
               <button
                 onClick={() =>

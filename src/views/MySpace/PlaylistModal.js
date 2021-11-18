@@ -7,10 +7,14 @@ import WebPlayer from "../../components/WebPlayer";
 import { AiFillCaretRight, AiOutlinePause } from "react-icons/ai";
 
 const PlaylistModal = ({ data, close, isEdit }) => {
+  console.log(data);
   const [tracks, setTracks] = useState(data.songs);
   const [currentSong, setCurrentSong] = useState({
     songId: null,
     audioUrl: null,
+    imageUrl: data.cover_image,
+    name: "",
+    artists: "",
   });
 
   useEffect(() => {
@@ -39,24 +43,50 @@ const PlaylistModal = ({ data, close, isEdit }) => {
       while (!children[index].classList.contains("selected")) {
         index++;
       }
-      // console.log(index);
       if (index) {
         children = container.querySelector(
           `.track:nth-child(${index})`
         ).offsetTop;
-        container.scrollTo({ top: children - 50, behavior: "smooth" });
+        container.scrollTo({ top: children - 65, behavior: "smooth" });
       } else {
         container.scrollTo({ top: 0, behavior: "smooth" });
       }
     }
   }, [currentSong.songId]);
 
-  const handlePlaySong = (songId, audioUrl) => {
-    setCurrentSong({ songId, audioUrl });
+  const handlePlaySong = (songId, audioUrl, imageUrl, name, artists) => {
+    setCurrentSong({ songId, audioUrl, imageUrl, name, artists });
   };
 
   const handlePause = () => {
     setCurrentSong({ songId: null, audioUrl: null });
+  };
+
+  const handlePrevPlay = () => {
+    const currTrack = tracks.find(
+      (item) => item.song_id === currentSong.songId
+    );
+    const index = tracks.indexOf(currTrack);
+
+    if (index === 0) {
+      setCurrentSong({
+        songId: tracks[tracks.length - 1].song_id,
+        audioUrl: tracks[tracks.length - 1].preview_url,
+        imageUrl: tracks[tracks.length - 1].image_url,
+        name: tracks[tracks.length - 1].name,
+        artists: tracks[tracks.length - 1].artists
+          .map((i) => i.name)
+          .join(", "),
+      });
+    } else {
+      setCurrentSong({
+        songId: tracks[index - 1].song_id,
+        audioUrl: tracks[index - 1].preview_url,
+        imageUrl: tracks[index - 1].image_url,
+        name: tracks[index - 1].name,
+        artists: tracks[index - 1].artists.map((i) => i.name).join(", "),
+      });
+    }
   };
 
   const handleNextPlay = () => {
@@ -69,13 +99,32 @@ const PlaylistModal = ({ data, close, isEdit }) => {
       setCurrentSong({
         songId: tracks[0].song_id,
         audioUrl: tracks[0].preview_url,
+        imageUrl: tracks[0].image_url,
+        name: tracks[0].name,
+        artists: tracks[0].artists.map((i) => i.name).join(", "),
       });
     } else {
       setCurrentSong({
         songId: tracks[index + 1].song_id,
         audioUrl: tracks[index + 1].preview_url,
+        imageUrl: tracks[index + 1].image_url,
+        name: tracks[index + 1].name,
+        artists: tracks[index + 1].artists.map((i) => i.name).join(", "),
       });
     }
+  };
+
+  const handleShufflePlay = () => {
+    let total = tracks.length;
+    let rnd = Math.floor(Math.random() * total);
+    const newTrack = tracks[rnd];
+    setCurrentSong({
+      songId: newTrack.song_id,
+      audioUrl: newTrack.preview_url,
+      imageUrl: newTrack.image_url,
+      name: newTrack.name,
+      artists: newTrack.artists.map((i) => i.name).join(", "),
+    });
   };
 
   const onDragEnd = (result) => {
@@ -99,116 +148,129 @@ const PlaylistModal = ({ data, close, isEdit }) => {
   };
 
   return (
-    <div className="modal-wrapper">
+    <div className="modal-wrapper playlist-modal-wrapper">
       <div className="modal-container">
         <div className="close">
           <IoMdClose onClick={close} />
         </div>
         <div className="modal edit-list-container">
-          <div className="title">{data.name} Playlist</div>
-          {isEdit ? (
-            <DragDropContext onDragEnd={onDragEnd}>
-              <Droppable droppableId="edit-list-droppable">
-                {(provided) => (
-                  <div
-                    className="edit-list"
-                    ref={provided.innerRef}
-                    {...provided.droppableProps}
-                  >
-                    {tracks &&
-                      tracks.length > 0 &&
-                      tracks.map((item, ind) => (
-                        <Draggable
-                          key={item.song_id}
-                          draggableId={item.song_id}
-                          index={ind}
-                        >
-                          {(provided) => (
-                            <div
-                              className="track"
-                              ref={provided.innerRef}
-                              {...provided.dragHandleProps}
-                              {...provided.draggableProps}
-                            >
-                              <div className="image-container">
-                                <img src={item.image_url} alt={item.name} />
-                              </div>
-                              <div className="content-container">
-                                <div className="main">
-                                  <div className="title">{item.name}</div>
-                                  <div className="sub">
-                                    {item.artists.map((i) => i.name).join(", ")}
+          <div className="topbar">
+            <div className="title">{data.name} Playlist</div>
+            <div className="button-container">
+              <button>Follow</button>
+            </div>
+          </div>
+          <div className="main-content">
+            {isEdit ? (
+              <DragDropContext onDragEnd={onDragEnd}>
+                <Droppable droppableId="edit-list-droppable">
+                  {(provided) => (
+                    <div
+                      className="edit-list"
+                      ref={provided.innerRef}
+                      {...provided.droppableProps}
+                    >
+                      {tracks &&
+                        tracks.length > 0 &&
+                        tracks.map((item, ind) => (
+                          <Draggable
+                            key={item.song_id}
+                            draggableId={item.song_id}
+                            index={ind}
+                          >
+                            {(provided) => (
+                              <div
+                                className="track"
+                                ref={provided.innerRef}
+                                {...provided.dragHandleProps}
+                                {...provided.draggableProps}
+                              >
+                                <div className="image-container">
+                                  <img src={item.image_url} alt={item.name} />
+                                </div>
+                                <div className="content-container">
+                                  <div className="main">
+                                    <div className="title">{item.name}</div>
+                                    <div className="sub">
+                                      {item.artists
+                                        .map((i) => i.name)
+                                        .join(", ")}
+                                    </div>
+                                  </div>
+                                  <div className="num">
+                                    <span>{`#${paddedNumbers(ind + 1)}`}</span>
+                                    <span
+                                      onClick={() =>
+                                        onDeleteTrack(item.song_id)
+                                      }
+                                    >
+                                      <MdDelete />
+                                    </span>
                                   </div>
                                 </div>
-                                <div className="num">
-                                  <span>{`#${paddedNumbers(ind + 1)}`}</span>
-                                  <span
-                                    onClick={() => onDeleteTrack(item.song_id)}
-                                  >
-                                    <MdDelete />
-                                  </span>
-                                </div>
                               </div>
-                            </div>
-                          )}
-                        </Draggable>
-                      ))}
-                    {provided.placeholder}
-                  </div>
-                )}
-              </Droppable>
-            </DragDropContext>
-          ) : (
-            <div className="edit-list">
-              {tracks &&
-                tracks.length > 0 &&
-                tracks.map((item, ind) => (
-                  <div
-                    key={item.song_id}
-                    className={`track ${
-                      currentSong.songId === item.song_id ? "selected" : ""
-                    } `}
-                  >
-                    <div className="image-container">
-                      <img src={item.image_url} alt={item.name} />
+                            )}
+                          </Draggable>
+                        ))}
+                      {provided.placeholder}
                     </div>
-                    <div className="content-container">
-                      <div className="main">
-                        <div className="title">{item.name}</div>
-                        <div className="sub">
-                          {item.artists.map((i) => i.name).join(", ")}
+                  )}
+                </Droppable>
+              </DragDropContext>
+            ) : (
+              <div className="edit-list">
+                {tracks &&
+                  tracks.length > 0 &&
+                  tracks.map((item, ind) => (
+                    <div
+                      key={item.song_id}
+                      className={`track ${
+                        currentSong.songId === item.song_id ? "selected" : ""
+                      } `}
+                      onClick={() =>
+                        handlePlaySong(
+                          item.song_id,
+                          item.preview_url,
+                          item.image_url,
+                          item.name,
+                          item.artists.map((i) => i.name).join(", ")
+                        )
+                      }
+                    >
+                      <div className="content-container">
+                        <div className="main">
+                          <div className="title">{item.name}</div>
+                          <div className="sub">
+                            {item.artists.map((i) => i.name).join(", ")}
+                          </div>
+                        </div>
+                        <div className="num">
+                          <span>{`#${paddedNumbers(ind + 1)}`}</span>
                         </div>
                       </div>
-                      <div className="num">
-                        <span>{`#${paddedNumbers(ind + 1)}`}</span>
-                        {item.preview_url &&
-                          (currentSong.songId === item.song_id ? (
-                            <span onClick={() => handlePause()}>
-                              <AiOutlinePause />
-                            </span>
-                          ) : (
-                            <span
-                              onClick={() =>
-                                handlePlaySong(item.song_id, item.preview_url)
-                              }
-                            >
-                              <AiFillCaretRight />
-                            </span>
-                          ))}
-                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
+              </div>
+            )}
+            <div className="image-controls">
+              <div className="image-container">
+                <img src={currentSong.imageUrl} alt="Cover Image" />
+              </div>
+              <div className="song-info">
+                <div className="song-name">{currentSong.name}</div>
+                <div className="song-artists">{currentSong.artists}</div>
+              </div>
+              {currentSong.audioUrl && (
+                <WebPlayer
+                  url={currentSong.audioUrl}
+                  prevPlay={handlePrevPlay}
+                  nextPlay={handleNextPlay}
+                  shufflePlay={handleShufflePlay}
+                />
+              )}
             </div>
-          )}
+          </div>
         </div>
-        {currentSong.audioUrl && (
-          <WebPlayer
-            url={currentSong.audioUrl}
-            nextPlay={handleNextPlay}
-            noControls={true}
-          />
-        )}
       </div>
     </div>
   );

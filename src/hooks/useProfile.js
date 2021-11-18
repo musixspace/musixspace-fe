@@ -12,7 +12,7 @@ const useProfile = () => {
     setLoading(true);
 
     axiosInstance
-      .post("/users")
+      .get(`/users/${handle}`)
       .then((res) => {
         if (res.status === 200) {
           localStorage.setItem("handle", res.data.username);

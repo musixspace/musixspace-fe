@@ -11,7 +11,7 @@ const Insights = () => {
 
   useEffect(() => {
     if (!displayName) {
-      getUserProfile();
+      getUserProfile(localStorage.getItem("handle"));
     }
   }, []);
 

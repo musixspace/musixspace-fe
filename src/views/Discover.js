@@ -6,13 +6,15 @@ import image2 from "../assets/images/artists/image2.png";
 import image3 from "../assets/images/artists/image3.png";
 import image4 from "../assets/images/artists/image4.png";
 import image5 from "../assets/images/artists/image5.png";
+import amaya1 from "../assets/images/artists/amaya1.png";
+import amaya2 from "../assets/images/artists/amaya2.png";
 import lewis from "../assets/images/artists/lewis.png";
 import prateek from "../assets/images/artists/prateek.png";
 import logoWhite from "../assets/images/logo-white.png";
 
 const user = [
   {
-    img: image3,
+    img: amaya2,
     name: "Amaya Srivastava",
     bio: "Old school guy. Hmu if you love indian-indies more than anything!",
     tags: ["introvert", "easy going"],
