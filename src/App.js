@@ -24,7 +24,7 @@ const App = () => {
     if (
       localStorage.getItem("accessToken") &&
       !window.location.href.includes("insights") &&
-      !sessionStorage.getItem("newUser")
+      sessionStorage.getItem("newUser") === false
     ) {
       console.log("Entered here 2");
       window.location = window.location.origin + "/insights";

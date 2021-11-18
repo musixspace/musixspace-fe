@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react";
+import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { IoMdClose } from "react-icons/io";
 import { MdDelete } from "react-icons/md";
-import { paddedNumbers, setMediaSession } from "../../util/functions";
-import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import WebPlayer from "../../components/WebPlayer";
-import { AiFillCaretRight, AiOutlinePause } from "react-icons/ai";
+import { paddedNumbers, setMediaSession } from "../../util/functions";
+import logo from "../../assets/images/logo-black.png";
 
 const PlaylistModal = ({ data, close, isEdit }) => {
-  console.log(data);
   const [tracks, setTracks] = useState(data.songs);
   const [currentSong, setCurrentSong] = useState({
     songId: null,
@@ -29,7 +28,7 @@ const PlaylistModal = ({ data, close, isEdit }) => {
         currTrack.name,
         artists,
         currTrack.image_url,
-        null,
+        handlePrevPlay,
         handleNextPlay
       );
     }
@@ -56,10 +55,6 @@ const PlaylistModal = ({ data, close, isEdit }) => {
 
   const handlePlaySong = (songId, audioUrl, imageUrl, name, artists) => {
     setCurrentSong({ songId, audioUrl, imageUrl, name, artists });
-  };
-
-  const handlePause = () => {
-    setCurrentSong({ songId: null, audioUrl: null });
   };
 
   const handlePrevPlay = () => {
@@ -128,7 +123,6 @@ const PlaylistModal = ({ data, close, isEdit }) => {
   };
 
   const onDragEnd = (result) => {
-    // console.log(result);
     const { destination, source, draggableId } = result;
 
     if (!destination) return;
@@ -155,9 +149,14 @@ const PlaylistModal = ({ data, close, isEdit }) => {
         </div>
         <div className="modal edit-list-container">
           <div className="topbar">
-            <div className="title">{data.name} Playlist</div>
+            <p className="title">{data.name}</p>
             <div className="button-container">
-              <button>Follow</button>
+              <a
+                href={`https://open.spotify.com/playlist/${data.playlist_id}`}
+                target="_blank"
+              >
+                Follow
+              </a>
             </div>
           </div>
           <div className="main-content">
@@ -186,7 +185,10 @@ const PlaylistModal = ({ data, close, isEdit }) => {
                                 {...provided.draggableProps}
                               >
                                 <div className="image-container">
-                                  <img src={item.image_url} alt={item.name} />
+                                  <img
+                                    src={item.image_url || logo}
+                                    alt={item.name}
+                                  />
                                 </div>
                                 <div className="content-container">
                                   <div className="main">
@@ -254,7 +256,7 @@ const PlaylistModal = ({ data, close, isEdit }) => {
             )}
             <div className="image-controls">
               <div className="image-container">
-                <img src={currentSong.imageUrl} alt="Cover Image" />
+                <img src={currentSong.imageUrl || logo} alt="Cover Image" />
               </div>
               <div className="song-info">
                 <div className="song-name">{currentSong.name}</div>

@@ -5,6 +5,7 @@ import WebPlayer from "../components/WebPlayer";
 import { loadingAtom } from "../recoil/loadingAtom";
 import { userState } from "../recoil/userAtom";
 import { axiosInstance } from "../util/axiosConfig";
+import logo from "../assets/images/logo-black.png";
 
 const MoodRadio = () => {
   const setLoading = useSetRecoilState(loadingAtom);
@@ -26,7 +27,7 @@ const MoodRadio = () => {
               id: index,
               name: item.name,
               artist: item.artist,
-              url: item.image_url,
+              url: item.image_url || logo,
               preview_url: item.preview_url,
             };
             if (item.acousticness) {

@@ -12,20 +12,21 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
+        margin-bottom: 1em;
 
         > .title {
-          margin-bottom: 0.5em;
           font-size: calc(var(--base-font-size) * 4);
         }
 
         > .button-container {
           display: grid;
           place-items: center;
-          button {
+          a {
             padding: 0.4em 1em;
-            font-size: calc(var(--base-font-size) * 1.75);
+            font-size: calc(var(--base-font-size) * 2);
             background-color: var(--clr-white-2);
             border-radius: 100px;
+            color: var(--clr-black);
           }
         }
       }
@@ -96,7 +97,9 @@
 
         > .edit-list {
           flex: 1 1 45%;
-          height: 60vh;
+          min-width: 250px;
+          height: auto;
+          max-height: 60vh;
           overflow-y: scroll;
 
           &::-webkit-scrollbar {
@@ -106,6 +109,7 @@
           scrollbar-width: none;
 
           display: flex;
+          align-items: center;
           flex-direction: column;
           gap: 0.2em;
 
@@ -132,6 +136,7 @@
                 align-items: flex-start;
                 flex-direction: column;
                 > .title {
+                  font-family: var(--f-circ-spotify);
                   font-size: calc(var(--base-font-size) * 3);
                   color: var(--clr-pink);
                 }
@@ -187,28 +192,68 @@
     > .modal-container {
       > .edit-list-container {
         padding: 10% 5% !important;
-        .edit-list {
-          height: 70vh;
 
-          > .track {
-            > .content-container {
-              > .main {
-                > .title {
-                  font-size: calc(var(--base-font-size) * 1.75);
-                }
+        > .topbar {
+          > .title {
+            font-size: calc(var(--base-font-size) * 2.5);
+          }
 
-                > .sub {
-                  font-size: calc(var(--base-font-size) * 1.25);
-                }
+          > .button-container {
+            a {
+              font-size: calc(var(--base-font-size) * 1.5);
+            }
+          }
+        }
+
+        > .main-content {
+          > .image-controls {
+            > .image-container {
+              width: 100%;
+              height: 100%;
+            }
+
+            > .song-info {
+              margin-top: 1em;
+
+              > .song-name {
+                font-size: calc(var(--base-font-size) * 2.5);
               }
 
-              > .num {
-                > span:nth-child(1) {
-                  font-size: calc(var(--base-font-size) * 2);
+              > .song-artists {
+                font-size: calc(var(--base-font-size) * 1.5);
+              }
+            }
+
+            > .audio-container {
+              > .controls {
+                margin-top: 0;
+                flex-direction: row;
+                justify-content: space-between;
+                gap: 0;
+              }
+            }
+          }
+
+          > .edit-list {
+            height: auto;
+            max-height: 40vh;
+
+            > .track {
+              > .content-container {
+                > .main {
+                  > .title {
+                    font-size: calc(var(--base-font-size) * 2);
+                  }
+
+                  > .sub {
+                    font-size: calc(var(--base-font-size) * 1.5);
+                  }
                 }
 
-                > span:nth-child(2) {
-                  font-size: calc(var(--base-font-size) * 2.25);
+                > .num {
+                  > span {
+                    font-size: calc(var(--base-font-size) * 2);
+                  }
                 }
               }
             }

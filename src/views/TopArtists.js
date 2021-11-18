@@ -6,6 +6,7 @@ import WebPlayer from "../components/WebPlayer";
 import useTopArtists from "../hooks/useTopArtists";
 import { userState } from "../recoil/userAtom";
 import { setMediaSession } from "../util/functions";
+import logo from "../assets/images/logo-black.png";
 
 const TopArtists = () => {
   const user = useRecoilValue(userState);
@@ -37,7 +38,7 @@ const TopArtists = () => {
       setMediaSession(
         ct.toptrack.name,
         ct.name,
-        ct.image_url,
+        ct.image_url || logo,
         handlePrevPlay,
         handleNextPlay
       );

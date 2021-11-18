@@ -26,6 +26,13 @@ export const setMediaSession = (
       if (handler) {
         navigator.mediaSession.setActionHandler(action, handler);
       }
+      navigator.mediaSession.setActionHandler("play", () => {
+        console.log("hello");
+        navigator.mediaSession.playbackState = "paused";
+      });
+      navigator.mediaSession.setActionHandler("pause", () => {
+        navigator.mediaSession.playbackState = "playing";
+      });
     } catch (error) {
       console.log(`The media action ${action} is not supported yet!`);
     }

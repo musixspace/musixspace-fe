@@ -9,6 +9,7 @@ import { alertAtom } from "../recoil/alertAtom";
 import { userState } from "../recoil/userAtom";
 import { axiosInstance } from "../util/axiosConfig";
 import { setMediaSession } from "../util/functions";
+import logo from "../assets/images/logo-black.png";
 
 const SurpriseMe = () => {
   const user = useRecoilValue(userState);
@@ -42,7 +43,7 @@ const SurpriseMe = () => {
       setMediaSession(
         ct.name,
         artist,
-        ct.image_url,
+        ct.image_url || logo,
         handlePrevPlay,
         handleNextPlay
       );

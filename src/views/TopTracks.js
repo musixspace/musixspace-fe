@@ -9,6 +9,7 @@ import { axiosInstance } from "../util/axiosConfig";
 import { setMediaSession } from "../util/functions";
 import { alertAtom } from "../recoil/alertAtom";
 import { userState } from "../recoil/userAtom";
+import logo from "../assets/images/logo-black.png";
 
 const TopTracks = () => {
   const user = useRecoilValue(userState);
@@ -43,7 +44,7 @@ const TopTracks = () => {
       setMediaSession(
         ct.name,
         artist,
-        ct.image_url,
+        ct.image_url || logo,
         handlePrevPlay,
         handleNextPlay
       );

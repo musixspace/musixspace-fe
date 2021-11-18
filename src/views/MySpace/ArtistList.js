@@ -1,6 +1,7 @@
 import React from "react";
 import { AiFillCaretRight, AiOutlinePause } from "react-icons/ai";
 import { FiSkipBack, FiSkipForward } from "react-icons/fi";
+import logo from "../../assets/images/logo-black.png";
 import { paddedNumbers } from "../../util/functions";
 
 const ArtistList = ({
@@ -44,7 +45,7 @@ const ArtistList = ({
                     item.artist_id === currentSong.songId ? "selected" : ""
                   }`}
                 >
-                  <img src={item.image_url} alt={item.name} />
+                  <img src={item.image_url || logo} alt={item.name} />
                 </div>
                 <div className="content-container">
                   <div className="title">{item.name}</div>

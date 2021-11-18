@@ -2,6 +2,7 @@ import React from "react";
 import { AiFillCaretRight, AiOutlinePause } from "react-icons/ai";
 import { FiSkipBack, FiSkipForward } from "react-icons/fi";
 import { paddedNumbers } from "../../util/functions";
+import logo from "../../assets/images/logo-black.png";
 
 const TrackList = ({
   data,
@@ -17,9 +18,6 @@ const TrackList = ({
     <div className="topTracks">
       <div className="upper-container">
         <div className="title">Top Tracks</div>
-        {/* <span onClick={handleEdit}>
-          <FaRegEdit />
-        </span> */}
       </div>
       <div className="songs-container">
         <button
@@ -39,7 +37,7 @@ const TrackList = ({
                     item.song_id === currentSong.songId ? "selected" : ""
                   }`}
                 >
-                  <img src={item.image_url} alt={item.name} />
+                  <img src={item.image_url || logo} alt={item.name} />
                 </div>
                 <div className="content-container">
                   <div className="title">{item.name}</div>
@@ -51,7 +49,8 @@ const TrackList = ({
                   <button
                     className="controls"
                     onClick={() =>
-                      item.song_id === currentSong.songId
+                      item.song_id === currentSong.songId &&
+                      navigator.mediaSession.playbackState === "playing"
                         ? handlePause()
                         : handleSetAndPlayTrack(
                             idx + 1,

@@ -44,7 +44,7 @@ const Intro = ({ user, currentSong, handlePause, handlePlaySong }) => {
             }`}
           >
             <img
-              src={user.anthem.image_url}
+              src={user.anthem.image_url || logo}
               alt={`${user.display_name.split(" ")[0]}'s Anthem'`}
             />
             {user.anthem.preview_url && (

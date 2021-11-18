@@ -1,6 +1,7 @@
 import React from "react";
 import { AiFillCaretRight } from "react-icons/ai";
 import { FiSkipBack, FiSkipForward } from "react-icons/fi";
+import logo from "../../assets/images/logo-black.png";
 
 const Playlist = ({
   data,
@@ -33,7 +34,7 @@ const Playlist = ({
                 className="track"
               >
                 <div className={`image-container`}>
-                  <img src={item.cover_image} alt={item.name} />
+                  <img src={item.cover_image || logo} alt={item.name} />
                 </div>
                 <div className="content-container">
                   <div className="title">{item.name}</div>
