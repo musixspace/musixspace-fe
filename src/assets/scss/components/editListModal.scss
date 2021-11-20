@@ -14,8 +14,22 @@
         align-items: center;
         margin-bottom: 1em;
 
+        > .main {
+          display: flex;
+          justify-content: center;
+          align-items: flex-start;
+          flex-direction: column;
+
+          > span:nth-child(1) {
+            font-size: calc(var(--base-font-size) * 4);
+          }
+
+          > span:nth-child(2) {
+            font-size: calc(var(--base-font-size) * 2);
+          }
+        }
+
         > .title {
-          font-size: calc(var(--base-font-size) * 4);
         }
 
         > .button-container {
@@ -194,8 +208,10 @@
         padding: 10% 5% !important;
 
         > .topbar {
-          > .title {
-            font-size: calc(var(--base-font-size) * 2.5);
+          > .main {
+            > span:nth-child(1) {
+              font-size: calc(var(--base-font-size) * 2.5);
+            }
           }
 
           > .button-container {

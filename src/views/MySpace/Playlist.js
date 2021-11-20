@@ -39,6 +39,12 @@ const Playlist = ({
                 <div className="content-container">
                   <div className="title">{item.name}</div>
                 </div>
+                <a
+                  href={`https://open.spotify.com/playlist/${item.playlist_id}`}
+                  target="_blank"
+                >
+                  Follow
+                </a>
                 <button
                   className="controls"
                   onClick={() => openPlaylistModal(item)}

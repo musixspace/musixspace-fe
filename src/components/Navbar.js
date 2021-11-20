@@ -62,11 +62,11 @@ const Navbar = () => {
   }, [showLinks, openProfile]);
 
   useEffect(() => {
-    if (username) {
+    if (username || localStorage.getItem("handle")) {
       console.log("Aa gaye yaha");
-      loggedInLinks[2].path = `/${username}`;
+      loggedInLinks[2].path = `/${username || localStorage.getItem("handle")}`;
     }
-  }, [username]);
+  }, [username, location.pathname]);
 
   return (
     <nav

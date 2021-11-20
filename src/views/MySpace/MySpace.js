@@ -374,7 +374,7 @@ const MySpace = () => {
               handlePlaySong={handlePlaySong}
             />
           )}
-          {data.topTracks.tracks && data.topTracks.tracks.length > 0 && (
+          {data?.topTracks?.tracks && data.topTracks.tracks.length > 0 && (
             <TrackList
               data={data.topTracks.tracks}
               currentSong={currentSong}
@@ -385,7 +385,7 @@ const MySpace = () => {
               onRightClicked={onRightClicked}
             />
           )}
-          {data.topArtists.artists && data.topArtists.artists.length > 0 && (
+          {data?.topArtists?.artists && data.topArtists.artists.length > 0 && (
             <ArtistList
               data={data.topArtists.artists}
               currentSong={currentSong}
@@ -396,14 +396,14 @@ const MySpace = () => {
               onRightClicked={onRightClicked}
             />
           )}
-          {currentSong.audioUrl && (
+          {currentSong?.audioUrl && (
             <WebPlayer
               url={currentSong.audioUrl}
               nextPlay={handleNextPlay}
               noControls={true}
             />
           )}
-          {data.publicPlaylists && data.publicPlaylists.length > 0 && (
+          {data?.publicPlaylists && data.publicPlaylists.length > 0 && (
             <Playlist
               data={data.publicPlaylists}
               onLeftClicked={onLeftClicked}
@@ -411,8 +411,8 @@ const MySpace = () => {
               openPlaylistModal={openPlaylistModal}
             />
           )}
-          {currentSong.songId && !currentSong.audioUrl && handleNextPlay()}
-          {modal.open && (
+          {currentSong?.songId && !currentSong.audioUrl && handleNextPlay()}
+          {modal?.open && (
             <PlaylistModal
               data={modal.data}
               close={() => setModal({ ...modal, data: null, open: false })}

@@ -149,7 +149,12 @@ const PlaylistModal = ({ data, close, isEdit }) => {
         </div>
         <div className="modal edit-list-container">
           <div className="topbar">
-            <p className="title">{data.name}</p>
+            <div className="main">
+              <span>{data.name}</span>
+              <span>{`${data.songs.length} ${
+                data.songs.length > 1 ? "songs" : "song"
+              }`}</span>
+            </div>
             <div className="button-container">
               <a
                 href={`https://open.spotify.com/playlist/${data.playlist_id}`}
@@ -258,10 +263,12 @@ const PlaylistModal = ({ data, close, isEdit }) => {
               <div className="image-container">
                 <img src={currentSong.imageUrl || logo} alt="Cover Image" />
               </div>
-              <div className="song-info">
-                <div className="song-name">{currentSong.name}</div>
-                <div className="song-artists">{currentSong.artists}</div>
-              </div>
+              {currentSong.audioUrl && (
+                <div className="song-info">
+                  <div className="song-name">{currentSong.name}</div>
+                  <div className="song-artists">{currentSong.artists}</div>
+                </div>
+              )}
               {currentSong.audioUrl && (
                 <WebPlayer
                   url={currentSong.audioUrl}
