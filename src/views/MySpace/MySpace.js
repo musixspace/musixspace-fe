@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { useRecoilState } from "recoil";
+import Loading from "../../components/Loading";
 import WebPlayer from "../../components/WebPlayer";
 import { userState } from "../../recoil/userAtom";
 import { axiosInstance } from "../../util/axiosConfig";
@@ -14,6 +15,7 @@ import TrackList from "./TrackList";
 const MySpace = () => {
   const { handle } = useParams();
   const [user, setUser] = useRecoilState(userState);
+  const [loading, setLoading] = useState(false);
 
   const [data, setData] = useState({
     currentUser: null,
@@ -51,7 +53,7 @@ const MySpace = () => {
     console.log("Handle changed");
     console.log(handle);
     if (handle && handle !== "myspace") {
-      // setLoading(true);
+      setLoading(true);
       let userObj = {};
       let finalObj = {
         currentUser: null,
@@ -176,6 +178,7 @@ const MySpace = () => {
         ...userObj,
       });
       setData({ ...data, ...finalObj });
+      setLoading(false);
     }
   }, [handle]);
 
@@ -359,58 +362,64 @@ const MySpace = () => {
 
   return (
     <div className="mySpace">
-      {data.currentUser && (
-        <Intro
-          user={data.currentUser}
-          currentSong={currentSong}
-          handlePause={handlePause}
-          handlePlaySong={handlePlaySong}
-        />
-      )}
-      {data.topTracks.tracks && data.topTracks.tracks.length > 0 && (
-        <TrackList
-          data={data.topTracks.tracks}
-          currentSong={currentSong}
-          songNumber={songNumber.tracks}
-          handlePause={handlePause}
-          handleSetAndPlayTrack={handleSetAndPlayTrack}
-          onLeftClicked={onLeftClicked}
-          onRightClicked={onRightClicked}
-        />
-      )}
-      {data.topArtists.artists && data.topArtists.artists.length > 0 && (
-        <ArtistList
-          data={data.topArtists.artists}
-          currentSong={currentSong}
-          songNumber={songNumber.artists}
-          handlePause={handlePause}
-          handleSetAndPlayArtist={handleSetAndPlayArtist}
-          onLeftClicked={onLeftClicked}
-          onRightClicked={onRightClicked}
-        />
-      )}
-      {currentSong.audioUrl && (
-        <WebPlayer
-          url={currentSong.audioUrl}
-          nextPlay={handleNextPlay}
-          noControls={true}
-        />
-      )}
-      {data.publicPlaylists && data.publicPlaylists.length > 0 && (
-        <Playlist
-          data={data.publicPlaylists}
-          onLeftClicked={onLeftClicked}
-          onRightClicked={onRightClicked}
-          openPlaylistModal={openPlaylistModal}
-        />
-      )}
-      {currentSong.songId && !currentSong.audioUrl && handleNextPlay()}
-      {modal.open && (
-        <PlaylistModal
-          data={modal.data}
-          close={() => setModal({ ...modal, data: null, open: false })}
-          isEdit={false}
-        />
+      {loading ? (
+        <Loading bg="--bg-about" />
+      ) : (
+        <>
+          {data.currentUser && (
+            <Intro
+              user={data.currentUser}
+              currentSong={currentSong}
+              handlePause={handlePause}
+              handlePlaySong={handlePlaySong}
+            />
+          )}
+          {data.topTracks.tracks && data.topTracks.tracks.length > 0 && (
+            <TrackList
+              data={data.topTracks.tracks}
+              currentSong={currentSong}
+              songNumber={songNumber.tracks}
+              handlePause={handlePause}
+              handleSetAndPlayTrack={handleSetAndPlayTrack}
+              onLeftClicked={onLeftClicked}
+              onRightClicked={onRightClicked}
+            />
+          )}
+          {data.topArtists.artists && data.topArtists.artists.length > 0 && (
+            <ArtistList
+              data={data.topArtists.artists}
+              currentSong={currentSong}
+              songNumber={songNumber.artists}
+              handlePause={handlePause}
+              handleSetAndPlayArtist={handleSetAndPlayArtist}
+              onLeftClicked={onLeftClicked}
+              onRightClicked={onRightClicked}
+            />
+          )}
+          {currentSong.audioUrl && (
+            <WebPlayer
+              url={currentSong.audioUrl}
+              nextPlay={handleNextPlay}
+              noControls={true}
+            />
+          )}
+          {data.publicPlaylists && data.publicPlaylists.length > 0 && (
+            <Playlist
+              data={data.publicPlaylists}
+              onLeftClicked={onLeftClicked}
+              onRightClicked={onRightClicked}
+              openPlaylistModal={openPlaylistModal}
+            />
+          )}
+          {currentSong.songId && !currentSong.audioUrl && handleNextPlay()}
+          {modal.open && (
+            <PlaylistModal
+              data={modal.data}
+              close={() => setModal({ ...modal, data: null, open: false })}
+              isEdit={false}
+            />
+          )}
+        </>
       )}
     </div>
   );

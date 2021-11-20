@@ -4,6 +4,7 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import { loadingAtom } from "../recoil/loadingAtom";
 import { openSidebarAtom } from "../recoil/openSidebarAtom";
 import Alert from "./Alert";
+import Loading from "./Loading";
 import Navbar from "./Navbar";
 
 const themeSwitch = (str) => {
@@ -49,16 +50,7 @@ const Wrapper = (props) => {
       <Navbar />
       {sidebarOpen && <div className="dark-overlay"></div>}
       {loading ? (
-        <div
-          className="loading-div"
-          style={{ backgroundColor: `var(${themeSwitch(location.pathname)})` }}
-        >
-          <div className="loader">
-            <div></div>
-            <div></div>
-            <div></div>
-          </div>
-        </div>
+        <Loading bg={`${themeSwitch(location.pathname)}`} />
       ) : (
         props.children
       )}
