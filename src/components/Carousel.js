@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import Skeleton from "./Skeleton";
 
 const Carousel = ({ data, current }) => {
   const [images, setImages] = useState({
@@ -27,12 +28,12 @@ const Carousel = ({ data, current }) => {
   };
 
   useEffect(() => {
-    if (data.length > 0) {
+    if (data && data.length > 0) {
       getImages();
     }
   }, [data, current]);
 
-  if (data.length > 0 && images.img1 && current !== "")
+  if (data && data.length > 0 && images.img1 && current !== "")
     return (
       <div className="img-container">
         <img src={images.img1} alt="Poster" />
@@ -40,7 +41,12 @@ const Carousel = ({ data, current }) => {
         <img src={images.img3} alt="Poster" />
       </div>
     );
-  else return null;
+  else
+    return (
+      <div className="img-container">
+        <Skeleton type="text" />
+      </div>
+    );
 };
 
 export default Carousel;

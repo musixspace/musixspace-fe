@@ -130,35 +130,34 @@ const TopTracks = () => {
 
   return (
     <div className="dashboard-container">
-      {user.topTracksLong.tracks &&
-        user.topTracksLong.tracks.length > 0 &&
-        currentTrack && (
-          <div className="dashboard">
-            <div>
-              <TrackList
-                currentTrack={currentTrack}
-                tracks={user.topTracksLong.tracks}
-                changeTrack={handleTrackChange}
-              />
-              <WebPlayer
-                url={audioUrl}
-                prevPlay={handlePrevPlay}
-                nextPlay={handleNextPlay}
-                shufflePlay={handleShufflePlay}
-              />
-            </div>
-            <Carousel data={user.topTracksLong.images} current={currentTrack} />
-            <div className="heading">
-              <p>Your Top Tracks Radio</p>
-              <div>
-                <p>30 sec</p>
-                <button id="export" onClick={() => setOpenModal(true)}>
-                  Export
-                </button>
-              </div>
-            </div>
+      <div className="dashboard">
+        <div>
+          <TrackList
+            currentTrack={currentTrack}
+            tracks={user && user.topTracksLong && user.topTracksLong.tracks}
+            changeTrack={handleTrackChange}
+          />
+          <WebPlayer
+            url={audioUrl}
+            prevPlay={handlePrevPlay}
+            nextPlay={handleNextPlay}
+            shufflePlay={handleShufflePlay}
+          />
+        </div>
+        <Carousel
+          data={user && user.topTracksLong && user.topTracksLong.images}
+          current={currentTrack}
+        />
+        <div className="heading">
+          <p>Your Top Tracks Radio</p>
+          <div>
+            <p>30 sec</p>
+            <button id="export" onClick={() => setOpenModal(true)}>
+              Export
+            </button>
           </div>
-        )}
+        </div>
+      </div>
       {openModal && (
         <ExportPlaylistModal
           submitData={handleExport}

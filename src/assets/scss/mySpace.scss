@@ -1,13 +1,22 @@
+@mixin d-flex($j: center, $a: center, $d: row) {
+  display: flex;
+  justify-content: $j;
+  align-items: $a;
+  flex-direction: $d;
+}
+
 .mySpace {
   margin-top: 10vh;
   padding: 2em 6em;
   font-family: var(--f-circ-pro), sans-serif;
   color: var(--clr-pink);
 
+  .skeleton {
+    background-color: #141e3e;
+  }
+
   > .intro {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
+    @include d-flex(space-around, center, row);
 
     > .image-container {
       width: 460px;
@@ -17,15 +26,18 @@
         height: 100%;
         object-fit: cover;
       }
+
+      .skeleton {
+        height: 100%;
+      }
     }
 
     > .content-container {
       height: 100%;
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
-      flex-direction: column;
+      @include d-flex(center, flex-end, column);
       > .main {
+        @include d-flex(center, flex-end, column);
+
         > p {
           text-align: right;
           font-size: calc(var(--base-font-size) * 8);
@@ -33,9 +45,7 @@
         }
 
         > .sub {
-          display: flex;
-          justify-content: flex-end;
-          align-items: center;
+          @include d-flex(flex-end, center, row);
 
           > span {
             font-size: calc(var(--base-font-size) * 3);
@@ -44,9 +54,7 @@
 
           > .traits-container {
             font-size: calc(var(--base-font-size) * 2);
-            display: flex;
-            justify-content: space-evenly;
-            align-items: center;
+            @include d-flex(space-evenly, center, row);
 
             > .trait {
               text-transform: capitalize;
@@ -61,11 +69,22 @@
             }
           }
         }
+
+        .skeleton {
+          &:nth-child(1) {
+            width: 300px;
+          }
+
+          &:nth-child(2) {
+            width: 150px;
+          }
+        }
       }
 
       > .middle {
         margin-top: 5em;
         width: 450px;
+        @include d-flex(center, flex-end, column);
 
         > p {
           width: 100%;
@@ -90,23 +109,24 @@
             font-size: calc(var(--base-font-size) * 2.25);
           }
         }
+
+        .skeleton {
+          &:nth-child(2) {
+            width: 150px;
+          }
+        }
       }
 
       > .anthem-container {
         margin-top: 5em;
-        display: flex;
-        justify-content: flex-end;
-        align-items: center;
+        @include d-flex(flex-end, center, row);
         width: 100%;
         gap: 1.5em;
 
         > .content {
           height: 100%;
           text-align: right;
-          display: flex;
-          justify-content: center;
-          align-items: flex-end;
-          flex-direction: column;
+          @include d-flex(center, flex-end, column);
 
           > div {
             font-size: calc(var(--base-font-size) * 3);
@@ -136,6 +156,25 @@
             margin-top: 0.4em;
             color: var(--clr-dark-pink);
             font-size: calc(var(--base-font-size) * 2);
+          }
+
+          .skeleton {
+            margin-bottom: 5px;
+            &:nth-child(1) {
+              width: 100px;
+            }
+
+            &:nth-child(2) {
+              width: 150px;
+            }
+
+            &:nth-child(3) {
+              width: 100px;
+            }
+
+            &::after {
+              all: unset;
+            }
           }
         }
 
@@ -168,8 +207,14 @@
               font-size: calc(var(--base-font-size) * 2);
             }
           }
+
           &.highlight {
             border: 2px solid var(--clr-dark-pink);
+          }
+
+          .skeleton {
+            height: 100%;
+            margin: 0;
           }
         }
       }
@@ -180,16 +225,11 @@
   > .topArtists {
     margin-top: 5em;
     width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
+    @include d-flex(center, center, column);
 
     > .upper-container {
       width: 100%;
-      display: flex;
-      justify-content: flex-start;
-      align-items: center;
+      @include d-flex(flex-start, center, row);
       > .title {
         font-size: calc(var(--base-font-size) * 5);
         width: max-content;
@@ -210,9 +250,7 @@
     > .genres-container {
       width: 100%;
       margin-top: 1.5em;
-      display: flex;
-      justify-content: flex-start;
-      align-items: center;
+      @include d-flex(flex-start, center, row);
       flex-wrap: wrap;
       gap: 0.4em;
 
@@ -224,13 +262,15 @@
         border-radius: 100px;
         text-transform: capitalize;
       }
+
+      .skeleton {
+        width: 100px;
+      }
     }
 
     > .songs-container {
       margin-top: 1em;
-      display: flex;
-      justify-content: flex-start;
-      align-items: center;
+      @include d-flex(flex-start, center, row);
       width: 100%;
 
       > .prev,
@@ -267,9 +307,7 @@
           overflow: hidden;
           min-width: 254px;
           height: 254px;
-          display: flex;
-          justify-content: center;
-          align-items: center;
+          @include d-flex(center, center, row);
           position: relative;
           border-radius: 10px;
           z-index: 1;
@@ -302,12 +340,9 @@
             top: 4px;
             width: calc(100% - 8px);
             height: calc(100% - 8px);
-            background-color: rgba($color: #000000, $alpha: 0.2);
+            background-color: rgba($color: #000000, $alpha: 0.4);
 
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
+            @include d-flex(center, center, column);
             gap: 0.5em;
 
             > .title {
@@ -332,15 +367,18 @@
             width: 40px;
             height: 40px;
             border-radius: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            @include d-flex(center, center, row);
             background-color: var(--clr-white);
 
             > svg {
               font-size: calc(var(--base-font-size) * 3);
               color: var(--clr-black);
             }
+          }
+
+          .skeleton {
+            height: 100%;
+            margin: 0;
           }
         }
       }
@@ -349,7 +387,7 @@
         > .tracks-container {
           > .track {
             > .content-container {
-              background-color: rgba($color: #000000, $alpha: 0.5);
+              background-color: rgba($color: #000000, $alpha: 0.4);
             }
 
             > a {
@@ -370,15 +408,11 @@
 
     > .metadata-container {
       width: 100%;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      @include d-flex(space-between, center, row);
       margin-top: 1em;
 
       > .dots-container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
+        @include d-flex(center, center, row);
         gap: 0.2em;
 
         > .dot {
@@ -405,6 +439,11 @@
           font-size: calc(var(--base-font-size) * 3);
         }
       }
+
+      .skeleton {
+        width: 50px;
+        margin: 0;
+      }
     }
   }
 
@@ -413,10 +452,7 @@
       > .tracks-container {
         > .track {
           height: 350px;
-          display: flex;
-          justify-content: flex-start;
-          align-items: center;
-          flex-direction: column;
+          @include d-flex(flex-start, center, column);
           position: relative;
           gap: 0;
           > .image-container {
@@ -425,11 +461,18 @@
             width: 248px;
             border: 3px solid transparent;
             overflow: hidden;
+            @include d-flex(center, center, row);
 
             > img {
               width: 100%;
               height: 100%;
               object-fit: cover;
+            }
+
+            .skeleton {
+              width: 100%;
+              height: 100%;
+              margin: 0;
             }
           }
 
@@ -443,6 +486,12 @@
 
             > .title {
               font-size: calc(var(--base-font-size) * 3);
+            }
+
+            .skeleton {
+              width: 100%;
+              height: 10px;
+              margin: 0;
             }
           }
 
@@ -461,6 +510,7 @@
     > .intro {
       > .content-container {
         > .main {
+          @include d-flex(center, flex-start, column);
           > p {
             font-size: calc(var(--base-font-size) * 6);
           }
@@ -635,13 +685,16 @@
       > .image-container {
         width: 60%;
         height: auto;
+
+        .skeleton {
+          height: 500px;
+        }
       }
 
       > .content-container {
         margin-top: 2em;
         width: 100%;
-        align-items: flex-start;
-        justify-content: flex-start;
+        @include d-flex(flex-start, flex-start, column);
 
         > .main {
           width: 100%;
@@ -666,8 +719,7 @@
         > .anthem-container {
           margin-top: 1.5em;
           width: 100%;
-          justify-content: space-between;
-          flex-direction: row-reverse;
+          @include d-flex(space-between, center, row-reverse);
 
           > .image-container {
             margin-left: 0;
@@ -820,6 +872,10 @@
     > .topArtists {
       > .metadata-container {
         margin-top: -1em;
+
+        .skeleton {
+          margin-top: 10px;
+        }
       }
       > .songs-container {
         > .tracks-container {

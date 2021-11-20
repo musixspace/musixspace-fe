@@ -108,32 +108,28 @@ const TopArtists = () => {
 
   return (
     <div className="dashboard-container">
-      {user.topArtistsLong.artists &&
-        user.topArtistsLong.artists.length > 0 &&
-        currentArtist && (
-          <div className="dashboard">
-            <div>
-              <ArtistList
-                currentArtist={currentArtist}
-                artists={user.topArtistsLong.artists}
-                changeArtist={handleArtistChange}
-              />
-              <WebPlayer
-                url={audioUrl}
-                prevPlay={handlePrevPlay}
-                nextPlay={handleNextPlay}
-                shufflePlay={handleShufflePlay}
-              />
-            </div>
-            <Carousel
-              data={user.topArtistsLong.images}
-              current={currentArtist}
-            />
-            <div className="heading">
-              <p>Your Top Artists Radio</p>
-            </div>
-          </div>
-        )}
+      <div className="dashboard">
+        <div>
+          <ArtistList
+            currentArtist={currentArtist}
+            artists={user && user.topArtistsLong && user.topArtistsLong.artists}
+            changeArtist={handleArtistChange}
+          />
+          <WebPlayer
+            url={audioUrl}
+            prevPlay={handlePrevPlay}
+            nextPlay={handleNextPlay}
+            shufflePlay={handleShufflePlay}
+          />
+        </div>
+        <Carousel
+          data={user && user.topArtistsLong && user.topArtistsLong.images}
+          current={currentArtist}
+        />
+        <div className="heading">
+          <p>Your Top Artists Radio</p>
+        </div>
+      </div>
     </div>
   );
 };

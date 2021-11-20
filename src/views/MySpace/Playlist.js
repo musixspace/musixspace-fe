@@ -2,6 +2,7 @@ import React from "react";
 import { AiFillCaretRight } from "react-icons/ai";
 import { FiSkipBack, FiSkipForward } from "react-icons/fi";
 import logo from "../../assets/images/logo-black.png";
+import Skeleton from "../../components/Skeleton";
 
 const Playlist = ({
   data,
@@ -26,33 +27,38 @@ const Playlist = ({
           <FiSkipBack />
         </button>
         <div className="tracks-container">
-          {data &&
-            data.map((item, idx) => (
-              <div
-                key={item.playlist_id}
-                id={item.playlist_id}
-                className="track"
-              >
-                <div className={`image-container`}>
-                  <img src={item.cover_image || logo} alt={item.name} />
+          {!data
+            ? [1, 2, 3, 4, 5].map((item) => (
+                <div key={item} className="track">
+                  <Skeleton type="text" />
                 </div>
-                <div className="content-container">
-                  <div className="title">{item.name}</div>
+              ))
+            : data.map((item, idx) => (
+                <div
+                  key={item.playlist_id}
+                  id={item.playlist_id}
+                  className="track"
+                >
+                  <div className={`image-container`}>
+                    <img src={item.cover_image || logo} alt={item.name} />
+                  </div>
+                  <div className="content-container">
+                    <div className="title">{item.name}</div>
+                  </div>
+                  <a
+                    href={`https://open.spotify.com/playlist/${item.playlist_id}`}
+                    target="_blank"
+                  >
+                    Follow
+                  </a>
+                  <button
+                    className="controls"
+                    onClick={() => openPlaylistModal(item)}
+                  >
+                    <AiFillCaretRight />
+                  </button>
                 </div>
-                <a
-                  href={`https://open.spotify.com/playlist/${item.playlist_id}`}
-                  target="_blank"
-                >
-                  Follow
-                </a>
-                <button
-                  className="controls"
-                  onClick={() => openPlaylistModal(item)}
-                >
-                  <AiFillCaretRight />
-                </button>
-              </div>
-            ))}
+              ))}
         </div>
         <button
           className="next"

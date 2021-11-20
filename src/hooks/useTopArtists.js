@@ -1,5 +1,4 @@
 import { useRecoilState, useSetRecoilState } from "recoil";
-import { loadingAtom } from "../recoil/loadingAtom";
 import {
   topArtistsLongAtom,
   topArtistsMediumAtom,
@@ -10,14 +9,11 @@ import { axiosInstance } from "../util/axiosConfig";
 
 const useTopArtists = () => {
   const [user, setUser] = useRecoilState(userState);
-  const setLoading = useSetRecoilState(loadingAtom);
   const setTALong = useSetRecoilState(topArtistsLongAtom);
   const setTAMedium = useSetRecoilState(topArtistsMediumAtom);
   const setTAShort = useSetRecoilState(topArtistsShortAtom);
 
   const getTopArtistsLong = (handle) => {
-    setLoading(true);
-
     axiosInstance
       .get(`/topartists_long/${handle}`)
       .then((res) => {
@@ -46,8 +42,6 @@ const useTopArtists = () => {
               images: imgArr,
             });
           }
-
-          setLoading(false);
         }
       })
       .catch((err) => {
@@ -56,8 +50,6 @@ const useTopArtists = () => {
   };
 
   const getTopArtistsMedium = (handle) => {
-    setLoading(true);
-
     axiosInstance
       .post("/topartists_medium")
       .then((res) => {
@@ -86,8 +78,6 @@ const useTopArtists = () => {
               images: imgArr,
             });
           }
-
-          setLoading(false);
         }
       })
       .catch((err) => {
@@ -96,8 +86,6 @@ const useTopArtists = () => {
   };
 
   const getTopArtistsShort = (handle) => {
-    setLoading(true);
-
     axiosInstance
       .post("/topartists_short")
       .then((res) => {
@@ -126,8 +114,6 @@ const useTopArtists = () => {
               images: imgArr,
             });
           }
-
-          setLoading(false);
         }
       })
       .catch((err) => {

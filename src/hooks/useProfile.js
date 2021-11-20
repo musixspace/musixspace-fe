@@ -1,16 +1,12 @@
 import { useRecoilState, useSetRecoilState } from "recoil";
-import { loadingAtom } from "../recoil/loadingAtom";
 import { publicPlaylistsAtom, userState } from "../recoil/userAtom";
 import { axiosInstance } from "../util/axiosConfig";
 
 const useProfile = () => {
-  const setLoading = useSetRecoilState(loadingAtom);
   const [user, setUser] = useRecoilState(userState);
   const setPublicPlaylists = useSetRecoilState(publicPlaylistsAtom);
 
   const getUserProfile = (handle) => {
-    setLoading(true);
-
     axiosInstance
       .get(`/users/${handle}`)
       .then((res) => {
@@ -24,8 +20,6 @@ const useProfile = () => {
             traits: res.data.traits,
             anthem: res.data.anthem,
           });
-
-          setLoading(false);
         }
       })
       .catch((err) => {
@@ -34,8 +28,6 @@ const useProfile = () => {
   };
 
   const getUserPublicPlaylists = (username) => {
-    setLoading(true);
-
     axiosInstance
       .get(`/playlists/${username}`)
       .then((res) => {
@@ -44,7 +36,6 @@ const useProfile = () => {
             console.log(res.data);
             setPublicPlaylists(res.data);
           }
-          setLoading(false);
         }
       })
       .catch((err) => {

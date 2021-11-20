@@ -1,5 +1,4 @@
 import { useRecoilState, useSetRecoilState } from "recoil";
-import { loadingAtom } from "../recoil/loadingAtom";
 import { surpriseTracksAtom } from "../recoil/surpriseTracksAtom";
 import {
   topTracksLongAtom,
@@ -11,14 +10,12 @@ import { axiosInstance } from "../util/axiosConfig";
 
 const useTopTracks = () => {
   const [user, setUser] = useRecoilState(userState);
-  const setLoading = useSetRecoilState(loadingAtom);
   const setTTLong = useSetRecoilState(topTracksLongAtom);
   const setTTMedium = useSetRecoilState(topTracksMediumAtom);
   const setTTShort = useSetRecoilState(topTracksShortAtom);
   const setRecommendations = useSetRecoilState(surpriseTracksAtom);
 
   const getTopTracksLong = (handle) => {
-    setLoading(true);
     axiosInstance
       .get(`toptracks_long/${handle}`)
       .then((res) => {
@@ -42,15 +39,12 @@ const useTopTracks = () => {
               images: imgArr,
             });
           }
-
-          setLoading(false);
         }
       })
       .catch((err) => console.log(err));
   };
 
   const getTopTracksMedium = (handle) => {
-    setLoading(true);
     axiosInstance
       .post("toptracks_medium")
       .then((res) => {
@@ -74,16 +68,12 @@ const useTopTracks = () => {
               images: imgArr,
             });
           }
-
-          setLoading(false);
         }
       })
       .catch((err) => console.log(err));
   };
 
   const getTopTracksShort = (handle) => {
-    setLoading(true);
-
     axiosInstance
       .post("toptracks_short")
       .then((res) => {
@@ -107,16 +97,12 @@ const useTopTracks = () => {
               images: imgArr,
             });
           }
-
-          setLoading(false);
         }
       })
       .catch((err) => console.log(err));
   };
 
   const getRecommendations = (handle) => {
-    setLoading(true);
-
     axiosInstance
       .post("/recommendation")
       .then((res) => {
@@ -139,8 +125,6 @@ const useTopTracks = () => {
             images: imgArr,
           });
         }
-
-        setLoading(false);
       })
       .catch((err) => {
         console.log(err);

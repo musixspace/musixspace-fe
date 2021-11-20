@@ -1,0 +1,30 @@
+.skeleton {
+  width: 100%;
+  background-color: #ddd;
+  height: 15px;
+  border-radius: 5px;
+  margin: 5px 0;
+  position: relative;
+  overflow: hidden;
+
+  &::after {
+    position: absolute;
+    content: "";
+    width: 50%;
+    height: 100%;
+    background-color: rgba($color: #000000, $alpha: 0.05);
+    top: 0;
+    left: 0;
+    animation: shimmer 1200ms infinite;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    transform: skewX(-20deg) translateX(-200%);
+  }
+
+  100% {
+    transform: skewX(-20deg) translateX(300%);
+  }
+}

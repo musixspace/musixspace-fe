@@ -5,6 +5,10 @@
   height: 580px;
   margin-left: 8em;
 
+  .skeleton {
+    height: 100%;
+  }
+
   img {
     position: absolute;
     width: 100%;
@@ -55,6 +59,10 @@
 
     > img:not(:first-child) {
       display: none;
+    }
+
+    .skeleton {
+      height: 350px;
     }
   }
 }

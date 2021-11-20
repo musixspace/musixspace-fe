@@ -129,37 +129,33 @@ const SurpriseMe = () => {
 
   return (
     <div className="dashboard-container">
-      {user.surpriseTracks.tracks &&
-        user.surpriseTracks.tracks.length > 0 &&
-        currentTrack && (
-          <div className="dashboard">
-            <div>
-              <TrackList
-                currentTrack={currentTrack}
-                tracks={user.surpriseTracks.tracks}
-                changeTrack={handleTrackChange}
-              />
-              <WebPlayer
-                url={audioUrl}
-                prevPlay={handlePrevPlay}
-                nextPlay={handleNextPlay}
-                shufflePlay={handleShufflePlay}
-              />
-            </div>
-            <Carousel
-              data={user.surpriseTracks.images}
-              current={currentTrack}
-            />
-            <div className="heading">
-              <p>Surprise Tracks Radio</p>
-              <div>
-                <button id="export" onClick={(e) => setOpenModal(true)}>
-                  Export
-                </button>
-              </div>
-            </div>
+      <div className="dashboard">
+        <div>
+          <TrackList
+            currentTrack={currentTrack}
+            tracks={user && user.surpriseTracks && user.surpriseTracks.tracks}
+            changeTrack={handleTrackChange}
+          />
+          <WebPlayer
+            url={audioUrl}
+            prevPlay={handlePrevPlay}
+            nextPlay={handleNextPlay}
+            shufflePlay={handleShufflePlay}
+          />
+        </div>
+        <Carousel
+          data={user && user.surpriseTracks && user.surpriseTracks.images}
+          current={currentTrack}
+        />
+        <div className="heading">
+          <p>Surprise Tracks Radio</p>
+          <div>
+            <button id="export" onClick={(e) => setOpenModal(true)}>
+              Export
+            </button>
           </div>
-        )}
+        </div>
+      </div>
       {openModal && (
         <ExportPlaylistModal
           submitData={handleExport}

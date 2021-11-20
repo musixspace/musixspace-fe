@@ -4,7 +4,10 @@
   margin-top: 10vh;
   overflow: hidden;
   color: var(--clr-gray);
-  // border: 1px solid red;
+
+  .skeleton {
+    background-color: #312131;
+  }
 
   .dashboard {
     display: grid;
@@ -63,11 +66,19 @@
             text-transform: capitalize;
             font-size: calc(var(--base-font-size) * 6);
           }
+
+          .skeleton {
+            height: 50px;
+          }
         }
 
         .inner {
           text-align: right;
           .content {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            flex-direction: column;
             p > span {
               text-transform: capitalize;
             }
@@ -90,6 +101,30 @@
             p:nth-child(4) {
               font-size: calc(var(--base-font-size) * 3);
               color: var(--clr-white);
+            }
+
+            .skeleton {
+              &:nth-child(1) {
+                width: 150px;
+                height: 15px;
+              }
+
+              &:nth-child(2) {
+                width: 250px;
+                height: 25px;
+              }
+
+              &:nth-child(3) {
+                width: 200px;
+                height: 20px;
+              }
+
+              &:nth-child(4) {
+                width: 100px;
+                height: 10px;
+              }
+
+              margin-top: 10px;
             }
           }
         }
@@ -150,6 +185,7 @@
 
             .content {
               margin-top: 1em;
+              align-items: flex-start;
               p:first-child {
                 font-size: calc(var(--base-font-size) * 2.25);
               }
