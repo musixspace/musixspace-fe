@@ -1,20 +1,16 @@
+@import "./mixins/d-flex.scss";
+
 .readyToRock {
   background: url("../images/bgs/lonewolf.png") no-repeat;
   background-size: cover;
   width: 100%;
   height: 100vh;
   padding: 0 5em;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
+  @include d-flex(center, center, column);
 
   .container {
     padding-top: 5em;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    @include d-flex(flex-start, center, column);
     .title {
       font-family: var(--f-circ-spotify);
       font-size: calc(var(--base-font-size) * 7);
@@ -72,9 +68,7 @@
 
         > li {
           width: 100%;
-          display: flex;
-          justify-content: flex-start;
-          align-items: center;
+          @include d-flex(flex-start center, row);
           gap: 1em;
           padding: 0.4em 1em;
           font-size: calc(var(--base-font-size) * 2.5);
@@ -110,9 +104,7 @@
     .button-div {
       width: 620px;
       margin-top: 2em;
-      display: flex;
-      justify-content: flex-end;
-      align-items: center;
+      @include d-flex(flex-end, center, row);
 
       button {
         text-transform: uppercase;
@@ -142,9 +134,7 @@
 
       .input-fields {
         width: 100%;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
+        @include d-flex(flex-start, center, column);
 
         > div {
           width: 80%;

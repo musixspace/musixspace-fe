@@ -1,18 +1,15 @@
+@import "./mixins/d-flex.scss";
+
 .home {
   height: 90vh;
-  display: flex;
   padding: 1em 6em;
   margin-top: 10vh;
-  justify-content: space-between;
-  align-items: center;
+  @include d-flex(space-between, center, row);
 
   .content {
     height: 75vh;
     max-width: 45ch;
-    display: flex;
-    justify-content: space-evenly;
-    align-items: flex-start;
-    flex-direction: column;
+    @include d-flex(space-evenly, flex-start, column);
 
     & p:first-child {
       font-size: calc(var(--base-font-size) * 8);
@@ -37,15 +34,10 @@
       background-color: var(--clr-black);
       color: var(--bg-home);
       transition: all 250ms ease-in-out;
-
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      @include d-flex(space-between, center, row);
 
       > span:first-child {
-        display: flex;
-        justify-content: center;
-        align-items: center;
+        @include d-flex(center, center, row);
       }
 
       > span:nth-child(2) {

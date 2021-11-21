@@ -1,3 +1,5 @@
+@import "./mixins/d-flex.scss";
+
 .about {
   color: var(--clr-pink);
   padding: 1em 6em;
@@ -9,9 +11,7 @@
     scroll-snap-align: start;
     padding-top: 2em;
     height: 100vh;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    @include d-flex(space-between, center, row);
 
     .content {
       width: 30ch;
@@ -29,9 +29,7 @@
 
     .person-img {
       margin-left: 2em;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      @include d-flex(center, center, row);
       gap: 2em;
 
       > p {

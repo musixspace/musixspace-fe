@@ -1,9 +1,4 @@
-@mixin d-flex($j: center, $a: center, $d: row) {
-  display: flex;
-  justify-content: $j;
-  align-items: $a;
-  flex-direction: $d;
-}
+@import "./mixins/d-flex.scss";
 
 .mySpace {
   margin-top: 10vh;
@@ -687,7 +682,7 @@
         height: auto;
 
         .skeleton {
-          height: 500px;
+          height: 400px;
         }
       }
 

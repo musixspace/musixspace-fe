@@ -1,3 +1,5 @@
+@import "../mixins/d-flex.scss";
+
 .tracks-container {
   height: 75vh;
   overflow-y: scroll;
@@ -26,9 +28,7 @@
   }
 
   .track {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
+    @include d-flex(space-between, flex-end, row);
     cursor: pointer;
     gap: 1em;
     padding: 0 1em 1em 0;

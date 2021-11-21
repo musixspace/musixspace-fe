@@ -1,14 +1,12 @@
+@import "./mixins/d-flex.scss";
+
 .discover-container {
   margin-top: 10vh;
   height: 90vh;
   padding: 2em 6em;
   font-family: var(--f-circ-pro), sans-serif;
   color: var(--clr-white);
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
+  @include d-flex(center, center, column);
 
   .searchbar {
     width: 100%;
@@ -24,9 +22,7 @@
       width: 30%;
       background-color: var(--clr-white);
       transition: all 250ms ease-in-out;
-      display: flex;
-      justify-content: flex-end;
-      align-items: center;
+      @include d-flex(flex-end, center, row);
 
       > svg {
         color: var(--clr-black);
@@ -64,9 +60,7 @@
 
     .prev,
     .next {
-      display: flex;
-      justify-content: flex-start;
-      align-items: center;
+      @include d-flex(flex-start, center, row);
       font-size: 2rem;
 
       svg {
@@ -86,10 +80,7 @@
       border-radius: 50px;
       overflow: hidden;
       transform: scale(0.9);
-
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      @include d-flex(center, center, row);
 
       .image-container {
         width: 50%;
@@ -137,10 +128,7 @@
         height: 100%;
         background-color: var(--clr-maroon);
         padding: 3em 4em;
-        display: flex;
-        justify-content: space-evenly;
-        align-items: flex-start;
-        flex-direction: column;
+        @include d-flex(space-evenly, flex-start, column);
 
         .main-content {
           .name {
@@ -179,9 +167,7 @@
 
             .anthem-content {
               margin-top: 1em;
-              display: flex;
-              justify-content: flex-start;
-              align-items: center;
+              @include d-flex(flex-start, center, row);
               gap: 1em;
 
               .anthem-image {
@@ -222,9 +208,7 @@
 
               .artist {
                 background-color: var(--clr-black);
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
+                @include d-flex(space-between, center, row);
                 gap: 1em;
                 border-radius: 100px;
                 padding-right: 1em;
@@ -421,10 +405,7 @@
 
     .discover {
       margin-top: 1em;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
+      @include d-flex(center, center, column);
       gap: 0;
 
       .next,
@@ -445,7 +426,7 @@
       .user {
         transform: scale(1);
         height: 100%;
-        border-radius: unset;
+        border-radius: 20px;
 
         .image-container {
           .overlap {

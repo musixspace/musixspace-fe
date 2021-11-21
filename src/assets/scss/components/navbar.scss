@@ -1,8 +1,8 @@
+@import "../mixins/d-flex.scss";
+
 nav {
   width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  @include d-flex(space-between, center, row);
   padding: 1.5em 6em;
   position: fixed;
   z-index: 10;
@@ -227,9 +227,7 @@ nav {
 @media (max-width: 776px) {
   nav {
     padding: 1em 1.5em;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    @include d-flex(space-between, center, row);
 
     .nav-title {
       font-size: calc(var(--base-font-size) * 3);
@@ -300,13 +298,10 @@ nav {
       }
 
       .mobile-top {
-        display: block;
         align-self: flex-start;
         width: 70%;
         height: 10vh;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
+        @include d-flex(space-between, center, row);
         padding: 0 1.5em;
         border-bottom: 2px solid var(--clr-white);
 

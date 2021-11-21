@@ -1,3 +1,5 @@
+@import "../mixins/d-flex.scss";
+
 .playlist-modal-wrapper {
   background-color: transparent;
   backdrop-filter: blur(5px);
@@ -9,16 +11,11 @@
       border: 3px solid var(--clr-white-2);
 
       > .topbar {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
+        @include d-flex(space-between, center, row);
         margin-bottom: 1em;
 
         > .main {
-          display: flex;
-          justify-content: center;
-          align-items: flex-start;
-          flex-direction: column;
+          @include d-flex(center, flex-start, column);
 
           > span:nth-child(1) {
             font-size: calc(var(--base-font-size) * 4);
@@ -46,9 +43,7 @@
       }
 
       > .main-content {
-        display: flex;
-        justify-content: center;
-        align-items: center;
+        @include d-flex(center, center, row);
         flex-wrap: wrap;
         gap: 1em;
         max-height: 70vh;
@@ -62,10 +57,7 @@
 
         > .image-controls {
           flex: 1 1 45%;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          flex-direction: column;
+          @include d-flex(center, center, column);
 
           > .image-container {
             width: 250px;
@@ -121,17 +113,12 @@
           }
 
           scrollbar-width: none;
-
-          display: flex;
-          align-items: center;
-          flex-direction: column;
+          @include d-flex(flex-start, center, column);
           gap: 0.2em;
 
           > .track {
             width: 100%;
-            display: flex;
-            justify-content: flex-start;
-            align-items: center;
+            @include d-flex(flex-start, center, row);
             gap: 0.4em;
             padding: 0.2em 0;
             border-bottom: 2px solid var(--clr-white-2);
@@ -139,16 +126,11 @@
 
             > .content-container {
               width: 100%;
-              display: flex;
-              justify-content: space-between;
-              align-items: center;
+              @include d-flex(space-between, center, row);
               gap: 0.2em;
 
               > .main {
-                display: flex;
-                justify-content: center;
-                align-items: flex-start;
-                flex-direction: column;
+                @include d-flex(center, flex-start, column);
                 > .title {
                   font-family: var(--f-circ-spotify);
                   font-size: calc(var(--base-font-size) * 3);
@@ -163,10 +145,7 @@
               }
 
               > .num {
-                display: flex;
-                justify-content: space-evenly;
-                align-items: center;
-                flex-direction: column;
+                @include d-flex(space-evenly, center, column);
                 gap: 0.2em;
                 > span {
                   font-size: calc(var(--base-font-size) * 3);

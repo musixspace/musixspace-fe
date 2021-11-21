@@ -18,13 +18,7 @@ const TrackList = ({
   return (
     <div className="topTracks">
       <div className="upper-container">
-        {data ? (
-          <div className="title">
-            <Skeleton type="text" />
-          </div>
-        ) : (
-          <div className="title">Top Tracks</div>
-        )}
+        <div className="title">Top Tracks</div>
       </div>
       <div className="songs-container">
         {data && (
