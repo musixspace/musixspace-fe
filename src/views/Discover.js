@@ -7,6 +7,7 @@ import useDebounceCallback from "../hooks/useDebounce";
 import { axiosInstance } from "../util/axiosConfig";
 import WebPlayer from "../components/WebPlayer";
 import { useHistory } from "react-router-dom";
+import { setMediaSession } from "../util/functions";
 
 // const handleTouchStart = (e) => {
 //   console.log("Touch Start");
@@ -55,6 +56,18 @@ const Discover = () => {
       setUserSearchArray([]);
     }
   }, [search]);
+
+  useEffect(() => {
+    if (audioUrl) {
+      setMediaSession(
+        user.anthem.name,
+        user.anthem.artists.map((i) => i.name).join(", "),
+        user.anthem.image_url,
+        null,
+        null
+      );
+    }
+  }, [audioUrl]);
 
   const handleSearch = (e) => {
     setSearch(e.target.value);
@@ -176,7 +189,7 @@ const Discover = () => {
                     <div className="anthem-content">
                       <div className="anthem-image">
                         <img
-                          src={user.anthem && user.anthem.image_url}
+                          src={(user.anthem && user.anthem.image_url) || logo}
                           alt={user.anthem && user.anthem.name}
                         />
                         {user.anthem && user.anthem.preview_url && (
@@ -212,7 +225,10 @@ const Discover = () => {
                         user.common_artists.slice(0, 4).map((item) => (
                           <div key={item.name} className="artist">
                             <div>
-                              <img src={item.image_url} alt={item.name} />
+                              <img
+                                src={item.image_url || logo}
+                                alt={item.name}
+                              />
                             </div>
                             <span>{item.name}</span>
                           </div>
