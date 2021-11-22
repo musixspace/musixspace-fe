@@ -152,7 +152,11 @@ const PlaylistModal = ({ data, close, isEdit }) => {
             <div className="main">
               <span>{data.name}</span>
               <span>{`${data.songs.length} ${
-                data.songs.length > 1 ? "songs" : "song"
+                data.songs.length > 1
+                  ? `${data.songs.length} songs`
+                  : data.songs.length === 0
+                  ? "No song"
+                  : "1 song"
               }`}</span>
             </div>
             <div className="button-container">
