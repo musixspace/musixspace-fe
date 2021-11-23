@@ -34,6 +34,16 @@ const App = () => {
     ) {
       window.location = window.location.origin + "/insights";
     }
+
+    const viewport = document.querySelector("meta[name=viewport]");
+    viewport.setAttribute(
+      "content",
+      "height=" +
+        window.innerHeight +
+        "px, width=" +
+        window.innerWidth +
+        "px, initial-scale=1.0"
+    );
   }, []);
 
   return (
