@@ -58,7 +58,7 @@ const ReadyToRock = () => {
     axiosInstance
       .post("/newstar", payload)
       .then((res) => {
-        localStorage.setItem("hanlde", data.username);
+        localStorage.setItem("handle", data.username);
         history.push("/rolling");
       })
       .catch((err) => {
