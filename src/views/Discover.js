@@ -195,7 +195,11 @@ const Discover = () => {
                         {user.anthem && user.anthem.preview_url && (
                           <button
                             className="controls"
-                            onClick={() => setAudioUrl(user.anthem.preview_url)}
+                            onClick={() =>
+                              audioUrl
+                                ? setAudioUrl(null)
+                                : setAudioUrl(user.anthem.preview_url)
+                            }
                           >
                             {audioUrl ? (
                               <AiOutlinePause />

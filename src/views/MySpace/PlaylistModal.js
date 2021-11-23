@@ -46,7 +46,7 @@ const PlaylistModal = ({ data, close, isEdit }) => {
         children = container.querySelector(
           `.track:nth-child(${index})`
         ).offsetTop;
-        container.scrollTo({ top: children - 65, behavior: "smooth" });
+        container.scrollTo({ top: children - 100, behavior: "smooth" });
       } else {
         container.scrollTo({ top: 0, behavior: "smooth" });
       }
@@ -151,7 +151,7 @@ const PlaylistModal = ({ data, close, isEdit }) => {
           <div className="topbar">
             <div className="main">
               <span>{data.name}</span>
-              <span>{`${data.songs.length} ${
+              <span>{`${
                 data.songs.length > 1
                   ? `${data.songs.length} songs`
                   : data.songs.length === 0

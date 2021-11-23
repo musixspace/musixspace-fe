@@ -28,6 +28,11 @@ const App = () => {
     ) {
       console.log("Entered here 2");
       window.location = window.location.origin + "/insights";
+    } else if (
+      window.location.pathname === "/" &&
+      localStorage.getItem("accessToken")
+    ) {
+      window.location = window.location.origin + "/insights";
     }
   }, []);
 
