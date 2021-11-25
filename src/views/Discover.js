@@ -9,50 +9,23 @@ import WebPlayer from "../components/WebPlayer";
 import { useHistory } from "react-router-dom";
 import { setMediaSession } from "../util/functions";
 
-// const handleTouchStart = (e) => {
-//   console.log("Touch Start");
-//   console.log(e);
-// };
-
-// const handleTouchMove = (e) => {
-//   console.log("Touch Move");
-//   console.log(e);
-// };
-
-// const handleTouchEnd = (e) => {
-//   console.log("Touch end");
-//   console.log(e);
-// };
-
 const Discover = () => {
   const history = useHistory();
   const [search, setSearch] = useState("");
-  const [current, setCurrent] = useState(0);
   const [user, setUser] = useState(null);
+  const [currentUserNumber, setCurrentUserNumber] = useState(0);
 
   const [userSearchArray, setUserSearchArray] = useState([]);
   const [audioUrl, setAudioUrl] = useState(null);
 
-  const searchUserAPICall = useDebounceCallback((value) => {
-    axiosInstance
-      .get(`/discover_search/${value}`)
-      .then((res) => {
-        setUserSearchArray(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  });
-
   useEffect(() => {
-    handleSelectUser(localStorage.getItem("handle"));
-  }, []);
+    searchAllUsersAPICall();
+  }, [currentUserNumber]);
 
   useEffect(() => {
     if (search) {
       searchUserAPICall(search);
     } else {
-      console.log("Array reset");
       setUserSearchArray([]);
     }
   }, [search]);
@@ -73,6 +46,37 @@ const Discover = () => {
     setSearch(e.target.value);
   };
 
+  const searchAllUsersAPICall = () => {
+    axiosInstance
+      .get(
+        `/discover_all/${currentUserNumber}/${localStorage.getItem("handle")}`
+      )
+      .then((res) => {
+        const payload = {
+          ...res.data[0],
+          firstname: res.data[0].display_name.split(" ")[0],
+          total:
+            res.data[0].common_artists.length +
+            res.data[0].common_tracks.length,
+        };
+        setUser({ ...payload });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const searchUserAPICall = useDebounceCallback((value) => {
+    axiosInstance
+      .get(`/discover_search/${value}`)
+      .then((res) => {
+        setUserSearchArray(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  });
+
   const handleSelectUser = (username) => {
     axiosInstance
       .get(`/discover_detail/${username}/${localStorage.getItem("handle")}`)
@@ -85,7 +89,6 @@ const Discover = () => {
             res.data[0].common_artists.length +
             res.data[0].common_tracks.length,
         };
-        console.log(payload);
         setUser({ ...payload });
       })
       .catch((err) => {
@@ -98,19 +101,12 @@ const Discover = () => {
   };
 
   const handlePrevUser = () => {
-    if (current === 0) {
-      setCurrent(user.length - 1);
-    } else {
-      setCurrent((prev) => prev - 1);
-    }
+    console.log("Hello");
+    setCurrentUserNumber((prev) => prev - 1);
   };
 
   const handleNextUser = () => {
-    if (current === user.length - 1) {
-      setCurrent(0);
-    } else {
-      setCurrent((prev) => prev + 1);
-    }
+    setCurrentUserNumber((prev) => prev + 1);
   };
 
   return (

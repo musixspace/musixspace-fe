@@ -1,9 +1,25 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { AiFillCaretRight, AiOutlinePause } from "react-icons/ai";
 import logo from "../../assets/images/logo-black.png";
 import Skeleton from "../../components/Skeleton";
 
-const Intro = ({ user, currentSong, handlePause, handlePlaySong }) => {
+const Intro = ({ user, currentSong, handlePause, handlePlaySong, edit }) => {
+  const [store, setStore] = useState({
+    displayName: "",
+    imageUrl: "",
+    username: "",
+  });
+
+  useEffect(() => {
+    if (user && user.display_name) {
+      setStore({
+        displayName: user.display_name,
+        imageUrl: user.image_url || logo,
+        username: user.username,
+      });
+    }
+  }, [user]);
+
   return (
     <div className="intro">
       <div className="image-container">
@@ -20,7 +36,19 @@ const Intro = ({ user, currentSong, handlePause, handlePlaySong }) => {
         <div className="main">
           {user && user.display_name ? (
             <>
-              <p>{user.display_name}</p>
+              <p>
+                {edit ? (
+                  <input
+                    value={store.displayName}
+                    onChange={(e) =>
+                      setStore({ ...store, displayName: e.target.value })
+                    }
+                    type="text"
+                  />
+                ) : (
+                  user.display_name
+                )}
+              </p>
               <div className="sub">
                 <div className="traits-container">
                   {user.traits &&
@@ -44,9 +72,11 @@ const Intro = ({ user, currentSong, handlePause, handlePlaySong }) => {
           {user && user.display_name ? (
             <>
               <p>{user.username}</p>
-              <div className="button-container">
-                <button>Match</button>
-              </div>
+              {user.username !== localStorage.getItem("handle") && (
+                <div className="button-container">
+                  <button>Match</button>
+                </div>
+              )}
             </>
           ) : (
             <>

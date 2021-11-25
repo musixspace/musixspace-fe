@@ -5,9 +5,45 @@
   padding: 2em 6em;
   font-family: var(--f-circ-pro), sans-serif;
   color: var(--clr-pink);
+  position: relative;
 
   .skeleton {
     background-color: #141e3e;
+  }
+
+  .floating-buttons {
+    position: fixed;
+    bottom: 2em;
+    right: 6em;
+    z-index: 100;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1em;
+
+    > button {
+      background-color: var(--clr-dark-pink);
+      width: 45px;
+      height: 45px;
+      border-radius: 100%;
+
+      > svg {
+        font-size: calc(var(--base-font-size) * 3);
+        color: var(--clr-white);
+      }
+    }
+  }
+
+  input {
+    width: auto;
+    outline: none;
+    border: none;
+    color: inherit;
+    font-size: inherit;
+    font-family: inherit;
+    border-bottom: 4px solid var(--clr-dark-pink);
+    background-color: transparent;
   }
 
   > .intro {
@@ -37,6 +73,13 @@
           text-align: right;
           font-size: calc(var(--base-font-size) * 8);
           font-family: var(--f-circ-spotify), sans-serif;
+
+          > input {
+            font-family: var(--f-circ-spotify), sans-serif;
+            text-align: right;
+            max-width: 450px;
+            height: 65px;
+          }
         }
 
         > .sub {
@@ -240,6 +283,11 @@
           background-color: var(--clr-dark-pink);
         }
       }
+
+      > input {
+        font-size: calc(var(--base-font-size) * 5);
+        width: 12ch;
+      }
     }
 
     > .genres-container {
@@ -330,6 +378,7 @@
             all: unset;
 
             position: absolute;
+            overflow: hidden;
             z-index: 10;
             left: 4px;
             top: 4px;
@@ -566,6 +615,10 @@
         > .title {
           font-size: calc(var(--base-font-size) * 4);
         }
+
+        > input {
+          font-size: calc(var(--base-font-size) * 4);
+        }
       }
 
       > .songs-container {
@@ -696,6 +749,11 @@
 
           > p {
             text-align: left;
+
+            > input {
+              text-align: left;
+              width: 100%;
+            }
           }
         }
 
@@ -728,6 +786,22 @@
 @media (max-width: 776px) {
   .mySpace {
     padding: 1em 1.5em;
+
+    .floating-buttons {
+      bottom: 1.5em;
+      right: 1.5em;
+      gap: 0.5em;
+
+      > button {
+        width: 40px;
+        height: 40px;
+
+        > svg {
+          font-size: calc(var(--base-font-size) * 2.5);
+        }
+      }
+    }
+
     > .intro {
       position: relative;
       > .image-container {
@@ -745,6 +819,11 @@
           > p {
             font-size: calc(var(--base-font-size) * 3.5);
             color: var(--clr-white);
+
+            > input {
+              height: 35px;
+              margin-bottom: 0.2em;
+            }
           }
 
           > .sub {
@@ -813,6 +892,10 @@
       margin-top: 2em;
       > .upper-container {
         > .title {
+          font-size: calc(var(--base-font-size) * 2.75);
+        }
+
+        > input {
           font-size: calc(var(--base-font-size) * 2.75);
         }
       }

@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
+import { IoMdClose } from "react-icons/io";
+import { MdEdit, MdSave } from "react-icons/md";
 import { useParams } from "react-router";
 import { useRecoilState } from "recoil";
-import Loading from "../../components/Loading";
 import WebPlayer from "../../components/WebPlayer";
 import { userState } from "../../recoil/userAtom";
 import { axiosInstance } from "../../util/axiosConfig";
@@ -334,14 +335,6 @@ const MySpace = () => {
     });
   };
 
-  const handleEditClick = () => {
-    if (editMode) {
-      setEditMode(false);
-    } else {
-      setEditMode(true);
-    }
-  };
-
   const openPlaylistModal = (item) => {
     if (currentSong.audioUrl) {
       handlePause();
@@ -358,6 +351,7 @@ const MySpace = () => {
       <Intro
         user={data.currentUser}
         currentSong={currentSong}
+        edit={editMode}
         handlePause={handlePause}
         handlePlaySong={handlePlaySong}
       />
@@ -369,6 +363,7 @@ const MySpace = () => {
         handleSetAndPlayTrack={handleSetAndPlayTrack}
         onLeftClicked={onLeftClicked}
         onRightClicked={onRightClicked}
+        edit={editMode}
       />
       <ArtistList
         data={data && data.topArtists && data.topArtists.artists}
@@ -378,6 +373,7 @@ const MySpace = () => {
         handleSetAndPlayArtist={handleSetAndPlayArtist}
         onLeftClicked={onLeftClicked}
         onRightClicked={onRightClicked}
+        edit={editMode}
       />
       {currentSong.audioUrl && (
         <WebPlayer
@@ -399,6 +395,23 @@ const MySpace = () => {
           close={() => setModal({ ...modal, data: null, open: false })}
           isEdit={false}
         />
+      )}
+      {!editMode && handle === localStorage.getItem("handle") && (
+        <div className="floating-buttons">
+          <button onClick={() => setEditMode(true)}>
+            <MdEdit />
+          </button>
+        </div>
+      )}
+      {editMode && (
+        <div className="floating-buttons">
+          <button onClick={() => setEditMode(false)}>
+            <IoMdClose />
+          </button>
+          <button onClick={() => {}}>
+            <MdSave />
+          </button>
+        </div>
       )}
     </div>
   );

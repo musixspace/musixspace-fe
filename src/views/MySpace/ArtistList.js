@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { AiFillCaretRight, AiOutlinePause } from "react-icons/ai";
 import { FiSkipBack, FiSkipForward } from "react-icons/fi";
+import { MdAdd, MdDelete } from "react-icons/md";
 import logo from "../../assets/images/logo-black.png";
 import Skeleton from "../../components/Skeleton";
 import { paddedNumbers } from "../../util/functions";
@@ -13,11 +15,49 @@ const ArtistList = ({
   onRightClicked,
   handlePause,
   handleSetAndPlayArtist,
+  edit,
 }) => {
+  const [name, setName] = useState("");
+  const [artists, setArtists] = useState(null);
+
+  useEffect(() => {
+    if (edit) {
+      setName("Top Artists");
+      setArtists(data);
+    }
+  }, [edit]);
+
+  const onDragEnd = (result) => {
+    const { destination, source } = result;
+
+    if (!destination) return;
+    if (destination.index === source.index) return;
+
+    const sourceTrack = artists[source.index];
+
+    const newArtists = [...artists];
+    newArtists.splice(source.index, 1);
+    newArtists.splice(destination.index, 0, sourceTrack);
+    setArtists(newArtists);
+  };
+
+  const onDeleteArtist = (artistId) => {
+    const newArtists = artists.filter((item) => item.artist_id !== artistId);
+    setArtists(newArtists);
+  };
+
   return (
     <div className="topArtists">
       <div className="upper-container">
-        <div className="title">Top Artists</div>
+        {edit ? (
+          <input
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+        ) : (
+          <p className="title">Top Artists</p>
+        )}
       </div>
       <div className="genres-container">
         {!data ? (
@@ -27,6 +67,7 @@ const ArtistList = ({
             <Skeleton type="text" />
           </>
         ) : (
+          !edit &&
           data &&
           currentSong.genre &&
           currentSong.genre.length > 0 &&
@@ -46,49 +87,111 @@ const ArtistList = ({
         >
           <FiSkipBack />
         </button>
-        <div className="tracks-container">
-          {!data
-            ? [1, 2, 3, 4, 5].map((item) => (
-                <div key={item} className="track">
-                  <div className="image-container">
-                    <Skeleton type="circle" />
-                  </div>
-                  <div className="content-container">
-                    <Skeleton type="text" />
-                  </div>
-                </div>
-              ))
-            : data.map((item, idx) => (
-                <div key={idx} id={item.artist_id} className="track">
-                  <div
-                    className={`image-container ${
-                      item.artist_id === currentSong.songId ? "selected" : ""
-                    }`}
-                  >
-                    <img src={item.image_url || logo} alt={item.name} />
-                  </div>
-                  <div className="content-container">
-                    <div className="title">{item.name}</div>
-                  </div>
-                  {item.toptrack && item.toptrack.preview_url && (
-                    <button
-                      className="controls"
-                      onClick={() =>
-                        item.artist_id === currentSong.songId
-                          ? handlePause()
-                          : handleSetAndPlayArtist(idx + 1, item)
-                      }
-                    >
-                      {item.artist_id === currentSong.songId ? (
-                        <AiOutlinePause />
-                      ) : (
-                        <AiFillCaretRight />
-                      )}
-                    </button>
+        {edit ? (
+          <DragDropContext onDragEnd={onDragEnd}>
+            <Droppable droppableId="edit-list-droppable" direction="horizontal">
+              {(provided) => (
+                <div
+                  className="tracks-container"
+                  ref={provided.innerRef}
+                  {...provided.droppableProps}
+                >
+                  {artists && (
+                    <>
+                      <div className="track">
+                        <div className="image-container">
+                          <img src={logo} alt="Musixspace Logo" />
+                        </div>
+                        <div className="content-container">
+                          <div className="title">Add New Artist</div>
+                        </div>
+                        <button className="controls" onClick={() => {}}>
+                          <MdAdd />
+                        </button>
+                      </div>
+                      {artists.map((item, idx) => (
+                        <Draggable
+                          key={item.artist_id}
+                          draggableId={item.artist_id}
+                          index={idx}
+                        >
+                          {(provided) => (
+                            <div
+                              className="track"
+                              ref={provided.innerRef}
+                              {...provided.dragHandleProps}
+                              {...provided.draggableProps}
+                            >
+                              <div className="image-container">
+                                <img
+                                  src={item.image_url || logo}
+                                  alt={item.name}
+                                />
+                              </div>
+                              <div className="content-container">
+                                <div className="title">{item.name}</div>
+                              </div>
+                              <button
+                                className="controls"
+                                onClick={() => onDeleteArtist(item.artist_id)}
+                              >
+                                <MdDelete />
+                              </button>
+                            </div>
+                          )}
+                        </Draggable>
+                      ))}
+                    </>
                   )}
                 </div>
-              ))}
-        </div>
+              )}
+            </Droppable>
+          </DragDropContext>
+        ) : (
+          <div className="tracks-container">
+            {!data
+              ? [1, 2, 3, 4, 5].map((item) => (
+                  <div key={item} className="track">
+                    <div className="image-container">
+                      <Skeleton type="circle" />
+                    </div>
+                    <div className="content-container">
+                      <Skeleton type="text" />
+                    </div>
+                  </div>
+                ))
+              : data.map((item, idx) => (
+                  <div key={idx} id={item.artist_id} className="track">
+                    <div
+                      className={`image-container ${
+                        item.artist_id === currentSong.songId ? "selected" : ""
+                      }`}
+                    >
+                      <img src={item.image_url || logo} alt={item.name} />
+                    </div>
+                    <div className="content-container">
+                      <div className="title">{item.name}</div>
+                    </div>
+                    {item.toptrack && item.toptrack.preview_url && (
+                      <button
+                        className="controls"
+                        onClick={() =>
+                          item.artist_id === currentSong.songId
+                            ? handlePause()
+                            : handleSetAndPlayArtist(idx + 1, item)
+                        }
+                      >
+                        {item.artist_id === currentSong.songId ? (
+                          <AiOutlinePause />
+                        ) : (
+                          <AiFillCaretRight />
+                        )}
+                      </button>
+                    )}
+                  </div>
+                ))}
+          </div>
+        )}
         <button
           className="next"
           onClick={() =>
@@ -104,6 +207,7 @@ const ArtistList = ({
           <Skeleton type="text" />
         </div>
       ) : (
+        !edit &&
         data &&
         data.length > 0 && (
           <div className="metadata-container">
