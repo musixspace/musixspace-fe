@@ -104,20 +104,20 @@ const Discover = () => {
 
   const populateCommonArr = (info) => {
     let common_arr = [];
-    const common_artists = info.common_artists.slice(0, 2);
-    const common_tracks = info.common_tracks.slice(0, 2);
+    const common_artists = info.common_artists;
+    const common_tracks = info.common_tracks;
     let i = 0;
-    while (common_arr.length < 4) {
-      if (common_artists[i]) {
+    while (common_arr.length <= 4) {
+      if (i < common_artists.length) {
         common_arr.push(common_artists[i]);
       }
-      if (common_tracks[i]) {
+      if (i < common_tracks.length) {
         common_arr.push(common_tracks[i]);
       }
-      i++;
-      if (!common_artists[i] && !common_tracks[i]) {
+      if (i >= common_artists.length && i >= common_tracks.length) {
         break;
       }
+      i++;
     }
     const payload = {
       ...info,

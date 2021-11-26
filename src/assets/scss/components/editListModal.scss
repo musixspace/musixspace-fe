@@ -198,6 +198,7 @@
         }
 
         > .main-content {
+          max-height: 55vh;
           > .image-controls {
             flex-direction: column-reverse;
             > .image-container {

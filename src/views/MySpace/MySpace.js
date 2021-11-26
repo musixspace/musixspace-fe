@@ -49,6 +49,14 @@ const MySpace = () => {
 
   const [editMode, setEditMode] = useState(false);
 
+  useEffect(() => {
+    if (modal.open) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+  }, [modal.open]);
+
   useEffect(async () => {
     if (handle && handle !== "myspace") {
       let userObj = {};

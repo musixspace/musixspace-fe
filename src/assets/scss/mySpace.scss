@@ -15,7 +15,7 @@
     position: fixed;
     bottom: 2em;
     right: 6em;
-    z-index: 100;
+    z-index: 1;
 
     @include d-flex(center, center, row);
     gap: 1em;
@@ -25,6 +25,7 @@
       width: 45px;
       height: 45px;
       border-radius: 100%;
+      @include d-flex(center, center, row);
 
       > svg {
         font-size: calc(var(--base-font-size) * 3);
@@ -640,9 +641,6 @@
             }
 
             > .content-container {
-              width: calc(100% - 8px);
-              height: calc(100% - 8px);
-
               > .title {
                 font-size: calc(var(--base-font-size) * 2.25);
               }
@@ -920,8 +918,8 @@
             }
 
             > .content-container {
-              width: calc(100% - 8px);
-              height: calc(100% - 8px);
+              width: calc(100% - 5px);
+              height: calc(100% - 5px);
 
               > .title {
                 font-size: calc(var(--base-font-size) * 1.75);
