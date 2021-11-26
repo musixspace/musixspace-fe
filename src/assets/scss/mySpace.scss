@@ -17,9 +17,7 @@
     right: 6em;
     z-index: 100;
 
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    @include d-flex(center, center, row);
     gap: 1em;
 
     > button {

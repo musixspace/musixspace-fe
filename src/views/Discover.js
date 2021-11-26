@@ -17,6 +17,10 @@ const Discover = () => {
 
   const [userSearchArray, setUserSearchArray] = useState([]);
   const [audioUrl, setAudioUrl] = useState(null);
+  const [touch, setTouch] = useState({
+    start: null,
+    end: null,
+  });
 
   useEffect(() => {
     searchAllUsersAPICall();
@@ -42,6 +46,17 @@ const Discover = () => {
     }
   }, [audioUrl]);
 
+  useEffect(() => {
+    if (touch.start && touch.end) {
+      console.log("In");
+      if (touch.start - touch.end > 75) {
+        handleNextUser();
+      } else if (touch.end - touch.start > 75) {
+        handleViewProfile();
+      }
+    }
+  }, [touch.start, touch.end]);
+
   const handleSearch = (e) => {
     setSearch(e.target.value);
   };
@@ -52,14 +67,8 @@ const Discover = () => {
         `/discover_all/${currentUserNumber}/${localStorage.getItem("handle")}`
       )
       .then((res) => {
-        const payload = {
-          ...res.data[0],
-          firstname: res.data[0].display_name.split(" ")[0],
-          total:
-            res.data[0].common_artists.length +
-            res.data[0].common_tracks.length,
-        };
-        setUser({ ...payload });
+        const info = res.data[0];
+        populateCommonArr(info);
       })
       .catch((err) => {
         console.log(err);
@@ -82,31 +91,61 @@ const Discover = () => {
       .get(`/discover_detail/${username}/${localStorage.getItem("handle")}`)
       .then((res) => {
         setSearch("");
-        const payload = {
-          ...res.data[0],
-          firstname: res.data[0].display_name.split(" ")[0],
-          total:
-            res.data[0].common_artists.length +
-            res.data[0].common_tracks.length,
-        };
-        setUser({ ...payload });
+        const info = res.data[0];
+        populateCommonArr(info);
       })
       .catch((err) => {
         console.log(err);
       });
   };
 
-  const handleViewProfile = (username) => {
-    history.push(`/${username}`);
+  const populateCommonArr = (info) => {
+    let common_arr = [];
+    const common_artists = info.common_artists.slice(0, 2);
+    const common_tracks = info.common_tracks.slice(0, 2);
+    let i = 0;
+    while (common_arr.length < 4) {
+      if (common_artists[i]) {
+        common_arr.push(common_artists[i]);
+      }
+      if (common_tracks[i]) {
+        common_arr.push(common_tracks[i]);
+      }
+      i++;
+      if (!common_artists[i] && !common_tracks[i]) {
+        break;
+      }
+    }
+    const payload = {
+      ...info,
+      firstname: info.display_name.split(" ")[0],
+      total:
+        info.common_artists.length +
+        info.common_tracks.length -
+        common_arr.length,
+      common_arr: common_arr,
+    };
+    setUser({ ...payload });
+  };
+
+  const handleViewProfile = () => {
+    history.push(`/${user.username}`);
   };
 
   const handlePrevUser = () => {
-    console.log("Hello");
     setCurrentUserNumber((prev) => prev - 1);
   };
 
   const handleNextUser = () => {
     setCurrentUserNumber((prev) => prev + 1);
+  };
+
+  const handleTouchStart = (e) => {
+    setTouch({ start: parseInt(e.touches[0].clientX), end: null });
+  };
+
+  const handleTouchEnd = (e) => {
+    setTouch({ ...touch, end: parseInt(e.changedTouches[0].clientX) });
   };
 
   return (
@@ -149,7 +188,11 @@ const Discover = () => {
         </div>
       ) : (
         user && (
-          <div className="discover">
+          <div
+            className="discover"
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
+          >
             <div className="prev">
               <FiSkipBack onClick={handlePrevUser} />
             </div>
@@ -161,9 +204,7 @@ const Discover = () => {
                 />
                 <div className="overlap">
                   <img src={logoWhite} alt="Musixspace Logo" />
-                  <button onClick={() => handleViewProfile(user.username)}>
-                    View Space
-                  </button>
+                  <button onClick={handleViewProfile}>View Space</button>
                 </div>
               </div>
               <div className="content-container">
@@ -220,9 +261,9 @@ const Discover = () => {
                   <div className="interests">
                     <div className="title">{user.firstname} X You</div>
                     <div className="list">
-                      {user.common_artists &&
-                        user.common_artists.length > 0 &&
-                        user.common_artists.slice(0, 4).map((item) => (
+                      {user.common_arr &&
+                        user.common_arr.length &&
+                        user.common_arr.map((item) => (
                           <div key={item.name} className="artist">
                             <div>
                               <img
@@ -235,9 +276,7 @@ const Discover = () => {
                         ))}
                     </div>
                     <div className="common">
-                      {user.total &&
-                        user.total - 4 > 0 &&
-                        `+${user.total - 4} common interests`}
+                      {user.total > 0 && `+${user.total} common interests`}
                     </div>
                   </div>
                 </div>

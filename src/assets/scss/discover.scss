@@ -181,6 +181,7 @@
         @include d-flex(space-evenly, flex-start, column);
 
         .main-content {
+          width: 100%;
           .name {
             font-family: var(--f-circ-spotify), sans-serif;
             font-size: calc(var(--base-font-size) * 4.5);
@@ -209,6 +210,7 @@
         }
 
         .inner-content {
+          width: 100%;
           .anthem {
             margin-top: 2em;
             .title {
