@@ -1,19 +1,61 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { AiFillCaretRight } from "react-icons/ai";
 import { FiSkipBack, FiSkipForward } from "react-icons/fi";
 import logo from "../../assets/images/logo-black.png";
 import Skeleton from "../../components/Skeleton";
+import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
+import { MdAdd, MdDelete } from "react-icons/md";
 
 const Playlist = ({
   data,
   onLeftClicked,
   onRightClicked,
   openPlaylistModal,
+  edit,
 }) => {
+  const [name, setName] = useState("");
+  const [playlists, setPlaylists] = useState(null);
+
+  useEffect(() => {
+    if (edit) {
+      setName("Top Tracks");
+      setPlaylists(data);
+    }
+  }, [edit]);
+
+  const onDragEnd = (result) => {
+    const { destination, source } = result;
+
+    if (!destination) return;
+    if (destination.index === source.index) return;
+
+    const sourceTrack = playlists[source.index];
+
+    const newPlaylists = [...playlists];
+    newPlaylists.splice(source.index, 1);
+    newPlaylists.splice(destination.index, 0, sourceTrack);
+    setPlaylists(newPlaylists);
+  };
+
+  const onDeletePlaylist = (playlistId) => {
+    const newPlaylists = playlists.filter(
+      (item) => item.playlist_id !== playlistId
+    );
+    setPlaylists(newPlaylists);
+  };
+
   return (
     <div className="topTracks">
       <div className="upper-container">
-        <div className="title">Mix Tapes</div>
+        {edit ? (
+          <input
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+        ) : (
+          <p className="title">Mix Tapes</p>
+        )}
       </div>
       <div className="songs-container playlist-container">
         <button
@@ -26,40 +68,104 @@ const Playlist = ({
         >
           <FiSkipBack />
         </button>
-        <div className="tracks-container">
-          {!data
-            ? [1, 2, 3, 4, 5].map((item) => (
-                <div key={item} className="track">
-                  <Skeleton type="text" />
-                </div>
-              ))
-            : data.map((item, idx) => (
+        {edit ? (
+          <DragDropContext onDragEnd={onDragEnd}>
+            <Droppable droppableId="play-list-droppable" direction="horizontal">
+              {(provided) => (
                 <div
-                  key={item.playlist_id}
-                  id={item.playlist_id}
-                  className="track"
+                  className="tracks-container"
+                  ref={provided.innerRef}
+                  {...provided.droppableProps}
                 >
-                  <div className={`image-container`}>
-                    <img src={item.cover_image || logo} alt={item.name} />
-                  </div>
-                  <div className="content-container">
-                    <div className="title">{item.name}</div>
-                  </div>
-                  <a
-                    href={`https://open.spotify.com/playlist/${item.playlist_id}`}
-                    target="_blank"
-                  >
-                    Follow
-                  </a>
-                  <button
-                    className="controls"
-                    onClick={() => openPlaylistModal(item)}
-                  >
-                    <AiFillCaretRight />
-                  </button>
+                  {playlists && (
+                    <>
+                      <div className="track">
+                        <div className="image-container">
+                          <img src={logo} alt="Musixspace Logo" />
+                        </div>
+                        <div className="content-container">
+                          <div className="title">Add New Playlist</div>
+                        </div>
+                        <button className="controls" onClick={() => {}}>
+                          <MdAdd />
+                        </button>
+                      </div>
+                      {playlists.map((item, idx) => (
+                        <Draggable
+                          key={item.playlist_id}
+                          draggableId={item.playlist_id}
+                          index={idx}
+                        >
+                          {(provided) => (
+                            <div
+                              className="track"
+                              ref={provided.innerRef}
+                              {...provided.dragHandleProps}
+                              {...provided.draggableProps}
+                            >
+                              <div className={`image-container`}>
+                                <img
+                                  src={item.cover_image || logo}
+                                  alt={item.name}
+                                />
+                              </div>
+                              <div className="content-container">
+                                <div className="title">{item.name}</div>
+                              </div>
+                              <button
+                                className="controls"
+                                onClick={() =>
+                                  onDeletePlaylist(item.playlist_id)
+                                }
+                              >
+                                <MdDelete />
+                              </button>
+                            </div>
+                          )}
+                        </Draggable>
+                      ))}
+                    </>
+                  )}
                 </div>
-              ))}
-        </div>
+              )}
+            </Droppable>
+          </DragDropContext>
+        ) : (
+          <div className="tracks-container">
+            {!data
+              ? [1, 2, 3, 4, 5].map((item) => (
+                  <div key={item} className="track">
+                    <Skeleton type="text" />
+                  </div>
+                ))
+              : data.map((item, idx) => (
+                  <div
+                    key={item.playlist_id}
+                    id={item.playlist_id}
+                    className="track"
+                  >
+                    <div className={`image-container`}>
+                      <img src={item.cover_image || logo} alt={item.name} />
+                    </div>
+                    <div className="content-container">
+                      <div className="title">{item.name}</div>
+                    </div>
+                    <a
+                      href={`https://open.spotify.com/playlist/${item.playlist_id}`}
+                      target="_blank"
+                    >
+                      Follow
+                    </a>
+                    <button
+                      className="controls"
+                      onClick={() => openPlaylistModal(item)}
+                    >
+                      <AiFillCaretRight />
+                    </button>
+                  </div>
+                ))}
+          </div>
+        )}
         <button
           className="next"
           onClick={() =>

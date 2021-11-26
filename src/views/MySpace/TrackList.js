@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { AiFillCaretRight, AiOutlinePause } from "react-icons/ai";
 import { FiSkipBack, FiSkipForward } from "react-icons/fi";
-import { MdAdd, MdClose, MdDelete } from "react-icons/md";
+import { MdAdd, MdDelete } from "react-icons/md";
 import logo from "../../assets/images/logo-black.png";
 import Skeleton from "../../components/Skeleton";
 import { paddedNumbers } from "../../util/functions";
@@ -72,7 +72,10 @@ const TrackList = ({
         )}
         {edit ? (
           <DragDropContext onDragEnd={onDragEnd}>
-            <Droppable droppableId="edit-list-droppable" direction="horizontal">
+            <Droppable
+              droppableId="track-list-droppable"
+              direction="horizontal"
+            >
               {(provided) => (
                 <div
                   className="tracks-container"

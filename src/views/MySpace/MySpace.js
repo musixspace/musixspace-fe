@@ -375,6 +375,13 @@ const MySpace = () => {
         onRightClicked={onRightClicked}
         edit={editMode}
       />
+      <Playlist
+        data={data && data.publicPlaylists}
+        onLeftClicked={onLeftClicked}
+        onRightClicked={onRightClicked}
+        openPlaylistModal={openPlaylistModal}
+        edit={editMode}
+      />
       {currentSong.audioUrl && (
         <WebPlayer
           url={currentSong.audioUrl}
@@ -382,12 +389,6 @@ const MySpace = () => {
           noControls={true}
         />
       )}
-      <Playlist
-        data={data && data.publicPlaylists}
-        onLeftClicked={onLeftClicked}
-        onRightClicked={onRightClicked}
-        openPlaylistModal={openPlaylistModal}
-      />
       {currentSong.songId && !currentSong.audioUrl && handleNextPlay()}
       {modal.open && (
         <PlaylistModal

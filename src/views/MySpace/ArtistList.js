@@ -89,7 +89,10 @@ const ArtistList = ({
         </button>
         {edit ? (
           <DragDropContext onDragEnd={onDragEnd}>
-            <Droppable droppableId="edit-list-droppable" direction="horizontal">
+            <Droppable
+              droppableId="artist-list-droppable"
+              direction="horizontal"
+            >
               {(provided) => (
                 <div
                   className="tracks-container"
