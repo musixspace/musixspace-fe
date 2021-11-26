@@ -378,10 +378,11 @@
             position: absolute;
             overflow: hidden;
             z-index: 10;
-            left: 4px;
-            top: 4px;
-            width: calc(100% - 8px);
-            height: calc(100% - 8px);
+            left: 2px;
+            top: 3px;
+            border-radius: 5px;
+            width: calc(100% - 5px);
+            height: calc(100% - 5px);
             background-color: rgba($color: #000000, $alpha: 0.4);
 
             @include d-flex(center, center, column);

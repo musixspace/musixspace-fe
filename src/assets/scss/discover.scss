@@ -8,6 +8,10 @@
   color: var(--clr-white);
   @include d-flex(flex-start, center, column);
 
+  .skeleton {
+    background-color: #671313;
+  }
+
   .searchbar {
     width: 100%;
     display: grid;
@@ -58,7 +62,7 @@
       margin-top: 1em;
       @include d-flex(flex-start, flex-start, column);
       overflow-y: auto;
-      max-height: 80vh;
+      max-height: 70vh;
       height: auto;
 
       &::-webkit-scrollbar {
@@ -171,6 +175,12 @@
             right: 20px;
           }
         }
+
+        .skeleton {
+          height: 100%;
+          margin: 0;
+          border-radius: 0;
+        }
       }
 
       .content-container {
@@ -206,6 +216,17 @@
           .bio {
             margin-top: 1em;
             font-size: calc(var(--base-font-size) * 2);
+          }
+
+          .skeleton {
+            &:nth-child(1) {
+              height: 40px;
+            }
+
+            &:nth-child(2) {
+              height: 20px;
+              width: 50%;
+            }
           }
         }
 
@@ -250,9 +271,14 @@
                     color: var(--clr-black);
                   }
                 }
+
+                .skeleton {
+                  height: 100%;
+                }
               }
 
               > div:not(.anthem-image) {
+                width: 50%;
                 .anthem-title {
                   font-size: calc(var(--base-font-size) * 2);
                 }
@@ -260,6 +286,19 @@
                 .anthem-album {
                   margin-top: 0.4em;
                   font-size: calc(var(--base-font-size) * 1.75);
+                }
+
+                .skeleton {
+                  &:nth-child(1) {
+                    width: 100%;
+                    max-width: 200px;
+                    height: 30px;
+                  }
+
+                  &:nth-child(2) {
+                    max-width: 100px;
+                    height: 20px;
+                  }
                 }
               }
             }
@@ -304,6 +343,17 @@
             .common {
               margin-top: 1em;
               text-align: center;
+            }
+
+            .skeleton {
+              &:nth-child(1) {
+                width: 100%;
+                height: 20px;
+              }
+
+              &:not(:nth-child(1)) {
+                width: 60%;
+              }
             }
           }
         }
@@ -513,6 +563,7 @@
       // }
 
       .user {
+        width: 100%;
         transform: scale(1);
         height: 100%;
         border-radius: 20px;

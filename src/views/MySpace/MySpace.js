@@ -249,6 +249,10 @@ const MySpace = () => {
     }
   }, [currentSong.audioUrl]);
 
+  useEffect(() => {
+    handlePause();
+  }, [editMode]);
+
   const onLeftClicked = (selector) => {
     document.querySelector(selector).scrollBy(-1000, 0);
   };

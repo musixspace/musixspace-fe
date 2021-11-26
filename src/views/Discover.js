@@ -8,6 +8,7 @@ import { axiosInstance } from "../util/axiosConfig";
 import WebPlayer from "../components/WebPlayer";
 import { useHistory } from "react-router-dom";
 import { setMediaSession } from "../util/functions";
+import Skeleton from "../components/Skeleton";
 
 const Discover = () => {
   const history = useHistory();
@@ -62,6 +63,7 @@ const Discover = () => {
   };
 
   const searchAllUsersAPICall = () => {
+    setUser(null);
     axiosInstance
       .get(
         `/discover_all/${currentUserNumber}/${localStorage.getItem("handle")}`
@@ -76,6 +78,7 @@ const Discover = () => {
   };
 
   const searchUserAPICall = useDebounceCallback((value) => {
+    setUser(null);
     axiosInstance
       .get(`/discover_search/${value}`)
       .then((res) => {
@@ -187,110 +190,151 @@ const Discover = () => {
           <div></div>
         </div>
       ) : (
-        user && (
-          <div
-            className="discover"
-            onTouchStart={handleTouchStart}
-            onTouchEnd={handleTouchEnd}
-          >
-            <div className="prev">
-              <FiSkipBack onClick={handlePrevUser} />
-            </div>
-            <div className="user">
-              <div className="image-container">
+        <div
+          className="discover"
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
+        >
+          <div className="prev">
+            <FiSkipBack onClick={handlePrevUser} />
+          </div>
+          <div className="user">
+            <div className="image-container">
+              {user && user.display_name ? (
                 <img
                   src={user.image_url || logo}
                   alt={`${user.display_name}'s Profile`}
                 />
+              ) : (
+                <Skeleton type="text" />
+              )}
+              {user && user.display_name && (
                 <div className="overlap">
                   <img src={logoWhite} alt="Musixspace Logo" />
                   <button onClick={handleViewProfile}>View Space</button>
                 </div>
-              </div>
-              <div className="content-container">
-                <div className="main-content">
-                  <div className="name">{user.display_name}</div>
-                  <div className="tags">
-                    {user.traits &&
-                      user.traits.map((tag) => (
-                        <div key={tag} className="tag">
-                          {tag}
-                        </div>
-                      ))}
-                  </div>
-                  {/* <div className="bio">"{user[current].bio}"</div> */}
-                </div>
-                <div className="inner-content">
-                  <div className="anthem">
-                    <div className="title">{user.firstname}'s Anthem</div>
-                    <div className="anthem-content">
-                      <div className="anthem-image">
-                        <img
-                          src={(user.anthem && user.anthem.image_url) || logo}
-                          alt={user.anthem && user.anthem.name}
-                        />
-                        {user.anthem && user.anthem.preview_url && (
-                          <button
-                            className="controls"
-                            onClick={() =>
-                              audioUrl
-                                ? setAudioUrl(null)
-                                : setAudioUrl(user.anthem.preview_url)
-                            }
-                          >
-                            {audioUrl ? (
-                              <AiOutlinePause />
-                            ) : (
-                              <AiFillCaretRight />
-                            )}
-                          </button>
-                        )}
-                      </div>
-                      <div>
-                        <div className="anthem-title">
-                          {user.anthem && user.anthem.name}
-                        </div>
-                        <div className="anthem-album">
-                          {user.anthem &&
-                            user.anthem.artists &&
-                            user.anthem.artists.map((i) => i.name).join(", ")}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="interests">
-                    <div className="title">{user.firstname} X You</div>
-                    <div className="list">
-                      {user.common_arr &&
-                        user.common_arr.length &&
-                        user.common_arr.map((item) => (
-                          <div key={item.name} className="artist">
-                            <div>
-                              <img
-                                src={item.image_url || logo}
-                                alt={item.name}
-                              />
-                            </div>
-                            <span>{item.name}</span>
+              )}
+            </div>
+            <div className="content-container">
+              <div className="main-content">
+                {user && user.display_name ? (
+                  <>
+                    <div className="name">{user.display_name}</div>
+                    <div className="tags">
+                      {user.traits &&
+                        user.traits.map((tag) => (
+                          <div key={tag} className="tag">
+                            {tag}
                           </div>
                         ))}
                     </div>
-                    <div className="common">
-                      {user.total > 0 && `+${user.total} common interests`}
-                    </div>
-                  </div>
+                  </>
+                ) : (
+                  <>
+                    <Skeleton type="text" />
+                    <Skeleton type="text" />
+                  </>
+                )}
+              </div>
+              <div className="inner-content">
+                <div className="anthem">
+                  {user && user.display_name ? (
+                    <>
+                      <div className="title">{user.firstname}'s Anthem</div>
+                      <div className="anthem-content">
+                        <div className="anthem-image">
+                          <img
+                            src={(user.anthem && user.anthem.image_url) || logo}
+                            alt={user.anthem && user.anthem.name}
+                          />
+                          {user.anthem && user.anthem.preview_url && (
+                            <button
+                              className="controls"
+                              onClick={() =>
+                                audioUrl
+                                  ? setAudioUrl(null)
+                                  : setAudioUrl(user.anthem.preview_url)
+                              }
+                            >
+                              {audioUrl ? (
+                                <AiOutlinePause />
+                              ) : (
+                                <AiFillCaretRight />
+                              )}
+                            </button>
+                          )}
+                        </div>
+                        <div>
+                          <div className="anthem-title">
+                            {user.anthem && user.anthem.name}
+                          </div>
+                          <div className="anthem-album">
+                            {user.anthem &&
+                              user.anthem.artists &&
+                              user.anthem.artists.map((i) => i.name).join(", ")}
+                          </div>
+                        </div>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <Skeleton type="text" />
+                      <div className="anthem-content">
+                        <div className="anthem-image">
+                          <Skeleton type="text" />
+                        </div>
+                        <div>
+                          <Skeleton type="text" />
+                          <Skeleton type="text" />
+                        </div>
+                      </div>
+                    </>
+                  )}
+                </div>
+                <div className="interests">
+                  {user && user.display_name ? (
+                    <>
+                      <div className="title">{user.firstname} X You</div>
+                      <div className="list">
+                        {user.common_arr &&
+                          user.common_arr.length &&
+                          user.common_arr.map((item) => (
+                            <div key={item.name} className="artist">
+                              <div>
+                                <img
+                                  src={item.image_url || logo}
+                                  alt={item.name}
+                                />
+                              </div>
+                              <span>{item.name}</span>
+                            </div>
+                          ))}
+                      </div>
+                      <div className="common">
+                        {user.total > 0 && `+${user.total} common interests`}
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <Skeleton type="text" />
+                      <div className="list">
+                        <Skeleton type="text" />
+                        <Skeleton type="text" />
+                      </div>
+                    </>
+                  )}
                 </div>
               </div>
             </div>
-            <div className="next">
-              <FiSkipForward onClick={handleNextUser} />
-            </div>
-            <div className="mobile-visible">
-              <FiSkipBack onClick={handlePrevUser} />
-              <FiSkipForward onClick={handleNextUser} />
-            </div>
           </div>
-        )
+          <div className="next">
+            <FiSkipForward onClick={handleNextUser} />
+          </div>
+          <div className="mobile-visible">
+            <FiSkipBack onClick={handlePrevUser} />
+            <FiSkipForward onClick={handleNextUser} />
+          </div>
+        </div>
       )}
       {audioUrl && (
         <WebPlayer
