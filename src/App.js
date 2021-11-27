@@ -1,8 +1,11 @@
 import { useEffect } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { useRecoilValue } from "recoil";
 import Logout from "./components/Logout";
 import Wrapper from "./components/Wrapper";
 import useAuth from "./hooks/useAuth";
+import useProfile from "./hooks/useProfile";
+import { userNameSelector } from "./recoil/userAtom";
 import About from "./views/About";
 import Discover from "./views/Discover";
 import Home from "./views/Home";
@@ -19,6 +22,8 @@ const code = new URLSearchParams(window.location.search).get("code");
 
 const App = () => {
   useAuth(code);
+  const displayName = useRecoilValue(userNameSelector);
+  const { getUserProfile } = useProfile();
 
   useEffect(() => {
     if (
@@ -45,6 +50,12 @@ const App = () => {
         "px, initial-scale=1.0"
     );
   }, []);
+
+  useEffect(() => {
+    if (!displayName && localStorage.getItem("handle")) {
+      getUserProfile(localStorage.getItem("handle"));
+    }
+  }, [displayName]);
 
   return (
     <Router>

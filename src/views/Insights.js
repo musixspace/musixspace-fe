@@ -1,19 +1,11 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import ImageSlider from "../components/ImageSlider";
-import useProfile from "../hooks/useProfile";
 import { userNameSelector } from "../recoil/userAtom";
 
 const Insights = () => {
   const displayName = useRecoilValue(userNameSelector);
-  const { getUserProfile } = useProfile();
-
-  useEffect(() => {
-    if (!displayName) {
-      getUserProfile(localStorage.getItem("handle"));
-    }
-  }, []);
 
   return (
     <div className="insights">

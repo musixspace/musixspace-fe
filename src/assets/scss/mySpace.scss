@@ -700,6 +700,8 @@
             > .image-container {
               min-width: 148px;
               min-height: 148px;
+              width: 100%;
+              height: 50px;
             }
 
             > .content-container {
@@ -918,8 +920,10 @@
             }
 
             > .content-container {
-              width: calc(100% - 5px);
-              height: calc(100% - 5px);
+              left: 3px;
+              border-radius: 6px;
+              width: calc(100% - 6px);
+              height: calc(100% - 6px);
 
               > .title {
                 font-size: calc(var(--base-font-size) * 1.75);

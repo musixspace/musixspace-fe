@@ -9,9 +9,12 @@ import WebPlayer from "../components/WebPlayer";
 import { useHistory } from "react-router-dom";
 import { setMediaSession } from "../util/functions";
 import Skeleton from "../components/Skeleton";
+import { useRecoilValue } from "recoil";
+import { userState } from "../recoil/userAtom";
 
 const Discover = () => {
   const history = useHistory();
+  const userStateVal = useRecoilValue(userState);
   const [search, setSearch] = useState("");
   const [user, setUser] = useState(null);
   const [currentUserNumber, setCurrentUserNumber] = useState(0);
@@ -78,7 +81,6 @@ const Discover = () => {
   };
 
   const searchUserAPICall = useDebounceCallback((value) => {
-    setUser(null);
     axiosInstance
       .get(`/discover_search/${value}`)
       .then((res) => {
@@ -90,6 +92,7 @@ const Discover = () => {
   });
 
   const handleSelectUser = (username) => {
+    setUser(null);
     axiosInstance
       .get(`/discover_detail/${username}/${localStorage.getItem("handle")}`)
       .then((res) => {
@@ -224,7 +227,15 @@ const Discover = () => {
                     <div className="tags">
                       {user.traits &&
                         user.traits.map((tag) => (
-                          <div key={tag} className="tag">
+                          <div
+                            key={tag}
+                            className={`tag ${
+                              userStateVal.traits.length > 0 &&
+                              userStateVal.traits.includes(tag)
+                                ? "selected"
+                                : ""
+                            }`}
+                          >
                             {tag}
                           </div>
                         ))}
