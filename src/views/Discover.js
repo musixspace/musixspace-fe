@@ -107,18 +107,19 @@ const Discover = () => {
     const common_artists = info.common_artists;
     const common_tracks = info.common_tracks;
     let i = 0;
-    while (common_arr.length <= 4) {
+    while (common_arr.length < 4) {
       if (i < common_artists.length) {
         common_arr.push(common_artists[i]);
       }
       if (i < common_tracks.length) {
         common_arr.push(common_tracks[i]);
       }
+      i++;
       if (i >= common_artists.length && i >= common_tracks.length) {
         break;
       }
-      i++;
     }
+    console.log(common_arr);
     const payload = {
       ...info,
       firstname: info.display_name.split(" ")[0],
