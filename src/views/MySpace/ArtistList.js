@@ -22,8 +22,8 @@ const ArtistList = ({
 
   useEffect(() => {
     if (edit) {
-      setName("Top Artists");
-      setArtists(data);
+      setName(data.nickname);
+      setArtists(data.artists);
     }
   }, [edit]);
 
@@ -56,7 +56,7 @@ const ArtistList = ({
             onChange={(e) => setName(e.target.value)}
           />
         ) : (
-          <p className="title">Top Artists</p>
+          <p className="title">{data && data.nickname}</p>
         )}
       </div>
       <div className="genres-container">
@@ -68,7 +68,7 @@ const ArtistList = ({
           </>
         ) : (
           !edit &&
-          data &&
+          data.nickname &&
           currentSong.genre &&
           currentSong.genre.length > 0 &&
           currentSong.genre.map((genre) => (
@@ -163,7 +163,7 @@ const ArtistList = ({
                     </div>
                   </div>
                 ))
-              : data.map((item, idx) => (
+              : data.artists.map((item, idx) => (
                   <div key={idx} id={item.artist_id} className="track">
                     <div
                       className={`image-container ${
@@ -181,7 +181,7 @@ const ArtistList = ({
                         onClick={() =>
                           item.artist_id === currentSong.songId
                             ? handlePause()
-                            : handleSetAndPlayArtist(idx + 1, item)
+                            : handleSetAndPlayArtist(item, idx + 1)
                         }
                       >
                         {item.artist_id === currentSong.songId ? (
@@ -211,27 +211,28 @@ const ArtistList = ({
         </div>
       ) : (
         !edit &&
-        data &&
-        data.length > 0 && (
+        data.artists.length > 0 && (
           <div className="metadata-container">
             <div className="dots-container">
               <div
                 className={`dot ${
-                  songNumber <= parseInt(data.length / 3) ? "highlight" : ""
-                }`}
-              ></div>
-              <div
-                className={`dot ${
-                  songNumber > data.length / 3 &&
-                  songNumber <= parseInt(2 * data.length) / 3
+                  songNumber <= parseInt(data.artists.length / 3)
                     ? "highlight"
                     : ""
                 }`}
               ></div>
               <div
                 className={`dot ${
-                  songNumber > parseInt(2 * data.length) / 3 &&
-                  songNumber <= data.length
+                  songNumber > data.artists.length / 3 &&
+                  songNumber <= parseInt(2 * data.artists.length) / 3
+                    ? "highlight"
+                    : ""
+                }`}
+              ></div>
+              <div
+                className={`dot ${
+                  songNumber > parseInt(2 * data.artists.length) / 3 &&
+                  songNumber <= data.artists.length
                     ? "highlight"
                     : ""
                 }`}
@@ -239,7 +240,7 @@ const ArtistList = ({
             </div>
             <div className="song-number">
               <span>{`${paddedNumbers(songNumber)}`}</span>
-              <span>{`/${data && data.length}`}</span>
+              <span>{`/${data.artists.length}`}</span>
             </div>
           </div>
         )

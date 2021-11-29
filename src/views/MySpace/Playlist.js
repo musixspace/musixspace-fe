@@ -18,8 +18,8 @@ const Playlist = ({
 
   useEffect(() => {
     if (edit) {
-      setName("Top Tracks");
-      setPlaylists(data);
+      setName(data.nickname);
+      setPlaylists(data.playlist_ids);
     }
   }, [edit]);
 
@@ -54,7 +54,7 @@ const Playlist = ({
             onChange={(e) => setName(e.target.value)}
           />
         ) : (
-          <p className="title">Mix Tapes</p>
+          <p className="title">{data && data.nickname}</p>
         )}
       </div>
       <div className="songs-container playlist-container">
@@ -132,13 +132,13 @@ const Playlist = ({
           </DragDropContext>
         ) : (
           <div className="tracks-container">
-            {!data
+            {!data.playlist_ids
               ? [1, 2, 3, 4, 5].map((item) => (
                   <div key={item} className="track">
                     <Skeleton type="text" />
                   </div>
                 ))
-              : data.map((item, idx) => (
+              : data.playlist_ids.map((item, idx) => (
                   <div
                     key={item.playlist_id}
                     id={item.playlist_id}

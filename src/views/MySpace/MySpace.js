@@ -2,9 +2,7 @@ import React, { useEffect, useState } from "react";
 import { IoMdClose } from "react-icons/io";
 import { MdEdit, MdSave } from "react-icons/md";
 import { useParams } from "react-router";
-import { useRecoilState } from "recoil";
 import WebPlayer from "../../components/WebPlayer";
-import { userState } from "../../recoil/userAtom";
 import { axiosInstance } from "../../util/axiosConfig";
 import { setMediaSession } from "../../util/functions";
 import ArtistList from "./ArtistList";
@@ -15,19 +13,12 @@ import TrackList from "./TrackList";
 
 const MySpace = () => {
   const { handle } = useParams();
-  const [user, setUser] = useRecoilState(userState);
 
   const [data, setData] = useState({
     currentUser: null,
-    publicPlaylists: null,
-    topTracks: {
-      tracks: null,
-      images: null,
-    },
-    topArtists: {
-      artists: null,
-      images: null,
-    },
+    playlists: null,
+    tracks: null,
+    artists: null,
   });
 
   const [currentSong, setCurrentSong] = useState({
@@ -35,11 +26,8 @@ const MySpace = () => {
     audioUrl: null,
     list: "topTracks",
     genre: [],
-  });
-
-  const [songNumber, setSongNumber] = useState({
-    tracks: 1,
-    artists: 1,
+    trackNumber: 1,
+    artistNumber: 1,
   });
 
   const [modal, setModal] = useState({
@@ -59,128 +47,44 @@ const MySpace = () => {
 
   useEffect(async () => {
     if (handle && handle !== "myspace") {
-      let userObj = {};
       let finalObj = {
         currentUser: null,
-        publicPlaylists: null,
-        topTracks: null,
-        topArtists: null,
+        tracks: null,
+        artists: null,
+        playlists: null,
       };
+      await axiosInstance
+        .get(`/myspace_view/${handle}`)
+        .then((res) => {
+          finalObj = {
+            ...finalObj,
+            playlists: res.data.myspace_mixtapes,
+            tracks: res.data.myspace_toptracks,
+            artists: res.data.myspace_topartists,
+          };
+        })
+        .catch((err) => {
+          console.log(err);
+        });
 
-      if (!data.currentUser) {
-        await axiosInstance
-          .get(`/users/${handle}`)
-          .then((res) => {
-            if (res.status === 200) {
-              if (
-                handle === user.username ||
-                handle === localStorage.getItem("handle")
-              ) {
-                userObj = {
-                  ...userObj,
-                  displayName: res.data?.display_name,
-                  username: res.data?.username,
-                  image: res.data.image_url,
-                  traits: res.data.traits,
-                  anthem: res.data.anthem,
-                };
-              }
-              finalObj.currentUser = { ...res.data };
-            }
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      }
+      await axiosInstance
+        .get(`/users/${handle}`)
+        .then((res) => {
+          if (res.status === 200) {
+            finalObj = {
+              ...finalObj,
+              currentUser: { ...res.data },
+            };
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
 
-      if (!data.publicPlaylists) {
-        await axiosInstance
-          .get(`/playlists/${handle}`)
-          .then((res) => {
-            if (res.status === 200) {
-              if (res.data !== "No playlists!") {
-                finalObj.publicPlaylists = res.data;
-              }
-            }
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      }
-
-      if (!data.topTracks.tracks) {
-        await axiosInstance
-          .get(`toptracks_long/${handle}`)
-          .then((res) => {
-            if (res.status === 200) {
-              const songs = res.data.songs;
-              let imgArr = [];
-              songs.forEach((item) => {
-                imgArr.push({ id: item.song_id, url: item.image_url });
-              });
-              if (
-                handle === user.username ||
-                handle === localStorage.getItem("handle")
-              ) {
-                userObj = {
-                  ...userObj,
-                  topTracksLong: {
-                    images: imgArr,
-                    tracks: songs,
-                  },
-                };
-              }
-              finalObj.topTracks = {
-                images: imgArr,
-                tracks: songs,
-              };
-            }
-          })
-          .catch((err) => console.log(err));
-      }
-
-      if (!data.topArtists.artists) {
-        await axiosInstance
-          .get(`/topartists_long/${handle}`)
-          .then((res) => {
-            if (res.status === 200) {
-              const artists = res.data.artists;
-              let imgArr = [];
-              artists.forEach((artist) => {
-                imgArr.push({
-                  id: artist.artist_id,
-                  url:
-                    artist.image_url ||
-                    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRd-y-IJN8glQlf1qoU01dEgGPUa0d1-sjfWg&usqp=CAU",
-                });
-              });
-              if (
-                handle === user.username ||
-                handle === localStorage.getItem("handle")
-              ) {
-                userObj = {
-                  ...userObj,
-                  topArtistsLong: {
-                    artists: artists,
-                    images: imgArr,
-                  },
-                };
-              }
-              finalObj.topArtists = {
-                artists: artists,
-                images: imgArr,
-              };
-            }
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      }
-      setUser({
-        ...user,
-        ...userObj,
+      setData({
+        ...data,
+        ...finalObj,
       });
-      setData({ ...data, ...finalObj });
     }
   }, [handle]);
 
@@ -221,13 +125,13 @@ const MySpace = () => {
   useEffect(() => {
     if (currentSong.audioUrl) {
       if (currentSong.list === "topTracks") {
-        const ct = data.topTracks.tracks.find(
+        const ct = data.tracks.songs.find(
           (item) => item.song_id === currentSong.songId
         );
         const artist = ct.artists.map((ar) => ar.name).join(", ");
         setMediaSession(ct.name, artist, ct.image_url, null, handleNextPlay);
       } else if (currentSong.list === "topArtists") {
-        const ct = data.topArtists.artists.find(
+        const ct = data.artists.artists.find(
           (item) => item.artist_id === currentSong.songId
         );
         setMediaSession(
@@ -269,30 +173,28 @@ const MySpace = () => {
     document.querySelector(selector).scrollBy(1000, 0);
   };
 
-  const handleSetAndPlayArtist = (num, item) => {
-    setSongNumber({ ...songNumber, artists: num });
-    handlePlayArtist(item);
-  };
-
-  const handleSetAndPlayTrack = (num, songId, audioUrl) => {
-    setSongNumber({ ...songNumber, tracks: num });
-    handlePlaySong(songId, audioUrl);
-  };
-
-  const handlePlaySong = (songId, audioUrl, list = "topTracks", genre = []) => {
+  const handlePlaySong = (
+    songId,
+    audioUrl,
+    num,
+    list = "topTracks",
+    genre = []
+  ) => {
     setCurrentSong({
       ...currentSong,
       songId,
       audioUrl,
       list,
       genre,
+      [list === "topTracks" ? "trackNumber" : "artistNumber"]: num,
     });
   };
 
-  const handlePlayArtist = (artist) => {
+  const handlePlayArtist = (artist, num) => {
     handlePlaySong(
       artist.artist_id,
       artist.toptrack ? artist.toptrack.preview_url : null,
+      num,
       "topArtists",
       artist.genres
     );
@@ -300,38 +202,37 @@ const MySpace = () => {
 
   const handleNextPlay = () => {
     if (
-      data.topTracks &&
-      data.topTracks.tracks &&
+      data.tracks &&
+      data.tracks.songs &&
+      data.tracks.songs.length &&
       currentSong.list === "topTracks"
     ) {
-      const track = data.topTracks.tracks.find(
+      const track = data.tracks.songs.find(
         (item) => item.song_id === currentSong.songId
       );
-      const index = data.topTracks.tracks.indexOf(track);
-      if (index + 1 !== data.topTracks.tracks.length) {
-        setSongNumber({ ...songNumber, tracks: index + 2 });
+      const index = data.tracks.songs.indexOf(track);
+      if (index + 1 !== data.tracks.songs.length) {
         handlePlaySong(
-          data.topTracks.tracks[index + 1].song_id,
-          data.topTracks.tracks[index + 1].preview_url
+          data.tracks.songs[index + 1].song_id,
+          data.tracks.songs[index + 1].preview_url,
+          index + 2
         );
       } else {
-        setSongNumber({ ...songNumber, tracks: 1 });
         handlePlaySong(
-          data.topTracks.tracks[0].song_id,
-          data.topTracks.tracks[0].preview_url
+          data.tracks.songs[0].song_id,
+          data.tracks.songs[0].preview_url,
+          1
         );
       }
     } else if (currentSong.list === "topArtists") {
-      const artist = data.topArtists.artists.find(
+      const artist = data.artists.artists.find(
         (item) => item.artist_id === currentSong.songId
       );
-      const index = data.topArtists.artists.indexOf(artist);
-      if (index + 1 !== data.topArtists.artists.length) {
-        setSongNumber({ ...songNumber, artists: index + 2 });
-        handlePlayArtist(data.topArtists.artists[index + 1]);
+      const index = data.artists.artists.indexOf(artist);
+      if (index + 1 !== data.artists.artists.length) {
+        handlePlayArtist(data.artists.artists[index + 1], index + 2);
       } else {
-        setSongNumber({ ...songNumber, artists: 1 });
-        handlePlayArtist(data.topArtists.artists[0]);
+        handlePlayArtist(data.artists.artists[0], 1);
       }
     } else {
       setCurrentSong({ ...currentSong, songId: null, audioUrl: null });
@@ -358,6 +259,8 @@ const MySpace = () => {
     });
   };
 
+  const handleSave = () => {};
+
   return (
     <div className="mySpace">
       <Intro
@@ -368,32 +271,34 @@ const MySpace = () => {
         handlePlaySong={handlePlaySong}
       />
       <TrackList
-        data={data && data.topTracks && data.topTracks.tracks}
+        data={data && data.tracks}
         currentSong={currentSong}
-        songNumber={songNumber.tracks}
+        songNumber={currentSong.trackNumber}
         handlePause={handlePause}
-        handleSetAndPlayTrack={handleSetAndPlayTrack}
+        handleSetAndPlayTrack={handlePlaySong}
         onLeftClicked={onLeftClicked}
         onRightClicked={onRightClicked}
         edit={editMode}
       />
       <ArtistList
-        data={data && data.topArtists && data.topArtists.artists}
+        data={data && data.artists}
         currentSong={currentSong}
-        songNumber={songNumber.artists}
+        songNumber={currentSong.artistNumber}
         handlePause={handlePause}
-        handleSetAndPlayArtist={handleSetAndPlayArtist}
+        handleSetAndPlayArtist={handlePlayArtist}
         onLeftClicked={onLeftClicked}
         onRightClicked={onRightClicked}
         edit={editMode}
       />
-      <Playlist
-        data={data && data.publicPlaylists}
-        onLeftClicked={onLeftClicked}
-        onRightClicked={onRightClicked}
-        openPlaylistModal={openPlaylistModal}
-        edit={editMode}
-      />
+      {data && data.playlists && (
+        <Playlist
+          data={data && data.playlists}
+          onLeftClicked={onLeftClicked}
+          onRightClicked={onRightClicked}
+          openPlaylistModal={openPlaylistModal}
+          edit={editMode}
+        />
+      )}
       {currentSong.audioUrl && (
         <WebPlayer
           url={currentSong.audioUrl}
@@ -421,7 +326,7 @@ const MySpace = () => {
           <button onClick={() => setEditMode(false)}>
             <IoMdClose />
           </button>
-          <button onClick={() => {}}>
+          <button onClick={handleSave}>
             <MdSave />
           </button>
         </div>

@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { AiFillCaretRight, AiOutlinePause } from "react-icons/ai";
+import {
+  AiFillCaretRight,
+  AiOutlinePause,
+  AiOutlineUpload,
+} from "react-icons/ai";
 import logo from "../../assets/images/logo-black.png";
 import Skeleton from "../../components/Skeleton";
 
@@ -8,6 +12,7 @@ const Intro = ({ user, currentSong, handlePause, handlePlaySong, edit }) => {
     displayName: "",
     imageUrl: "",
     username: "",
+    file: null,
   });
 
   useEffect(() => {
@@ -16,18 +21,38 @@ const Intro = ({ user, currentSong, handlePause, handlePlaySong, edit }) => {
         displayName: user.display_name,
         imageUrl: user.image_url || logo,
         username: user.username,
+        file: null,
       });
     }
   }, [user]);
+
+  const submitFile = (file) => {
+    console.log(file);
+  };
 
   return (
     <div className="intro">
       <div className="image-container">
         {user && user.display_name ? (
-          <img
-            src={user.image_url || logo}
-            alt={`${user.display_name.split(" ")[0]}'s Image'`}
-          />
+          <>
+            <img
+              src={user.image_url || logo}
+              alt={`${user.display_name.split(" ")[0]}'s Image'`}
+            />
+            {/* {edit && (
+              <div className="uploadContainer">
+                <input
+                  type="file"
+                  accept=".jpg,.png,.jpeg"
+                  onChange={(e) => setStore({ ...store, file: e.target.files })}
+                />
+                <div className="uploadContent">
+                  <AiOutlineUpload />
+                  <span>Upload Image</span>
+                </div>
+              </div>
+            )} */}
+          </>
         ) : (
           <Skeleton type="text" />
         )}
@@ -122,6 +147,7 @@ const Intro = ({ user, currentSong, handlePause, handlePlaySong, edit }) => {
                         : handlePlaySong(
                             user.anthem.song_id,
                             user.anthem.preview_url,
+                            1,
                             null
                           )
                     }
