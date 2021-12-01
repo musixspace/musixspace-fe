@@ -277,6 +277,7 @@ const MySpace = () => {
         cover_image: item.cover_image || null,
         nickname: item.nickname,
         songs: item.songs.map((i) => i.song_id),
+        playlist_id: item.playlist_id,
       };
     });
     const payload = {
