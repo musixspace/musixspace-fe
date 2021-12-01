@@ -150,7 +150,7 @@ const PlaylistModal = ({ data, close, isEdit }) => {
         <div className="modal edit-list-container">
           <div className="topbar">
             <div className="main">
-              <span>{data.name}</span>
+              <span>{data.nickname}</span>
               <span>{`${
                 data.songs.length > 1
                   ? `${data.songs.length} songs`

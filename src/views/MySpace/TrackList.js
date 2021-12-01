@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { AiFillCaretRight, AiOutlinePause } from "react-icons/ai";
 import { FiSkipBack, FiSkipForward } from "react-icons/fi";
@@ -16,34 +16,36 @@ const TrackList = ({
   onLeftClicked,
   onRightClicked,
   edit,
+  editData,
+  setEditData,
 }) => {
-  const [name, setName] = useState("");
-  const [tracks, setTracks] = useState(null);
-
-  useEffect(() => {
-    if (edit) {
-      setName(data.nickname);
-      setTracks(data.songs);
-    }
-  }, [edit]);
-
   const onDragEnd = (result) => {
     const { destination, source } = result;
 
     if (!destination) return;
     if (destination.index === source.index) return;
 
-    const sourceTrack = tracks[source.index];
+    const sourceTrack = editData.tracks.songs[source.index];
 
-    const newTracks = [...tracks];
+    const newTracks = [...editData.tracks.songs];
     newTracks.splice(source.index, 1);
     newTracks.splice(destination.index, 0, sourceTrack);
-    setTracks(newTracks);
+    // setTracks(newTracks);
+    setEditData({
+      ...editData,
+      tracks: { ...editData.tracks, songs: newTracks },
+    });
   };
 
   const onDeleteTrack = (songId) => {
-    const newTracks = tracks.filter((item) => item.song_id !== songId);
-    setTracks(newTracks);
+    const newTracks = editData.tracks.songs.filter(
+      (item) => item.song_id !== songId
+    );
+    // setTracks(newTracks);
+    setEditData({
+      ...editData,
+      tracks: { ...editData.tracks, songs: newTracks },
+    });
   };
 
   return (
@@ -52,8 +54,13 @@ const TrackList = ({
         {edit ? (
           <input
             type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
+            value={editData.tracks.nickname}
+            onChange={(e) =>
+              setEditData({
+                ...editData,
+                tracks: { ...editData.tracks, nickname: e.target.value },
+              })
+            }
           />
         ) : (
           <p className="title">{data && data.nickname}</p>
@@ -82,7 +89,7 @@ const TrackList = ({
                   ref={provided.innerRef}
                   {...provided.droppableProps}
                 >
-                  {tracks && (
+                  {data.nickname && (
                     <>
                       <div className="track">
                         <div className="image-container">
@@ -95,7 +102,7 @@ const TrackList = ({
                           <MdAdd />
                         </button>
                       </div>
-                      {tracks.map((item, idx) => (
+                      {editData.tracks.songs.map((item, idx) => (
                         <Draggable
                           key={item.song_id}
                           draggableId={item.song_id}

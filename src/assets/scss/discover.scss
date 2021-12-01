@@ -200,7 +200,7 @@
           .tags {
             display: flex;
             flex-wrap: wrap;
-            gap: 1em;
+            gap: 0.2em 0.4em;
 
             .tag {
               background-color: var(--clr-white);
@@ -319,7 +319,7 @@
               margin-top: 1em;
               display: flex;
               flex-wrap: wrap;
-              gap: 1em;
+              gap: 0.2em 0.4em;
 
               .artist {
                 background-color: var(--clr-black);

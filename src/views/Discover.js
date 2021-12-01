@@ -27,6 +27,7 @@ const Discover = () => {
   });
 
   useEffect(() => {
+    stopAudio();
     searchAllUsersAPICall();
   }, [currentUserNumber]);
 
@@ -52,7 +53,7 @@ const Discover = () => {
 
   useEffect(() => {
     if (touch.start && touch.end) {
-      console.log("In");
+      stopAudio();
       if (touch.start - touch.end > 75) {
         handleNextUser();
       } else if (touch.end - touch.start > 75) {
@@ -63,6 +64,12 @@ const Discover = () => {
 
   const handleSearch = (e) => {
     setSearch(e.target.value);
+  };
+
+  const stopAudio = () => {
+    if (audioUrl) {
+      setAudioUrl(null);
+    }
   };
 
   const searchAllUsersAPICall = () => {

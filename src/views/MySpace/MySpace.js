@@ -21,6 +21,14 @@ const MySpace = () => {
     artists: null,
   });
 
+  const [editMode, setEditMode] = useState(false);
+  const [editData, setEditData] = useState({
+    currentUser: null,
+    playlists: null,
+    tracks: null,
+    artists: null,
+  });
+
   const [currentSong, setCurrentSong] = useState({
     songId: null,
     audioUrl: null,
@@ -34,8 +42,6 @@ const MySpace = () => {
     open: false,
     data: null,
   });
-
-  const [editMode, setEditMode] = useState(false);
 
   useEffect(() => {
     if (modal.open) {
@@ -83,6 +89,10 @@ const MySpace = () => {
 
       setData({
         ...data,
+        ...finalObj,
+      });
+      setEditData({
+        ...editData,
         ...finalObj,
       });
     }
@@ -259,7 +269,46 @@ const MySpace = () => {
     });
   };
 
-  const handleSave = () => {};
+  const handleSave = () => {
+    const songs = editData.tracks.songs.map((item) => item.song_id);
+    const artists = editData.artists.artists.map((item) => item.artist_id);
+    const playlists = editData.playlists.playlist_ids.map((item) => {
+      return {
+        cover_image: item.cover_image || null,
+        nickname: item.nickname,
+        songs: item.songs.map((i) => i.song_id),
+      };
+    });
+    const payload = {
+      display_name: editData.currentUser.display_name,
+      anthem: editData.currentUser.anthem.song_id,
+      image_url: editData.currentUser.image_url || null,
+      myspace_toptracks: {
+        nickname: editData.tracks.nickname,
+        songs: songs,
+      },
+      myspace_topartists: {
+        nickname: editData.artists.nickname,
+        artists: artists,
+      },
+      myspace_mixtapes: {
+        nickname: editData.playlists.nickname,
+        playlist_ids: playlists,
+      },
+    };
+
+    console.log(payload);
+
+    axiosInstance
+      .post(`/myspace_edit/${handle}`, payload)
+      .then((res) => {
+        console.log(res.data);
+        window.location.reload();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   return (
     <div className="mySpace">
@@ -267,6 +316,8 @@ const MySpace = () => {
         user={data.currentUser}
         currentSong={currentSong}
         edit={editMode}
+        editData={editData}
+        setEditData={setEditData}
         handlePause={handlePause}
         handlePlaySong={handlePlaySong}
       />
@@ -279,6 +330,8 @@ const MySpace = () => {
         onLeftClicked={onLeftClicked}
         onRightClicked={onRightClicked}
         edit={editMode}
+        editData={editData}
+        setEditData={setEditData}
       />
       <ArtistList
         data={data && data.artists}
@@ -289,6 +342,8 @@ const MySpace = () => {
         onLeftClicked={onLeftClicked}
         onRightClicked={onRightClicked}
         edit={editMode}
+        editData={editData}
+        setEditData={setEditData}
       />
       {data && data.playlists && (
         <Playlist
@@ -297,6 +352,8 @@ const MySpace = () => {
           onRightClicked={onRightClicked}
           openPlaylistModal={openPlaylistModal}
           edit={editMode}
+          editData={editData}
+          setEditData={setEditData}
         />
       )}
       {currentSong.audioUrl && (

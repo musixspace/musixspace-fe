@@ -12,36 +12,36 @@ const Playlist = ({
   onRightClicked,
   openPlaylistModal,
   edit,
+  editData,
+  setEditData,
 }) => {
-  const [name, setName] = useState("");
-  const [playlists, setPlaylists] = useState(null);
-
-  useEffect(() => {
-    if (edit) {
-      setName(data.nickname);
-      setPlaylists(data.playlist_ids);
-    }
-  }, [edit]);
-
   const onDragEnd = (result) => {
     const { destination, source } = result;
 
     if (!destination) return;
     if (destination.index === source.index) return;
 
-    const sourceTrack = playlists[source.index];
+    const sourceTrack = editData.playlists.playlist_ids[source.index];
 
-    const newPlaylists = [...playlists];
+    const newPlaylists = [...editData.playlists.playlist_ids];
     newPlaylists.splice(source.index, 1);
     newPlaylists.splice(destination.index, 0, sourceTrack);
-    setPlaylists(newPlaylists);
+    // setPlaylists(newPlaylists);
+    setEditData({
+      ...editData,
+      playlists: { ...editData.playlists, playlist_ids: newPlaylists },
+    });
   };
 
   const onDeletePlaylist = (playlistId) => {
-    const newPlaylists = playlists.filter(
+    const newPlaylists = editData.playlists.playlist_ids.filter(
       (item) => item.playlist_id !== playlistId
     );
-    setPlaylists(newPlaylists);
+    // setPlaylists(newPlaylists);
+    setEditData({
+      ...editData,
+      playlists: { ...editData.playlists, playlist_ids: newPlaylists },
+    });
   };
 
   return (
@@ -50,8 +50,13 @@ const Playlist = ({
         {edit ? (
           <input
             type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
+            value={editData.playlists.nickname}
+            onChange={(e) =>
+              setEditData({
+                ...editData,
+                playlists: { ...editData.playlists, nickname: e.target.value },
+              })
+            }
           />
         ) : (
           <p className="title">{data && data.nickname}</p>
@@ -77,7 +82,7 @@ const Playlist = ({
                   ref={provided.innerRef}
                   {...provided.droppableProps}
                 >
-                  {playlists && (
+                  {data.nickname && (
                     <>
                       <div className="track">
                         <div className="image-container">
@@ -90,7 +95,7 @@ const Playlist = ({
                           <MdAdd />
                         </button>
                       </div>
-                      {playlists.map((item, idx) => (
+                      {editData.playlists.playlist_ids.map((item, idx) => (
                         <Draggable
                           key={item.playlist_id}
                           draggableId={item.playlist_id}

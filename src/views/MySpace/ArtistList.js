@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { AiFillCaretRight, AiOutlinePause } from "react-icons/ai";
 import { FiSkipBack, FiSkipForward } from "react-icons/fi";
@@ -16,34 +16,36 @@ const ArtistList = ({
   handlePause,
   handleSetAndPlayArtist,
   edit,
+  editData,
+  setEditData,
 }) => {
-  const [name, setName] = useState("");
-  const [artists, setArtists] = useState(null);
-
-  useEffect(() => {
-    if (edit) {
-      setName(data.nickname);
-      setArtists(data.artists);
-    }
-  }, [edit]);
-
   const onDragEnd = (result) => {
     const { destination, source } = result;
 
     if (!destination) return;
     if (destination.index === source.index) return;
 
-    const sourceTrack = artists[source.index];
+    const sourceTrack = editData.artists.artists[source.index];
 
-    const newArtists = [...artists];
+    const newArtists = [...editData.artists.artists];
     newArtists.splice(source.index, 1);
     newArtists.splice(destination.index, 0, sourceTrack);
-    setArtists(newArtists);
+    // setArtists(newArtists);
+    setEditData({
+      ...editData,
+      artists: { ...editData.artists, artists: newArtists },
+    });
   };
 
   const onDeleteArtist = (artistId) => {
-    const newArtists = artists.filter((item) => item.artist_id !== artistId);
-    setArtists(newArtists);
+    const newArtists = editData.artists.artists.filter(
+      (item) => item.artist_id !== artistId
+    );
+    // setArtists(newArtists);
+    setEditData({
+      ...editData,
+      artists: { ...editData.artists, artists: newArtists },
+    });
   };
 
   return (
@@ -52,8 +54,13 @@ const ArtistList = ({
         {edit ? (
           <input
             type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
+            value={editData.artists.nickname}
+            onChange={(e) =>
+              setEditData({
+                ...editData,
+                artists: { ...editData.artists, nickname: e.target.value },
+              })
+            }
           />
         ) : (
           <p className="title">{data && data.nickname}</p>
@@ -99,7 +106,7 @@ const ArtistList = ({
                   ref={provided.innerRef}
                   {...provided.droppableProps}
                 >
-                  {artists && (
+                  {data.nickname && (
                     <>
                       <div className="track">
                         <div className="image-container">
@@ -112,7 +119,7 @@ const ArtistList = ({
                           <MdAdd />
                         </button>
                       </div>
-                      {artists.map((item, idx) => (
+                      {editData.artists.artists.map((item, idx) => (
                         <Draggable
                           key={item.artist_id}
                           draggableId={item.artist_id}

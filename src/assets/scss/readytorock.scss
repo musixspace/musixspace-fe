@@ -57,8 +57,9 @@
         position: absolute;
         left: 0;
         top: calc(100% + 10px);
-        height: 200px;
-        overflow-y: scroll;
+        height: auto;
+        max-height: 200px;
+        overflow-y: auto;
         border-radius: 10px;
 
         width: 100%;
@@ -142,6 +143,11 @@
             font-size: calc(var(--base-font-size) * 2.5);
           }
         }
+
+        > ul.anthem-options {
+          left: 10%;
+          width: 80%;
+        }
       }
 
       .button-div {
@@ -171,6 +177,11 @@
           input {
             font-size: calc(var(--base-font-size) * 2.2);
           }
+        }
+
+        > ul.anthem-options {
+          left: 0;
+          width: 100%;
         }
       }
 

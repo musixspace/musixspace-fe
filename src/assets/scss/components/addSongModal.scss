@@ -1,0 +1,97 @@
+@import "../mixins/d-flex.scss";
+
+.add-song-modal-wrapper {
+  background-color: transparent;
+  backdrop-filter: blur(5px);
+
+  .modal-container {
+    .add-song-modal {
+      padding: 5% !important;
+      background-color: var(--bg-about);
+      border: 3px solid var(--clr-white-2);
+
+      @include d-flex(flex-start, flex-start, column);
+
+      .searchbar {
+        margin-top: 0.5em;
+        position: relative;
+        width: 100%;
+        background-color: var(--clr-white-2);
+        border-radius: 100px;
+        @include d-flex(center, center, row);
+        gap: 10px;
+        padding: 5px 0;
+
+        > input {
+          all: unset;
+          width: 100%;
+          //   height: 40px;
+          color: var(--clr-black);
+          font-family: var(--f-circ-pro), sans-serif;
+        }
+
+        > svg {
+          color: var(--clr-gray);
+          font-size: calc(var(--base-font-size) * 3);
+          cursor: pointer;
+
+          &:nth-child(1) {
+            margin-left: 10px;
+          }
+
+          &:not(:nth-child(1)) {
+            margin-right: 10px;
+          }
+        }
+      }
+
+      ul.song-list {
+        height: 350px;
+        list-style-type: none;
+        width: 100%;
+
+        > li {
+          @include d-flex(flex-start, center, row);
+          cursor: pointer;
+          margin-top: 10px;
+          width: 100%;
+          border-radius: 10px;
+          padding: 0.2em 0.5em;
+
+          .image-container {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            overflow: hidden;
+
+            > img {
+              width: 100%;
+              height: 100%;
+              object-fit: contain;
+            }
+          }
+
+          .title {
+            margin-left: 1em;
+            font-size: calc(var(--base-font-size) * 3);
+            text-overflow: ellipsis;
+          }
+
+          &:hover {
+            background-color: rgba($color: #000000, $alpha: 0.2);
+          }
+        }
+      }
+
+      button {
+        border: none;
+        outline: none;
+        background-color: var(--clr-white-2);
+        padding: 0.2em 1em;
+        border-radius: 100px;
+        font-family: var(--f-circ-pro), sans-serif;
+        font-size: calc(var(--base-font-size) * 3);
+      }
+    }
+  }
+}
