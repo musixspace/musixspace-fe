@@ -4,7 +4,7 @@ import { IoMdClose } from "react-icons/io";
 import useDebounceCallback from "../../hooks/useDebounce";
 import { axiosInstance } from "../../util/axiosConfig";
 
-const AddSongModal = ({ submitData, close }) => {
+const AddSongModal = ({ title, submitData, close }) => {
   const [search, setSearch] = useState({
     id: null,
     name: "",
@@ -38,7 +38,7 @@ const AddSongModal = ({ submitData, close }) => {
           <IoMdClose onClick={close} />
         </div>
         <div className="modal add-song-modal">
-          <div className="title">Add New Song</div>
+          <div className="title">{title}</div>
           <div className="searchbar">
             <FaSearch />
             <input
@@ -49,7 +49,9 @@ const AddSongModal = ({ submitData, close }) => {
               }
               placeholder="Search song"
             />
-            <IoMdClose onClick={() => setSearch({ ...search, name: "" })} />
+            <IoMdClose
+              onClick={() => setSearch({ ...search, id: null, name: "" })}
+            />
           </div>
           <ul className="song-list">
             {songList && songList.length
@@ -74,9 +76,14 @@ const AddSongModal = ({ submitData, close }) => {
                 ))
               : null}
           </ul>
-          {search.id && (
-            <button onClick={() => submitData(search)}>Add Track</button>
-          )}
+          <div className="button-container">
+            <button
+              className={search.id ? "" : "hide"}
+              onClick={() => submitData(search)}
+            >
+              {title}
+            </button>
+          </div>
         </div>
       </div>
     </div>

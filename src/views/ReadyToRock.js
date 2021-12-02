@@ -51,19 +51,21 @@ const ReadyToRock = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const payload = {
-      handle: data.username,
-      bio: data.anthem.id,
-    };
-    axiosInstance
-      .post("/newstar", payload)
-      .then((res) => {
-        localStorage.setItem("handle", data.username);
-        history.push("/rolling");
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    if (data.email && data.username && data.anthem.id) {
+      const payload = {
+        handle: data.username,
+        bio: data.anthem.id,
+      };
+      axiosInstance
+        .post("/newstar", payload)
+        .then((res) => {
+          localStorage.setItem("handle", data.username);
+          history.push("/rolling");
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   };
 
   return (

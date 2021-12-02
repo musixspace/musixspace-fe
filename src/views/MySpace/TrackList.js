@@ -1,11 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { AiFillCaretRight, AiOutlinePause } from "react-icons/ai";
 import { FiSkipBack, FiSkipForward } from "react-icons/fi";
 import { MdAdd, MdDelete } from "react-icons/md";
+import { useSetRecoilState } from "recoil";
 import logo from "../../assets/images/logo-black.png";
 import Skeleton from "../../components/Skeleton";
+import { alertAtom } from "../../recoil/alertAtom";
 import { paddedNumbers } from "../../util/functions";
+import AddSongModal from "./AddSongModal";
 
 const TrackList = ({
   data,
@@ -19,6 +22,9 @@ const TrackList = ({
   editData,
   setEditData,
 }) => {
+  const [openModal, setOpenModal] = useState(false);
+  const setAlert = useSetRecoilState(alertAtom);
+
   const onDragEnd = (result) => {
     const { destination, source } = result;
 
@@ -46,6 +52,34 @@ const TrackList = ({
       ...editData,
       tracks: { ...editData.tracks, songs: newTracks },
     });
+  };
+
+  const addNewTrack = (track) => {
+    console.log(track);
+    const duplicateTrack = editData.tracks.songs.find((item) =>
+      item ? item.song_id === track.id : false
+    );
+    if (duplicateTrack) {
+      setAlert({
+        open: true,
+        message: `You already have this track in your current playlist!`,
+        type: "warning",
+      });
+    } else {
+      const newTrack = {
+        song_id: track.id,
+        name: track.name,
+        image_url: track.image_url,
+      };
+      setEditData({
+        ...editData,
+        tracks: {
+          ...editData.tracks,
+          songs: [newTrack, ...editData.tracks.songs],
+        },
+      });
+      setOpenModal(false);
+    }
   };
 
   return (
@@ -89,7 +123,7 @@ const TrackList = ({
                   ref={provided.innerRef}
                   {...provided.droppableProps}
                 >
-                  {data.nickname && (
+                  {data && data.nickname && (
                     <>
                       <div className="track">
                         <div className="image-container">
@@ -98,45 +132,55 @@ const TrackList = ({
                         <div className="content-container">
                           <div className="title">Add New Track</div>
                         </div>
-                        <button className="controls" onClick={() => {}}>
+                        <button
+                          className="controls"
+                          onClick={() => setOpenModal(true)}
+                        >
                           <MdAdd />
                         </button>
                       </div>
-                      {editData.tracks.songs.map((item, idx) => (
-                        <Draggable
-                          key={item.song_id}
-                          draggableId={item.song_id}
-                          index={idx}
-                        >
-                          {(provided) => (
-                            <div
-                              className="track"
-                              ref={provided.innerRef}
-                              {...provided.dragHandleProps}
-                              {...provided.draggableProps}
+                      {editData.tracks.songs.map(
+                        (item, idx) =>
+                          item && (
+                            <Draggable
+                              key={item.song_id}
+                              draggableId={item.song_id}
+                              index={idx}
                             >
-                              <div className="image-container">
-                                <img
-                                  src={item.image_url || logo}
-                                  alt={item.name}
-                                />
-                              </div>
-                              <div className="content-container">
-                                <div className="title">{item.name}</div>
-                                <div className="sub">
-                                  {item.artists.map((i) => i.name).join(", ")}
+                              {(provided) => (
+                                <div
+                                  className="track"
+                                  ref={provided.innerRef}
+                                  {...provided.dragHandleProps}
+                                  {...provided.draggableProps}
+                                >
+                                  <div className="image-container">
+                                    <img
+                                      src={item.image_url || logo}
+                                      alt={item.name}
+                                    />
+                                  </div>
+                                  <div className="content-container">
+                                    <div className="title">{item.name}</div>
+                                    <div className="sub">
+                                      {item.artists &&
+                                        item.artists.length > 0 &&
+                                        item.artists
+                                          .map((i) => i.name)
+                                          .join(", ")}
+                                    </div>
+                                  </div>
+                                  <button
+                                    className="controls"
+                                    onClick={() => onDeleteTrack(item.song_id)}
+                                  >
+                                    <MdDelete />
+                                  </button>
                                 </div>
-                              </div>
-                              <button
-                                className="controls"
-                                onClick={() => onDeleteTrack(item.song_id)}
-                              >
-                                <MdDelete />
-                              </button>
-                            </div>
-                          )}
-                        </Draggable>
-                      ))}
+                              )}
+                            </Draggable>
+                          )
+                      )}
                     </>
                   )}
                 </div>
@@ -151,43 +195,56 @@ const TrackList = ({
                     <Skeleton type="text" />
                   </div>
                 ))
-              : data.songs.map((item, idx) => (
-                  <div key={item.song_id} id={item.song_id} className="track">
-                    <div
-                      className={`image-container ${
-                        item.song_id === currentSong.songId ? "selected" : ""
-                      }`}
-                    >
-                      <img src={item.image_url || logo} alt={item.name} />
-                    </div>
-                    <div className="content-container">
-                      <div className="title">{item.name}</div>
-                      <div className="sub">
-                        {item.artists.map((i) => i.name).join(", ")}
-                      </div>
-                    </div>
-                    {item.preview_url && (
-                      <button
-                        className="controls"
-                        onClick={() =>
-                          item.song_id === currentSong.songId
-                            ? handlePause()
-                            : handleSetAndPlayTrack(
-                                item.song_id,
-                                item.preview_url,
-                                idx + 1
-                              )
-                        }
+              : data.songs &&
+                data.songs.length > 0 &&
+                data.songs.map(
+                  (item, idx) =>
+                    item && (
+                      <div
+                        key={item.song_id}
+                        id={item.song_id}
+                        className="track"
                       >
-                        {item.song_id === currentSong.songId ? (
-                          <AiOutlinePause />
-                        ) : (
-                          <AiFillCaretRight />
+                        <div
+                          className={`image-container ${
+                            item.song_id === currentSong.songId
+                              ? "selected"
+                              : ""
+                          }`}
+                        >
+                          <img src={item.image_url || logo} alt={item.name} />
+                        </div>
+                        <div className="content-container">
+                          <div className="title">{item.name}</div>
+                          <div className="sub">
+                            {item.artists &&
+                              item.artists.length > 0 &&
+                              item.artists.map((i) => i.name).join(", ")}
+                          </div>
+                        </div>
+                        {item.preview_url && (
+                          <button
+                            className="controls"
+                            onClick={() =>
+                              item.song_id === currentSong.songId
+                                ? handlePause()
+                                : handleSetAndPlayTrack(
+                                    item.song_id,
+                                    item.preview_url,
+                                    idx + 1
+                                  )
+                            }
+                          >
+                            {item.song_id === currentSong.songId ? (
+                              <AiOutlinePause />
+                            ) : (
+                              <AiFillCaretRight />
+                            )}
+                          </button>
                         )}
-                      </button>
-                    )}
-                  </div>
-                ))}
+                      </div>
+                    )
+                )}
           </div>
         )}
         {data && (
@@ -245,6 +302,13 @@ const TrackList = ({
             </div>
           </div>
         )
+      )}
+      {openModal && (
+        <AddSongModal
+          submitData={addNewTrack}
+          title="Add New Track"
+          close={() => setOpenModal(false)}
+        />
       )}
     </div>
   );

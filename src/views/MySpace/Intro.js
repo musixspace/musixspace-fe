@@ -223,6 +223,7 @@ const Intro = ({
       {openModal && (
         <AddSongModal
           submitData={changeAnthem}
+          title="Change Anthem"
           close={() => setOpenModal(false)}
         />
       )}

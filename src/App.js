@@ -52,8 +52,9 @@ const App = () => {
   }, []);
 
   useEffect(() => {
-    if (!displayName && localStorage.getItem("handle")) {
-      getUserProfile(localStorage.getItem("handle"));
+    const handle = localStorage.getItem("handle");
+    if (!displayName && handle && handle !== "undefined") {
+      getUserProfile(handle);
     }
   }, [displayName]);
 

@@ -38,6 +38,14 @@
     background-color: var(--clr-alert-error);
   }
 
+  &.info {
+    background-color: var(--clr-alert-info);
+  }
+
+  &.warning {
+    background-color: var(--clr-alert-warning);
+  }
+
   &.hide {
     transform: translateX(0) translateY(1000px);
   }

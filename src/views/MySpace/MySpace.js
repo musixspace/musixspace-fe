@@ -2,7 +2,9 @@ import React, { useEffect, useState } from "react";
 import { IoMdClose } from "react-icons/io";
 import { MdEdit, MdSave } from "react-icons/md";
 import { useParams } from "react-router";
+import { useSetRecoilState } from "recoil";
 import WebPlayer from "../../components/WebPlayer";
+import { alertAtom } from "../../recoil/alertAtom";
 import { axiosInstance } from "../../util/axiosConfig";
 import { setMediaSession } from "../../util/functions";
 import ArtistList from "./ArtistList";
@@ -13,6 +15,7 @@ import TrackList from "./TrackList";
 
 const MySpace = () => {
   const { handle } = useParams();
+  const setAlert = useSetRecoilState(alertAtom);
 
   const [data, setData] = useState({
     currentUser: null,
@@ -53,50 +56,54 @@ const MySpace = () => {
 
   useEffect(async () => {
     if (handle && handle !== "myspace") {
-      let finalObj = {
-        currentUser: null,
-        tracks: null,
-        artists: null,
-        playlists: null,
-      };
-      await axiosInstance
-        .get(`/myspace_view/${handle}`)
-        .then((res) => {
-          finalObj = {
-            ...finalObj,
-            playlists: res.data.myspace_mixtapes,
-            tracks: res.data.myspace_toptracks,
-            artists: res.data.myspace_topartists,
-          };
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-
-      await axiosInstance
-        .get(`/users/${handle}`)
-        .then((res) => {
-          if (res.status === 200) {
-            finalObj = {
-              ...finalObj,
-              currentUser: { ...res.data },
-            };
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-
-      setData({
-        ...data,
-        ...finalObj,
-      });
-      setEditData({
-        ...editData,
-        ...finalObj,
-      });
+      apiCall();
     }
   }, [handle]);
+
+  const apiCall = async () => {
+    let finalObj = {
+      currentUser: null,
+      tracks: null,
+      artists: null,
+      playlists: null,
+    };
+    await axiosInstance
+      .get(`/myspace_view/${handle}`)
+      .then((res) => {
+        finalObj = {
+          ...finalObj,
+          playlists: res.data.myspace_mixtapes,
+          tracks: res.data.myspace_toptracks,
+          artists: res.data.myspace_topartists,
+        };
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+    await axiosInstance
+      .get(`/users/${handle}`)
+      .then((res) => {
+        if (res.status === 200) {
+          finalObj = {
+            ...finalObj,
+            currentUser: { ...res.data },
+          };
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+    setData({
+      ...data,
+      ...finalObj,
+    });
+    setEditData({
+      ...editData,
+      ...finalObj,
+    });
+  };
 
   useEffect(() => {
     if (currentSong.songId && currentSong.list) {
@@ -270,16 +277,26 @@ const MySpace = () => {
   };
 
   const handleSave = () => {
-    const songs = editData.tracks.songs.map((item) => item.song_id);
-    const artists = editData.artists.artists.map((item) => item.artist_id);
-    const playlists = editData.playlists.playlist_ids.map((item) => {
-      return {
-        cover_image: item.cover_image || null,
-        nickname: item.nickname,
-        songs: item.songs.map((i) => i.song_id),
-        playlist_id: item.playlist_id,
-      };
-    });
+    console.log(editData);
+    const songs = editData.tracks.songs
+      .map((item) => (item ? item.song_id : null))
+      .filter((item) => item !== null);
+    const artists = editData.artists.artists
+      .map((item) => (item ? item.artist_id : null))
+      .filter((item) => item !== null);
+    const playlists = editData.playlists.playlist_ids
+      .map((item) => {
+        if (item) {
+          return {
+            cover_image: item.cover_image || null,
+            nickname: item.nickname,
+            songs: item.songs.map((i) => i.song_id),
+            playlist_id: item.playlist_id,
+          };
+        }
+        return null;
+      })
+      .filter((item) => item !== null);
     const payload = {
       display_name: editData.currentUser.display_name,
       anthem: editData.currentUser.anthem.song_id,
@@ -298,13 +315,23 @@ const MySpace = () => {
       },
     };
 
-    console.log(payload);
-
+    setData({
+      ...data,
+      currentUser: null,
+      playlists: null,
+      tracks: null,
+      artists: null,
+    });
+    setAlert({
+      open: true,
+      message: `Updating your space...`,
+      type: "info",
+    });
     axiosInstance
       .post(`/myspace_edit/${handle}`, payload)
       .then((res) => {
-        console.log(res.data);
-        window.location.reload();
+        setEditMode(false);
+        apiCall();
       })
       .catch((err) => {
         console.log(err);

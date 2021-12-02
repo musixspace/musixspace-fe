@@ -82,7 +82,7 @@ const Playlist = ({
                   ref={provided.innerRef}
                   {...provided.droppableProps}
                 >
-                  {data.nickname && (
+                  {data && data.nickname && (
                     <>
                       <div className="track">
                         <div className="image-container">
