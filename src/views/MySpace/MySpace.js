@@ -315,6 +315,12 @@ const MySpace = () => {
       },
     };
 
+    setAlert({
+      open: true,
+      message: `Updating your space...`,
+      type: "info",
+    });
+    setEditMode(false);
     setData({
       ...data,
       currentUser: null,
@@ -322,15 +328,9 @@ const MySpace = () => {
       tracks: null,
       artists: null,
     });
-    setAlert({
-      open: true,
-      message: `Updating your space...`,
-      type: "info",
-    });
     axiosInstance
       .post(`/myspace_edit/${handle}`, payload)
       .then((res) => {
-        setEditMode(false);
         apiCall();
       })
       .catch((err) => {

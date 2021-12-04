@@ -3,22 +3,22 @@ import { FaSearch } from "react-icons/fa";
 import { IoMdClose } from "react-icons/io";
 import useDebounceCallback from "../../hooks/useDebounce";
 import { axiosInstance } from "../../util/axiosConfig";
+import logo from "../../assets/images/logo-black.png";
 
-const AddSongModal = ({ title, submitData, close }) => {
+const AddSongModal = ({ title, submitData, close, type }) => {
   const [search, setSearch] = useState({
     id: null,
     name: "",
     image_url: null,
   });
 
-  const [songList, setSongList] = useState(null);
+  const [itemList, setItemList] = useState(null);
 
   const apiCall = useDebounceCallback((value) => {
     axiosInstance
-      .post("/search", { query: value })
+      .post("/search", { query: value, type: type })
       .then((res) => {
-        console.log(res.data);
-        setSongList(res.data);
+        setItemList(res.data);
       })
       .catch((err) => {
         console.log(err);
@@ -47,15 +47,15 @@ const AddSongModal = ({ title, submitData, close }) => {
               onChange={(e) =>
                 setSearch({ ...search, id: null, name: e.target.value })
               }
-              placeholder="Search song"
+              placeholder={type === "track" ? "Search song" : "Search artist"}
             />
             <IoMdClose
               onClick={() => setSearch({ ...search, id: null, name: "" })}
             />
           </div>
           <ul className="song-list">
-            {songList && songList.length
-              ? songList.map((item) => (
+            {itemList && itemList.length
+              ? itemList.map((item) => (
                   <li
                     key={item.id}
                     onClick={() => {
@@ -65,11 +65,11 @@ const AddSongModal = ({ title, submitData, close }) => {
                         name: item.name,
                         image_url: item.image_url,
                       });
-                      setSongList([]);
+                      setItemList([]);
                     }}
                   >
                     <div className="image-container">
-                      <img src={item.image_url} alt={item.name} />
+                      <img src={item.image_url || logo} alt={item.name} />
                     </div>
                     <div className="title">{item.name}</div>
                   </li>

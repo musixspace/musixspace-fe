@@ -8,7 +8,7 @@ import logo from "../../assets/images/logo-black.png";
 import Skeleton from "../../components/Skeleton";
 import { alertAtom } from "../../recoil/alertAtom";
 import { paddedNumbers } from "../../util/functions";
-import AddSongModal from "./AddSongModal";
+import AddItemModal from "./AddItemModal";
 
 const TrackList = ({
   data,
@@ -130,7 +130,7 @@ const TrackList = ({
                           <img src={logo} alt="Musixspace Logo" />
                         </div>
                         <div className="content-container">
-                          <div className="title">Add New Track</div>
+                          <div className="title">Add New Song</div>
                         </div>
                         <button
                           className="controls"
@@ -304,9 +304,10 @@ const TrackList = ({
         )
       )}
       {openModal && (
-        <AddSongModal
+        <AddItemModal
           submitData={addNewTrack}
-          title="Add New Track"
+          title="Add Song"
+          type="track"
           close={() => setOpenModal(false)}
         />
       )}

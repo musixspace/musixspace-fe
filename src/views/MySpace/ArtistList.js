@@ -1,11 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { AiFillCaretRight, AiOutlinePause } from "react-icons/ai";
 import { FiSkipBack, FiSkipForward } from "react-icons/fi";
 import { MdAdd, MdDelete } from "react-icons/md";
+import { useSetRecoilState } from "recoil";
 import logo from "../../assets/images/logo-black.png";
 import Skeleton from "../../components/Skeleton";
+import { alertAtom } from "../../recoil/alertAtom";
 import { paddedNumbers } from "../../util/functions";
+import AddItemModal from "./AddItemModal";
 
 const ArtistList = ({
   data,
@@ -19,6 +22,9 @@ const ArtistList = ({
   editData,
   setEditData,
 }) => {
+  const [openModal, setOpenModal] = useState(false);
+  const setAlert = useSetRecoilState(alertAtom);
+
   const onDragEnd = (result) => {
     const { destination, source } = result;
 
@@ -46,6 +52,34 @@ const ArtistList = ({
       ...editData,
       artists: { ...editData.artists, artists: newArtists },
     });
+  };
+
+  const addNewArtist = (artist) => {
+    console.log(artist);
+    const duplicateArtist = editData.artists.artists.find((item) =>
+      item ? item.artist_id === artist.id : false
+    );
+    if (duplicateArtist) {
+      setAlert({
+        open: true,
+        message: `You already have this artist in your current playlist!`,
+        type: "warning",
+      });
+    } else {
+      const newArtist = {
+        artist_id: artist.id,
+        name: artist.name,
+        image_url: artist.image_url,
+      };
+      setEditData({
+        ...editData,
+        artists: {
+          ...editData.artists,
+          artists: [newArtist, ...editData.artists.artists],
+        },
+      });
+      setOpenModal(false);
+    }
   };
 
   return (
@@ -115,7 +149,10 @@ const ArtistList = ({
                         <div className="content-container">
                           <div className="title">Add New Artist</div>
                         </div>
-                        <button className="controls" onClick={() => {}}>
+                        <button
+                          className="controls"
+                          onClick={() => setOpenModal(true)}
+                        >
                           <MdAdd />
                         </button>
                       </div>
@@ -251,6 +288,14 @@ const ArtistList = ({
             </div>
           </div>
         )
+      )}
+      {openModal && (
+        <AddItemModal
+          submitData={addNewArtist}
+          title="Add Artist"
+          type="artist"
+          close={() => setOpenModal(false)}
+        />
       )}
     </div>
   );

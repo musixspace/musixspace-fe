@@ -21,7 +21,7 @@ const ReadyToRock = () => {
 
   const apiCall = useDebounceCallback((value) => {
     axiosInstance
-      .post("/search", { query: value })
+      .post("/search", { query: value, type: "search" })
       .then((res) => {
         console.log(res.data);
         setAnthemStore(res.data);

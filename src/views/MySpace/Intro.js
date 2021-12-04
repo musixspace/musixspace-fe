@@ -1,13 +1,9 @@
-import React, { useEffect, useState } from "react";
-import {
-  AiFillCaretRight,
-  AiOutlinePause,
-  AiOutlineUpload,
-} from "react-icons/ai";
+import React, { useState } from "react";
+import { AiFillCaretRight, AiOutlinePause } from "react-icons/ai";
 import { MdDelete } from "react-icons/md";
 import logo from "../../assets/images/logo-black.png";
 import Skeleton from "../../components/Skeleton";
-import AddSongModal from "./AddSongModal";
+import AddSongModal from "./AddItemModal";
 
 const Intro = ({
   user,
@@ -224,6 +220,7 @@ const Intro = ({
         <AddSongModal
           submitData={changeAnthem}
           title="Change Anthem"
+          type="track"
           close={() => setOpenModal(false)}
         />
       )}
