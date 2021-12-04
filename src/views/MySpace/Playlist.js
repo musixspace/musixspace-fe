@@ -111,11 +111,11 @@ const Playlist = ({
                               <div className={`image-container`}>
                                 <img
                                   src={item.cover_image || logo}
-                                  alt={item.name}
+                                  alt={item.nickname}
                                 />
                               </div>
                               <div className="content-container">
-                                <div className="title">{item.name}</div>
+                                <div className="title">{item.nickname}</div>
                               </div>
                               <button
                                 className="controls"
@@ -150,10 +150,10 @@ const Playlist = ({
                     className="track"
                   >
                     <div className={`image-container`}>
-                      <img src={item.cover_image || logo} alt={item.name} />
+                      <img src={item.cover_image || logo} alt={item.nickname} />
                     </div>
                     <div className="content-container">
-                      <div className="title">{item.name}</div>
+                      <div className="title">{item.nickname}</div>
                     </div>
                     <a
                       href={`https://open.spotify.com/playlist/${item.playlist_id}`}
