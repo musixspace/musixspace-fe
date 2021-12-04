@@ -292,6 +292,7 @@ const MySpace = () => {
             nickname: item.nickname,
             songs: item.songs.map((i) => i.song_id),
             playlist_id: item.playlist_id,
+            visible: item.visible,
           };
         }
         return null;
