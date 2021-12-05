@@ -9,6 +9,9 @@ import logo from "../../assets/images/logo-black.png";
 import Skeleton from "../../components/Skeleton";
 import AddSongModal from "./AddItemModal";
 import S3 from "react-aws-s3";
+import { generateRandomString } from "../../util/functions";
+import { alertAtom } from "../../recoil/alertAtom";
+import { useSetRecoilState } from "recoil";
 
 const Intro = ({
   user,
@@ -19,13 +22,16 @@ const Intro = ({
   editData,
   setEditData,
 }) => {
+  const setAlert = useSetRecoilState(alertAtom);
   const [openModal, setOpenModal] = useState(false);
   const fileInput = useRef("");
 
   const handleUpload = (e) => {
     e.preventDefault();
     let file = fileInput.current.files[0];
-    let fileName = `${localStorage.getItem("handle")}-profile`;
+    let fileName = `${localStorage.getItem(
+      "handle"
+    )}-profile-${generateRandomString(5)}`;
     const config = {
       bucketName: "musixspace",
       dirName: "users",
@@ -34,9 +40,27 @@ const Intro = ({
       secretAccessKey: process.env.REACT_APP_SECRET_ACCESS_KEY,
     };
 
+    setAlert({
+      open: true,
+      message: `Uploading image...`,
+      type: "info",
+    });
+
     const ReactS3Client = new S3(config);
     ReactS3Client.uploadFile(file, fileName).then((data) => {
-      console.log(data);
+      if (data.status === 204) {
+        console.log(data);
+        setEditData({
+          ...editData,
+          currentUser: { ...editData.currentUser, image_url: data.location },
+        });
+      } else {
+        setAlert({
+          open: true,
+          message: `Some error occurred while uploading image!`,
+          type: "error",
+        });
+      }
     });
   };
 
@@ -64,10 +88,14 @@ const Intro = ({
         {user && user.display_name ? (
           <>
             <img
-              src={user.image_url || logo}
+              src={
+                edit
+                  ? editData.currentUser.image_url || logo
+                  : user.image_url || logo
+              }
               alt={`${user.display_name.split(" ")[0]}'s Image'`}
             />
-            {/* {edit && (
+            {edit && (
               <div className="uploadContainer">
                 <input
                   type="file"
@@ -80,7 +108,7 @@ const Intro = ({
                   <span>Upload Image</span>
                 </div>
               </div>
-            )} */}
+            )}
           </>
         ) : (
           <Skeleton type="text" />

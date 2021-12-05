@@ -2,9 +2,10 @@ import React, { useEffect, useState } from "react";
 import { IoMdClose } from "react-icons/io";
 import { MdEdit, MdSave } from "react-icons/md";
 import { useParams } from "react-router";
-import { useSetRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import WebPlayer from "../../components/WebPlayer";
 import { alertAtom } from "../../recoil/alertAtom";
+import { userState } from "../../recoil/userAtom";
 import { axiosInstance } from "../../util/axiosConfig";
 import { setMediaSession } from "../../util/functions";
 import ArtistList from "./ArtistList";
@@ -16,6 +17,7 @@ import TrackList from "./TrackList";
 const MySpace = () => {
   const { handle } = useParams();
   const setAlert = useSetRecoilState(alertAtom);
+  const [user, setUserState] = useRecoilState(userState);
 
   const [data, setData] = useState({
     currentUser: null,
@@ -332,6 +334,9 @@ const MySpace = () => {
     axiosInstance
       .post(`/myspace_edit/${handle}`, payload)
       .then((res) => {
+        if (payload.image_url !== user.image) {
+          setUserState({ ...user, image: payload.image_url });
+        }
         apiCall();
       })
       .catch((err) => {

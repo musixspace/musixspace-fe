@@ -3,6 +3,17 @@ export const paddedNumbers = (num) => {
   return `${num}`;
 };
 
+export const generateRandomString = (length) => {
+  let result = "";
+  let characters =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  let charactersLength = characters.length;
+  for (let i = 0; i < length; i++) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+  }
+  return result;
+};
+
 export const setMediaSession = (
   name,
   artist,
