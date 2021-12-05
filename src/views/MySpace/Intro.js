@@ -1,9 +1,14 @@
-import React, { useState } from "react";
-import { AiFillCaretRight, AiOutlinePause } from "react-icons/ai";
+import React, { useRef, useState } from "react";
+import {
+  AiFillCaretRight,
+  AiOutlinePause,
+  AiOutlineUpload,
+} from "react-icons/ai";
 import { MdDelete } from "react-icons/md";
 import logo from "../../assets/images/logo-black.png";
 import Skeleton from "../../components/Skeleton";
 import AddSongModal from "./AddItemModal";
+import S3 from "react-aws-s3";
 
 const Intro = ({
   user,
@@ -15,9 +20,24 @@ const Intro = ({
   setEditData,
 }) => {
   const [openModal, setOpenModal] = useState(false);
+  const fileInput = useRef("");
 
-  const submitFile = (file) => {
-    console.log(file);
+  const handleUpload = (e) => {
+    e.preventDefault();
+    let file = fileInput.current.files[0];
+    let fileName = `${localStorage.getItem("handle")}-profile`;
+    const config = {
+      bucketName: "musixspace",
+      dirName: "users",
+      region: "us-east-2",
+      accessKeyId: process.env.REACT_APP_AWS_ACCESS_KEY_ID,
+      secretAccessKey: process.env.REACT_APP_SECRET_ACCESS_KEY,
+    };
+
+    const ReactS3Client = new S3(config);
+    ReactS3Client.uploadFile(file, fileName).then((data) => {
+      console.log(data);
+    });
   };
 
   const changeAnthem = (data) => {
@@ -52,7 +72,8 @@ const Intro = ({
                 <input
                   type="file"
                   accept=".jpg,.png,.jpeg"
-                  onChange={(e) => setStore({ ...store, file: e.target.files })}
+                  ref={fileInput}
+                  onChange={handleUpload}
                 />
                 <div className="uploadContent">
                   <AiOutlineUpload />

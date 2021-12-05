@@ -14,7 +14,7 @@ import {
   topTracksMediumAtom,
   topTracksShortAtom,
 } from "../recoil/topTracksAtom";
-import { userState } from "../recoil/userAtom";
+import { discoverNumber, userState } from "../recoil/userAtom";
 
 const Logout = () => {
   const resetTracksLong = useResetRecoilState(topTracksLongAtom);
@@ -24,6 +24,7 @@ const Logout = () => {
   const resetArtistsMedium = useResetRecoilState(topArtistsMediumAtom);
   const resetArtistsShort = useResetRecoilState(topArtistsShortAtom);
   const resetRecommendations = useResetRecoilState(surpriseTracksAtom);
+  const resetDiscoverNumber = useResetRecoilState(discoverNumber);
   const resetUser = useResetRecoilState(userState);
   const setLoading = useSetRecoilState(loadingAtom);
   const setAlert = useSetRecoilState(alertAtom);
@@ -40,6 +41,7 @@ const Logout = () => {
     resetArtistsMedium();
     resetArtistsShort();
     resetRecommendations();
+    resetDiscoverNumber();
     resetUser();
     localStorage.removeItem("accessToken");
     localStorage.removeItem("spotifyId");

@@ -9,15 +9,16 @@ import WebPlayer from "../components/WebPlayer";
 import { useHistory } from "react-router-dom";
 import { setMediaSession } from "../util/functions";
 import Skeleton from "../components/Skeleton";
-import { useRecoilValue } from "recoil";
-import { userState } from "../recoil/userAtom";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { discoverNumber, userState } from "../recoil/userAtom";
 
 const Discover = () => {
   const history = useHistory();
   const userStateVal = useRecoilValue(userState);
   const [search, setSearch] = useState("");
   const [user, setUser] = useState(null);
-  const [currentUserNumber, setCurrentUserNumber] = useState(0);
+  const [currentUserNumber, setCurrentUserNumber] =
+    useRecoilState(discoverNumber);
 
   const [userSearchArray, setUserSearchArray] = useState([]);
   const [audioUrl, setAudioUrl] = useState(null);

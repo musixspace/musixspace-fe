@@ -1,10 +1,9 @@
-import { useRecoilState, useSetRecoilState } from "recoil";
-import { publicPlaylistsAtom, userState } from "../recoil/userAtom";
+import { useRecoilState } from "recoil";
+import { userState } from "../recoil/userAtom";
 import { axiosInstance } from "../util/axiosConfig";
 
 const useProfile = () => {
   const [user, setUser] = useRecoilState(userState);
-  const setPublicPlaylists = useSetRecoilState(publicPlaylistsAtom);
 
   const getUserProfile = (handle) => {
     axiosInstance
@@ -27,23 +26,7 @@ const useProfile = () => {
       });
   };
 
-  const getUserPublicPlaylists = (username) => {
-    axiosInstance
-      .get(`/playlists/${username}`)
-      .then((res) => {
-        if (res.status === 200) {
-          if (res.data !== "No playlists!") {
-            console.log(res.data);
-            setPublicPlaylists(res.data);
-          }
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  return { getUserProfile, getUserPublicPlaylists };
+  return { getUserProfile };
 };
 
 export default useProfile;

@@ -21,8 +21,16 @@ const Playlist = ({
   editData,
   setEditData,
 }) => {
+  const [itemsVisible, setItemsVisible] = useState(false);
+
   useEffect(() => {
-    console.log(data);
+    if (
+      data &&
+      data.playlist_ids.length > 0 &&
+      data.playlist_ids.filter((item) => item.visible === true).length > 0
+    ) {
+      setItemsVisible(true);
+    }
   }, [data]);
 
   const onDragEnd = (result) => {
@@ -72,24 +80,22 @@ const Playlist = ({
             }
           />
         ) : (
-          data &&
-          data.playlists &&
-          data.playlists.playlist_ids.length > 0 &&
-          data.playlists.playlist_ids.filter((item) => item.visible).length >
-            0 && <p className="title">{data && data.nickname}</p>
+          itemsVisible && <p className="title">{data && data.nickname}</p>
         )}
       </div>
       <div className="songs-container playlist-container">
-        <button
-          className="prev"
-          onClick={() =>
-            onLeftClicked(
-              ".topTracks > .playlist-container > .tracks-container"
-            )
-          }
-        >
-          <FiSkipBack />
-        </button>
+        {itemsVisible && (
+          <button
+            className="prev"
+            onClick={() =>
+              onLeftClicked(
+                ".topTracks > .playlist-container > .tracks-container"
+              )
+            }
+          >
+            <FiSkipBack />
+          </button>
+        )}
         {edit ? (
           <DragDropContext onDragEnd={onDragEnd}>
             <Droppable droppableId="play-list-droppable" direction="horizontal">
@@ -127,7 +133,7 @@ const Playlist = ({
                               onClick={() => onTogglePlaylist(item.playlist_id)}
                               className="controls"
                             >
-                              {item.visible ? <FiCheck /> : <MdDelete />}
+                              {item.visible ? <MdDelete /> : <FiCheck />}
                             </button>
                           </div>
                         )}
@@ -179,16 +185,18 @@ const Playlist = ({
                 )}
           </div>
         )}
-        <button
-          className="next"
-          onClick={() =>
-            onRightClicked(
-              ".topTracks > .playlist-container > .tracks-container"
-            )
-          }
-        >
-          <FiSkipForward />
-        </button>
+        {itemsVisible && (
+          <button
+            className="next"
+            onClick={() =>
+              onRightClicked(
+                ".topTracks > .playlist-container > .tracks-container"
+              )
+            }
+          >
+            <FiSkipForward />
+          </button>
+        )}
       </div>
     </div>
   );
