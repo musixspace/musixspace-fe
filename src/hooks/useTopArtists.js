@@ -1,17 +1,9 @@
-import { useRecoilState, useSetRecoilState } from "recoil";
-import {
-  topArtistsLongAtom,
-  topArtistsMediumAtom,
-  topArtistsShortAtom,
-} from "../recoil/topArtistsAtom";
+import { useRecoilState } from "recoil";
 import { userState } from "../recoil/userAtom";
 import { axiosInstance } from "../util/axiosConfig";
 
 const useTopArtists = () => {
   const [user, setUser] = useRecoilState(userState);
-  const setTALong = useSetRecoilState(topArtistsLongAtom);
-  const setTAMedium = useSetRecoilState(topArtistsMediumAtom);
-  const setTAShort = useSetRecoilState(topArtistsShortAtom);
 
   const getTopArtistsLong = (handle) => {
     axiosInstance
@@ -35,11 +27,6 @@ const useTopArtists = () => {
                 artists: artists,
                 images: imgArr,
               },
-            });
-          } else {
-            setTALong({
-              artists: artists,
-              images: imgArr,
             });
           }
         }
@@ -72,11 +59,6 @@ const useTopArtists = () => {
                 images: imgArr,
               },
             });
-          } else {
-            setTAMedium({
-              artists: artists,
-              images: imgArr,
-            });
           }
         }
       })
@@ -107,11 +89,6 @@ const useTopArtists = () => {
                 artists: artists,
                 images: imgArr,
               },
-            });
-          } else {
-            setTAShort({
-              artists: artists,
-              images: imgArr,
             });
           }
         }

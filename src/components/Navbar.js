@@ -1,10 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { FiMenu, FiX } from "react-icons/fi";
+import { FiMenu, FiRefreshCcw, FiX } from "react-icons/fi";
 import { Link, useLocation } from "react-router-dom";
-import { useRecoilState, useRecoilValue } from "recoil";
+import {
+  useRecoilState,
+  useRecoilValue,
+  useResetRecoilState,
+  useSetRecoilState,
+} from "recoil";
 import profile from "../assets/images/logo-black.png";
+import { alertAtom } from "../recoil/alertAtom";
 import { openSidebarAtom } from "../recoil/openSidebarAtom";
 import { userState } from "../recoil/userAtom";
+import { axiosInstance } from "../util/axiosConfig";
 
 const themeSwitch = (str) => {
   switch (str) {
@@ -37,6 +44,8 @@ const Navbar = () => {
   const location = useLocation();
   const { username, image: image_url } = useRecoilValue(userState);
   const [showLinks, setShowLinks] = useRecoilState(openSidebarAtom);
+  const setAlert = useSetRecoilState(alertAtom);
+  const resetUser = useResetRecoilState(userState);
 
   const [openProfile, setOpenProfile] = useState(false);
 
@@ -67,6 +76,30 @@ const Navbar = () => {
       loggedInLinks[2].path = `/${username || localStorage.getItem("handle")}`;
     }
   }, [username, location.pathname]);
+
+  const handleReload = () => {
+    const reloadSvgList = document.querySelectorAll(".reload>svg");
+    for (let i = 0; i < reloadSvgList.length; i++) {
+      reloadSvgList[i].classList.toggle("spin");
+    }
+    setAlert({
+      open: true,
+      message: `Fetching data from Spotify...`,
+      type: "info",
+    });
+    axiosInstance
+      .get("/refresh")
+      .then((res) => {
+        console.log(res);
+        for (let i = 0; i < reloadSvgList.length; i++) {
+          reloadSvgList[i].classList.toggle("spin");
+        }
+        resetUser();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   return (
     <nav
@@ -115,6 +148,9 @@ const Navbar = () => {
               <Link to="/logout">Logout</Link>
             </li>
             <div className="profile">
+              <div className="reload" onClick={handleReload}>
+                <FiRefreshCcw />
+              </div>
               <div
                 className="profile-img"
                 onClick={() => setOpenProfile((prev) => !prev)}
@@ -164,13 +200,18 @@ const Navbar = () => {
           </li>
         </ul>
       )}
-      <div onClick={toggleMenu} className="ham">
+      <div className="ham">
         {localStorage.getItem("accessToken") ? (
-          <div className="profile">
-            <div className="profile-img">
-              <img src={image_url || profile} alt="Profile" />
+          <>
+            <div className="reload" onClick={handleReload}>
+              <FiRefreshCcw />
             </div>
-          </div>
+            <div className="profile" onClick={toggleMenu}>
+              <div className="profile-img">
+                <img src={image_url || profile} alt="Profile" />
+              </div>
+            </div>
+          </>
         ) : showLinks ? (
           <FiX />
         ) : (

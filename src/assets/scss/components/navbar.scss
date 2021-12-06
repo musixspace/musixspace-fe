@@ -1,4 +1,5 @@
 @import "../mixins/d-flex.scss";
+@import "../mixins/reload.scss";
 
 nav {
   width: 100%;
@@ -72,6 +73,11 @@ nav {
       margin-left: 2em;
       position: relative;
       z-index: 1;
+      @include d-flex(center, center, row);
+      gap: 2em;
+
+      @include reload();
+
       .profile-img {
         cursor: pointer;
         width: 40px;
@@ -237,6 +243,10 @@ nav {
       display: block;
       font-size: calc(var(--base-font-size) * 3);
       cursor: pointer;
+      @include d-flex(center, center, row);
+      gap: 1em;
+
+      @include reload();
 
       .profile {
         position: relative;
@@ -245,7 +255,6 @@ nav {
           cursor: pointer;
           width: 40px;
           height: 40px;
-          // border: 2px solid black;
           border-radius: 100px;
           overflow: hidden;
 

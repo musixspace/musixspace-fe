@@ -1,19 +1,9 @@
-import { useRecoilState, useSetRecoilState } from "recoil";
-import { surpriseTracksAtom } from "../recoil/surpriseTracksAtom";
-import {
-  topTracksLongAtom,
-  topTracksMediumAtom,
-  topTracksShortAtom,
-} from "../recoil/topTracksAtom";
+import { useRecoilState } from "recoil";
 import { userState } from "../recoil/userAtom";
 import { axiosInstance } from "../util/axiosConfig";
 
 const useTopTracks = () => {
   const [user, setUser] = useRecoilState(userState);
-  const setTTLong = useSetRecoilState(topTracksLongAtom);
-  const setTTMedium = useSetRecoilState(topTracksMediumAtom);
-  const setTTShort = useSetRecoilState(topTracksShortAtom);
-  const setRecommendations = useSetRecoilState(surpriseTracksAtom);
 
   const getTopTracksLong = (handle) => {
     axiosInstance
@@ -32,11 +22,6 @@ const useTopTracks = () => {
                 images: imgArr,
                 tracks: songs,
               },
-            });
-          } else {
-            setTTLong({
-              tracks: songs,
-              images: imgArr,
             });
           }
         }
@@ -62,11 +47,6 @@ const useTopTracks = () => {
                 tracks: songs,
               },
             });
-          } else {
-            setTTMedium({
-              tracks: songs,
-              images: imgArr,
-            });
           }
         }
       })
@@ -91,11 +71,6 @@ const useTopTracks = () => {
                 tracks: songs,
               },
             });
-          } else {
-            setTTShort({
-              tracks: songs,
-              images: imgArr,
-            });
           }
         }
       })
@@ -118,11 +93,6 @@ const useTopTracks = () => {
               images: imgArr,
               tracks: songs,
             },
-          });
-        } else {
-          setRecommendations({
-            tracks: songs,
-            images: imgArr,
           });
         }
       })

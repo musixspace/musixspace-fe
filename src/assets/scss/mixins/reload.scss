@@ -1,0 +1,58 @@
+@mixin reload() {
+  .reload {
+    cursor: pointer;
+    position: relative;
+    > svg {
+      display: grid;
+      place-items: center;
+      font-size: calc(var(--base-font-size) * 2.5);
+
+      &.spin {
+        animation: spin 600ms forwards;
+      }
+    }
+
+    &::after {
+      content: "Re-Sync Data with Spotify";
+      position: absolute;
+      width: 12ch;
+      top: 150%;
+      right: -5ch;
+      font-size: calc(var(--base-font-size) * 2);
+      font-family: var(--f-circ-pro), sans-serif;
+      padding: 0.5em;
+      border: 1px solid black;
+      border-radius: 5px;
+      background-color: var(--clr-black);
+      color: var(--clr-white);
+      transition: transform 300ms ease-in-out;
+      transform: scale(0);
+    }
+
+    &:hover::after {
+      transform: scale(1);
+    }
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  25% {
+    transform: rotate(90deg);
+  }
+
+  50% {
+    transform: rotate(180deg);
+  }
+
+  75% {
+    transform: rotate(270deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}

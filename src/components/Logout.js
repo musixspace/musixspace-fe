@@ -3,27 +3,9 @@ import { useHistory } from "react-router";
 import { useResetRecoilState, useSetRecoilState } from "recoil";
 import { alertAtom } from "../recoil/alertAtom";
 import { loadingAtom } from "../recoil/loadingAtom";
-import { surpriseTracksAtom } from "../recoil/surpriseTracksAtom";
-import {
-  topArtistsLongAtom,
-  topArtistsMediumAtom,
-  topArtistsShortAtom,
-} from "../recoil/topArtistsAtom";
-import {
-  topTracksLongAtom,
-  topTracksMediumAtom,
-  topTracksShortAtom,
-} from "../recoil/topTracksAtom";
 import { discoverNumber, userState } from "../recoil/userAtom";
 
 const Logout = () => {
-  const resetTracksLong = useResetRecoilState(topTracksLongAtom);
-  const resetTracksMedium = useResetRecoilState(topTracksMediumAtom);
-  const resetTracksShort = useResetRecoilState(topTracksShortAtom);
-  const resetArtistsLong = useResetRecoilState(topArtistsLongAtom);
-  const resetArtistsMedium = useResetRecoilState(topArtistsMediumAtom);
-  const resetArtistsShort = useResetRecoilState(topArtistsShortAtom);
-  const resetRecommendations = useResetRecoilState(surpriseTracksAtom);
   const resetDiscoverNumber = useResetRecoilState(discoverNumber);
   const resetUser = useResetRecoilState(userState);
   const setLoading = useSetRecoilState(loadingAtom);
@@ -34,13 +16,6 @@ const Logout = () => {
   useEffect(() => {
     setLoading(true);
     setAlert({ open: true, message: "Logging you out...", type: "success" });
-    resetTracksLong();
-    resetTracksMedium();
-    resetTracksShort();
-    resetArtistsLong();
-    resetArtistsMedium();
-    resetArtistsShort();
-    resetRecommendations();
     resetDiscoverNumber();
     resetUser();
     localStorage.removeItem("accessToken");
