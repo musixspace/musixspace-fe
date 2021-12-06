@@ -16,7 +16,7 @@ const useAuth = (code) => {
             code,
             redirect_uri: process.env.REACT_APP_REDIRECT_URI,
           },
-          { timeout: 15000 }
+          { timeout: 60000 }
         )
         .then((response) => {
           setAccessToken(response.data.accessToken);
