@@ -10,10 +10,14 @@ const useAuth = (code) => {
     if (code) {
       setLoading(true);
       axiosInstance
-        .post("/login", {
-          code,
-          redirect_uri: process.env.REACT_APP_REDIRECT_URI,
-        })
+        .post(
+          "/login",
+          {
+            code,
+            redirect_uri: process.env.REACT_APP_REDIRECT_URI,
+          },
+          { timeout: 15000 }
+        )
         .then((response) => {
           setAccessToken(response.data.accessToken);
           localStorage.setItem("accessToken", response.data.accessToken);

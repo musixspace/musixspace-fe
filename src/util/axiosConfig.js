@@ -2,7 +2,7 @@ import axios from "axios";
 
 export const axiosInstance = axios.create({
   baseURL: `${process.env.REACT_APP_BACKEND_URI}`,
-  // timeout: 1000,
+  timeout: 5000,
 });
 
 axiosInstance.interceptors.request.use(
