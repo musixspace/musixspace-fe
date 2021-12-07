@@ -15,21 +15,19 @@ const useTopTracks = () => {
           songs.forEach((item) => {
             imgArr.push({ id: item.song_id, url: item.image_url });
           });
-          if (handle === user.username) {
-            setUser({
-              ...user,
-              topTracksLong: {
-                images: imgArr,
-                tracks: songs,
-              },
-            });
-          }
+          setUser({
+            ...user,
+            topTracksLong: {
+              images: imgArr,
+              tracks: songs,
+            },
+          });
         }
       })
       .catch((err) => console.log(err));
   };
 
-  const getTopTracksMedium = (handle) => {
+  const getTopTracksMedium = () => {
     axiosInstance
       .post("toptracks_medium")
       .then((res) => {
@@ -39,21 +37,19 @@ const useTopTracks = () => {
           songs.forEach((item) => {
             imgArr.push({ id: item.song_id, url: item.image_url });
           });
-          if (handle === user.username) {
-            setUser({
-              ...user,
-              topTracksMedium: {
-                images: imgArr,
-                tracks: songs,
-              },
-            });
-          }
+          setUser({
+            ...user,
+            topTracksMedium: {
+              images: imgArr,
+              tracks: songs,
+            },
+          });
         }
       })
       .catch((err) => console.log(err));
   };
 
-  const getTopTracksShort = (handle) => {
+  const getTopTracksShort = () => {
     axiosInstance
       .post("toptracks_short")
       .then((res) => {
@@ -63,21 +59,19 @@ const useTopTracks = () => {
           songs.forEach((item) => {
             imgArr.push({ id: item.song_id, url: item.image_url });
           });
-          if (handle === user.username) {
-            setUser({
-              ...user,
-              topTracksShort: {
-                images: imgArr,
-                tracks: songs,
-              },
-            });
-          }
+          setUser({
+            ...user,
+            topTracksShort: {
+              images: imgArr,
+              tracks: songs,
+            },
+          });
         }
       })
       .catch((err) => console.log(err));
   };
 
-  const getRecommendations = (handle) => {
+  const getRecommendations = () => {
     axiosInstance
       .post("/recommendation")
       .then((res) => {
@@ -86,15 +80,13 @@ const useTopTracks = () => {
         songs.forEach((song) => {
           imgArr.push({ id: song.song_id, url: song.image_url });
         });
-        if (handle === user.username) {
-          setUser({
-            ...user,
-            surpriseTracks: {
-              images: imgArr,
-              tracks: songs,
-            },
-          });
-        }
+        setUser({
+          ...user,
+          surpriseTracks: {
+            images: imgArr,
+            tracks: songs,
+          },
+        });
       })
       .catch((err) => {
         console.log(err);

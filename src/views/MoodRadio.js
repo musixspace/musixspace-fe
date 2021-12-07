@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import logo from "../assets/images/logo-black.png";
 import Carousel from "../components/Carousel";
 import Skeleton from "../components/Skeleton";
 import WebPlayer from "../components/WebPlayer";
+import { alertAtom } from "../recoil/alertAtom";
 import { userState } from "../recoil/userAtom";
 import { axiosInstance } from "../util/axiosConfig";
 
 const MoodRadio = () => {
   const [user, setUser] = useRecoilState(userState);
+  const setAlert = useSetRecoilState(alertAtom);
 
   const [currentTrack, setCurrentTrack] = useState("");
   const [audioUrl, setAudioUrl] = useState("");
@@ -65,12 +67,19 @@ const MoodRadio = () => {
     } else {
       setCurrentTrack(0);
     }
-  }, []);
+  }, [user.moodRadio]);
 
   useEffect(() => {
     if (currentTrack !== "") {
       const track = user.moodRadio.find((item) => item.id === currentTrack);
       setAudioUrl(track.preview_url);
+      if (!track.preview_url) {
+        setAlert({
+          open: true,
+          message: `Cannot play this track!`,
+          type: "error",
+        });
+      }
     }
   }, [currentTrack]);
 

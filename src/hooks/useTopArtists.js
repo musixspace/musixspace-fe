@@ -20,15 +20,14 @@ const useTopArtists = () => {
                 "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRd-y-IJN8glQlf1qoU01dEgGPUa0d1-sjfWg&usqp=CAU",
             });
           });
-          if (handle === user.username) {
-            setUser({
-              ...user,
-              topArtistsLong: {
-                artists: artists,
-                images: imgArr,
-              },
-            });
-          }
+
+          setUser({
+            ...user,
+            topArtistsLong: {
+              artists: artists,
+              images: imgArr,
+            },
+          });
         }
       })
       .catch((err) => {
@@ -36,7 +35,7 @@ const useTopArtists = () => {
       });
   };
 
-  const getTopArtistsMedium = (handle) => {
+  const getTopArtistsMedium = () => {
     axiosInstance
       .post("/topartists_medium")
       .then((res) => {
@@ -51,15 +50,14 @@ const useTopArtists = () => {
                 "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRd-y-IJN8glQlf1qoU01dEgGPUa0d1-sjfWg&usqp=CAU",
             });
           });
-          if (handle === user.username) {
-            setUser({
-              ...user,
-              topArtistsMedium: {
-                artists: artists,
-                images: imgArr,
-              },
-            });
-          }
+
+          setUser({
+            ...user,
+            topArtistsMedium: {
+              artists: artists,
+              images: imgArr,
+            },
+          });
         }
       })
       .catch((err) => {
@@ -67,7 +65,7 @@ const useTopArtists = () => {
       });
   };
 
-  const getTopArtistsShort = (handle) => {
+  const getTopArtistsShort = () => {
     axiosInstance
       .post("/topartists_short")
       .then((res) => {
@@ -82,15 +80,14 @@ const useTopArtists = () => {
                 "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRd-y-IJN8glQlf1qoU01dEgGPUa0d1-sjfWg&usqp=CAU",
             });
           });
-          if (handle === user.username) {
-            setUser({
-              ...user,
-              topArtistsShort: {
-                artists: artists,
-                images: imgArr,
-              },
-            });
-          }
+
+          setUser({
+            ...user,
+            topArtistsShort: {
+              artists: artists,
+              images: imgArr,
+            },
+          });
         }
       })
       .catch((err) => {

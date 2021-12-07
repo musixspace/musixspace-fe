@@ -215,7 +215,7 @@ const Navbar = () => {
         ) : showLinks ? (
           <FiX />
         ) : (
-          <FiMenu />
+          <FiMenu onClick={toggleMenu} />
         )}
       </div>
     </nav>

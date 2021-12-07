@@ -10,7 +10,7 @@ const Alert = () => {
     if (alert.open) {
       setTimeout(() => {
         setAlert({ ...alert, open: false });
-      }, 4000);
+      }, 5000);
     }
   }, [alert.open]);
 

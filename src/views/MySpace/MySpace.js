@@ -62,6 +62,24 @@ const MySpace = () => {
     }
   }, [handle]);
 
+  useEffect(() => {
+    if (!user.username && data.currentUser && handle && handle !== "myspace") {
+      setData({
+        currentUser: null,
+        playlists: null,
+        tracks: null,
+        artists: null,
+      });
+      setEditData({
+        currentUser: null,
+        playlists: null,
+        tracks: null,
+        artists: null,
+      });
+      apiCall();
+    }
+  }, [user.username]);
+
   const apiCall = async () => {
     let finalObj = {
       currentUser: null,

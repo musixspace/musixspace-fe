@@ -24,7 +24,7 @@ const Logout = () => {
     setTimeout(() => {
       setLoading(false);
       history.push("/");
-    }, 4000);
+    }, 5000);
   }, []);
 
   return null;
