@@ -157,6 +157,25 @@ nav {
     }
   }
 
+  &.nav-match {
+    background-color: var(--bg-match);
+    color: var(--clr-black);
+
+    .nav-ul {
+      color: var(--clr-black);
+
+      .profile {
+        .profile-ul {
+          color: var(--clr-skin);
+        }
+      }
+    }
+
+    > .nav-ul > .nav-li::after {
+      background-color: var(--clr-black);
+    }
+  }
+
   &.nav-insights {
     background-color: var(--bg-insights);
     color: var(--clr-dark-blue);

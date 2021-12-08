@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { FaSearch } from "react-icons/fa";
 import { IoMdClose } from "react-icons/io";
+import logo from "../../assets/images/logo-black.png";
 import useDebounceCallback from "../../hooks/useDebounce";
 import { axiosInstance } from "../../util/axiosConfig";
-import logo from "../../assets/images/logo-black.png";
 
 const AddSongModal = ({ title, submitData, close, type }) => {
   const [search, setSearch] = useState({

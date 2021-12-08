@@ -12,6 +12,7 @@ import S3 from "react-aws-s3";
 import { generateRandomString } from "../../util/functions";
 import { alertAtom } from "../../recoil/alertAtom";
 import { useSetRecoilState } from "recoil";
+import { useHistory } from "react-router-dom";
 
 const Intro = ({
   user,
@@ -22,6 +23,7 @@ const Intro = ({
   editData,
   setEditData,
 }) => {
+  const history = useHistory();
   const setAlert = useSetRecoilState(alertAtom);
   const [openModal, setOpenModal] = useState(false);
   const fileInput = useRef("");
@@ -80,6 +82,11 @@ const Intro = ({
       },
     });
     setOpenModal(false);
+  };
+
+  const gotToMatch = (e) => {
+    e.preventDefault();
+    history.push(`/match/${user.username}`);
   };
 
   return (
@@ -162,7 +169,7 @@ const Intro = ({
               <p>{user.username}</p>
               {user.username !== localStorage.getItem("handle") && (
                 <div className="button-container">
-                  <button>Match</button>
+                  <button onClick={gotToMatch}>Match</button>
                 </div>
               )}
             </>

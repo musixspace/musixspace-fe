@@ -15,6 +15,8 @@ import { axiosInstance } from "../util/axiosConfig";
 
 const themeSwitch = (str) => {
   switch (str) {
+    case String(str.match(/.*match.*/)):
+      return "nav-match";
     case "/readytorock":
       return "nav-transparent";
     case "/insights/toptracks":

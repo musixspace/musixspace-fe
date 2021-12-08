@@ -1,0 +1,316 @@
+@import "./mixins/d-flex.scss";
+
+.match-container {
+  margin-top: 10vh;
+  padding: 1em 6em;
+  color: var(--clr-skin);
+
+  scroll-behavior: smooth;
+
+  span.black {
+    color: var(--clr-black);
+  }
+
+  > div {
+    position: relative;
+    height: calc(90vh - 1em);
+
+    > .scroll-content {
+      position: absolute;
+      bottom: 20px;
+      left: 0;
+      width: 100%;
+      @include d-flex(center, center, column);
+      cursor: pointer;
+      > p {
+        font-size: calc(var(--base-font-size) * 2);
+        text-align: center;
+        color: var(--clr-white);
+      }
+
+      > svg {
+        font-size: calc(var(--base-font-size) * 3);
+        color: var(--clr-black);
+        transition: transform 300ms ease-in-out;
+      }
+
+      &:hover > svg {
+        transform: translateY(5px);
+      }
+    }
+  }
+
+  .first-page {
+    @include d-flex(flex-start, space-evenly, column);
+    gap: 3em;
+
+    > .topbar {
+      @include d-flex(space-evenly, center, row);
+
+      > .image-container {
+        @include d-flex(flex-start, center, row);
+        width: fit-content;
+        > img {
+          width: 200px;
+          height: 200px;
+          border-radius: 50%;
+          object-fit: cover;
+        }
+
+        > img:nth-child(2) {
+          margin-left: -100px;
+        }
+      }
+
+      > p {
+        text-align: center;
+        font-size: calc(var(--base-font-size) * 8);
+      }
+    }
+
+    > .middle-content {
+      // margin-top: 1em;
+      @include d-flex(center, center, column);
+
+      > .text {
+        text-align: center;
+        > p {
+          width: 45ch;
+          color: var(--clr-white);
+          font-size: calc(var(--base-font-size) * 2.25);
+        }
+      }
+
+      > .button-container {
+        margin-top: 1em;
+        @include d-flex();
+        > button {
+          font-family: var(--f-circ-pro), sans-serif;
+          font-size: calc(var(--base-font-size) * 2);
+          padding: 0.8em 2em;
+          background-color: var(--clr-black);
+          color: var(--clr-skin);
+          text-transform: uppercase;
+          border-radius: 100px;
+          border: 2px solid var(--clr-black);
+
+          &:hover {
+            border-color: var(--clr-white);
+          }
+        }
+      }
+    }
+
+    > .percentage {
+      // margin-top: 1em;
+      text-align: center;
+
+      > p {
+        font-size: calc(var(--base-font-size) * 20);
+      }
+    }
+  }
+
+  .second-page {
+    @include d-flex(space-evenly, center, row);
+
+    .content-container {
+      // height: 100%;
+      @include d-flex(center, center, column);
+      gap: 2em;
+      .title {
+        text-align: center;
+        font-size: calc(var(--base-font-size) * 4.5);
+        color: var(--clr-black);
+      }
+
+      .image-container {
+        > img {
+          width: 250px;
+          height: 250px;
+          object-fit: cover;
+          border-radius: 10px;
+        }
+      }
+
+      .name {
+        text-align: center;
+
+        font-size: calc(var(--base-font-size) * 8);
+        color: var(--clr-white);
+      }
+    }
+
+    .middle-content {
+      > p {
+        text-align: center;
+        color: var(--clr-white);
+        font-size: calc(var(--base-font-size) * 3);
+      }
+    }
+
+    &::before {
+      position: absolute;
+      z-index: -1;
+      content: "";
+      top: 10%;
+      left: -6em;
+      width: 100vw;
+      height: 50%;
+      background-color: var(--clr-skin);
+    }
+  }
+}
+
+@media (max-width: 1075px) {
+  .match-container {
+    > div {
+      height: 100%;
+      > .scroll-content {
+        display: none;
+      }
+    }
+
+    .first-page {
+      > .topbar {
+        flex-direction: column;
+      }
+    }
+
+    .second-page {
+      gap: 1em;
+      .content-container {
+        margin-top: 1em;
+        .title {
+          font-size: calc(var(--base-font-size) * 3.5);
+        }
+
+        .image-container {
+          > img {
+            width: 200px;
+            height: 200px;
+          }
+        }
+
+        .name {
+          font-size: calc(var(--base-font-size) * 6);
+        }
+      }
+
+      .middle-content {
+        > p {
+          font-size: calc(var(--base-font-size) * 2.5);
+        }
+      }
+
+      &::before {
+        top: 0;
+      }
+    }
+  }
+}
+
+@media (max-width: 776px) {
+  .match-container {
+    padding: 1em 1.5em;
+
+    .first-page {
+      gap: 2em;
+      > .topbar {
+        > .image-container {
+          > img {
+            width: 160px;
+            height: 160px;
+          }
+        }
+
+        > p {
+          margin-top: 1rem;
+          font-size: calc(var(--base-font-size) * 6);
+        }
+      }
+
+      > .middle-content {
+        > .text {
+          text-align: center;
+          > p {
+            width: 100%;
+          }
+        }
+
+        > .button-container {
+          > button {
+            font-size: calc(var(--base-font-size) * 1.75);
+          }
+        }
+      }
+
+      > .percentage {
+        width: 100%;
+        > p {
+          font-size: calc(var(--base-font-size) * 10);
+        }
+      }
+    }
+
+    .second-page {
+      width: 100%;
+      flex-direction: column;
+      .content-container {
+        width: 100%;
+        margin-top: 2em;
+        .title {
+          font-size: calc(var(--base-font-size) * 3);
+        }
+
+        .name {
+          font-size: calc(var(--base-font-size) * 5);
+        }
+      }
+
+      .middle-content {
+        > p {
+          font-size: calc(var(--base-font-size) * 2.25);
+        }
+      }
+
+      &::before {
+        left: -1.5em;
+      }
+    }
+  }
+}
+
+@media (max-width: 400px) {
+  .match-container {
+    .first-page {
+      > .topbar {
+        > .image-container {
+          > img {
+            width: 140px;
+            height: 140px;
+          }
+        }
+
+        > p {
+          margin-top: 1rem;
+          font-size: calc(var(--base-font-size) * 5);
+        }
+      }
+
+      > .middle-content {
+        > .button-container {
+          > button {
+            font-size: calc(var(--base-font-size) * 1.5);
+          }
+        }
+      }
+
+      > .percentage {
+        > p {
+          font-size: calc(var(--base-font-size) * 8);
+        }
+      }
+    }
+  }
+}

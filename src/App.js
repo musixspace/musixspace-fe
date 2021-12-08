@@ -10,6 +10,7 @@ import About from "./views/About";
 import Discover from "./views/Discover";
 import Home from "./views/Home";
 import Insights from "./views/Insights";
+import Match from "./views/Match";
 import MoodRadio from "./views/MoodRadio";
 import MySpace from "./views/MySpace/MySpace";
 import ReadyToRock from "./views/ReadyToRock";
@@ -70,6 +71,7 @@ const App = () => {
           <Route exact path="/insights/toptracks" component={TopTracks} />
           <Route exact path="/insights" component={Insights} />
           <Route exact path="/discover" component={Discover} />
+          <Route exact path="/match/:matchHandle" component={Match} />
           <Route exact path="/about" component={About} />
           <Route exact path="/logout" component={Logout} />
           <Route exact path="/" component={Home} />

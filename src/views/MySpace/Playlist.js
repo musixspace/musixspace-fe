@@ -1,16 +1,10 @@
 import React, { useEffect, useState } from "react";
+import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { AiFillCaretRight } from "react-icons/ai";
-import {
-  FiCheck,
-  FiDelete,
-  FiSkipBack,
-  FiSkipForward,
-  FiX,
-} from "react-icons/fi";
+import { FiCheck, FiSkipBack, FiSkipForward } from "react-icons/fi";
+import { MdDelete } from "react-icons/md";
 import logo from "../../assets/images/logo-black.png";
 import Skeleton from "../../components/Skeleton";
-import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
-import { MdAdd, MdDelete } from "react-icons/md";
 
 const Playlist = ({
   data,
@@ -152,7 +146,7 @@ const Playlist = ({
                   </div>
                 ))
               : data.playlist_ids.map(
-                  (item, idx) =>
+                  (item) =>
                     item.visible && (
                       <div
                         key={item.playlist_id}

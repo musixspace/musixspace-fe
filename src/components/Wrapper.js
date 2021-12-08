@@ -11,6 +11,8 @@ const themeSwitch = (str) => {
   switch (str) {
     case "/":
       return "--bg-home";
+    case String(str.match(/.*match.*/)):
+      return "--bg-match";
     case "/readytorock":
       return "--bg-transparent";
     case "/insights/toptracks":

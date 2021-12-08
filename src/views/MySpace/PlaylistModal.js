@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { IoMdClose } from "react-icons/io";
 import { MdDelete } from "react-icons/md";
+import logo from "../../assets/images/logo-black.png";
 import WebPlayer from "../../components/WebPlayer";
 import { paddedNumbers, setMediaSession } from "../../util/functions";
-import logo from "../../assets/images/logo-black.png";
 
 const PlaylistModal = ({ data, close, isEdit }) => {
   const [tracks, setTracks] = useState(data.songs);
