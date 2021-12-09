@@ -13,7 +13,7 @@
 
   > div {
     position: relative;
-    height: calc(90vh - 1em);
+    height: calc(90vh - 1.5em);
 
     > .scroll-content {
       position: absolute;
@@ -42,10 +42,11 @@
 
   .first-page {
     @include d-flex(flex-start, space-evenly, column);
-    gap: 3em;
+    gap: 2.5em;
 
     > .topbar {
       @include d-flex(space-evenly, center, row);
+      flex-wrap: wrap;
 
       > .image-container {
         @include d-flex(flex-start, center, row);
@@ -125,11 +126,29 @@
       }
 
       .image-container {
+        position: relative;
+        width: min-content;
         > img {
           width: 250px;
           height: 250px;
           object-fit: cover;
           border-radius: 10px;
+        }
+        > .control {
+          position: absolute;
+          z-index: 105;
+          bottom: 10px;
+          right: 10px;
+          width: 40px;
+          height: 40px;
+          border-radius: 100%;
+          @include d-flex(center, center, row);
+          background-color: var(--clr-white);
+
+          > svg {
+            font-size: calc(var(--base-font-size) * 3);
+            color: var(--clr-black);
+          }
         }
       }
 

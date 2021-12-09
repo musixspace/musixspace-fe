@@ -38,7 +38,7 @@ const WebPlayer = ({ url, prevPlay, nextPlay, shufflePlay, noControls }) => {
   }, [url]);
 
   return (
-    <div className="audio-container">
+    <div style={noControls && { display: "none" }} className="audio-container">
       <audio
         ref={audioPlayer}
         src={`${url}.mp3`}
