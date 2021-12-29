@@ -3,16 +3,16 @@
 .match-container {
   margin-top: 10vh;
   padding: 1em 6em;
-  color: var(--clr-skin);
+  color: var(--clr-text-match);
 
   scroll-behavior: smooth;
 
   .skeleton {
-    background-color: #4789eb;
+    background-color: #392d2d;
   }
 
   span.black {
-    color: var(--clr-black);
+    color: var(--clr-text-match);
   }
 
   > div {
@@ -34,7 +34,7 @@
 
       > svg {
         font-size: calc(var(--base-font-size) * 3);
-        color: var(--clr-black);
+        color: var(--clr-text-match);
         transition: transform 300ms ease-in-out;
       }
 
@@ -101,9 +101,9 @@
         > button {
           font-family: var(--f-circ-pro), sans-serif;
           font-size: calc(var(--base-font-size) * 2);
-          padding: 0.8em 2em;
+          padding: 0.8em 2.5em;
           background-color: var(--clr-black);
-          color: var(--clr-skin);
+          color: var(--clr-text-match);
           text-transform: uppercase;
           border-radius: 100px;
           border: 2px solid var(--clr-black);
@@ -143,104 +143,107 @@
   }
 
   .second-page {
-    @include d-flex(space-evenly, center, row);
-
-    .content-container {
-      // height: 100%;
+    height: auto;
+    padding: 2em 0;
+    width: 100%;
+    > .main-content {
       @include d-flex(center, center, column);
-      gap: 2em;
-      .title {
-        text-align: center;
-        font-size: calc(var(--base-font-size) * 4.5);
-        color: var(--clr-black);
+      > p {
+        &:nth-child(1) {
+          font-size: calc(var(--base-font-size) * 15);
+        }
+        &:nth-child(2) {
+          text-transform: uppercase;
+          font-size: calc(var(--base-font-size) * 3);
+        }
+      }
+    }
+
+    > .artist-list {
+      margin-top: 2em;
+      width: 100%;
+      @include d-flex(center, center, row);
+      gap: 4em;
+      flex-wrap: wrap;
+
+      $height: 175px;
+      > .common-artist {
+        position: relative;
+        z-index: 1;
+        @include d-flex(center, center, column);
+        > .image-container {
+          width: 175px;
+          height: $height;
+          border-radius: 50%;
+          overflow: hidden;
+          > img {
+            object-fit: cover;
+            width: 100%;
+            height: 100%;
+          }
+        }
+        > .controls {
+          position: absolute;
+          z-index: 100;
+          left: 50%;
+          top: $height - 15px;
+          transform: translateX(-50%);
+
+          button {
+            @include d-flex(center, center, row);
+            width: 30px;
+            height: 30px;
+            border-radius: 100%;
+            @include d-flex(center, center, row);
+            background-color: var(--clr-white);
+
+            > svg {
+              font-size: calc(var(--base-font-size) * 2);
+              color: var(--clr-black);
+            }
+          }
+        }
+
+        > p {
+          margin-top: 1.5em;
+          text-align: center;
+          font-size: calc(var(--base-font-size) * 2.25);
+          font-family: var(--f-circ-pro);
+        }
       }
 
-      .image-container {
-        position: relative;
-        width: min-content;
-        > img {
-          width: 250px;
-          height: 250px;
-          object-fit: cover;
-          border-radius: 10px;
-        }
-        > .control {
-          position: absolute;
-          z-index: 105;
-          bottom: 10px;
-          right: 10px;
-          width: 40px;
-          height: 40px;
-          border-radius: 100%;
-          @include d-flex(center, center, row);
-          background-color: var(--clr-white);
+      > .common-track {
+        @include d-flex(center, center, row);
+        gap: 1em;
 
-          > svg {
-            font-size: calc(var(--base-font-size) * 3);
-            color: var(--clr-black);
+        .image-container {
+          border-radius: 15px;
+        }
+
+        > .controls {
+          position: absolute;
+          z-index: 100;
+          left: $height - 20px !important;
+          top: $height - 35px;
+        }
+
+        > .track-meta {
+          > p {
+            &:nth-child(1) {
+              font-size: calc(var(--base-font-size) * 3);
+            }
+            &:nth-child(2) {
+              font-family: var(--f-circ-pro);
+              font-size: calc(var(--base-font-size) * 2.25);
+            }
           }
         }
       }
-
-      .name {
-        text-align: center;
-
-        font-size: calc(var(--base-font-size) * 8);
-        color: var(--clr-white);
-      }
-
-      > .skeleton {
-        &:nth-child(1) {
-          width: 200px;
-          height: 30px;
-        }
-
-        &:nth-child(2) {
-          width: 250px;
-          height: 250px;
-        }
-
-        &:nth-child(3) {
-          width: 300px;
-          height: 50px;
-        }
-      }
-    }
-
-    .middle-content {
-      @include d-flex(center, center, column);
-      > p {
-        text-align: center;
-        color: var(--clr-white);
-        font-size: calc(var(--base-font-size) * 3);
-      }
-
-      > .skeleton {
-        height: 20px;
-        &:nth-child(1) {
-          width: 400px;
-        }
-
-        &:nth-child(2) {
-          width: 300px;
-        }
-      }
-    }
-
-    &::before {
-      position: absolute;
-      z-index: -1;
-      content: "";
-      top: 10%;
-      left: -6em;
-      width: 100vw;
-      height: 50%;
-      background-color: var(--clr-skin);
     }
   }
 }
 
-@media (max-width: 1075px) {
+@media (max-width: 1084px) {
   .match-container {
     > div {
       height: 100%;
@@ -252,58 +255,6 @@
     .first-page {
       > .topbar {
         flex-direction: column;
-      }
-    }
-
-    .second-page {
-      gap: 1em;
-      .content-container {
-        margin-top: 1em;
-        .title {
-          font-size: calc(var(--base-font-size) * 3.5);
-        }
-
-        .image-container {
-          > img {
-            width: 200px;
-            height: 200px;
-          }
-        }
-
-        .name {
-          font-size: calc(var(--base-font-size) * 6);
-        }
-
-        > .skeleton {
-          &:nth-child(2) {
-            width: 200px;
-            height: 200px;
-          }
-
-          &:nth-child(3) {
-            width: 300px;
-          }
-        }
-      }
-
-      .middle-content {
-        > p {
-          font-size: calc(var(--base-font-size) * 2.5);
-        }
-
-        > .skeleton {
-          &:nth-child(1) {
-            width: 200px;
-          }
-
-          &:nth-child(2) {
-            width: 100px;
-          }
-        }
-      }
-
-      &::before {
-        top: 0;
       }
     }
   }
@@ -370,51 +321,38 @@
     }
 
     .second-page {
-      width: 100%;
-      flex-direction: column;
-      .content-container {
-        width: 100%;
-        margin-top: 2em;
-        .title {
-          font-size: calc(var(--base-font-size) * 3);
-        }
-
-        .name {
-          font-size: calc(var(--base-font-size) * 5);
-        }
-
-        > .skeleton {
-          &:nth-child(1) {
-            width: 50%;
-            height: 20px;
-          }
-
-          &:nth-child(3) {
-            width: 80%;
-            height: 40px;
-          }
-        }
-      }
-
-      .middle-content {
-        width: 100%;
+      > .main-content {
         > p {
-          font-size: calc(var(--base-font-size) * 2.25);
-        }
-
-        > .skeleton {
           &:nth-child(1) {
-            width: 90%;
-          }
-
-          &:nth-child(2) {
-            width: 60%;
+            font-size: calc(var(--base-font-size) * 12);
           }
         }
       }
 
-      &::before {
-        left: -1.5em;
+      > .artist-list {
+        gap: 2em;
+        $height: 150px;
+        > .common-artist {
+          > .image-container {
+            width: 150px;
+            height: $height;
+          }
+
+          > p {
+            font-size: calc(var(--base-font-size) * 2);
+          }
+
+          > .controls {
+            top: $height - 15px;
+          }
+        }
+
+        > .common-track {
+          > .controls {
+            left: $height - 20px !important;
+            top: $height - 35px;
+          }
+        }
       }
     }
   }
@@ -453,6 +391,52 @@
       > .percentage {
         > p {
           font-size: calc(var(--base-font-size) * 8);
+        }
+      }
+    }
+
+    .second-page {
+      > .main-content {
+        > p {
+          &:nth-child(1) {
+            font-size: calc(var(--base-font-size) * 8);
+          }
+          &:nth-child(2) {
+            font-size: calc(var(--base-font-size) * 2);
+          }
+        }
+      }
+
+      > .artist-list {
+        gap: 1em;
+        $height: 120px;
+        > .common-artist {
+          > .image-container {
+            width: 120px;
+            height: $height;
+          }
+
+          > .controls {
+            top: $height - 15px;
+          }
+        }
+        > .common-track {
+          > .controls {
+            left: $height - 20px !important;
+            top: $height - 35px;
+          }
+
+          > .track-meta {
+            > p {
+              &:nth-child(1) {
+                font-size: calc(var(--base-font-size) * 2.5);
+              }
+              &:nth-child(2) {
+                font-family: var(--f-circ-pro);
+                font-size: calc(var(--base-font-size) * 2);
+              }
+            }
+          }
         }
       }
     }

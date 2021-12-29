@@ -313,12 +313,12 @@ const Discover = () => {
                 </div>
                 <div className="interests">
                   {user && user.display_name ? (
-                    <>
-                      <div className="title">{user.firstname} X You</div>
-                      <div className="list">
-                        {user.common_arr &&
-                          user.common_arr.length &&
-                          user.common_arr.map((item) => (
+                    user.common_arr &&
+                    user.common_arr.length > 0 && (
+                      <>
+                        <div className="title">{user.firstname} X You</div>
+                        <div className="list">
+                          {user.common_arr.map((item) => (
                             <div key={item.name} className="artist">
                               <div>
                                 <img
@@ -329,11 +329,12 @@ const Discover = () => {
                               <span>{item.name}</span>
                             </div>
                           ))}
-                      </div>
-                      <div className="common">
-                        {user.total > 0 && `+${user.total} common interests`}
-                      </div>
-                    </>
+                        </div>
+                        <div className="common">
+                          {user.total > 0 && `+${user.total} common interests`}
+                        </div>
+                      </>
+                    )
                   ) : (
                     <>
                       <Skeleton type="text" />

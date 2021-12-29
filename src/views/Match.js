@@ -153,111 +153,81 @@ const Match = () => {
           </div>
         )}
       </div>
-      <div className="second-page">
-        {!store.topArtist ? (
-          <div className="content-container">
-            <Skeleton type="text" />
-            <Skeleton type="text" />
-            <Skeleton type="text" />
+      {store?.commonArtists?.length > 0 && (
+        <div className="second-page">
+          <div className="main-content">
+            <p>{store.commonArtists.length}</p>
+            <p>Common Artists</p>
           </div>
-        ) : (
-          <div className="content-container">
-            <div className="title">Top Artist</div>
-            <div className="image-container">
-              <img
-                src={(store.topArtist && store.topArtist.image_url) || logo}
-                alt={store.topArtist && store.topArtist.name}
-              />
-              {store.topArtist && store.topArtist.topTrack.preview_url && (
-                <button
-                  className="control"
-                  onClick={() =>
-                    toggleAudioUrl(
-                      store.topArtist.topTrack.name,
-                      null,
-                      store.topArtist.image_url,
-                      store.topArtist.topTrack.preview_url
-                    )
-                  }
-                >
-                  {audioUrl === store.topArtist.topTrack.preview_url ? (
-                    <AiOutlinePause />
-                  ) : (
-                    <AiFillCaretRight />
-                  )}
-                </button>
-              )}
-            </div>
-            <div className="name">
-              {(store.topArtist && store.topArtist.name) || "No Artist"}
-            </div>
+          <div className="artist-list">
+            {store.commonArtists.map((item) => (
+              <div key={item.name} className="common-artist">
+                <div className="image-container">
+                  <img src={item.image_url || logo} alt={item.name} />
+                </div>
+                <div className="controls">
+                  <button
+                    onClick={() =>
+                      toggleAudioUrl(
+                        item.topTrack.name,
+                        item.name,
+                        item.image_url,
+                        item.topTrack.preview_url
+                      )
+                    }
+                  >
+                    {audioUrl === item.topTrack.preview_url ? (
+                      <AiOutlinePause />
+                    ) : (
+                      <AiFillCaretRight />
+                    )}
+                  </button>
+                </div>
+                <p>{item.name}</p>
+              </div>
+            ))}
           </div>
-        )}
-        <div className="middle-content">
-          {!store.me ? (
-            <>
-              <Skeleton type="text" />
-              <Skeleton type="text" />
-            </>
-          ) : (
-            <p>
-              <span className="black">when it comes to these,</span>
-              <br />
-              {`${store.me && store.me.name.split(" ")[0]}`} and{" "}
-              {`${store.friend && store.friend.name.split(" ")[0]}`}{" "}
-              <span className="black">can’t hit the skip button!</span>
-            </p>
-          )}
         </div>
-        {!store.topTrack ? (
-          <div className="content-container">
-            <Skeleton type="text" />
-            <Skeleton type="text" />
-            <Skeleton type="text" />
+      )}
+      {store?.commonTracks?.length > 0 && (
+        <div className="second-page">
+          <div className="main-content">
+            <p>{store.commonTracks.length}</p>
+            <p>Common Tracks</p>
           </div>
-        ) : (
-          <div className="content-container">
-            <div className="title">Top Track</div>
-            <div className="image-container">
-              <img
-                src={(store.topTrack && store.topTrack.image_url) || logo}
-                alt={store.topTrack && store.topTrack.name}
-              />
-              {store.topTrack && store.topTrack.preview_url && (
-                <button
-                  className="control"
-                  onClick={() =>
-                    toggleAudioUrl(
-                      store.topTrack.name,
-                      store.topTrack.artist.map((item) => item.name).join(" "),
-                      store.topTrack.image_url,
-                      store.topTrack.preview_url
-                    )
-                  }
-                >
-                  {audioUrl === store.topTrack.preview_url ? (
-                    <AiOutlinePause />
-                  ) : (
-                    <AiFillCaretRight />
-                  )}
-                </button>
-              )}
-            </div>
-            <div className="name">
-              {(store.topTrack && store.topTrack.name) || "No Track"}
-            </div>
+          <div className="artist-list">
+            {store.commonTracks.map((item) => (
+              <div key={item.name} className="common-artist common-track">
+                <div className="image-container">
+                  <img src={item.image_url || logo} alt={item.name} />
+                </div>
+                <div className="controls">
+                  <button
+                    onClick={() =>
+                      toggleAudioUrl(
+                        item.name,
+                        item.artist.map((i) => i.name).join(", "),
+                        item.image_url,
+                        item.preview_url
+                      )
+                    }
+                  >
+                    {audioUrl === item.preview_url ? (
+                      <AiOutlinePause />
+                    ) : (
+                      <AiFillCaretRight />
+                    )}
+                  </button>
+                </div>
+                <div className="track-meta">
+                  <p>{item.name}</p>
+                  <p>{item.artist.map((i) => i.name).join(", ")}</p>
+                </div>
+              </div>
+            ))}
           </div>
-        )}
-        {store.me && (
-          <div className="scroll-content">
-            <p>
-              wait<span className="black"> there's more, </span>
-              dig into more!
-            </p>
-            <FiChevronDown />
-          </div>
-        )}
-      </div>
+        </div>
+      )}
       {audioUrl && (
         <WebPlayer
           url={audioUrl}

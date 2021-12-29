@@ -1,0 +1,18 @@
+@mixin custom_nav($bg, $clr, $clr2: $clr) {
+  background-color: $bg;
+  color: $clr;
+
+  .nav-ul {
+    color: $clr;
+
+    .profile {
+      .profile-ul {
+        color: $clr2;
+      }
+    }
+  }
+
+  > .nav-ul > .nav-li::after {
+    background-color: $clr;
+  }
+}

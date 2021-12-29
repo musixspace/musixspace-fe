@@ -1,5 +1,6 @@
 @import "../mixins/d-flex.scss";
 @import "../mixins/reload.scss";
+@import "../mixins/custom_nav.scss";
 
 nav {
   width: 100%;
@@ -139,86 +140,29 @@ nav {
   }
 
   &.nav-top-tracks {
-    background-color: var(--bg-top-tracks);
-    color: var(--clr-gray);
-
-    .nav-ul {
-      color: var(--clr-gray);
-
-      .profile {
-        .profile-ul {
-          color: var(--clr-gray);
-        }
-      }
-    }
-
-    > .nav-ul > .nav-li::after {
-      background-color: var(--clr-gray);
-    }
+    @include custom_nav(var(--bg-top-tracks), var(--clr-gray));
   }
 
   &.nav-match {
-    background-color: var(--bg-match);
-    color: var(--clr-black);
-
-    .nav-ul {
-      color: var(--clr-black);
-
-      .profile {
-        .profile-ul {
-          color: var(--clr-skin);
-        }
-      }
-    }
-
-    > .nav-ul > .nav-li::after {
-      background-color: var(--clr-black);
-    }
+    @include custom_nav(var(--bg-match), var(--clr-text-match));
   }
 
   &.nav-insights {
-    background-color: var(--bg-insights);
-    color: var(--clr-dark-blue);
-
-    .nav-ul {
-      .profile {
-        .profile-ul {
-          color: var(--bg-insights);
-        }
-      }
-    }
-
-    > .nav-ul > .nav-li::after {
-      background-color: var(--clr-dark-blue);
-    }
+    @include custom_nav(
+      var(--bg-insights),
+      var(--clr-dark-blue),
+      var(--bg-insights)
+    );
   }
 
   &.nav-about {
-    background-color: var(--bg-about);
-    color: var(--clr-pink);
-
-    .nav-ul {
-      color: var(--clr-pink);
-
-      .profile {
-        .profile-ul {
-          color: var(--clr-pink);
-        }
-      }
-    }
-
-    > .nav-ul > .nav-li::after {
-      background-color: var(--clr-pink);
-    }
+    @include custom_nav(var(--bg-about), var(--clr-pink));
   }
 
   &.nav-discover {
-    background-color: var(--clr-black);
-    color: var(--clr-white);
+    @include custom_nav(var(--clr-black), var(--clr-white));
 
     .nav-ul {
-      color: var(--clr-white);
-
       .profile {
         .profile-ul {
           background-color: var(--clr-white);
@@ -237,10 +181,6 @@ nav {
           }
         }
       }
-    }
-
-    > .nav-ul > .nav-li::after {
-      background-color: var(--clr-white);
     }
   }
 
