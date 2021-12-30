@@ -19,6 +19,17 @@ const ReadyToRock = () => {
 
   const [anthemStore, setAnthemStore] = useState([]);
 
+  useEffect(() => {
+    axiosInstance
+      .get("/login/second")
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
   const apiCall = useDebounceCallback((value) => {
     axiosInstance
       .post("/search", { query: value, type: "track" })

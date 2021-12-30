@@ -27,6 +27,17 @@ const Rolling = () => {
   const [selectedTraits, setSelectedTraits] = useState([]);
 
   useEffect(() => {
+    axiosInstance
+      .get("/login/third")
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
+  useEffect(() => {
     const flag = sessionStorage.getItem("newUser");
     console.log(typeof flag);
     if (flag === "false") {
