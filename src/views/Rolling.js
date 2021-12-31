@@ -25,6 +25,7 @@ const traits = [
 const Rolling = () => {
   const history = useHistory();
   const [selectedTraits, setSelectedTraits] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     axiosInstance
@@ -34,6 +35,9 @@ const Rolling = () => {
       })
       .catch((err) => {
         console.log(err);
+      })
+      .finally(() => {
+        setLoading(false);
       });
   }, []);
 
@@ -113,6 +117,7 @@ const Rolling = () => {
         </div>
         <div className="button-container">
           <button
+            disabled={loading}
             onClick={onHandleSubmit}
             className={`${selectedTraits.length < 3 ? "hide" : ""}`}
           >
