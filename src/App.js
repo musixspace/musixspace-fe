@@ -24,7 +24,7 @@ const code = new URLSearchParams(window.location.search).get("code");
 const App = () => {
   useAuth(code);
   const displayName = useRecoilValue(userNameSelector);
-  const { getUserProfile } = useProfile();
+  // const { getUserProfile } = useProfile();
 
   useEffect(() => {
     if (
@@ -55,7 +55,7 @@ const App = () => {
   useEffect(() => {
     const handle = localStorage.getItem("handle");
     if (!displayName && handle && handle !== "undefined") {
-      getUserProfile(handle);
+      // getUserProfile(handle);
     }
   }, [displayName]);
 

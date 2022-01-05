@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { FiCheck } from "react-icons/fi";
 import { useHistory } from "react-router";
-import { axiosInstance } from "../util/axiosConfig";
 import ambivert from "../assets/images/bgs/ambi.png";
 import easy from "../assets/images/bgs/easy.png";
 import extrovert from "../assets/images/bgs/extrovert.png";
@@ -10,6 +9,7 @@ import lonewolf from "../assets/images/bgs/lonewolf.png";
 import party from "../assets/images/bgs/party.png";
 import quiet from "../assets/images/bgs/quiet.png";
 import weirdo from "../assets/images/bgs/weirdo.png";
+import { axiosInstance } from "../util/axiosConfig";
 
 const traits = [
   { id: 1, name: "introvert", img: introvert },
@@ -25,21 +25,6 @@ const traits = [
 const Rolling = () => {
   const history = useHistory();
   const [selectedTraits, setSelectedTraits] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    axiosInstance
-      .get("/login/third")
-      .then((res) => {
-        console.log(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  }, []);
 
   useEffect(() => {
     const flag = sessionStorage.getItem("newUser");
@@ -117,7 +102,6 @@ const Rolling = () => {
         </div>
         <div className="button-container">
           <button
-            disabled={loading}
             onClick={onHandleSubmit}
             className={`${selectedTraits.length < 3 ? "hide" : ""}`}
           >

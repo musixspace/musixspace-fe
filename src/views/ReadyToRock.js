@@ -20,14 +20,13 @@ const ReadyToRock = () => {
   const [anthemStore, setAnthemStore] = useState([]);
 
   useEffect(() => {
-    axiosInstance
-      .get("/login/second")
-      .then((res) => {
-        console.log(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    (async () => {
+      try {
+        await axiosInstance.get("/login/second");
+      } catch (error) {
+        console.log(error);
+      }
+    })();
   }, []);
 
   const apiCall = useDebounceCallback((value) => {
