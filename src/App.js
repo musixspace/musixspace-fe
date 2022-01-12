@@ -4,7 +4,6 @@ import { useRecoilValue } from "recoil";
 import Logout from "./components/Logout";
 import Wrapper from "./components/Wrapper";
 import useAuth from "./hooks/useAuth";
-import useProfile from "./hooks/useProfile";
 import { userNameSelector } from "./recoil/userAtom";
 import About from "./views/About";
 import Discover from "./views/Discover";
