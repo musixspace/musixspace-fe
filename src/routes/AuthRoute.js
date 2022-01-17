@@ -41,7 +41,7 @@ const AuthRoute = () => {
           <PrivateRoute exact path="/discover" component={Discover} />
           <PrivateRoute exact path="/match/:matchHandle" component={Match} />
           <PrivateRoute exact path="/logout" component={Logout} />
-          <PrivateRoute exact path="/:handle" component={MySpace} />
+          <PrivateRoute exact path="/myspace/:handle" component={MySpace} />
         </Switch>
       </Wrapper>
     </Router>

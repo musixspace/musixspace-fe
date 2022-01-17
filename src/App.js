@@ -1,5 +1,10 @@
 import { useEffect } from "react";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Redirect,
+  Route,
+  Switch,
+} from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import Wrapper from "./components/Wrapper";
 import { SocketProvider } from "./context/socketContext";
@@ -53,7 +58,7 @@ const App = () => {
     }
   }, [displayName]);
 
-  const isAuthenticated = false;
+  const isAuthenticated = true;
 
   return (
     <SocketProvider>
@@ -67,7 +72,8 @@ const App = () => {
               <Route exact path="/rolling" component={Rolling} />
               <Route exact path="/about" component={About} />
               <Route exact path="/" component={Home} />
-              <Route path="/:handle" component={MySpace} />
+              <Route exact path="/myspace/:handle" component={MySpace} />
+              <Route path="/*" component={() => <h1>404</h1>} />
             </Switch>
           </Wrapper>
         </Router>
