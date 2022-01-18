@@ -18,6 +18,7 @@
 @import "./components/editListModal.scss";
 @import "./components/skeleton.scss";
 @import "./components/addSongModal.scss";
+@import "./components/bottomNav.scss";
 
 :root {
   /* Colors */
@@ -80,6 +81,9 @@ body {
   overflow: hidden;
   position: relative;
   z-index: 1;
+  // @media (max-width: 776px) {
+  //   padding-bottom: 4em;
+  // }
 }
 
 .dark-overlay {

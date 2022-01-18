@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { FiMenu, FiRefreshCcw, FiX } from "react-icons/fi";
+import { FiLogOut, FiMenu, FiRefreshCcw, FiX } from "react-icons/fi";
 import { Link, useLocation } from "react-router-dom";
 import {
   useRecoilState,
@@ -74,7 +74,6 @@ const Navbar = () => {
 
   useEffect(() => {
     if (username || localStorage.getItem("handle")) {
-      console.log("Aa gaye yaha");
       loggedInLinks[2].path = `/${username || localStorage.getItem("handle")}`;
     }
   }, [username, location.pathname]);
@@ -208,10 +207,8 @@ const Navbar = () => {
             <div className="reload" onClick={handleReload}>
               <FiRefreshCcw />
             </div>
-            <div className="profile" onClick={toggleMenu}>
-              <div className="profile-img">
-                <img src={image_url || profile} alt="Profile" />
-              </div>
+            <div>
+              <FiLogOut />
             </div>
           </>
         ) : showLinks ? (

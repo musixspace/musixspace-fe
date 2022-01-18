@@ -1,4 +1,5 @@
 @import "./mixins/d-flex.scss";
+@import "./partials/skeletonColors";
 
 .mySpace {
   margin-top: 10vh;
@@ -8,7 +9,7 @@
   position: relative;
 
   .skeleton {
-    background-color: #141e3e;
+    background-color: $skeletonMyspace;
   }
 
   .floating-buttons {
@@ -823,10 +824,10 @@
 
 @media (max-width: 776px) {
   .mySpace {
-    padding: 1em 1.5em;
+    padding: 1em 1.5em 10vh;
 
     .floating-buttons {
-      bottom: 1.5em;
+      bottom: 10vh;
       right: 1.5em;
       gap: 0.5em;
 

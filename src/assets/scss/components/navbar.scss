@@ -199,7 +199,6 @@ nav {
     }
 
     .ham {
-      display: block;
       font-size: calc(var(--base-font-size) * 3);
       cursor: pointer;
       @include d-flex(center, center, row);
@@ -207,26 +206,8 @@ nav {
 
       @include reload();
 
-      .profile {
-        position: relative;
-        z-index: 1;
-        .profile-img {
-          cursor: pointer;
-          width: 40px;
-          height: 40px;
-          border-radius: 100px;
-          overflow: hidden;
-
-          img {
-            object-fit: cover;
-            width: 100%;
-            height: 100%;
-          }
-        }
-      }
-
       svg {
-        margin-top: 5px;
+        font-size: calc(var(--base-font-size) * 2.5);
       }
     }
 

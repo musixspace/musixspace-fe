@@ -1,4 +1,5 @@
 @import "./mixins/d-flex.scss";
+@import "./partials/skeletonColors";
 
 .discover-container {
   margin-top: 10vh;
@@ -9,7 +10,7 @@
   @include d-flex(flex-start, center, column);
 
   .skeleton {
-    background-color: #671313;
+    background-color: $skeletonDiscover;
   }
 
   .searchbar {
@@ -491,6 +492,7 @@
 @media (max-width: 776px) {
   .discover-container {
     padding: 1em 1.5em;
+    height: 85vh;
   }
 }
 

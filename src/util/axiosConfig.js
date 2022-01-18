@@ -29,9 +29,9 @@ axiosInstance.interceptors.response.use(
   },
   function (error) {
     console.log(error.response);
-    if (error.response.status === 401 || error.response.status === 403) {
-      window.location.href = window.location.origin + "/logout";
-    }
+    // if (error.response.status === 401 || error.response.status === 403) {
+    //   window.location.href = window.location.origin + "/logout";
+    // }
     return Promise.reject(error);
   }
 );

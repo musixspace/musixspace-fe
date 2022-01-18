@@ -1,4 +1,5 @@
 @import "./mixins/d-flex.scss";
+@import "./partials/skeletonColors";
 
 .match-container {
   margin-top: 10vh;
@@ -8,7 +9,7 @@
   scroll-behavior: smooth;
 
   .skeleton {
-    background-color: #392d2d;
+    background-color: $skeletonMatch;
   }
 
   span.black {
@@ -348,6 +349,12 @@
         }
 
         > .common-track {
+          flex-direction: column;
+
+          > .track-meta {
+            text-align: center;
+          }
+
           > .controls {
             left: $height - 20px !important;
             top: $height - 35px;

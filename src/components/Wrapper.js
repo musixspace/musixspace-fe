@@ -4,6 +4,7 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import { loadingAtom } from "../recoil/loadingAtom";
 import { openSidebarAtom } from "../recoil/openSidebarAtom";
 import Alert from "./Alert";
+import BottomNav from "./BottomNav";
 import Loading from "./Loading";
 import Navbar from "./Navbar";
 
@@ -56,6 +57,7 @@ const Wrapper = (props) => {
       ) : (
         props.children
       )}
+      <BottomNav />
       <Alert />
     </div>
   );

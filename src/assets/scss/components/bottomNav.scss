@@ -1,0 +1,82 @@
+@import "../mixins/d-flex.scss";
+@import "../partials/skeletonColors";
+
+.bottom-nav {
+  position: fixed;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 8vh;
+  border-radius: 15px 15px 0 0;
+  background-color: $skeletonInsights;
+  z-index: 1000;
+
+  > ul {
+    width: 100%;
+    height: 100%;
+    list-style-type: none;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+
+    > a {
+      display: grid;
+      place-items: center;
+      > svg {
+        font-size: calc(var(--base-font-size) * 2.5);
+        transition: transform 300ms ease-in-out;
+      }
+
+      &.selected {
+        > svg {
+          transform: scale(1.3);
+        }
+      }
+    }
+  }
+}
+
+@media (min-width: 776px) {
+  .bottom-nav {
+    display: none;
+  }
+}
+
+.bottom-nav-hidden {
+  display: none;
+}
+
+.bottom-nav-match {
+  background-color: $skeletonMatch;
+  > ul > a > svg {
+    color: var(--clr-text-match);
+  }
+}
+
+.bottom-nav-dashboard {
+  background-color: $skeletonDashboard;
+  > ul > a > svg {
+    color: var(--clr-gray);
+  }
+}
+
+.bottom-nav-insights {
+  background-color: $skeletonInsights;
+  > ul > a > svg {
+    color: var(--clr-dark-blue);
+  }
+}
+
+.bottom-nav-discover {
+  background-color: $skeletonDiscover;
+  > ul > a > svg {
+    color: var(--clr-white);
+  }
+}
+
+.bottom-nav-myspace {
+  background-color: $skeletonMyspace;
+  > ul > a > svg {
+    color: var(--clr-pink);
+  }
+}
