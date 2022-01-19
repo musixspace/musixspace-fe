@@ -37,9 +37,10 @@ const themeSwitch = (str) => {
 
 const loggedInLinks = [
   { name: "Insights", path: "/insights" },
+  { name: "Feed", path: "/feed" },
   { name: "Discover", path: "/discover" },
   { name: "My Space", path: "/myspace" },
-  { name: "Discord", path: "/discord" },
+  // { name: "Discord", path: "/discord" },
 ];
 
 const Navbar = () => {
@@ -191,7 +192,7 @@ const Navbar = () => {
               <FiX />
             </div>
           </div>
-          <li className="nav-li">Discord</li>
+          {/* <li className="nav-li">Discord</li> */}
           <li
             className={`nav-li ${
               location.pathname === "/about" ? "underline" : ""

@@ -4,10 +4,10 @@ import { useRecoilValue } from "recoil";
 import Logout from "./components/Logout";
 import Wrapper from "./components/Wrapper";
 import useAuth from "./hooks/useAuth";
-import useProfile from "./hooks/useProfile";
 import { userNameSelector } from "./recoil/userAtom";
 import About from "./views/About";
 import Discover from "./views/Discover";
+import Feed from "./views/Feed/Feed";
 import Home from "./views/Home";
 import Insights from "./views/Insights";
 import Match from "./views/Match";
@@ -70,6 +70,7 @@ const App = () => {
           <Route exact path="/insights/topartists" component={TopArtists} />
           <Route exact path="/insights/toptracks" component={TopTracks} />
           <Route exact path="/insights" component={Insights} />
+          <Route exact path="/feed" component={Feed} />
           <Route exact path="/discover" component={Discover} />
           <Route exact path="/match/:matchHandle" component={Match} />
           <Route exact path="/about" component={About} />
