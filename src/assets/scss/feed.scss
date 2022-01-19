@@ -82,6 +82,7 @@
             width: 100%;
             height: 100%;
             padding: 1em;
+            z-index: 200;
             @include d-flex(space-between, flex-start, column);
 
             p.vibe {
@@ -159,7 +160,7 @@
 
           > .overlay {
             position: absolute;
-            z-index: 200;
+            z-index: 100;
             left: 0;
             top: 0;
             width: 100%;
@@ -174,7 +175,7 @@
               border-radius: 100%;
               display: grid;
               place-items: center;
-              animation: faded 300ms forwards;
+              // animation: faded 300ms forwards;
 
               > svg {
                 color: var(--clr-black);
@@ -194,14 +195,14 @@
   }
 }
 
-@keyframes faded {
-  0% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(0.5);
-  }
-  100% {
-    transform: scale(0);
-  }
-}
+// @keyframes faded {
+//   0% {
+//     transform: scale(1);
+//   }
+//   50% {
+//     transform: scale(0.5);
+//   }
+//   100% {
+//     transform: scale(0);
+//   }
+// }
