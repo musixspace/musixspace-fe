@@ -104,7 +104,6 @@ const Match = () => {
           {!store.me ? (
             <>
               <Skeleton type="text" />
-              <Skeleton type="text" />
             </>
           ) : (
             <>
@@ -113,9 +112,6 @@ const Match = () => {
                   That’s a harmony we have never heard of before! Send a song to
                   give a spark to this vibe.
                 </p>
-              </div>
-              <div className="button-container">
-                <button>Send a Song</button>
               </div>
             </>
           )}
