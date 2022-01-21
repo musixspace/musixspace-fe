@@ -1,16 +1,15 @@
 import jwtDecode from "jwt-decode";
-import React, { useEffect, useRef, useState } from "react";
-import { AiFillCaretRight, AiOutlinePause } from "react-icons/ai";
-import { GiSpeaker, GiSpeakerOff } from "react-icons/gi";
+import moment from "moment";
+import React, { useEffect, useState } from "react";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 import { FiSkipForward } from "react-icons/fi";
+import { GiSpeaker, GiSpeakerOff } from "react-icons/gi";
 import { useSetRecoilState } from "recoil";
 import logo from "../../assets/images/logo-black.png";
 import WebPlayer from "../../components/WebPlayer";
 import { alertAtom } from "../../recoil/alertAtom";
 import { axiosInstance } from "../../util/axiosConfig";
 import { nFormatter, setMediaSession } from "../../util/functions";
-import moment from "moment";
 
 const decodeJWT = () => {
   const access_token = localStorage.getItem("accessToken");
@@ -34,7 +33,7 @@ const Feed = () => {
 
   const fetchPosts = () => {
     axiosInstance
-      .get(`/feed/${pageId}`)
+      .get(`/feed/all/${pageId}`)
       .then((res) => {
         const newPosts = [...posts, ...res.data];
         setPosts(newPosts);
@@ -83,7 +82,7 @@ const Feed = () => {
         currentSong.artists,
         currentSong.imageUrl,
         null,
-        null,
+        null
       );
     }
   }, [currentSong.audioUrl]);
@@ -103,7 +102,11 @@ const Feed = () => {
         setAlert({ open: true, type: "success", message: res.data });
         const allPosts = posts.map((item) => {
           if (item.feed_id === feedId) {
-            item.likes.push(userId);
+            if (item.likes.includes(userId)) {
+              item.likes = item.likes.filter((i) => i !== userId);
+            } else {
+              item.likes.push(userId);
+            }
           }
           return item;
         });
@@ -173,16 +176,16 @@ const Feed = () => {
                             {item.artists.map((i) => i.name).join(", ")}
                           </p>
                         </div>
-                        <div>
+                        <div
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            likePost(item.feed_id);
+                          }}
+                        >
                           {userId && item.likes.includes(userId) ? (
                             <FaHeart />
                           ) : (
-                            <FaRegHeart
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                likePost(item.feed_id);
-                              }}
-                            />
+                            <FaRegHeart />
                           )}
                           <span>{nFormatter(item.likes.length)}</span>
                         </div>
