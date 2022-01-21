@@ -139,6 +139,11 @@ nav {
     background-color: transparent;
   }
 
+  &.nav-beta {
+    background-color: transparent;
+    color: var(--clr-white);
+  }
+
   &.nav-top-tracks {
     @include custom_nav(var(--bg-top-tracks), var(--clr-gray));
   }

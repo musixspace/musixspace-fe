@@ -106,7 +106,7 @@ const Navbar = () => {
   return (
     <nav
       className={
-        location.pathname === "/" ? "" : themeSwitch(location.pathname)
+        location.pathname === "/" ? "nav-beta" : themeSwitch(location.pathname)
       }
     >
       <div className="nav-title">

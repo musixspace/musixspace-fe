@@ -1,6 +1,5 @@
 @import "fonts.scss";
 @import "dashboard.scss";
-// @import "home.scss";
 @import "insights.scss";
 @import "about.scss";
 @import "readytorock.scss";
@@ -21,15 +20,26 @@
 @import "./components/skeleton.scss";
 @import "./components/addSongModal.scss";
 @import "./components/bottomNav.scss";
+@import "./components/betaImageSlider.scss";
 
 :root {
   /* Colors */
-  --bg-home: #ffc055;
   --bg-top-tracks: #483048;
   --bg-insights: #ffc7cc;
   --bg-about: #1d2d5b;
   --bg-match: #191414;
   --bg-transparent: transparent;
+
+  --bg-home: #f59c24;
+  --bg-beta-brown: #7e4b31;
+  --bg-beta-red: #8f1833;
+  --bg-beta-blue: #6098f2;
+  --clr-beta-blue: #1e3468;
+  --clr-beta-white: #fafafa;
+  --clr-beta-yellow: #f7c964;
+  --clr-beta-brown: #cd845b;
+  --clr-beta-dark-brown: #832333;
+  --clr-beta-faded-white: #ffcdd3;
 
   --clr-black: #000000;
   --clr-white: #ffffff;

@@ -5,7 +5,7 @@ import { loginUrl } from "../util/spotify";
 import banner1 from "../assets/images/banner1.png";
 import banner2 from "../assets/images/banner2.png";
 import banner3 from "../assets/images/banner3.png";
-import ImageSlider from "../components/ImageSlider";
+import BetaImageSlider from "../components/BetaImageSlider";
 import { axiosInstance } from "../util/axiosConfig";
 
 const BetaLanding = () => {
@@ -29,7 +29,7 @@ const BetaLanding = () => {
     <div className="beta-landing">
       <div className="first-page">
         <div className="image-wrapper">
-          <ImageSlider />
+          <BetaImageSlider />
         </div>
         <div className="content-wrapper">
           <div className="title">Welcome to the Music Metaverse.</div>
