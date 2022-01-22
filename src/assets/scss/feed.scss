@@ -10,7 +10,7 @@
   position: relative;
 
   .skeleton {
-    background-color: $skeletonDashboard;
+    background-color: $skeletonFeed;
   }
 
   > .feed-wrapper {
@@ -79,7 +79,6 @@
           }
 
           > .main-content {
-            background-color: yellowgreen;
             width: 100%;
             @include d-flex(flex-start, flex-start, column);
             gap: 1em;
@@ -159,7 +158,7 @@
                   }
 
                   > span {
-                    margin-top: 8px;
+                    margin-top: 4px;
                     font-size: calc(var(--base-font-size) * 2);
                   }
                 }
@@ -190,6 +189,58 @@
             > svg {
               color: var(--clr-black);
               font-size: calc(var(--base-font-size) * 3.5);
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 767px) {
+  .feed-container {
+    padding: 0;
+    height: 85vh;
+    > .feed-wrapper {
+      width: 100%;
+      > svg {
+        display: none;
+      }
+      > .feed {
+        width: 100%;
+        border-radius: 0;
+
+        > .ind-post {
+          > .image-container {
+            img {
+              max-width: 100%;
+            }
+          }
+
+          > .content-container {
+            padding: 1.5em;
+            padding-bottom: 3em;
+
+            p.vibe {
+              font-size: calc(var(--base-font-size) * 2.5);
+            }
+
+            > .main-content {
+              .song-info {
+                > div {
+                  &:first-child {
+                    p {
+                      &:first-child {
+                        font-size: calc(var(--base-font-size) * 2.5);
+                      }
+
+                      &:nth-child(2) {
+                        font-size: calc(var(--base-font-size) * 2);
+                      }
+                    }
+                  }
+                }
+              }
             }
           }
         }

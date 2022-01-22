@@ -6,6 +6,8 @@ const themeSwitch = (str) => {
   switch (str) {
     case "/":
       return "bottom-nav-hidden";
+    case "/feed":
+      return "bottom-nav-feed";
     case String(str.match(/.*match.*/)):
       return "bottom-nav-match";
     case "/insights/toptracks":
