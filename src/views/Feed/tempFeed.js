@@ -1,13 +1,13 @@
 import jwtDecode from "jwt-decode";
 import moment from "moment";
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 import { FiSkipForward } from "react-icons/fi";
 import { GiSpeaker, GiSpeakerOff } from "react-icons/gi";
 import { useSetRecoilState } from "recoil";
+import logo from "../../assets/images/logo-black.png";
 import WebPlayer from "../../components/WebPlayer";
 import { alertAtom } from "../../recoil/alertAtom";
-import logo from "../../assets/images/logo-black.png";
 import { axiosInstance } from "../../util/axiosConfig";
 import { nFormatter, setMediaSession } from "../../util/functions";
 
@@ -82,7 +82,7 @@ const Feed = () => {
         currentSong.artists,
         currentSong.imageUrl,
         null,
-        null,
+        null
       );
     }
   }, [currentSong.audioUrl]);
@@ -139,25 +139,26 @@ const Feed = () => {
     <div className="feed-container">
       {addPost ? null : (
         <div className="feed-wrapper">
-          <FiSkipForward
-            onClick={prevPost}
-            style={{ visibility: index !== 0 ? "visible" : "hidden" }}
-          />
-          <div className="feed">
-            {posts.map((item) => (
-              <div
-                key={item.feed_id}
-                className="ind-post"
-                onClick={() => toggleAudioUrl(item)}
-              >
-                <div className="image-container">
-                  <img src={item.image_url} alt="Dummy" />
-                </div>
-                <div className="content-container">
-                  <p className="vibe">#{item.vibe}</p>
-                  <div className="main-content">
-                    <div className="user-info">
-                      <div>
+          <p>Musixpieces</p>
+          <div className="feed-nav">
+            <FiSkipForward
+              onClick={prevPost}
+              style={{ visibility: index !== 0 ? "visible" : "hidden" }}
+            />
+            <div className="feed">
+              {posts.map((item) => (
+                <div
+                  key={item.feed_id}
+                  className="ind-post"
+                  onClick={() => toggleAudioUrl(item)}
+                >
+                  <div className="image-container">
+                    <img src={item.image_url} alt="Dummy" />
+                  </div>
+                  <div className="content-container">
+                    <p className="vibe">#{item.vibe}</p>
+                    <div className="main-content">
+                      <div className="user-info">
                         <div className="user-image">
                           <img src={item.user_url || logo} alt="Dummy" />
                         </div>
@@ -168,67 +169,53 @@ const Feed = () => {
                           </p>
                         </div>
                       </div>
-                      <div
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          likePost(item.feed_id);
-                        }}
-                      >
-                        {userId && item.likes.includes(userId) ? (
-                          <FaHeart />
-                        ) : (
-                          <FaRegHeart />
-                        )}
-                        <span>{nFormatter(item.likes.length)}</span>
-                      </div>
-                    </div>
-                    <div className="song-info">
-                      <div>
-                        <p className="name">{item.name}</p>
-                        <p className="artist">
-                          {item.artists.map((i) => i.name).join(", ")}
-                        </p>
-                      </div>
-
-                      <div
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          likePost(item.feed_id);
-                        }}
-                      >
-                        {userId && item.likes.includes(userId) ? (
-                          <FaHeart />
-                        ) : (
-                          <FaRegHeart />
-                        )}
-                        <span>{nFormatter(item.likes.length)}</span>
+                      <div className="song-info">
+                        <div>
+                          <p className="name">{item.name}</p>
+                          <p className="artist">
+                            {item.artists.map((i) => i.name).join(", ")}
+                          </p>
+                        </div>
+                        <div
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            likePost(item.feed_id);
+                          }}
+                        >
+                          {userId && item.likes.includes(userId) ? (
+                            <FaHeart />
+                          ) : (
+                            <FaRegHeart />
+                          )}
+                          <span>{nFormatter(item.likes.length)}</span>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-                <div className="overlay">
-                  <div
-                    className="controls"
-                    style={{ display: display ? "" : "none" }}
-                  >
-                    {currentSong.audioUrl === item.preview_url ? (
-                      // <AiFillCaretRight />
-                      <GiSpeaker />
-                    ) : (
-                      // <AiOutlinePause />
-                      <GiSpeakerOff />
-                    )}
+                  <div className="overlay">
+                    <div
+                      className="controls"
+                      style={{ display: display ? "" : "none" }}
+                    >
+                      {currentSong.audioUrl === item.preview_url ? (
+                        // <AiFillCaretRight />
+                        <GiSpeaker />
+                      ) : (
+                        // <AiOutlinePause />
+                        <GiSpeakerOff />
+                      )}
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
+            <FiSkipForward
+              onClick={nextPost}
+              style={{
+                visibility: index !== posts.length - 1 ? "visible" : "hidden",
+              }}
+            />
           </div>
-          <FiSkipForward
-            onClick={nextPost}
-            style={{
-              visibility: index !== posts.length - 1 ? "visible" : "hidden",
-            }}
-          />
         </div>
       )}
       {currentSong.audioUrl && (

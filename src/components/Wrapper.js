@@ -25,6 +25,7 @@ const themeSwitch = (str) => {
       return "--bg-insights";
     case "/discover":
     case "/rolling":
+    case "/feed":
       return "--clr-black";
     case "/about":
     default:

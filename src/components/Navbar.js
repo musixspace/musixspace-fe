@@ -29,6 +29,8 @@ const themeSwitch = (str) => {
     case "/discover":
     case "/rolling":
       return "nav-discover";
+    case "/feed":
+      return "nav-feed";
     case "/about":
     default:
       return "nav-about";
