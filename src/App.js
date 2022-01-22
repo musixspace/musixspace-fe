@@ -18,13 +18,14 @@ import Rolling from "./views/Rolling";
 import SurpriseMe from "./views/SurpriseMe";
 import TopArtists from "./views/TopArtists";
 import TopTracks from "./views/TopTracks";
+import useProfile from "./hooks/useProfile";
 
 const code = new URLSearchParams(window.location.search).get("code");
 
 const App = () => {
   useAuth(code);
   const displayName = useRecoilValue(userNameSelector);
-  // const { getUserProfile } = useProfile();
+  const { getUserProfile } = useProfile();
 
   useEffect(() => {
     if (
@@ -48,14 +49,14 @@ const App = () => {
         window.innerHeight +
         "px, width=" +
         window.innerWidth +
-        "px, initial-scale=1.0"
+        "px, initial-scale=1.0",
     );
   }, []);
 
   useEffect(() => {
     const handle = localStorage.getItem("handle");
     if (!displayName && handle && handle !== "undefined") {
-      // getUserProfile(handle);
+      getUserProfile(handle);
     }
   }, [displayName]);
 

@@ -75,7 +75,7 @@ const Navbar = () => {
 
   useEffect(() => {
     if (username || localStorage.getItem("handle")) {
-      loggedInLinks[2].path = `/${username || localStorage.getItem("handle")}`;
+      loggedInLinks[3].path = `/${username || localStorage.getItem("handle")}`;
     }
   }, [username, location.pathname]);
 
