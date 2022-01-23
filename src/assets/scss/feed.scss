@@ -85,6 +85,28 @@
             z-index: 200;
             @include d-flex(space-between, flex-start, column);
 
+            .header-container {
+              display: flex;
+              width: 100%;
+              justify-content: space-between;
+              align-items: center;
+            }
+
+            .delete-feed {
+              height: 40px;
+              width: 40px;
+              border-radius: 50%;
+              background-color: transparent;
+              border: none;
+              color: var(--clr-white);
+              transition: background-color 250ms;
+
+              &:hover {
+                cursor: pointer;
+                background-color: rgba(0, 0, 0, 0.3);
+              }
+            }
+
             p.vibe {
               font-size: calc(var(--base-font-size) * 3);
             }
