@@ -167,6 +167,132 @@
           }
         }
 
+        > .input-container {
+          position: absolute;
+          left: 0;
+          top: 0;
+          width: 100%;
+          height: 100%;
+          padding: 1em;
+          padding-bottom: 2em;
+          z-index: 200;
+
+          @include d-flex(flex-end, center, column);
+
+          .input-fields {
+            width: 100%;
+            margin-top: 2em;
+            position: relative;
+
+            > p {
+              padding-left: 0.5em;
+              font-family: var(--f-circ-spotify), sans-serif;
+              font-size: calc(var(--base-font-size) * 3);
+              margin-bottom: 0.4em;
+            }
+
+            > div {
+              position: relative;
+              margin-bottom: 2em;
+
+              input {
+                width: 100%;
+                font-size: calc(var(--base-font-size) * 2.5);
+                font-family: var(--f-circ-pro);
+                padding: 0.5em 3em;
+                outline: none;
+                border: none;
+                border-radius: 100px;
+
+                &::-webkit-input-placeholder,
+                &::placeholder {
+                  color: var(--clr-black);
+                }
+              }
+
+              svg {
+                position: absolute;
+                left: 25px;
+                top: 50%;
+                color: var(--clr-black);
+                font-size: calc(var(--base-font-size) * 2.25);
+                transform: translateY(-50%);
+              }
+            }
+
+            > ul.anthem-options {
+              position: absolute;
+              left: 0;
+              bottom: -3em;
+              height: auto;
+              max-height: 175px;
+              overflow-y: auto;
+              border-radius: 10px;
+              z-index: 300;
+
+              width: 100%;
+              list-style-type: none;
+              background-color: var(--clr-black);
+              color: var(--clr-white);
+
+              > li {
+                width: 100%;
+                @include d-flex(flex-start, center, row);
+                gap: 1em;
+                padding: 0.2em 1em;
+                font-size: calc(var(--base-font-size) * 2.25);
+                font-family: var(--f-circ-pro);
+                cursor: pointer;
+
+                > .image-container {
+                  max-width: 40px;
+                  max-height: 40px;
+                  width: 100%;
+                  height: 100%;
+                  border-radius: 100px;
+                  overflow: hidden;
+
+                  > img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: contain;
+                  }
+                }
+
+                &:hover,
+                &:focus {
+                  background-color: var(--clr-white);
+                  color: var(--clr-black);
+                }
+
+                &:not(:first-child) {
+                  border-top: 1px solid var(--clr-white);
+                }
+              }
+            }
+          }
+
+          .button-div {
+            width: 100%;
+            @include d-flex(flex-end, center, row);
+
+            button {
+              text-transform: uppercase;
+              font-family: var(--f-circ-pro);
+              font-size: calc(var(--base-font-size) * 2);
+              padding: 0.6em 1.5em;
+              border-radius: 100px;
+              background-color: var(--clr-white);
+              transition: all 300ms ease-in-out;
+              transform: scale(1);
+
+              &.hide {
+                transform: scale(0);
+              }
+            }
+          }
+        }
+
         > .overlay {
           position: absolute;
           z-index: 100;
@@ -193,6 +319,27 @@
           }
         }
       }
+    }
+  }
+
+  .floating-button {
+    position: absolute;
+    right: 6em;
+    bottom: 2em;
+    background-color: #2196f3;
+    width: 64px;
+    height: 64px;
+    border-radius: 100%;
+    color: var(--clr-white);
+    display: grid;
+    place-items: center;
+    // cursor: pointer;
+    transition: opacity 250ms ease-in-out;
+    > svg {
+      font-size: calc(var(--base-font-size) * 3);
+    }
+    &:hover {
+      opacity: 0.8;
     }
   }
 }
@@ -243,8 +390,45 @@
               }
             }
           }
+
+          > .input-container {
+            padding: 1.5em;
+
+            @include d-flex(center, center, column);
+
+            .input-fields {
+              > p {
+                font-size: calc(var(--base-font-size) * 2.5);
+              }
+
+              > div {
+                input {
+                  font-size: calc(var(--base-font-size) * 2.25);
+                }
+              }
+
+              > ul.anthem-options {
+                > li {
+                  font-size: calc(var(--base-font-size) * 2.25);
+
+                  > .image-container {
+                    max-width: 36px;
+                    max-height: 36px;
+                  }
+                }
+              }
+            }
+          }
         }
       }
+    }
+
+    .floating-button {
+      right: 1.5em;
+      top: 1em;
+      width: 48px;
+      height: 48px;
+      z-index: 300;
     }
   }
 }
