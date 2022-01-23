@@ -93,12 +93,17 @@
             }
 
             .delete-feed {
+              height: 40px;
+              width: 40px;
+              border-radius: 50%;
               background-color: transparent;
               border: none;
               color: var(--clr-white);
+              transition: background-color 250ms;
 
               &:hover {
                 cursor: pointer;
+                background-color: rgba(0, 0, 0, 0.3);
               }
             }
 

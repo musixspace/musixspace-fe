@@ -137,17 +137,21 @@ const Musixpieces = () => {
   };
 
   const deleteFeed = async (feedId, idx) => {
-    console.log("In delete");
     try {
       const res = await axiosInstance.delete(`/feed/${feedId}`);
+      // Calculating next index to show, by default it will show next post after deletion
       let newIndex = idx;
+      // If current index is last post, then set the new index to current - 1
       if (idx === posts.length - 1) {
+        // If only one post is present, set index to 0
         if (idx === 0) {
           newIndex = 0;
         } else {
           newIndex = idx - 1;
         }
       }
+
+      // Filter posts
       const newPosts = posts.filter((post) => post.feed_id !== feedId);
       setPosts(newPosts);
       setIndex(newIndex);
@@ -182,13 +186,14 @@ const Musixpieces = () => {
                       <p className="vibe">#{item.vibe}</p>
                       {item.user_id === userId && (
                         <button
+                          title="Delete Post"
                           className="delete-feed"
                           onClick={(e) => {
                             e.stopPropagation();
                             deleteFeed(item.feed_id, idx);
                           }}
                         >
-                          <MdDeleteForever size={30} />
+                          <MdDeleteForever size={26} />
                         </button>
                       )}
                     </div>
