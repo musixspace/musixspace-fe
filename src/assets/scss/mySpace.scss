@@ -79,10 +79,7 @@
           width: 100%;
           height: 100%;
           background-color: rgba($color: #000000, $alpha: 0.6);
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          flex-direction: column;
+          @include d-flex(center, center, column);
           color: var(--clr-white);
 
           > svg {
@@ -587,10 +584,9 @@
     }
   }
 
-  .feed-container {
-    margin-top: 10vh;
-    padding: 2em 6em;
-    height: 90vh;
+  > .feed-container {
+    padding: 0;
+    height: 85vh;
     font-family: var(--f-circ-pro), sans-serif;
     color: var(--clr-pink);
     position: relative;
@@ -605,9 +601,22 @@
       padding-bottom: 2em;
       @include d-flex(space-between, center, row);
       flex-wrap: wrap;
+      cursor: pointer;
 
       > p {
         font-size: calc(var(--base-font-size) * 6);
+        position: relative;
+        width: max-content;
+
+        &::after {
+          position: absolute;
+          content: "";
+          width: 80%;
+          left: 10%;
+          bottom: -5px;
+          height: 4px;
+          background-color: var(--clr-dark-pink);
+        }
       }
 
       > .feed-nav {
@@ -672,10 +681,12 @@
               @include d-flex(space-between, flex-start, column);
 
               .header-container {
-                display: flex;
+                @include d-flex(space-between, center, row);
                 width: 100%;
-                justify-content: space-between;
-                align-items: center;
+
+                svg {
+                  font-size: calc(var(--base-font-size) * 4);
+                }
               }
 
               .delete-feed {
@@ -1266,7 +1277,70 @@
     }
 
     .feed-container {
-      padding: 1em 1.5em 10vh;
+      background-color: transparent;
+      padding: 0;
+      width: 100%;
+      margin: 1.5em 0 6em;
+      height: 60vh;
+
+      .feed-wrapper {
+        padding: 0;
+        width: 100% !important;
+        gap: 1em;
+
+        > p {
+          font-size: calc(var(--base-font-size) * 2.75);
+        }
+
+        > .feed-nav {
+          > svg {
+            display: none;
+          }
+
+          > .feed {
+            max-width: 100%;
+            .ind-post {
+              .image-container {
+                img {
+                  width: 100%;
+                }
+              }
+
+              > .content-container {
+                padding: 1.5em;
+
+                p.vibe {
+                  font-size: calc(var(--base-font-size) * 2.5);
+                }
+
+                .header-container {
+                  svg {
+                    font-size: calc(var(--base-font-size) * 3.5);
+                  }
+                }
+
+                > .main-content {
+                  .song-info {
+                    > div {
+                      &:first-child {
+                        p {
+                          &:first-child {
+                            font-size: calc(var(--base-font-size) * 2.5);
+                          }
+
+                          &:nth-child(2) {
+                            font-size: calc(var(--base-font-size) * 2);
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     }
   }
 }

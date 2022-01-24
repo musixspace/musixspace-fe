@@ -35,7 +35,7 @@ const Feed = () => {
   const [addPost, setAddPost] = useState(false);
   const [userId, setUserId] = useState("");
   const [currentSong, setCurrentSong] = useState({
-    audioUrl: "",
+    audioUrl: null,
     songName: "",
     artists: "",
     imageUrl: null,
@@ -77,6 +77,7 @@ const Feed = () => {
   }, [pageId]);
 
   useEffect(() => {
+    toggleAudioUrl(posts[index]);
     const container = document.querySelector(".feed");
     if (container) {
       let children = container.children;
@@ -92,13 +93,6 @@ const Feed = () => {
         setPageId((prev) => prev + 1);
       }
     }
-
-    // setCurrentSong({
-    //   audioUrl: posts[index]?.preview_url,
-    //   imageUrl: posts[index]?.image_url,
-    //   songName: posts[index]?.name,
-    //   artists: posts[index]?.artists.map((i) => i.name).join(", "),
-    // });
   }, [index]);
 
   useEffect(() => {
@@ -115,7 +109,6 @@ const Feed = () => {
 
   useEffect(() => {
     if (touch.start && touch.end) {
-      stopAudio();
       if (touch.start - touch.end > 75) {
         nextPost();
       } else if (touch.end - touch.start > 75) {
@@ -141,12 +134,6 @@ const Feed = () => {
       apiCall(data.anthem.name);
     }
   }, [data.anthem.name]);
-
-  const stopAudio = () => {
-    if (currentSong.audioUrl) {
-      setCurrentSong({ ...currentSong, audioUrl: null });
-    }
-  };
 
   const prevPost = () => {
     if (index !== 0) {
@@ -188,7 +175,10 @@ const Feed = () => {
       setDisplay(false);
     }, 800);
 
-    if (!currentSong.audioUrl) {
+    if (
+      (!currentSong.audioUrl || currentSong.audioUrl !== item.preview_url) &&
+      item?.preview_url
+    ) {
       setCurrentSong({
         audioUrl: item.preview_url,
         imageUrl: item.image_url,
@@ -237,7 +227,15 @@ const Feed = () => {
           <div className="feed">
             <div className="ind-post">
               <div className="image-container">
-                <img src={currentUser?.anthem?.image_url || logo} alt="Dummy" />
+                <img
+                  src={
+                    (currentUser &&
+                      currentUser.anthem &&
+                      currentUser.anthem.image_url) ||
+                    logo
+                  }
+                  alt="Dummy"
+                />
               </div>
               <div className="input-container">
                 <div className="input-fields">
@@ -358,7 +356,10 @@ const Feed = () => {
                         <div>
                           <p className="name">{item.name}</p>
                           <p className="artist">
-                            {item.artists.map((i) => i.name).join(", ")}
+                            {item.artists
+                              .map((i) => i.name)
+                              .slice(0, 5)
+                              .join(", ")}
                           </p>
                         </div>
                         <div>
@@ -397,7 +398,7 @@ const Feed = () => {
       {currentSong.audioUrl && (
         <WebPlayer
           url={currentSong.audioUrl}
-          nextPlay={() => {}}
+          nextPlay={nextPost}
           noControls={true}
         />
       )}

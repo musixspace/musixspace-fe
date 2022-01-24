@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 import { FiSkipForward } from "react-icons/fi";
 import { GiSpeaker, GiSpeakerOff } from "react-icons/gi";
-import { MdDeleteForever } from "react-icons/md";
+import { MdDelete } from "react-icons/md";
 import { useSetRecoilState } from "recoil";
 import logo from "../../assets/images/logo-black.png";
 import WebPlayer from "../../components/WebPlayer";
@@ -22,13 +22,16 @@ const Musixpieces = () => {
   const [posts, setPosts] = useState([]);
   const [pageId, setPageId] = useState(0);
   const [index, setIndex] = useState(0);
-  const [addPost, setAddPost] = useState(false);
   const [userId, setUserId] = useState("");
   const [currentSong, setCurrentSong] = useState({
     audioUrl: "",
     songName: "",
     artists: "",
     imageUrl: null,
+  });
+  const [touch, setTouch] = useState({
+    start: null,
+    end: null,
   });
   const [display, setDisplay] = useState(false);
 
@@ -54,6 +57,7 @@ const Musixpieces = () => {
   }, [pageId]);
 
   useEffect(() => {
+    toggleAudioUrl(posts[index]);
     const container = document.querySelector(".feed");
     let children = container.children;
     if (children[0]) {
@@ -67,13 +71,6 @@ const Musixpieces = () => {
     if (index === posts.length - 3) {
       setPageId((prev) => prev + 1);
     }
-
-    // setCurrentSong({
-    //   audioUrl: posts[index]?.preview_url,
-    //   imageUrl: posts[index]?.image_url,
-    //   songName: posts[index]?.name,
-    //   artists: posts[index]?.artists.map((i) => i.name).join(", "),
-    // });
   }, [index]);
 
   useEffect(() => {
@@ -87,6 +84,16 @@ const Musixpieces = () => {
       );
     }
   }, [currentSong.audioUrl]);
+
+  useEffect(() => {
+    if (touch.start && touch.end) {
+      if (touch.start - touch.end > 75) {
+        nextPost();
+      } else if (touch.end - touch.start > 75) {
+        prevPost();
+      }
+    }
+  }, [touch.start, touch.end]);
 
   const prevPost = () => {
     setIndex((prevIndex) => prevIndex - 1);
@@ -124,7 +131,11 @@ const Musixpieces = () => {
     setTimeout(() => {
       setDisplay(false);
     }, 800);
-    if (!currentSong.audioUrl) {
+
+    if (
+      (!currentSong.audioUrl || currentSong.audioUrl !== item.preview_url) &&
+      item?.preview_url
+    ) {
       setCurrentSong({
         audioUrl: item.preview_url,
         imageUrl: item.image_url,
@@ -132,7 +143,7 @@ const Musixpieces = () => {
         artists: item.artists.map((i) => i.name).join(", "),
       });
     } else {
-      setCurrentSong({ ...currentSong, audioUrl: "" });
+      setCurrentSong({ ...currentSong, audioUrl: null });
     }
   };
 
@@ -161,107 +172,118 @@ const Musixpieces = () => {
     }
   };
 
+  const handleTouchStart = (e) => {
+    setTouch({ start: parseInt(e.touches[0].clientY), end: null });
+  };
+
+  const handleTouchEnd = (e) => {
+    setTouch({ ...touch, end: parseInt(e.changedTouches[0].clientY) });
+  };
+
   return (
     <div className="feed-container">
-      {addPost ? null : (
-        <div className="feed-wrapper">
-          <p>Musixpieces</p>
-          <div className="feed-nav">
-            <FiSkipForward
-              onClick={prevPost}
-              style={{ visibility: index !== 0 ? "visible" : "hidden" }}
-            />
-            <div className="feed">
-              {posts.map((item, idx) => (
-                <div
-                  key={item.feed_id}
-                  className="ind-post"
-                  onClick={() => toggleAudioUrl(item)}
-                >
-                  <div className="image-container">
-                    <img src={item.image_url} alt="Dummy" />
+      <div className="feed-wrapper">
+        <p>Musixpieces</p>
+        <div className="feed-nav">
+          <FiSkipForward
+            onClick={prevPost}
+            style={{ visibility: index !== 0 ? "visible" : "hidden" }}
+          />
+          <div
+            className="feed"
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
+          >
+            {posts.map((item, idx) => (
+              <div
+                key={item.feed_id}
+                className="ind-post"
+                onClick={() => toggleAudioUrl(item)}
+              >
+                <div className="image-container">
+                  <img src={item.image_url} alt="Dummy" />
+                </div>
+                <div className="content-container">
+                  <div className="header-container">
+                    <p className="vibe">#{item.vibe}</p>
+                    {item.user_id === userId && (
+                      <button
+                        title="Delete Post"
+                        className="delete-feed"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          deleteFeed(item.feed_id, idx);
+                        }}
+                      >
+                        <MdDelete />
+                      </button>
+                    )}
                   </div>
-                  <div className="content-container">
-                    <div className="header-container">
-                      <p className="vibe">#{item.vibe}</p>
-                      {item.user_id === userId && (
-                        <button
-                          title="Delete Post"
-                          className="delete-feed"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            deleteFeed(item.feed_id, idx);
-                          }}
-                        >
-                          <MdDeleteForever size={26} />
-                        </button>
-                      )}
-                    </div>
-                    <div className="main-content">
-                      <div className="user-info">
-                        <div className="user-image">
-                          <img src={item.user_url || logo} alt="Dummy" />
-                        </div>
-                        <div className="user-meta">
-                          <p className="name">{item.display_name}</p>
-                          <p className="time">
-                            {moment(item.created_at).fromNow()}
-                          </p>
-                        </div>
+                  <div className="main-content">
+                    <div className="user-info">
+                      <div className="user-image">
+                        <img src={item.user_url || logo} alt="Dummy" />
                       </div>
-                      <div className="song-info">
-                        <div>
-                          <p className="name">{item.name}</p>
-                          <p className="artist">
-                            {item.artists.map((i) => i.name).join(", ")}
-                          </p>
-                        </div>
-                        <div
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            likePost(item.feed_id);
-                          }}
-                        >
-                          {userId && item.likes.includes(userId) ? (
-                            <FaHeart />
-                          ) : (
-                            <FaRegHeart />
-                          )}
-                          <span>{nFormatter(item.likes.length)}</span>
-                        </div>
+                      <div className="user-meta">
+                        <p className="name">{item.display_name}</p>
+                        <p className="time">
+                          {moment(item.created_at).fromNow()}
+                        </p>
                       </div>
                     </div>
-                  </div>
-                  <div className="overlay">
-                    <div
-                      className="controls"
-                      style={{ display: display ? "" : "none" }}
-                    >
-                      {currentSong.audioUrl === item.preview_url ? (
-                        // <AiFillCaretRight />
-                        <GiSpeaker />
-                      ) : (
-                        // <AiOutlinePause />
-                        <GiSpeakerOff />
-                      )}
+                    <div className="song-info">
+                      <div>
+                        <p className="name">{item.name}</p>
+                        <p className="artist">
+                          {item.artists
+                            .map((i) => i.name)
+                            .slice(0, 5)
+                            .join(", ")}
+                        </p>
+                      </div>
+                      <div
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          likePost(item.feed_id);
+                        }}
+                      >
+                        {userId && item.likes.includes(userId) ? (
+                          <FaHeart />
+                        ) : (
+                          <FaRegHeart />
+                        )}
+                        <span>{nFormatter(item.likes.length)}</span>
+                      </div>
                     </div>
                   </div>
                 </div>
-              ))}
-            </div>
-            <FiSkipForward
-              onClick={nextPost}
-              style={{
-                visibility: index !== posts.length - 1 ? "visible" : "hidden",
-              }}
-            />
+                <div className="overlay">
+                  <div
+                    className="controls"
+                    style={{ display: display ? "" : "none" }}
+                  >
+                    {currentSong.audioUrl === item.preview_url ? (
+                      <GiSpeaker />
+                    ) : (
+                      <GiSpeakerOff />
+                    )}
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
+          <FiSkipForward
+            onClick={nextPost}
+            style={{
+              visibility: index !== posts.length - 1 ? "visible" : "hidden",
+            }}
+          />
         </div>
-      )}
+      </div>
       {currentSong.audioUrl && (
         <WebPlayer
           url={currentSong.audioUrl}
-          nextPlay={() => {}}
+          nextPlay={nextPost}
           noControls={true}
         />
       )}

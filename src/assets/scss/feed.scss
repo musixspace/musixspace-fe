@@ -333,7 +333,6 @@
     color: var(--clr-white);
     display: grid;
     place-items: center;
-    // cursor: pointer;
     transition: opacity 250ms ease-in-out;
     > svg {
       font-size: calc(var(--base-font-size) * 3);
@@ -347,7 +346,7 @@
 @media (max-width: 767px) {
   .feed-container {
     padding: 0;
-    height: 85vh;
+    background-color: var(--clr-black);
     > .feed-wrapper {
       width: 100%;
       > svg {
@@ -366,7 +365,7 @@
 
           > .content-container {
             padding: 1.5em;
-            padding-bottom: 3em;
+            padding-bottom: 5em;
 
             p.vibe {
               font-size: calc(var(--base-font-size) * 2.5);
@@ -426,9 +425,13 @@
     .floating-button {
       right: 1.5em;
       top: 1em;
-      width: 48px;
-      height: 48px;
+      width: 40px;
+      height: 40px;
       z-index: 300;
+
+      > svg {
+        font-size: calc(var(--base-font-size) * 2);
+      }
     }
   }
 }
