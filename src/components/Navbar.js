@@ -207,12 +207,14 @@ const Navbar = () => {
       <div className="ham">
         {localStorage.getItem("accessToken") ? (
           <>
-            <div className="reload" onClick={handleReload}>
+            <button className="reload" onClick={handleReload}>
               <FiRefreshCcw />
-            </div>
-            <div>
-              <FiLogOut />
-            </div>
+            </button>
+            <button>
+              <Link to="/logout">
+                <FiLogOut />
+              </Link>
+            </button>
           </>
         ) : showLinks ? (
           <FiX />

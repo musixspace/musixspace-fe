@@ -58,9 +58,12 @@ const BetaLanding = () => {
             with a strong backing of a common taste in music.
           </div>
           <div className="button-container">
-            {/* <button type="button" onClick={() => setOpenModal(true)}>
-              Join Beta
-            </button> */}
+            <a href={loginUrl}>
+              <span>
+                <FaSpotify />
+              </span>
+              <span>Login with Spotify</span>
+            </a>
           </div>
         </div>
         <div className="image-container">
@@ -77,9 +80,12 @@ const BetaLanding = () => {
             to.
           </div>
           <div className="button-container">
-            {/* <button type="button" onClick={() => setOpenModal(true)}>
-              Join Beta
-            </button> */}
+            <a href={loginUrl}>
+              <span>
+                <FaSpotify />
+              </span>
+              <span>Login with Spotify</span>
+            </a>
           </div>
         </div>
         <div className="image-container">
@@ -96,9 +102,12 @@ const BetaLanding = () => {
             your space, participate in weekly music prompts and much more fun!
           </div>
           <div className="button-container">
-            {/* <button type="button" onClick={() => setOpenModal(true)}>
-              Join Beta
-            </button> */}
+            <a href={loginUrl}>
+              <span>
+                <FaSpotify />
+              </span>
+              <span>Login with Spotify</span>
+            </a>
           </div>
         </div>
         <div className="image-container">

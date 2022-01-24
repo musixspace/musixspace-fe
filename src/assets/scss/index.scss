@@ -112,10 +112,10 @@ body {
 
 .loading-div {
   position: fixed;
-  top: 10vh;
   left: 0;
+  top: 0;
   width: 100vw;
-  height: 90vh;
+  height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -188,4 +188,5 @@ button {
   outline: none;
   border: none;
   cursor: pointer;
+  background-color: transparent;
 }

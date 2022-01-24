@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
 import img1 from "../assets/images/artists/image1.png";
 import img2 from "../assets/images/artists/image2.png";
-import img3 from "../assets/images/artists/image3.png";
-import img4 from "../assets/images/artists/image4.png";
+import img3 from "../assets/images/artists/ritviz.png";
+import img4 from "../assets/images/artists/john.png";
 
 const ImageSlider = ({ page }) => {
   const slideAnimation = () => {

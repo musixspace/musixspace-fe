@@ -51,35 +51,10 @@
         font-size: calc(var(--base-font-size) * 3);
         width: 48ch;
       }
+    }
 
-      .button-container {
-        margin: 4rem 0 2rem 0;
-
-        a {
-          font-family: var(--f-circ-pro), sans-serif;
-          font-size: calc(var(--base-font-size) * 3);
-          border: none;
-          outline: none;
-          padding: 0.5em 1em;
-          border-radius: 100px;
-          background-color: var(--clr-black);
-          color: var(--bg-home);
-          transition: all 250ms ease-in-out;
-          @include d-flex(space-between, center, row);
-
-          > span:first-child {
-            @include d-flex(center, center, row);
-          }
-
-          > span:nth-child(2) {
-            margin-left: 0.5em;
-          }
-
-          &:hover {
-            box-shadow: 1px 1px 2px rgba($color: #000000, $alpha: 0.9);
-          }
-        }
-      }
+    .button-container {
+      color: var(--bg-home);
     }
   }
 
@@ -129,6 +104,10 @@
         height: 100%;
       }
     }
+
+    .button-container {
+      color: var(--clr-beta-yellow);
+    }
   }
 
   .third-page {
@@ -171,6 +150,10 @@
         }
       }
     }
+
+    .button-container {
+      color: var(--clr-beta-faded-white);
+    }
   }
 
   .fourth-page {
@@ -192,6 +175,10 @@
         }
       }
     }
+
+    .button-container {
+      color: var(--clr-beta-white);
+    }
   }
 
   .button-container {
@@ -210,6 +197,34 @@
       &:hover,
       &:focus {
         box-shadow: 0 0 2px 5px rgba($color: #000000, $alpha: 0.1);
+      }
+    }
+  }
+
+  .button-container {
+    margin: 4rem 0 2rem 0;
+
+    a {
+      font-family: var(--f-circ-pro), sans-serif;
+      font-size: calc(var(--base-font-size) * 3);
+      border: none;
+      outline: none;
+      padding: 0.5em 1em;
+      border-radius: 100px;
+      background-color: var(--clr-black);
+      transition: all 250ms ease-in-out;
+      @include d-flex(space-between, center, row);
+
+      > span:first-child {
+        @include d-flex(center, center, row);
+      }
+
+      > span:nth-child(2) {
+        margin-left: 0.5em;
+      }
+
+      &:hover {
+        box-shadow: 1px 1px 2px rgba($color: #000000, $alpha: 0.9);
       }
     }
   }
