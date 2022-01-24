@@ -4,6 +4,7 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import { loadingAtom } from "../recoil/loadingAtom";
 import { openSidebarAtom } from "../recoil/openSidebarAtom";
 import Alert from "./Alert";
+import BottomNav from "./BottomNav";
 import Loading from "./Loading";
 import Navbar from "./Navbar";
 
@@ -24,6 +25,7 @@ const themeSwitch = (str) => {
       return "--bg-insights";
     case "/discover":
     case "/rolling":
+    case "/feed":
       return "--clr-black";
     case "/about":
     default:
@@ -56,6 +58,7 @@ const Wrapper = (props) => {
       ) : (
         props.children
       )}
+      <BottomNav />
       <Alert />
     </div>
   );

@@ -30,6 +30,7 @@ const ImageSlider = ({ page }) => {
     }, 27000);
 
     return () => {
+      console.log("Cleanup running...");
       clearInterval(interval);
     };
   }, []);

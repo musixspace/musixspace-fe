@@ -1,4 +1,5 @@
 @import "./mixins/d-flex.scss";
+@import "./partials/skeletonColors";
 
 .mySpace {
   margin-top: 10vh;
@@ -8,7 +9,7 @@
   position: relative;
 
   .skeleton {
-    background-color: #141e3e;
+    background-color: $skeletonMyspace;
   }
 
   .floating-buttons {
@@ -585,6 +586,216 @@
       }
     }
   }
+
+  .feed-container {
+    margin-top: 10vh;
+    padding: 2em 6em;
+    height: 90vh;
+    font-family: var(--f-circ-pro), sans-serif;
+    color: var(--clr-pink);
+    position: relative;
+
+    .skeleton {
+      background-color: $skeletonMyspace;
+    }
+
+    > .feed-wrapper {
+      width: 100%;
+      height: 100%;
+      padding-bottom: 2em;
+      @include d-flex(space-between, center, row);
+      flex-wrap: wrap;
+
+      > p {
+        font-size: calc(var(--base-font-size) * 6);
+      }
+
+      > .feed-nav {
+        @include d-flex(center, center, row);
+        gap: 2em;
+        height: 100%;
+        > svg {
+          cursor: pointer;
+          color: var(--clr-white);
+          font-size: calc(var(--base-font-size) * 4);
+
+          &:first-child {
+            transform: rotate(-90deg);
+          }
+
+          &:last-child {
+            transform: rotate(90deg);
+          }
+        }
+
+        > .feed {
+          height: 100%;
+          background-color: black;
+          border-radius: 15px;
+          overflow-y: hidden;
+          position: relative;
+
+          &::-webkit-scrollbar {
+            display: none;
+          }
+
+          @supports (scrollbar-color: var(--clr-orange) var(--clr-gray)) {
+            * {
+              scrollbar-width: none;
+            }
+          }
+
+          > .ind-post {
+            color: var(--clr-white);
+            width: 100%;
+            height: 100%;
+            position: relative;
+            > .image-container {
+              width: 100%;
+              height: 100%;
+              img {
+                filter: brightness(0.6);
+                max-width: 460px;
+                height: 100%;
+                object-fit: cover;
+              }
+            }
+
+            > .content-container {
+              position: absolute;
+              left: 0;
+              top: 0;
+              width: 100%;
+              height: 100%;
+              padding: 1em;
+              z-index: 200;
+              @include d-flex(space-between, flex-start, column);
+
+              .header-container {
+                display: flex;
+                width: 100%;
+                justify-content: space-between;
+                align-items: center;
+              }
+
+              .delete-feed {
+                height: 40px;
+                width: 40px;
+                border-radius: 50%;
+                background-color: transparent;
+                border: none;
+                color: var(--clr-white);
+                transition: background-color 250ms;
+
+                &:hover {
+                  cursor: pointer;
+                  background-color: rgba(0, 0, 0, 0.3);
+                }
+              }
+
+              p.vibe {
+                font-size: calc(var(--base-font-size) * 3);
+              }
+
+              > .main-content {
+                width: 100%;
+                @include d-flex(flex-start, flex-start, column);
+                gap: 1em;
+                .user-info {
+                  @include d-flex(flex-start, center, row);
+                  gap: 1em;
+                  .user-image {
+                    width: 48px;
+                    height: 48px;
+                    border-radius: 100%;
+                    overflow: hidden;
+                    img {
+                      object-fit: cover;
+                      width: 100%;
+                      height: 100%;
+                    }
+                  }
+
+                  .user-meta {
+                    p {
+                      &:first-child {
+                        font-family: var(--f-circ-spotify), sans-serif;
+                        font-size: calc(var(--base-font-size) * 2);
+                      }
+
+                      &:nth-child(2) {
+                        font-size: calc(var(--base-font-size) * 2);
+                        color: var(--clr-gray-2);
+                      }
+                    }
+                  }
+                }
+
+                .song-info {
+                  width: 100%;
+                  @include d-flex(space-between, flex-end, row);
+                  > div {
+                    &:first-child {
+                      p {
+                        &:first-child {
+                          font-size: calc(var(--base-font-size) * 3);
+                        }
+
+                        &:nth-child(2) {
+                          margin-top: 8px;
+                          font-size: calc(var(--base-font-size) * 2);
+                        }
+                      }
+                    }
+                    &:nth-child(2) {
+                      @include d-flex(center, center, column);
+
+                      > svg {
+                        cursor: pointer;
+                        color: var(--clr-pink);
+                        font-size: calc(var(--base-font-size) * 3.5);
+                      }
+
+                      > span {
+                        margin-top: 8px;
+                        font-size: calc(var(--base-font-size) * 2);
+                      }
+                    }
+                  }
+                }
+              }
+            }
+
+            > .overlay {
+              position: absolute;
+              z-index: 100;
+              left: 0;
+              top: 0;
+              width: 100%;
+              height: 100%;
+              @include d-flex(center, center, row);
+              filter: brightness(0.6);
+
+              > .controls {
+                width: 60px;
+                height: 60px;
+                background-color: var(--clr-white);
+                border-radius: 100%;
+                display: grid;
+                place-items: center;
+                // animation: faded 300ms forwards;
+
+                > svg {
+                  color: var(--clr-black);
+                  font-size: calc(var(--base-font-size) * 3.5);
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
 }
 
 @media (max-width: 1248px) {
@@ -823,10 +1034,10 @@
 
 @media (max-width: 776px) {
   .mySpace {
-    padding: 1em 1.5em;
+    padding: 1em 1.5em 10vh;
 
     .floating-buttons {
-      bottom: 1.5em;
+      bottom: 10vh;
       right: 1.5em;
       gap: 0.5em;
 
@@ -1052,6 +1263,10 @@
           }
         }
       }
+    }
+
+    .feed-container {
+      padding: 1em 1.5em 10vh;
     }
   }
 }

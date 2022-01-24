@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { FaMusic } from "react-icons/fa";
 import { GoMail, GoPencil } from "react-icons/go";
-import { useHistory, withRouter, Redirect } from "react-router";
+import { useHistory, withRouter } from "react-router";
 import useDebounceCallback from "../hooks/useDebounce";
 import { axiosInstance } from "../util/axiosConfig";
-// import { Redirect } from "react-router-dom";
+import { useSetRecoilState } from "recoil";
+import { alertAtom } from "../recoil/alertAtom";
 
 const ReadyToRock = () => {
   const history = useHistory();
+  const setAlert = useSetRecoilState(alertAtom);
   const [data, setData] = useState({
     email: "",
     username: "",
@@ -73,7 +75,11 @@ const ReadyToRock = () => {
           history.push("/rolling");
         })
         .catch((err) => {
-          console.log(err);
+          setAlert({
+            open: true,
+            type: "error",
+            message: err.response.data.msg,
+          });
         });
     }
   };

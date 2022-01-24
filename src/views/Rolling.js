@@ -28,7 +28,6 @@ const Rolling = () => {
 
   useEffect(() => {
     const flag = sessionStorage.getItem("newUser");
-    console.log(typeof flag);
     if (flag === "false") {
       if (localStorage.getItem("accessToken")) {
         history.push("/insights");
