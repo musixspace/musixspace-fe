@@ -164,6 +164,10 @@ nav {
     @include custom_nav(var(--bg-about), var(--clr-pink));
   }
 
+  &.nav-feed {
+    @include custom_nav(var(--clr-black), var(--clr-text-match));
+  }
+
   &.nav-discover {
     @include custom_nav(var(--clr-black), var(--clr-white));
 

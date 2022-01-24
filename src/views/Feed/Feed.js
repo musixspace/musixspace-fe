@@ -1,13 +1,23 @@
 import jwtDecode from "jwt-decode";
 import moment from "moment";
 import React, { useEffect, useState } from "react";
-import { FaHeart, FaRegHeart } from "react-icons/fa";
+import {
+  FaHashtag,
+  FaHeart,
+  FaPlus,
+  FaRegComment,
+  FaRegHeart,
+  FaSearch,
+} from "react-icons/fa";
 import { FiSkipForward } from "react-icons/fi";
 import { GiSpeaker, GiSpeakerOff } from "react-icons/gi";
-import { useSetRecoilState } from "recoil";
+import { IoMdClose } from "react-icons/io";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import logo from "../../assets/images/logo-black.png";
 import WebPlayer from "../../components/WebPlayer";
+import useDebounceCallback from "../../hooks/useDebounce";
 import { alertAtom } from "../../recoil/alertAtom";
+import { userState } from "../../recoil/userAtom";
 import { axiosInstance } from "../../util/axiosConfig";
 import { nFormatter, setMediaSession } from "../../util/functions";
 
@@ -17,6 +27,7 @@ const decodeJWT = () => {
 };
 
 const Feed = () => {
+  const currentUser = useRecoilValue(userState);
   const setAlert = useSetRecoilState(alertAtom);
   const [posts, setPosts] = useState([]);
   const [pageId, setPageId] = useState(0);
@@ -30,6 +41,19 @@ const Feed = () => {
     imageUrl: null,
   });
   const [display, setDisplay] = useState(false);
+  const [touch, setTouch] = useState({
+    start: null,
+    end: null,
+  });
+
+  const [data, setData] = useState({
+    vibe: "",
+    anthem: {
+      id: null,
+      name: "",
+    },
+  });
+  const [anthemStore, setAnthemStore] = useState([]);
 
   const fetchPosts = () => {
     axiosInstance
@@ -54,17 +78,19 @@ const Feed = () => {
 
   useEffect(() => {
     const container = document.querySelector(".feed");
-    let children = container.children;
-    if (children[0]) {
-      children = container.querySelector(`.ind-post:nth-child(${index + 1})`);
-      container.scrollTo({
-        top: children.offsetTop,
-        behavior: "smooth",
-      });
-    }
+    if (container) {
+      let children = container.children;
+      if (children[0]) {
+        children = container.querySelector(`.ind-post:nth-child(${index + 1})`);
+        container.scrollTo({
+          top: children.offsetTop,
+          behavior: "smooth",
+        });
+      }
 
-    if (index === posts.length - 3) {
-      setPageId((prev) => prev + 1);
+      if (index === posts.length - 3) {
+        setPageId((prev) => prev + 1);
+      }
     }
 
     // setCurrentSong({
@@ -87,19 +113,57 @@ const Feed = () => {
     }
   }, [currentSong.audioUrl]);
 
+  useEffect(() => {
+    if (touch.start && touch.end) {
+      stopAudio();
+      if (touch.start - touch.end > 75) {
+        nextPost();
+      } else if (touch.end - touch.start > 75) {
+        prevPost();
+      }
+    }
+  }, [touch.start, touch.end]);
+
+  const apiCall = useDebounceCallback((value) => {
+    axiosInstance
+      .post("/search", { query: value, type: "track" })
+      .then((res) => {
+        console.log(res.data);
+        setAnthemStore(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, 1000);
+
+  useEffect(() => {
+    if (!data.anthem.id && data.anthem.name) {
+      apiCall(data.anthem.name);
+    }
+  }, [data.anthem.name]);
+
+  const stopAudio = () => {
+    if (currentSong.audioUrl) {
+      setCurrentSong({ ...currentSong, audioUrl: null });
+    }
+  };
+
   const prevPost = () => {
-    setIndex((prevIndex) => prevIndex - 1);
+    if (index !== 0) {
+      setIndex((prevIndex) => prevIndex - 1);
+    }
   };
 
   const nextPost = () => {
-    setIndex((prevIndex) => prevIndex + 1);
+    if (index !== posts.length - 1) {
+      setIndex((prevIndex) => prevIndex + 1);
+    }
   };
 
   const likePost = (feedId) => {
     axiosInstance
       .put(`/feed/${feedId}`)
       .then((res) => {
-        setAlert({ open: true, type: "success", message: res.data });
         const allPosts = posts.map((item) => {
           if (item.feed_id === feedId) {
             if (item.likes.includes(userId)) {
@@ -113,7 +177,7 @@ const Feed = () => {
         setPosts(allPosts);
       })
       .catch((err) => {
-        setAlert({ open: true, type: "error", message: err.response.data.msg });
+        console.log(err);
       });
   };
 
@@ -123,6 +187,7 @@ const Feed = () => {
     setTimeout(() => {
       setDisplay(false);
     }, 800);
+
     if (!currentSong.audioUrl) {
       setCurrentSong({
         audioUrl: item.preview_url,
@@ -131,21 +196,126 @@ const Feed = () => {
         artists: item.artists.map((i) => i.name).join(", "),
       });
     } else {
-      setCurrentSong({ ...currentSong, audioUrl: "" });
+      setCurrentSong({ ...currentSong, audioUrl: null });
     }
+  };
+
+  const handleTouchStart = (e) => {
+    setTouch({ start: parseInt(e.touches[0].clientY), end: null });
+  };
+
+  const handleTouchEnd = (e) => {
+    setTouch({ ...touch, end: parseInt(e.changedTouches[0].clientY) });
+  };
+
+  const handleAddPost = () => {
+    axiosInstance
+      .post("/feed", { vibe: data.vibe, song_id: data.anthem.id })
+      .then((res) => {
+        console.log(res);
+        setAlert({
+          open: true,
+          type: "success",
+          message: res.data,
+        });
+        setData({ anthem: { ...data.anthem, id: null, name: "" }, vibe: "" });
+      })
+      .catch((err) => {
+        setAlert({
+          open: true,
+          type: "error",
+          message: err.response.data.msg,
+        });
+        console.log(err);
+      });
   };
 
   return (
     <div className="feed-container">
-      {addPost ? null : (
+      {addPost ? (
         <div className="feed-wrapper">
-          <p>Musixpieces</p>
-          <div className="feed-nav">
+          <div className="feed">
+            <div className="ind-post">
+              <div className="image-container">
+                <img src={currentUser?.anthem?.image_url || logo} alt="Dummy" />
+              </div>
+              <div className="input-container">
+                <div className="input-fields">
+                  <p>Search for your masterpiece</p>
+                  <div>
+                    <FaSearch />
+                    <input
+                      value={data.anthem.name}
+                      onChange={(e) =>
+                        setData({
+                          ...data,
+                          anthem: { id: null, name: e.target.value },
+                        })
+                      }
+                      type="text"
+                    />
+                  </div>
+
+                  {anthemStore.length > 0 && (
+                    <ul className="anthem-options">
+                      {!data.anthem.id &&
+                        anthemStore.map((item) => (
+                          <li
+                            key={item.id}
+                            onClick={() => {
+                              setData({
+                                ...data,
+                                anthem: { id: item.id, name: item.name },
+                              });
+                              setAnthemStore([]);
+                            }}
+                          >
+                            <div className="image-container">
+                              <img src={item.image_url} alt={item.name} />
+                            </div>
+                            <span>{item.name}</span>
+                          </li>
+                        ))}
+                    </ul>
+                  )}
+                  <p>Add the #vibe</p>
+                  <div>
+                    <FaHashtag />
+                    <input
+                      value={data.vibe}
+                      onChange={(e) =>
+                        setData({ ...data, vibe: e.target.value })
+                      }
+                      type="text"
+                    />
+                  </div>
+                </div>
+
+                <div className="button-div">
+                  <button
+                    className={`${data.anthem.id && data.vibe ? "" : "hide"}`}
+                    onClick={handleAddPost}
+                  >
+                    Share
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : (
+        posts &&
+        posts.length > 0 && (
+          <div className="feed-wrapper">
             <FiSkipForward
               onClick={prevPost}
               style={{ visibility: index !== 0 ? "visible" : "hidden" }}
             />
-            <div className="feed">
+            <div
+              className="feed"
+              onTouchStart={handleTouchStart}
+              onTouchEnd={handleTouchEnd}
+            >
               {posts.map((item) => (
                 <div
                   key={item.feed_id}
@@ -159,22 +329,16 @@ const Feed = () => {
                     <p className="vibe">#{item.vibe}</p>
                     <div className="main-content">
                       <div className="user-info">
-                        <div className="user-image">
-                          <img src={item.user_url || logo} alt="Dummy" />
-                        </div>
-                        <div className="user-meta">
-                          <p className="name">{item.display_name}</p>
-                          <p className="time">
-                            {moment(item.created_at).fromNow()}
-                          </p>
-                        </div>
-                      </div>
-                      <div className="song-info">
                         <div>
-                          <p className="name">{item.name}</p>
-                          <p className="artist">
-                            {item.artists.map((i) => i.name).join(", ")}
-                          </p>
+                          <div className="user-image">
+                            <img src={item.user_url || logo} alt="Dummy" />
+                          </div>
+                          <div className="user-meta">
+                            <p className="name">{item.display_name}</p>
+                            <p className="time">
+                              {moment(item.created_at).fromNow()}
+                            </p>
+                          </div>
                         </div>
                         <div
                           onClick={(e) => {
@@ -188,6 +352,18 @@ const Feed = () => {
                             <FaRegHeart />
                           )}
                           <span>{nFormatter(item.likes.length)}</span>
+                        </div>
+                      </div>
+                      <div className="song-info">
+                        <div>
+                          <p className="name">{item.name}</p>
+                          <p className="artist">
+                            {item.artists.map((i) => i.name).join(", ")}
+                          </p>
+                        </div>
+                        <div>
+                          <FaRegComment />
+                          <span>{nFormatter(+item.total_comments)}</span>
                         </div>
                       </div>
                     </div>
@@ -216,7 +392,7 @@ const Feed = () => {
               }}
             />
           </div>
-        </div>
+        )
       )}
       {currentSong.audioUrl && (
         <WebPlayer
@@ -225,6 +401,12 @@ const Feed = () => {
           noControls={true}
         />
       )}
+      <button
+        className="floating-button"
+        onClick={() => setAddPost((prev) => !prev)}
+      >
+        {addPost ? <IoMdClose /> : <FaPlus />}
+      </button>
     </div>
   );
 };
