@@ -241,7 +241,7 @@ const Feed = () => {
                       currentUser.anthem.image_url) ||
                     logo
                   }
-                  alt="Dummy"
+                  alt={`${currentUser.displayName}'s Profile`}
                 />
               </div>
               <div className="input-container">
@@ -345,19 +345,6 @@ const Feed = () => {
                             </p>
                           </div>
                         </div>
-                        <div
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            likePost(item.feed_id);
-                          }}
-                        >
-                          {userId && item.likes.includes(userId) ? (
-                            <FaHeart />
-                          ) : (
-                            <FaRegHeart />
-                          )}
-                          <span>{nFormatter(item.likes.length)}</span>
-                        </div>
                       </div>
                       <div className="song-info">
                         <div>
@@ -369,10 +356,25 @@ const Feed = () => {
                               .join(", ")}
                           </p>
                         </div>
-                        <div>
-                          <FaRegComment onClick={handleOpenComments} />
-                          <span>{nFormatter(+item.total_comments)}</span>
-                        </div>
+                      </div>
+                    </div>
+                    <div className="icons">
+                      <div
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          likePost(item.feed_id);
+                        }}
+                      >
+                        {userId && item.likes.includes(userId) ? (
+                          <FaHeart />
+                        ) : (
+                          <FaRegHeart />
+                        )}
+                        <span>{nFormatter(item.likes.length)}</span>
+                      </div>
+                      <div onClick={handleOpenComments}>
+                        <FaRegComment />
+                        <span>{nFormatter(+item.total_comments)}</span>
                       </div>
                     </div>
                   </div>

@@ -213,6 +213,10 @@ nav {
       @include d-flex(center, center, row);
       gap: 1em;
 
+      button{
+        color: inherit;
+      }
+
       @include reload();
 
       svg {

@@ -5,10 +5,18 @@ import { nFormatter } from "../../util/functions";
 import logo from "../../assets/images/logo-black.png";
 import moment from "moment";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { userState } from "../../recoil/userAtom";
+import { FiSend } from "react-icons/fi";
+import { alertAtom } from "../../recoil/alertAtom";
 
 const Comments = ({ userId, feedId, totalComments, closeComments }) => {
+  const currentUser = useRecoilValue(userState);
+  const setAlert = useSetRecoilState(alertAtom);
+
   const [pageIndex, setPageIndex] = useState(0);
   const [comments, setComments] = useState([]);
+  const [comment, setComment] = useState("");
 
   const getCommentsAPICall = () => {
     axiosInstance
@@ -46,6 +54,31 @@ const Comments = ({ userId, feedId, totalComments, closeComments }) => {
       });
   };
 
+  const handleAddComment = (e) => {
+    e.preventDefault();
+    if (comment) {
+      axiosInstance
+        .post("/feed/comment", { feed_id: feedId, comment: comment })
+        .then((res) => {
+          setAlert({
+            open: true,
+            type: "success",
+            message: "Added your comment!",
+          });
+          closeComments();
+        })
+        .catch((err) => {
+          console.log(err);
+          setAlert({
+            open: true,
+            type: "error",
+            message: err.response.data.msg,
+          });
+        });
+    } else {
+    }
+  };
+
   return (
     <div className="comments-container" onClick={closeComments}>
       <div
@@ -63,7 +96,26 @@ const Comments = ({ userId, feedId, totalComments, closeComments }) => {
           </button>
         </div>
         <div className="comment-section">
-          <div className="comment-input"></div>
+          <div className="comment-input">
+            <div className="image-container">
+              <img
+                src={(currentUser && currentUser.image_url) || logo}
+                alt={`${currentUser.displayName}'s Profile`}
+              />
+            </div>
+            <form onSubmit={handleAddComment}>
+              <textarea
+                maxLength={1023}
+                value={comment}
+                onChange={(e) => setComment(e.target.value)}
+                placeholder="Add a comment"
+                cols={24}
+              />
+              <button type="submit">
+                <FiSend />
+              </button>
+            </form>
+          </div>
           <div className="comment-list">
             {comments.map((_) => (
               <div className="comment" key={_.comment_id}>
