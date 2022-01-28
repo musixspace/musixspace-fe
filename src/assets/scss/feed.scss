@@ -17,6 +17,8 @@
     @include d-flex(center, center, row);
     gap: 2em;
     height: 100%;
+    position: relative;
+    z-index: 1;
     > svg {
       cursor: pointer;
       color: var(--clr-white);
@@ -320,6 +322,104 @@
         }
       }
     }
+
+    > .comments-container{
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba($color: #000000, $alpha: 0.2);
+      z-index: 500;
+      transform: translateY(100%);
+      animation: slideUp 500ms ease-in-out forwards;
+
+      @include d-flex(center, flex-end, row);
+
+      .comments-wrapper{
+        height: 70%;
+        width: 100%;
+        margin-bottom: 4vh;
+        background-color: var(--clr-white);
+        font-family: var(--f-circ-pro), sans-serif;
+        color: black;
+
+        .comment-header{
+          padding: 1em 1em;
+          width: 100%;
+          @include d-flex(space-between, center, row);
+          border-bottom: 2px solid var(--clr-gray-2);
+
+          font-size: calc(var(--base-font-size) * 2.5);
+
+          span{
+            margin-left: 10px;
+            color: var(--clr-black-2);
+          }
+
+          svg{
+            font-size: calc(var(--base-font-size) * 3);
+          }
+        }
+
+        .comment-section{
+          width: 100%;
+          height: 100%;
+          padding-bottom: 12vh;
+          .comment-list{
+            width: 100%;
+            height: 100%;
+            overflow-y: auto;
+            .comment{
+              width: 100%;
+              padding: 1em;
+              border-bottom: 1px solid var(--clr-gray);
+              @include d-flex(flex-start, flex-start, row);
+              gap: 1em;
+
+              .image-container{
+                width: 48px;
+                height: 48px;
+                border-radius: 50%;
+                overflow: hidden;
+                img{
+                  width: 100%;
+                  height: 100%;
+                  object-fit: cover;
+                }
+              }
+
+              .content-container{
+                @include d-flex(flex-start, flex-start, column);
+                gap: 8px;
+                .topbar{
+                  @include d-flex(flex-start, center, row);
+                  color: var(--clr-black-2);
+                  gap: 10px;
+                }
+
+                > p{
+                  width: 100%;
+                  font-size: calc(var(--base-font-size) * 2.5);
+                }
+
+                .controls{
+                  @include d-flex(flex-start, center, row);
+                  gap: 4px;
+                }
+              }
+            }
+
+            button.comment{
+              width: 100%;
+              display: grid;
+              place-content: center;
+              font-size: calc(var(--base-font-size) * 2.5);
+            }
+          }
+        }
+      }
+    }
   }
 
   .floating-button {
@@ -433,5 +533,12 @@
         font-size: calc(var(--base-font-size) * 2);
       }
     }
+  }
+}
+
+
+@keyframes slideUp {
+  100%{
+    transform: translateY(0);
   }
 }

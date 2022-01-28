@@ -11,6 +11,7 @@ import WebPlayer from "../../components/WebPlayer";
 import { alertAtom } from "../../recoil/alertAtom";
 import { axiosInstance } from "../../util/axiosConfig";
 import { nFormatter, setMediaSession } from "../../util/functions";
+import { useLocation } from "react-router-dom";
 
 const decodeJWT = () => {
   const access_token = localStorage.getItem("accessToken");
@@ -19,6 +20,7 @@ const decodeJWT = () => {
 
 const Musixpieces = () => {
   const setAlert = useSetRecoilState(alertAtom);
+  const location = useLocation();
   const [posts, setPosts] = useState([]);
   const [pageId, setPageId] = useState(0);
   const [index, setIndex] = useState(0);
@@ -37,7 +39,7 @@ const Musixpieces = () => {
 
   const fetchPosts = () => {
     axiosInstance
-      .get(`/feed/${pageId}`)
+      .get(`/feed${location.pathname}/${pageId}`)
       .then((res) => {
         const newPosts = [...posts, ...res.data];
         setPosts(newPosts);

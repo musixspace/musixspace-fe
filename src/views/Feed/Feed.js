@@ -20,6 +20,7 @@ import { alertAtom } from "../../recoil/alertAtom";
 import { userState } from "../../recoil/userAtom";
 import { axiosInstance } from "../../util/axiosConfig";
 import { nFormatter, setMediaSession } from "../../util/functions";
+import Comments from "./Comments";
 
 const decodeJWT = () => {
   const access_token = localStorage.getItem("accessToken");
@@ -34,6 +35,7 @@ const Feed = () => {
   const [index, setIndex] = useState(0);
   const [addPost, setAddPost] = useState(false);
   const [userId, setUserId] = useState("");
+  const [showComments, setShowComments] = useState(false);
   const [currentSong, setCurrentSong] = useState({
     audioUrl: null,
     songName: "",
@@ -77,7 +79,7 @@ const Feed = () => {
   }, [pageId]);
 
   useEffect(() => {
-    toggleAudioUrl(posts[index]);
+    // toggleAudioUrl(posts[index]);
     const container = document.querySelector(".feed");
     if (container) {
       let children = container.children;
@@ -218,6 +220,11 @@ const Feed = () => {
         });
         console.log(err);
       });
+  };
+
+  const handleOpenComments = (e) => {
+    e.stopPropagation();
+    setShowComments(true);
   };
 
   return (
@@ -363,7 +370,7 @@ const Feed = () => {
                           </p>
                         </div>
                         <div>
-                          <FaRegComment />
+                          <FaRegComment onClick={handleOpenComments} />
                           <span>{nFormatter(+item.total_comments)}</span>
                         </div>
                       </div>
@@ -392,6 +399,14 @@ const Feed = () => {
                 visibility: index !== posts.length - 1 ? "visible" : "hidden",
               }}
             />
+            {showComments ? (
+              <Comments
+                userId={userId}
+                feedId={posts[index].feed_id}
+                totalComments={posts[index].total_comments}
+                closeComments={() => setShowComments(false)}
+              />
+            ) : null}
           </div>
         )
       )}
