@@ -10,7 +10,13 @@ import { userState } from "../../recoil/userAtom";
 import { FiSend } from "react-icons/fi";
 import { alertAtom } from "../../recoil/alertAtom";
 
-const Comments = ({ userId, feedId, totalComments, closeComments }) => {
+const Comments = ({
+  userId,
+  feedId,
+  totalComments,
+  incrementComments,
+  closeComments,
+}) => {
   const currentUser = useRecoilValue(userState);
   const setAlert = useSetRecoilState(alertAtom);
 
@@ -60,12 +66,19 @@ const Comments = ({ userId, feedId, totalComments, closeComments }) => {
       axiosInstance
         .post("/feed/comment", { feed_id: feedId, comment: comment })
         .then((res) => {
-          setAlert({
-            open: true,
-            type: "success",
-            message: "Added your comment!",
-          });
-          closeComments();
+          const newComments = [
+            {
+              ...res.data,
+              display_name: currentUser.displayName,
+              username: currentUser.username,
+              image_url: currentUser.image,
+            },
+            ...comments,
+          ];
+
+          setComments(newComments);
+          setComment("");
+          incrementComments();
         })
         .catch((err) => {
           console.log(err);

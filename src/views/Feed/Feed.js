@@ -79,7 +79,10 @@ const Feed = () => {
   }, [pageId]);
 
   useEffect(() => {
-    // toggleAudioUrl(posts[index]);
+    if (showComments) {
+      setShowComments(false);
+    }
+    toggleAudioUrl(posts[index]);
     const container = document.querySelector(".feed");
     if (container) {
       let children = container.children;
@@ -225,6 +228,19 @@ const Feed = () => {
   const handleOpenComments = (e) => {
     e.stopPropagation();
     setShowComments(true);
+  };
+
+  const incrementComments = (feedId) => {
+    const allPosts = posts.map((item) => {
+      if (item.feed_id === feedId) {
+        return {
+          ...item,
+          total_comments: (parseInt(item.total_comments) + 1).toString(),
+        };
+      }
+      return item;
+    });
+    setPosts([...allPosts]);
   };
 
   return (
@@ -406,6 +422,9 @@ const Feed = () => {
                 userId={userId}
                 feedId={posts[index].feed_id}
                 totalComments={posts[index].total_comments}
+                incrementComments={() =>
+                  incrementComments(posts[index].feed_id)
+                }
                 closeComments={() => setShowComments(false)}
               />
             ) : null}
