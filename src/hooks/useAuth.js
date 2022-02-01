@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react";
-import { useSetRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import { loadingAtom } from "../recoil/loadingAtom";
+import { userState } from "../recoil/userAtom";
 import { axiosInstance } from "../util/axiosConfig";
 
 const useAuth = (code) => {
   const [accessToken, setAccessToken] = useState(null);
+  const [user, setUser] = useRecoilState(userState);
   const setLoading = useSetRecoilState(loadingAtom);
+
   useEffect(() => {
     if (code) {
       setLoading(true);
@@ -20,6 +23,7 @@ const useAuth = (code) => {
         )
         .then((response) => {
           setAccessToken(response.data.accessToken);
+          setUser({ ...user, isAuthenticated: true });
           localStorage.setItem("accessToken", response.data.accessToken);
           localStorage.setItem("spotifyId", response.data.spotifyId);
           localStorage.setItem("handle", response.data.handle);

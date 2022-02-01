@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { FiMenu, FiRefreshCcw, FiX } from "react-icons/fi";
+import { FiLogOut, FiMenu, FiRefreshCcw, FiX } from "react-icons/fi";
 import { Link, useLocation } from "react-router-dom";
 import {
   useRecoilState,
@@ -29,6 +29,8 @@ const themeSwitch = (str) => {
     case "/discover":
     case "/rolling":
       return "nav-discover";
+    case "/feed":
+      return "nav-feed";
     case "/about":
     default:
       return "nav-about";
@@ -37,9 +39,10 @@ const themeSwitch = (str) => {
 
 const loggedInLinks = [
   { name: "Insights", path: "/insights" },
+  { name: "Feed", path: "/feed" },
   { name: "Discover", path: "/discover" },
   { name: "My Space", path: "/myspace" },
-  { name: "Discord", path: "/discord" },
+  // { name: "Discord", path: "/discord" },
 ];
 
 const Navbar = () => {
@@ -74,8 +77,7 @@ const Navbar = () => {
 
   useEffect(() => {
     if (username || localStorage.getItem("handle")) {
-      console.log("Aa gaye yaha");
-      loggedInLinks[2].path = `/${username || localStorage.getItem("handle")}`;
+      loggedInLinks[3].path = `/${username || localStorage.getItem("handle")}`;
     }
   }, [username, location.pathname]);
 
@@ -106,7 +108,7 @@ const Navbar = () => {
   return (
     <nav
       className={
-        location.pathname === "/" ? "" : themeSwitch(location.pathname)
+        location.pathname === "/" ? "nav-beta" : themeSwitch(location.pathname)
       }
     >
       <div className="nav-title">
@@ -192,7 +194,7 @@ const Navbar = () => {
               <FiX />
             </div>
           </div>
-          <li className="nav-li">Discord</li>
+          {/* <li className="nav-li">Discord</li> */}
           <li
             className={`nav-li ${
               location.pathname === "/about" ? "underline" : ""
@@ -205,14 +207,14 @@ const Navbar = () => {
       <div className="ham">
         {localStorage.getItem("accessToken") ? (
           <>
-            <div className="reload" onClick={handleReload}>
+            <button className="reload" onClick={handleReload}>
               <FiRefreshCcw />
-            </div>
-            <div className="profile" onClick={toggleMenu}>
-              <div className="profile-img">
-                <img src={image_url || profile} alt="Profile" />
-              </div>
-            </div>
+            </button>
+            <button>
+              <Link to="/logout">
+                <FiLogOut />
+              </Link>
+            </button>
           </>
         ) : showLinks ? (
           <FiX />

@@ -60,25 +60,28 @@ const Playlist = ({
   };
 
   return (
-    <div className="topTracks">
-      <div className="upper-container">
-        {edit ? (
-          <input
-            type="text"
-            value={editData.playlists.nickname}
-            onChange={(e) =>
-              setEditData({
-                ...editData,
-                playlists: { ...editData.playlists, nickname: e.target.value },
-              })
-            }
-          />
-        ) : (
-          itemsVisible && <p className="title">{data && data.nickname}</p>
-        )}
-      </div>
-      <div className="songs-container playlist-container">
-        {itemsVisible && (
+    itemsVisible && (
+      <div className="topTracks">
+        <div className="upper-container">
+          {edit ? (
+            <input
+              type="text"
+              value={editData.playlists.nickname}
+              onChange={(e) =>
+                setEditData({
+                  ...editData,
+                  playlists: {
+                    ...editData.playlists,
+                    nickname: e.target.value,
+                  },
+                })
+              }
+            />
+          ) : (
+            <p className="title">{data && data.nickname}</p>
+          )}
+        </div>
+        <div className="songs-container playlist-container">
           <button
             className="prev"
             onClick={() =>
@@ -89,97 +92,100 @@ const Playlist = ({
           >
             <FiSkipBack />
           </button>
-        )}
-        {edit ? (
-          <DragDropContext onDragEnd={onDragEnd}>
-            <Droppable droppableId="play-list-droppable" direction="horizontal">
-              {(provided) => (
-                <div
-                  className="tracks-container"
-                  ref={provided.innerRef}
-                  {...provided.droppableProps}
-                >
-                  {data &&
-                    data.nickname &&
-                    editData.playlists.playlist_ids.map((item, idx) => (
-                      <Draggable
-                        key={item.playlist_id}
-                        draggableId={item.playlist_id}
-                        index={idx}
-                      >
-                        {(provided) => (
-                          <div
-                            className="track"
-                            ref={provided.innerRef}
-                            {...provided.dragHandleProps}
-                            {...provided.draggableProps}
-                          >
-                            <div className={`image-container`}>
-                              <img
-                                src={item.cover_image || logo}
-                                alt={item.nickname}
-                              />
-                            </div>
-                            <div className="content-container">
-                              <div className="title">{item.nickname}</div>
-                            </div>
-                            <button
-                              onClick={() => onTogglePlaylist(item.playlist_id)}
-                              className="controls"
+          {edit ? (
+            <DragDropContext onDragEnd={onDragEnd}>
+              <Droppable
+                droppableId="play-list-droppable"
+                direction="horizontal"
+              >
+                {(provided) => (
+                  <div
+                    className="tracks-container"
+                    ref={provided.innerRef}
+                    {...provided.droppableProps}
+                  >
+                    {data &&
+                      data.nickname &&
+                      editData.playlists.playlist_ids.map((item, idx) => (
+                        <Draggable
+                          key={item.playlist_id}
+                          draggableId={item.playlist_id}
+                          index={idx}
+                        >
+                          {(provided) => (
+                            <div
+                              className="track"
+                              ref={provided.innerRef}
+                              {...provided.dragHandleProps}
+                              {...provided.draggableProps}
                             >
-                              {item.visible ? <MdDelete /> : <FiCheck />}
-                            </button>
-                          </div>
-                        )}
-                      </Draggable>
-                    ))}
-                </div>
-              )}
-            </Droppable>
-          </DragDropContext>
-        ) : (
-          <div className="tracks-container">
-            {!data.playlist_ids
-              ? [1, 2, 3, 4, 5].map((item) => (
-                  <div key={item} className="track">
-                    <Skeleton type="text" />
+                              <div className={`image-container`}>
+                                <img
+                                  src={item.cover_image || logo}
+                                  alt={item.nickname}
+                                />
+                              </div>
+                              <div className="content-container">
+                                <div className="title">{item.nickname}</div>
+                              </div>
+                              <button
+                                onClick={() =>
+                                  onTogglePlaylist(item.playlist_id)
+                                }
+                                className="controls"
+                              >
+                                {item.visible ? <MdDelete /> : <FiCheck />}
+                              </button>
+                            </div>
+                          )}
+                        </Draggable>
+                      ))}
                   </div>
-                ))
-              : data.playlist_ids.map(
-                  (item) =>
-                    item.visible && (
-                      <div
-                        key={item.playlist_id}
-                        id={item.playlist_id}
-                        className="track"
-                      >
-                        <div className={`image-container`}>
-                          <img
-                            src={item.cover_image || logo}
-                            alt={item.nickname}
-                          />
-                        </div>
-                        <div className="content-container">
-                          <div className="title">{item.nickname}</div>
-                        </div>
-                        <a
-                          href={`https://open.spotify.com/playlist/${item.playlist_id}`}
-                          target="_blank"
-                        >
-                          Follow
-                        </a>
-                        <button
-                          className="controls"
-                          onClick={() => openPlaylistModal(item)}
-                        >
-                          <AiFillCaretRight />
-                        </button>
-                      </div>
-                    )
                 )}
-          </div>
-        )}
-        {itemsVisible && (
+              </Droppable>
+            </DragDropContext>
+          ) : (
+            <div className="tracks-container">
+              {!data.playlist_ids
+                ? [1, 2, 3, 4, 5].map((item) => (
+                    <div key={item} className="track">
+                      <Skeleton type="text" />
+                    </div>
+                  ))
+                : data.playlist_ids.map(
+                    (item) =>
+                      item.visible && (
+                        <div
+                          key={item.playlist_id}
+                          id={item.playlist_id}
+                          className="track"
+                        >
+                          <div className={`image-container`}>
+                            <img
+                              src={item.cover_image || logo}
+                              alt={item.nickname}
+                            />
+                          </div>
+                          <div className="content-container">
+                            <div className="title">{item.nickname}</div>
+                          </div>
+                          <a
+                            href={`https://open.spotify.com/playlist/${item.playlist_id}`}
+                            target="_blank"
+                          >
+                            Follow
+                          </a>
+                          <button
+                            className="controls"
+                            onClick={() => openPlaylistModal(item)}
+                          >
+                            <AiFillCaretRight />
+                          </button>
+                        </div>
+                      )
+                  )}
+            </div>
+          )}
           <button
             className="next"
             onClick={() =>
@@ -190,9 +196,9 @@ const Playlist = ({
           >
             <FiSkipForward />
           </button>
-        )}
+        </div>
       </div>
-    </div>
+    )
   );
 };
 

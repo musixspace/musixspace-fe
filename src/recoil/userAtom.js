@@ -37,6 +37,7 @@ export const userState = atom({
       images: null,
     },
     moodRadio: null,
+    isAuthenticated: false,
   },
 });
 

@@ -10,6 +10,7 @@ import { axiosInstance } from "../../util/axiosConfig";
 import { setMediaSession } from "../../util/functions";
 import ArtistList from "./ArtistList";
 import Intro from "./Intro";
+import Musixpieces from "./Musixpieces";
 import Playlist from "./Playlist";
 import PlaylistModal from "./PlaylistModal";
 import TrackList from "./TrackList";
@@ -408,6 +409,7 @@ const MySpace = () => {
           setEditData={setEditData}
         />
       )}
+      <Musixpieces />
       {currentSong.audioUrl && (
         <WebPlayer
           url={currentSong.audioUrl}

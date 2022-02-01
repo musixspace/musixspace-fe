@@ -1,3 +1,5 @@
+@import "./partials/skeletonColors";
+
 .dashboard-container {
   padding: 2em 6em;
   height: 90vh;
@@ -6,7 +8,7 @@
   color: var(--clr-gray);
 
   .skeleton {
-    background-color: #312131;
+    background-color: $skeletonDashboard;
   }
 
   .dashboard {
@@ -136,7 +138,7 @@
 @media (max-width: 776px) {
   .dashboard-container {
     height: auto;
-    padding: 0 1.5em 0.5em 1.5em;
+    padding: 0 1.5em 10vh 1.5em;
 
     .dashboard {
       display: flex;

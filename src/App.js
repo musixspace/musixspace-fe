@@ -1,28 +1,35 @@
-import { useEffect } from "react";
-import {
-  BrowserRouter as Router,
-  Redirect,
-  Route,
-  Switch,
-} from "react-router-dom";
+import { useEffect, useState } from "react";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { io } from "socket.io-client";
 import { useRecoilValue } from "recoil";
 import Wrapper from "./components/Wrapper";
-import { SocketProvider } from "./context/socketContext";
+import { SocketContext } from "./context/socketContext";
 import useAuth from "./hooks/useAuth";
 import useProfile from "./hooks/useProfile";
-import { userNameSelector } from "./recoil/userAtom";
-import AuthRoute from "./routes/AuthRoute";
+import { userNameSelector, userState } from "./recoil/userAtom";
+import PrivateRoute from "./routes/PrivateRoute";
 import About from "./views/About";
+import Discover from "./views/Discover";
+import Feed, { decodeJWT } from "./views/Feed/Feed";
 import Home from "./views/Home";
 import MySpace from "./views/MySpace/MySpace";
 import ReadyToRock from "./views/ReadyToRock";
 import Rolling from "./views/Rolling";
+import SurpriseMe from "./views/SurpriseMe";
+import TopArtists from "./views/TopArtists";
+import TopTracks from "./views/TopTracks";
+import MoodRadio from "./views/MoodRadio";
+import Insights from "./views/Insights";
+import Logout from "./components/Logout";
+import Match from "./views/Match";
 
 const code = new URLSearchParams(window.location.search).get("code");
 
 const App = () => {
+  const [socket, setSocket] = useState(null);
   useAuth(code);
-  const displayName = useRecoilValue(userNameSelector);
+  const { isAuthenticated } = useRecoilValue(userState);
+
   const { getUserProfile } = useProfile();
 
   useEffect(() => {
@@ -52,33 +59,71 @@ const App = () => {
   }, []);
 
   useEffect(() => {
-    const handle = localStorage.getItem("handle");
-    if (!displayName && handle && handle !== "undefined") {
-      getUserProfile(handle);
-    }
-  }, [displayName]);
+    (async () => {
+      const handle = localStorage.getItem("handle");
+      const token = localStorage.getItem("accessToken");
+      if (token) {
+        getUserProfile(handle);
+      }
+    })();
+  }, []);
 
-  const isAuthenticated = true;
+  useEffect(() => {
+    let newSocket;
+
+    if (isAuthenticated) {
+      newSocket = io(process.env.REACT_APP_SOCKET_URI, {
+        transports: ["websocket"],
+        query: { userId: decodeJWT().user.id },
+      });
+      setTimeout(() => {
+        console.log(newSocket);
+        setSocket(newSocket);
+      }, 2000);
+    }
+
+    return () => {
+      newSocket && newSocket.disconnect();
+    };
+  }, [isAuthenticated]);
 
   return (
-    <SocketProvider>
-      {isAuthenticated ? (
-        <AuthRoute />
-      ) : (
-        <Router>
-          <Wrapper>
-            <Switch>
-              <Route exact path="/readytorock" component={ReadyToRock} />
-              <Route exact path="/rolling" component={Rolling} />
-              <Route exact path="/about" component={About} />
-              <Route exact path="/" component={Home} />
-              <Route exact path="/myspace/:handle" component={MySpace} />
-              <Route path="/*" component={() => <h1>404</h1>} />
-            </Switch>
-          </Wrapper>
-        </Router>
-      )}
-    </SocketProvider>
+    <SocketContext.Provider value={socket}>
+      <Router>
+        <Wrapper>
+          <Switch>
+            <Route exact path="/readytorock" component={ReadyToRock} />
+            <Route exact path="/rolling" component={Rolling} />
+            <Route exact path="/" component={Home} />
+
+            <Route exact path="/about" component={About} />
+
+            <PrivateRoute exact path="/insights/mood" component={MoodRadio} />
+            <PrivateRoute
+              exact
+              path="/insights/surprise"
+              component={SurpriseMe}
+            />
+            <PrivateRoute
+              exact
+              path="/insights/topartists"
+              component={TopArtists}
+            />
+            <PrivateRoute
+              exact
+              path="/insights/toptracks"
+              component={TopTracks}
+            />
+            <PrivateRoute exact path="/insights" component={Insights} />
+            <PrivateRoute exact path="/feed" component={Feed} />
+            <PrivateRoute exact path="/discover" component={Discover} />
+            <PrivateRoute exact path="/match/:matchHandle" component={Match} />
+            <PrivateRoute exact path="/logout" component={Logout} />
+            <Route path="/:handle" component={MySpace} />
+          </Switch>
+        </Wrapper>
+      </Router>
+    </SocketContext.Provider>
   );
 };
 

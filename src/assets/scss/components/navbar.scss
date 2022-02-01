@@ -139,6 +139,11 @@ nav {
     background-color: transparent;
   }
 
+  &.nav-beta {
+    background-color: transparent;
+    color: var(--clr-white);
+  }
+
   &.nav-top-tracks {
     @include custom_nav(var(--bg-top-tracks), var(--clr-gray));
   }
@@ -157,6 +162,10 @@ nav {
 
   &.nav-about {
     @include custom_nav(var(--bg-about), var(--clr-pink));
+  }
+
+  &.nav-feed {
+    @include custom_nav(var(--clr-black), var(--clr-text-match));
   }
 
   &.nav-discover {
@@ -199,34 +208,19 @@ nav {
     }
 
     .ham {
-      display: block;
       font-size: calc(var(--base-font-size) * 3);
       cursor: pointer;
       @include d-flex(center, center, row);
       gap: 1em;
 
-      @include reload();
-
-      .profile {
-        position: relative;
-        z-index: 1;
-        .profile-img {
-          cursor: pointer;
-          width: 40px;
-          height: 40px;
-          border-radius: 100px;
-          overflow: hidden;
-
-          img {
-            object-fit: cover;
-            width: 100%;
-            height: 100%;
-          }
-        }
+      button{
+        color: inherit;
       }
 
+      @include reload();
+
       svg {
-        margin-top: 5px;
+        font-size: calc(var(--base-font-size) * 2.5);
       }
     }
 

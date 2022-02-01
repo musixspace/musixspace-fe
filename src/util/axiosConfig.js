@@ -2,7 +2,6 @@ import axios from "axios";
 
 export const axiosInstance = axios.create({
   baseURL: `${process.env.REACT_APP_BACKEND_URI}`,
-  timeout: 8000,
 });
 
 axiosInstance.interceptors.request.use(
@@ -30,9 +29,9 @@ axiosInstance.interceptors.response.use(
   },
   function (error) {
     console.log(error.response);
-    if (error.response.status === 401 || error.response.status === 403) {
-      window.location.href = window.location.origin + "/logout";
-    }
+    // if (error.response.status === 401 || error.response.status === 403) {
+    //   window.location.href = window.location.origin + "/logout";
+    // }
     return Promise.reject(error);
   }
 );

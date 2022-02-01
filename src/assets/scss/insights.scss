@@ -3,7 +3,7 @@
 .insights {
   height: 90vh;
   margin-top: 10vh;
-  @include d-flex(space-between, center, row);
+  @include d-flex(center, center, row);
   padding: 1em 6em;
 
   .content {
@@ -52,7 +52,7 @@
   @media (max-width: 1075px) {
     padding: 1.5em;
     flex-direction: column;
-    gap: 2em;
+    gap: 1em;
 
     .content {
       display: block;
@@ -74,7 +74,7 @@
   }
 
   @media (max-width: 776px) {
-    height: 90vh;
+    height: 84vh;
   }
 
   @media (max-width: 576px) {
