@@ -19,6 +19,7 @@ import SurpriseMe from "./views/SurpriseMe";
 import TopArtists from "./views/TopArtists";
 import TopTracks from "./views/TopTracks";
 import useProfile from "./hooks/useProfile";
+import ColorThief from "./views/ColorThief";
 
 const code = new URLSearchParams(window.location.search).get("code");
 
@@ -49,7 +50,7 @@ const App = () => {
         window.innerHeight +
         "px, width=" +
         window.innerWidth +
-        "px, initial-scale=1.0",
+        "px, initial-scale=1.0"
     );
   }, []);
 
@@ -75,6 +76,7 @@ const App = () => {
           <Route exact path="/discover" component={Discover} />
           <Route exact path="/match/:matchHandle" component={Match} />
           <Route exact path="/about" component={About} />
+          <Route exact path="/color" component={ColorThief} />
           <Route exact path="/logout" component={Logout} />
           <Route exact path="/" component={Home} />
           <Route path="/:handle" component={MySpace} />

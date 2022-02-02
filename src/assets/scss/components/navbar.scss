@@ -165,7 +165,7 @@ nav {
   }
 
   &.nav-feed {
-    @include custom_nav(var(--clr-black), var(--clr-text-match));
+    @include custom_nav(var(--clr-black), var(--clr-white));
   }
 
   &.nav-discover {
