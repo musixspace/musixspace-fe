@@ -22,6 +22,7 @@ import MoodRadio from "./views/MoodRadio";
 import Insights from "./views/Insights";
 import Logout from "./components/Logout";
 import Match from "./views/Match";
+import Chat from "./views/Chat/Chat";
 
 const code = new URLSearchParams(window.location.search).get("code");
 
@@ -54,7 +55,7 @@ const App = () => {
         window.innerHeight +
         "px, width=" +
         window.innerWidth +
-        "px, initial-scale=1.0",
+        "px, initial-scale=1.0"
     );
   }, []);
 
@@ -119,6 +120,7 @@ const App = () => {
             <PrivateRoute exact path="/discover" component={Discover} />
             <PrivateRoute exact path="/match/:matchHandle" component={Match} />
             <PrivateRoute exact path="/logout" component={Logout} />
+            <PrivateRoute exact path="/chat" component={Chat} />
             <Route path="/:handle" component={MySpace} />
           </Switch>
         </Wrapper>
