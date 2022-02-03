@@ -54,7 +54,7 @@ const App = () => {
         window.innerHeight +
         "px, width=" +
         window.innerWidth +
-        "px, initial-scale=1.0"
+        "px, initial-scale=1.0",
     );
   }, []);
 
@@ -88,7 +88,7 @@ const App = () => {
   }, [isAuthenticated]);
 
   return (
-    <SocketContext.Provider value={socket}>
+    <SocketContext.Provider value={{ socket }}>
       <Router>
         <Wrapper>
           <Switch>

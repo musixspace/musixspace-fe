@@ -1,8 +1,4 @@
-import { useState } from "react";
-import { useEffect } from "react";
-import { useContext } from "react";
-import { createContext } from "react";
-import { io } from "socket.io-client";
+import { createContext, useContext } from "react";
 
 export const SocketContext = createContext({
   socket: null,

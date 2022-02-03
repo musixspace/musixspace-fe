@@ -13,6 +13,7 @@ import { generateRandomString } from "../../util/functions";
 import { alertAtom } from "../../recoil/alertAtom";
 import { useSetRecoilState } from "recoil";
 import { useHistory } from "react-router-dom";
+import SendASong from "./SendASong";
 
 const Intro = ({
   user,
@@ -32,7 +33,7 @@ const Intro = ({
     e.preventDefault();
     let file = fileInput.current.files[0];
     let fileName = `${localStorage.getItem(
-      "handle"
+      "handle",
     )}-profile-${generateRandomString(5)}`;
     const config = {
       bucketName: "musixspace",
@@ -102,6 +103,7 @@ const Intro = ({
               }
               alt={`${user.display_name.split(" ")[0]}'s Image'`}
             />
+            <SendASong user={user} />
             {edit && (
               <div className="uploadContainer">
                 <input
@@ -252,7 +254,7 @@ const Intro = ({
                                 user.anthem.song_id,
                                 user.anthem.preview_url,
                                 1,
-                                null
+                                null,
                               )
                         }
                       >
