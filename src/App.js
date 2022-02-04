@@ -88,6 +88,14 @@ const App = () => {
     };
   }, [isAuthenticated]);
 
+  useEffect(() => {
+    if (socket) {
+      socket.on("error", ({ err }) => {
+        console.log(err);
+      });
+    }
+  }, [socket]);
+
   return (
     <SocketContext.Provider value={{ socket }}>
       <Router>

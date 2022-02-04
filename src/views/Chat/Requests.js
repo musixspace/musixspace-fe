@@ -28,7 +28,10 @@ const Requests = () => {
   return (
     <ul>
       {requests.map((req, i) => (
-        <li key={i}>{req.username}</li>
+        <li key={i}>
+          <p>{req.username}</p>
+          {/* <button onClick={handleAccept}>Accept</button> */}
+        </li>
       ))}
     </ul>
   );
