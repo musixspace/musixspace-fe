@@ -409,7 +409,7 @@ const MySpace = () => {
           setEditData={setEditData}
         />
       )}
-      <Musixpieces />
+      <Musixpieces edit={editMode} />
       {currentSong.audioUrl && (
         <WebPlayer
           url={currentSong.audioUrl}

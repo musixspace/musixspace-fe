@@ -20,6 +20,7 @@ import TopArtists from "./views/TopArtists";
 import TopTracks from "./views/TopTracks";
 import useProfile from "./hooks/useProfile";
 import ColorThief from "./views/ColorThief";
+import IndPost from "./views/Feed/IndPost";
 
 const code = new URLSearchParams(window.location.search).get("code");
 
@@ -73,6 +74,7 @@ const App = () => {
           <Route exact path="/insights/toptracks" component={TopTracks} />
           <Route exact path="/insights" component={Insights} />
           <Route exact path="/feed" component={Feed} />
+          <Route exact path="/feed/:id" component={IndPost} />
           <Route exact path="/discover" component={Discover} />
           <Route exact path="/match/:matchHandle" component={Match} />
           <Route exact path="/about" component={About} />

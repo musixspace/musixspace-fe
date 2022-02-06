@@ -26,7 +26,7 @@
           all: unset;
           width: 100%;
           color: var(--clr-black);
-          font-family: var(--f-circ-pro), sans-serif;
+          font-family: var(--f-circ-pro);
           font-size: calc(var(--base-font-size) * 3);
         }
 
@@ -96,7 +96,7 @@
           background-color: var(--clr-white-2);
           padding: 0.2em 1em;
           border-radius: 100px;
-          font-family: var(--f-circ-pro), sans-serif;
+          font-family: var(--f-circ-pro);
           font-size: calc(var(--base-font-size) * 3);
           transform: scale(1);
           transition: transform 300ms ease-in-out;

@@ -66,9 +66,9 @@
   --clr-alert-warning: #ff9800;
 
   /* Fonts */
-  --f-circ-spotify-bold: "Circular Spotify Tx T Bold";
-  --f-circ-spotify: "Circular Spotify Tx T Black";
-  --f-circ-pro: "Circular Std Medium Regular";
+  --f-circ-spotify-bold: "Circular Spotify Tx T Bold", sans-serif;
+  --f-circ-spotify: "Circular Spotify Tx T Black", sans-serif;
+  --f-circ-pro: "Circular Std Medium Regular", sans-serif;
 
   /* Base Font Size */
   --base-font-size: 8px;
@@ -83,7 +83,7 @@
 }
 
 body {
-  font-family: var(--f-circ-spotify), sans-serif;
+  font-family: var(--f-circ-spotify);
   font-weight: normal;
   font-size: calc(var(--base-font-size) * 2);
   // overflow-y: scroll;

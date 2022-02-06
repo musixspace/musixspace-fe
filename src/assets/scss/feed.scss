@@ -1,18 +1,23 @@
 @import "./partials/skeletonColors";
 @import "./mixins/d-flex.scss";
+@import "./mixins/hide_scrollbar.scss";
 
-.feed-container {
+.ind-post-container{
+  height: 90vh;
+}
+
+.feed-container, .ind-post-container {
   margin-top: 10vh;
   padding: 2em 6em;
-  @include d-flex(center, center, row);
+  @include d-flex(center, center, column);
   width: 100%;
-  font-family: var(--f-circ-pro), sans-serif;
+  font-family: var(--f-circ-pro);
 
   .skeleton {
     background-color: $skeletonFeed;
   }
 
-  .feed-wrapper{
+  .feed-wrapper, .ind-post-wrapper{
     width: 100%;
     height: 100%;
     @include d-flex(space-around, center, row);
@@ -25,7 +30,8 @@
       border: 2px solid var(--clr-white);
       border-radius: 10px;
       padding: 1em 1.5em;
-      mix-blend-mode: difference;
+      background-color: var(--clr-maroon);
+      color: var(--clr-white);
       @include d-flex(space-between, flex-start, column);
 
       .post-header, .post-song{
@@ -34,6 +40,8 @@
         .image-container{
           width: 48px;
           height: 48px;
+          min-width: 48px;
+          min-height: 48px;
           border: 2px solid var(--clr-white);
           border-radius: 50%;
           overflow: hidden;
@@ -48,7 +56,7 @@
           @include d-flex(center, flex-start, column);
           > p {
             font-size: calc(var(--base-font-size) * 2);
-            font-family: var(--f-circ-spotify), sans-serif;
+            font-family: var(--f-circ-spotify);
           }
 
           .meta{
@@ -57,7 +65,7 @@
             flex-wrap: wrap;
             gap: calc(var(--base-font-size) * 0.5);
             font-size: calc(var(--base-font-size) * 1.5);
-            font-family: var(--f-circ-pro), sans-serif;
+            font-family: var(--f-circ-pro);
             > p {
               font-family: inherit;
               @include d-flex(center, center, row);
@@ -100,7 +108,7 @@
 
         &.focus, &:hover, &:focus{
           border-radius: 5px;
-          background-color: rgba($color: #000000, $alpha: 0.2);
+          background-color: rgba($color: #000000, $alpha: 0.1);
 
           .image-container{
             svg{
@@ -113,7 +121,7 @@
       .post-socials{
         width: 100%;
         @include d-flex(space-around, center, row);
-        button{
+        button, a{
           color: inherit;
           display: grid;
           place-items: center;
@@ -137,11 +145,193 @@
       }
     }
   }
+
+  .load-more{
+    width: 100%;
+    display: grid;
+    place-items: center;
+    margin-top: 2em;
+    button{
+      width: 345px;
+      max-width: 100%;
+      border: 2px solid var(--clr-white);
+      border-radius: 5px;
+      text-transform: uppercase;
+      font-size: calc(var(--base-font-size) * 1.75);
+      color: var(--clr-white);
+      padding: 0.6em;
+
+      &:hover{
+        background-color: rgba($color: #000000, $alpha: 0.1);
+      }
+    }
+  }
+
+  .ind-post-wrapper{
+    .ind-post{
+      width: 585px;
+      height: 100%;
+      padding: 2em;
+      gap: 1em;
+      justify-content: space-evenly;
+
+      .post-container{
+        width: 100%;
+        min-height: 260px;
+        @include d-flex(space-between, flex-start, column);
+      }
+
+      .comments-container{
+        width: 100%;
+
+        @include d-flex(flex-start, space-evenly, column);
+        gap: 1em;
+
+        .comments-header{
+          @include d-flex(space-between, center, row);
+          p{
+            text-transform: uppercase;
+            font-size: calc(var(--base-font-size) * 2);
+          }
+
+          .load-more{
+            width: 160px;
+            button{
+              @include d-flex(center, center, row);
+              gap: calc(var(--base-font-size) * 1);
+              font-size: calc(var(--base-font-size) * 1.75);
+              text-transform: unset;
+
+              svg{
+                font-size: calc(var(--base-font-size) * 1.5);
+              }
+
+              &:hover{
+                background-color: rgba($color: #000000, $alpha: 0.1);
+              }
+            }
+          }
+        }
+
+        .comments-list{
+          overflow-y: auto;
+          height: 220px;
+          width: 100%;
+
+          @include hideScrollbar();
+
+          .comment{
+            width: 100%;
+            @include d-flex(flex-start, center, row);
+            gap: 1em;
+            padding: 1em 0;
+
+            .image-container{
+              width: 48px;
+              height: 48px;
+              min-width: 48px;
+              min-height: 48px;
+              border: 2px solid var(--clr-white);
+              border-radius: 50%;
+              overflow: hidden;
+            
+              img{
+                object-fit: cover;
+                width: 100%;
+                height: 100%;
+              }
+            }
+
+            .content-container{
+              width: 100%;
+              @include d-flex(flex-start, flex-start, column);
+              gap: calc(var(--base-font-size) * 1);
+              .content-header{
+                @include d-flex(flex-start, center, row);
+                flex-wrap: wrap;
+                gap: calc(var(--base-font-size) * 0.5);
+
+                > p{
+                  font-size: calc(var(--base-font-size) * 1.75);
+                  font-family: var(--f-circ-spotify);
+                }
+
+                .meta{
+                  @include d-flex(flex-start, center, row);
+                  flex-wrap: wrap;
+                  gap: calc(var(--base-font-size) * 0.5);
+                  font-size: calc(var(--base-font-size) * 1.5);
+                  font-family: var(--f-circ-pro);
+                  > p {
+                    font-family: inherit;
+                    @include d-flex(center, center, row);
+                    > span{
+                      margin-right: calc(var(--base-font-size) * 0.5);
+                      height: 100%;
+                      display: grid;
+                      place-items: center;
+      
+                      svg{
+                        font-size: calc(var(--base-font-size) * 1);
+                      }
+                    }
+                  }
+                }
+              }
+
+              p.comment-main{
+                font-family: var(--f-circ-pro);
+                font-size: calc(var(--base-font-size) * 2);
+              }
+
+              .comment-socials{
+                width: 100%;
+                button{
+                  color: inherit;
+                  @include d-flex(center, center, row);
+                  gap: calc(var(--base-font-size) * 1);
+                  grid-template-columns: 1fr 1fr;
+
+                  svg{
+                    color: inherit;
+                    font-size: calc(var(--base-font-size) * 2);
+                  }
+
+                  p{
+                    font-size: calc(var(--base-font-size) * 1.5);
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+
+      .load-more{
+        margin-top: 0;
+        button{
+          width: 100%;
+        }
+      }
+    }
+  }
 }
 
 @media (max-width: 767px) {
-  .feed-container {
+  .feed-container, .ind-post-container {
     padding: 1em 1.5em;
     margin-bottom: 10vh;
+  }
+
+  .ind-post-container{
+    height: 80vh;
+    .ind-post-wrapper{
+      .ind-post{
+        width: 100%;
+        padding: 1em;
+        height: 100%;
+        justify-content: space-evenly;
+      }
+    }
   }
 }

@@ -1,7 +1,7 @@
 import jwtDecode from "jwt-decode";
 import React, { useEffect, useState } from "react";
 import { axiosInstance } from "../../util/axiosConfig";
-import IndPost from "./IndPost";
+import Post from "./Post";
 import WebPlayer from "../../components/WebPlayer";
 import { setMediaSession } from "../../util/functions";
 
@@ -13,6 +13,7 @@ const decodeJWT = () => {
 const Feed = () => {
   const [posts, setPosts] = useState([]);
   const [pageIndex, setPageIndex] = useState(0);
+  const [loadMore, setLoadMore] = useState(true);
   const [userId, setUserId] = useState("");
   const [currentSong, setCurrentSong] = useState({
     audioUrl: null,
@@ -25,8 +26,12 @@ const Feed = () => {
     axiosInstance
       .get(`/feed/all/${pageIndex}`)
       .then((res) => {
-        const newPosts = [...posts, ...res.data];
-        setPosts(newPosts);
+        if (res.data.length > 0) {
+          const newPosts = [...posts, ...res.data];
+          setPosts(newPosts);
+        } else {
+          setLoadMore(false);
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -98,7 +103,7 @@ const Feed = () => {
       <div className="feed-wrapper">
         {posts.length > 0 &&
           posts.map((post) => (
-            <IndPost
+            <Post
               key={post.feed_id}
               data={post}
               userId={userId}
@@ -108,6 +113,13 @@ const Feed = () => {
             />
           ))}
       </div>
+      {loadMore ? (
+        <div className="load-more">
+          <button onClick={() => setPageIndex((prev) => prev + 1)}>
+            Load More Posts
+          </button>
+        </div>
+      ) : null}
       {currentSong.audioUrl && (
         <WebPlayer
           url={currentSong.audioUrl}

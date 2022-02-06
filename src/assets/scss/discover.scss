@@ -1,11 +1,12 @@
 @import "./mixins/d-flex.scss";
+@import "./mixins/hide_scrollbar.scss";
 @import "./partials/skeletonColors";
 
 .discover-container {
   margin-top: 10vh;
   height: 90vh;
   padding: 1em 6em;
-  font-family: var(--f-circ-pro), sans-serif;
+  font-family: var(--f-circ-pro);
   color: var(--clr-white);
   @include d-flex(flex-start, center, column);
 
@@ -66,11 +67,7 @@
       max-height: 70vh;
       height: auto;
 
-      &::-webkit-scrollbar {
-        display: none;
-      }
-
-      scrollbar-width: none;
+      @include hideScrollbar();
 
       > li.user {
         @include d-flex(flex-start, center, row);
@@ -194,7 +191,7 @@
         .main-content {
           width: 100%;
           .name {
-            font-family: var(--f-circ-spotify), sans-serif;
+            font-family: var(--f-circ-spotify);
             font-size: calc(var(--base-font-size) * 4.5);
           }
 
