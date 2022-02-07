@@ -25,12 +25,23 @@ const Requests = () => {
     }
   }, [socketContext.socket]);
 
+  const handleAccept = async (request_id) => {
+    try {
+      const resp = await axiosInstance.post("/chat/accept", { request_id });
+      console.log(resp);
+      const reqs = requests.filter((item) => item.request_id !== request_id);
+      setRequests(reqs);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <ul>
       {requests.map((req, i) => (
         <li key={i}>
           <p>{req.username}</p>
-          {/* <button onClick={handleAccept}>Accept</button> */}
+          <button onClick={() => handleAccept(req.request_id)}>Accept</button>
         </li>
       ))}
     </ul>
