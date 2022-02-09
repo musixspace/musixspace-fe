@@ -5,6 +5,7 @@ export const userState = atom({
   default: {
     displayName: null,
     image: null,
+    userId: null,
     username: null,
     traits: [],
     anthem: null,

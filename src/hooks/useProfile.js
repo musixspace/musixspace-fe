@@ -19,6 +19,7 @@ const useProfile = () => {
             image: res.data.image_url,
             traits: res.data.traits,
             anthem: res.data.anthem,
+            userId: res.data.user_id,
           });
         }
       })

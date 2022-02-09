@@ -10,6 +10,7 @@ const Chats = () => {
       try {
         const resp = await axiosInstance.get("/chat");
         setChatList(resp.data);
+        console.log(resp.data);
       } catch (error) {
         console.log(error);
       }
@@ -22,15 +23,16 @@ const Chats = () => {
           return (
             <div
               onClick={() => {
-                setSelectedChat(item.chat_id);
+                setSelectedChat(item);
               }}
+              key={item.chat_id}
             >
               Chat
             </div>
           );
         })}
       </div>
-      <ChatWindow chatId={selectedChat} />
+      {selectedChat !== null && <ChatWindow selectedChat={selectedChat} />}
     </div>
   );
 };
