@@ -33,11 +33,9 @@ const Post = ({
       const [r, g, b] = colorThief.getColor(img);
       const color = rgbToHex(r, g, b);
       div.style.backgroundColor = color;
-      console.log(color);
 
       const textColor = getContrastYIQ(color);
       div.style.color = textColor;
-      console.log(textColor);
     });
 
     img.crossOrigin = "Anonymous";

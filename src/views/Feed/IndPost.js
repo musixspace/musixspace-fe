@@ -9,7 +9,6 @@ import {
   FaPlus,
   FaRegComment,
   FaRegHeart,
-  FaRegPlusSquare,
 } from "react-icons/fa";
 import { FiUpload } from "react-icons/fi";
 import { VscCircleFilled } from "react-icons/vsc";
@@ -22,6 +21,7 @@ import {
   rgbToHex,
   setMediaSession,
 } from "../../util/functions";
+import AddComment from "./AddComment";
 
 const decodeJWT = () => {
   const access_token = localStorage.getItem("accessToken");
@@ -36,6 +36,8 @@ const IndPost = () => {
   const [commentPageId, setCommentPageId] = useState(0);
   const [loadMoreComments, setLoadMoreComments] = useState(true);
   const [userId, setUserId] = useState("");
+  const [showAddComment, setShowAddComment] = useState(false);
+  const [bgc, setBgc] = useState("");
   const [currentSong, setCurrentSong] = useState({
     audioUrl: null,
     songName: "",
@@ -78,12 +80,12 @@ const IndPost = () => {
     img.addEventListener("load", () => {
       const [r, g, b] = colorThief.getColor(img);
       const color = rgbToHex(r, g, b);
+      setBgc(color);
       div.style.backgroundColor = color;
 
       const textColor = getContrastYIQ(color);
       div.style.color = textColor;
       for (const btn of buttons) {
-        console.log(btn);
         btn.style.color = textColor;
         btn.style.borderColor = textColor;
       }
@@ -165,6 +167,23 @@ const IndPost = () => {
           return item;
         });
         setComments(updatedComments);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const handleAddComment = (data) => {
+    const payload = {
+      ...data,
+      feed_id: feedId,
+    };
+    axiosInstance
+      .post("/feed/comment", payload)
+      .then((res) => {
+        console.log(res.data);
+        setComments([{ ...res.data }, ...comments]);
+        setShowAddComment(false);
       })
       .catch((err) => {
         console.log(err);
@@ -262,7 +281,7 @@ const IndPost = () => {
                   <span>{post.likes.length}</span>
                 </button>
                 <Link to={`/feed/${post.feed_id}`}>
-                  <FaRegComment /> <span>{post.total_comments}</span>
+                  <FaRegComment /> <span>{comments.length}</span>
                 </Link>
                 <button>
                   <FiUpload />
@@ -273,7 +292,7 @@ const IndPost = () => {
               <div className="comments-header">
                 <p>Comments</p>
                 <div className="load-more add-comment">
-                  <button>
+                  <button onClick={() => setShowAddComment(true)}>
                     <span>
                       <FaPlus></FaPlus>
                     </span>
@@ -335,6 +354,13 @@ const IndPost = () => {
               </div>
             </div>
           </div>
+        ) : null}
+        {showAddComment ? (
+          <AddComment
+            bgColor={bgc}
+            closeModal={() => setShowAddComment(false)}
+            submitData={handleAddComment}
+          />
         ) : null}
       </div>
       {currentSong.audioUrl && (
