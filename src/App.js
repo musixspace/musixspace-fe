@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { io } from "socket.io-client";
-import { useRecoilValue } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import Wrapper from "./components/Wrapper";
 import { SocketContext } from "./context/socketContext";
 import useAuth from "./hooks/useAuth";
@@ -23,6 +23,7 @@ import Insights from "./views/Insights";
 import Logout from "./components/Logout";
 import Match from "./views/Match";
 import Chat from "./views/Chat/Chat";
+import { alertAtom } from "./recoil/alertAtom";
 
 const code = new URLSearchParams(window.location.search).get("code");
 
@@ -30,6 +31,7 @@ const App = () => {
   const [socket, setSocket] = useState(null);
   useAuth(code);
   const { isAuthenticated } = useRecoilValue(userState);
+  const setAlert = useSetRecoilState(alertAtom);
 
   const { getUserProfile } = useProfile();
 
@@ -55,7 +57,7 @@ const App = () => {
         window.innerHeight +
         "px, width=" +
         window.innerWidth +
-        "px, initial-scale=1.0"
+        "px, initial-scale=1.0",
     );
   }, []);
 
@@ -91,7 +93,7 @@ const App = () => {
   useEffect(() => {
     if (socket) {
       socket.on("error", ({ err }) => {
-        console.log(err);
+        setAlert({ open: true, message: err, type: "error" });
       });
     }
   }, [socket]);

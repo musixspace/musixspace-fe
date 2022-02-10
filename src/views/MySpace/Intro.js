@@ -103,7 +103,7 @@ const Intro = ({
               }
               alt={`${user.display_name.split(" ")[0]}'s Image'`}
             />
-            <SendASong user={user} />
+
             {edit && (
               <div className="uploadContainer">
                 <input
@@ -169,11 +169,14 @@ const Intro = ({
           {user && user.display_name ? (
             <>
               <p>{user.username}</p>
-              {user.username !== localStorage.getItem("handle") && (
-                <div className="button-container">
-                  <button onClick={gotToMatch}>Match</button>
-                </div>
-              )}
+              <div className="btn-divs">
+                <SendASong user={user} />
+                {user.username !== localStorage.getItem("handle") && (
+                  <div className="button-container">
+                    <button onClick={gotToMatch}>Match</button>
+                  </div>
+                )}
+              </div>
             </>
           ) : (
             <>

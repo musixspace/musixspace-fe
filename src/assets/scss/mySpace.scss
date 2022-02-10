@@ -169,17 +169,23 @@
           font-size: calc(var(--base-font-size) * 4);
         }
 
-        > .button-container {
-          text-align: right;
-          > button {
+        > .btn-divs {
+          display: flex;
+          justify-content: space-between;
+          width: 100%;
+
+          > .button-container {
             text-align: right;
-            margin-top: 0.6em;
-            background-color: var(--clr-dark-pink);
-            color: var(--clr-black);
-            padding: 0.4em 1em;
-            border-radius: 100px;
-            font-family: var(--f-circ-pro);
-            font-size: calc(var(--base-font-size) * 2.25);
+            > button {
+              text-align: right;
+              margin-top: 0.6em;
+              background-color: var(--clr-dark-pink);
+              color: var(--clr-black);
+              padding: 0.4em 1em;
+              border-radius: 100px;
+              font-family: var(--f-circ-pro);
+              font-size: calc(var(--base-font-size) * 2.25);
+            }
           }
         }
 
