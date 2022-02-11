@@ -23,6 +23,7 @@ const themeSwitch = (str) => {
       return "--bg-top-tracks";
     case "/insights":
       return "--bg-insights";
+    case "/chat":
     case "/discover":
     case "/rolling":
     case "/feed":

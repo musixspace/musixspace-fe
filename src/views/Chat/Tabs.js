@@ -4,19 +4,19 @@ const tabs = ["Chats", "Requests"];
 
 const Tabs = ({ tab, setTab }) => {
   return (
-    <div>
+    <>
       {tabs.map((item, i) => (
         <button
           key={item}
+          className={`chatTab ${tab === i && "selectedTab"}`}
           onClick={() => {
             setTab(i);
           }}
-          style={{ background: tab === i ? "orchid" : "crimson" }}
         >
           {item}
         </button>
       ))}
-    </div>
+    </>
   );
 };
 

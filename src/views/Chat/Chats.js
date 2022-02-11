@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
 import { axiosInstance } from "../../util/axiosConfig";
-import ChatWindow from "./ChatWindow";
 
-const Chats = () => {
+const Chats = ({ setSelectedChat }) => {
   const [chatList, setChatList] = useState([]);
-  const [selectedChat, setSelectedChat] = useState(null);
+
   useEffect(() => {
     (async () => {
       try {
@@ -16,24 +15,27 @@ const Chats = () => {
       }
     })();
   }, []);
+
   return (
-    <div>
-      <div>
-        {chatList.map((item) => {
-          return (
-            <div
-              onClick={() => {
-                setSelectedChat(item);
-              }}
-              key={item.chat_id}
-            >
-              Chat
+    <>
+      {chatList.map((item) => {
+        return (
+          <div
+            onClick={() => {
+              setSelectedChat(item);
+            }}
+            key={item.chat_id}
+            className="chatListItem"
+          >
+            <div className="imageContainer">
+              <img src={item.otherUser.image_url} className="userImg" />
             </div>
-          );
-        })}
-      </div>
-      {selectedChat !== null && <ChatWindow selectedChat={selectedChat} />}
-    </div>
+            <p>{item.otherUser.display_name}</p>
+          </div>
+        );
+      })}
+      {/* {selectedChat !== null && <ChatWindow selectedChat={selectedChat} />} */}
+    </>
   );
 };
 export default Chats;

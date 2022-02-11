@@ -1,3 +1,66 @@
+.chatRoot {
+  height: 90vh;
+  margin-top: 10vh;
+  padding: 2em 6em;
+
+  .chatWrapper {
+    display: flex;
+    height: 100%;
+    width: 100%;
+    box-shadow: rgba(107, 107, 107, 0.384) 0px 4px 12px;
+
+    .chatPanel {
+      flex: 1 1 30%;
+      background: lime;
+
+      .chatTabs {
+        display: flex;
+        width: 100%;
+        align-items: center;
+
+        .chatTab {
+          width: 100%;
+          flex: 1;
+          padding: 1em;
+          border: 1px solid black;
+        }
+
+        .selectedTab {
+          background: gray;
+        }
+      }
+
+      .chatList {
+        overflow-y: auto;
+
+        .chatListItem {
+          display: flex;
+          align-items: center;
+          padding: 0.5em;
+
+          .imageContainer {
+            height: 48px;
+            width: 48px;
+            border-radius: 50%;
+            overflow: hidden;
+
+            img {
+              height: 100%;
+              width: 100%;
+              object-fit: cover;
+            }
+          }
+        }
+      }
+    }
+
+    .chatWindow {
+      flex: 1 1 70%;
+      background: orchid;
+    }
+  }
+}
+
 .send-song-button-container {
   > button {
     text-align: right;
