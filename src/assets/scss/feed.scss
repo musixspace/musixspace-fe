@@ -26,7 +26,7 @@
 
     .ind-post{
       width: 345px;
-      height: 360px;
+      height: calc(var(--base-font-size) * 45);
       border: 2px solid var(--clr-white);
       border-radius: 10px;
       padding: 1em 1.5em;
@@ -78,7 +78,6 @@
           width: 100%;
           > p {
             font-size: calc(var(--base-font-size) * 2);
-            font-family: var(--f-circ-spotify);
           }
 
           .skeleton{
@@ -237,12 +236,13 @@
 
       .post-container{
         width: 100%;
-        min-height: 260px;
+        height: 45%;
         @include d-flex(space-between, flex-start, column);
       }
 
       .comments-container{
         width: 100%;
+        height: 45%;
 
         @include d-flex(flex-start, space-evenly, column);
         gap: 1em;
@@ -705,6 +705,12 @@
         }
       }
     }
+
+    .load-more{
+      button{
+        width: 100%;
+      }
+    }
   }
 
   .ind-post-container{
@@ -718,9 +724,12 @@
       }
 
       .new-comment{
+        padding: 2em 1em;
+      }
+
+      .new-comment{
         justify-content: flex-start;
       }
     }
   }
-
 }

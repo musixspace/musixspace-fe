@@ -4,10 +4,13 @@ import { useRecoilValue } from "recoil";
 import Logout from "./components/Logout";
 import Wrapper from "./components/Wrapper";
 import useAuth from "./hooks/useAuth";
+import useProfile from "./hooks/useProfile";
 import { userNameSelector } from "./recoil/userAtom";
 import About from "./views/About";
+import ColorThief from "./views/ColorThief";
 import Discover from "./views/Discover";
 import Feed from "./views/Feed/Feed";
+import IndPost from "./views/Feed/IndPost";
 import Home from "./views/Home";
 import Insights from "./views/Insights";
 import Match from "./views/Match";
@@ -18,9 +21,6 @@ import Rolling from "./views/Rolling";
 import SurpriseMe from "./views/SurpriseMe";
 import TopArtists from "./views/TopArtists";
 import TopTracks from "./views/TopTracks";
-import useProfile from "./hooks/useProfile";
-import ColorThief from "./views/ColorThief";
-import IndPost from "./views/Feed/IndPost";
 
 const code = new URLSearchParams(window.location.search).get("code");
 
