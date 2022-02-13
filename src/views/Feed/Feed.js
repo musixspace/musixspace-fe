@@ -5,6 +5,8 @@ import Post from "./Post";
 import WebPlayer from "../../components/WebPlayer";
 import { setMediaSession } from "../../util/functions";
 import Skeleton from "../../components/Skeleton";
+import { useSetRecoilState } from "recoil";
+import { alertAtom } from "../../recoil/alertAtom";
 
 const decodeJWT = () => {
   const access_token = localStorage.getItem("accessToken");
@@ -22,6 +24,7 @@ const Feed = () => {
     artists: "",
     imageUrl: null,
   });
+  const setAlert = useSetRecoilState(alertAtom);
 
   const fetchPosts = () => {
     axiosInstance
@@ -81,8 +84,18 @@ const Feed = () => {
       });
   };
 
+  const handleSharePost = (feedId) => {
+    const link = window.location.origin + "/feed/" + feedId;
+    navigator.clipboard.writeText(link);
+    setAlert({
+      open: true,
+      type: "info",
+      message: "Link to post copied to clipboard!",
+    });
+  };
+
   const handlePlaySong = (data) => {
-    if (currentSong.audioUrl) {
+    if (currentSong.audioUrl && currentSong.audioUrl === data.preview_url) {
       handleStopSong();
     } else {
       setCurrentSong({
@@ -115,6 +128,7 @@ const Feed = () => {
                 playSong={handlePlaySong}
                 likePost={handleLikePost}
                 audioUrl={currentSong.audioUrl}
+                sharePost={handleSharePost}
               />
             ))
           : [0, 1, 2, 3, 4, 5].map((item) => (

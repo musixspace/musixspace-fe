@@ -2,10 +2,9 @@ import jwtDecode from "jwt-decode";
 import React, { useEffect, useState } from "react";
 import { FaPlus } from "react-icons/fa";
 import { useLocation } from "react-router-dom";
-import { useRecoilValue, useSetRecoilState } from "recoil";
+import { useSetRecoilState } from "recoil";
 import WebPlayer from "../../components/WebPlayer";
 import { alertAtom } from "../../recoil/alertAtom";
-import { userState } from "../../recoil/userAtom";
 import { axiosInstance } from "../../util/axiosConfig";
 import { setMediaSession } from "../../util/functions";
 import AddPost from "../Feed/AddPost";
@@ -18,7 +17,6 @@ const decodeJWT = () => {
 
 const Musixpieces = ({ handle }) => {
   const location = useLocation();
-  const user = useRecoilValue(userState);
   const setAlert = useSetRecoilState(alertAtom);
   const [posts, setPosts] = useState([]);
   const [pageIndex, setPageIndex] = useState(0);
@@ -108,8 +106,18 @@ const Musixpieces = ({ handle }) => {
       });
   };
 
+  const handleSharePost = (feedId) => {
+    const link = window.location.origin + "/feed/" + feedId;
+    navigator.clipboard.writeText(link);
+    setAlert({
+      open: true,
+      type: "info",
+      message: "Link to post copied to clipboard!",
+    });
+  };
+
   const handlePlaySong = (data) => {
-    if (currentSong.audioUrl) {
+    if (currentSong.audioUrl && currentSong.audioUrl === data.preview_url) {
       handleStopSong();
     } else {
       setCurrentSong({
@@ -164,9 +172,11 @@ const Musixpieces = ({ handle }) => {
               userId={userId}
               playSong={handlePlaySong}
               likePost={handleLikePost}
+              sharePost={handleSharePost}
               audioUrl={currentSong.audioUrl}
               edit={true}
               deletePost={handleDeletePost}
+              handle={handle}
             />
           ))}
         {showAddPost ? (
@@ -176,7 +186,7 @@ const Musixpieces = ({ handle }) => {
           />
         ) : null}
       </div>
-      {loadMore ? (
+      {loadMore && posts.length > 0 ? (
         <div className="load-more">
           <button onClick={() => setPageIndex((prev) => prev + 1)}>
             Load More Posts

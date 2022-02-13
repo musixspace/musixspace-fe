@@ -209,8 +209,22 @@ const IndPost = () => {
       });
   };
 
+  const handleSharePost = () => {
+    const link = window.location.origin + "/feed/" + feedId;
+    navigator.clipboard.writeText(link);
+    setAlert({
+      open: true,
+      type: "info",
+      message: "Link to post copied to clipboard!",
+    });
+  };
+
   const toggleSong = (type, item) => {
-    if (currentSong.audioUrl) {
+    if (
+      currentSong.audioUrl &&
+      currentSong.audioUrl ===
+        (type === "post" ? item.preview_url : item.song_preview_url)
+    ) {
       stopSong();
     } else {
       if (type === "post") {
@@ -311,7 +325,7 @@ const IndPost = () => {
                 <Link to={`/feed/${post.feed_id}`}>
                   <FaRegComment /> <span>{comments.length}</span>
                 </Link>
-                <button>
+                <button onClick={handleSharePost}>
                   <FiUpload />
                 </button>
               </div>

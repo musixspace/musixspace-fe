@@ -21,8 +21,10 @@ const Post = ({
   likePost,
   playSong,
   audioUrl,
+  sharePost,
   edit,
   deletePost,
+  handle,
 }) => {
   useLayoutEffect(() => {
     const div = document.querySelector(`div#post-${data.feed_id}`);
@@ -41,6 +43,12 @@ const Post = ({
     img.crossOrigin = "Anonymous";
     img.src = data.image_url;
   }, []);
+
+  const canUserEdit = () => {
+    if (!edit) return false;
+    if (localStorage.getItem("handle") === handle) return true;
+    return false;
+  };
 
   return (
     <div id={`post-${data.feed_id}`} className="ind-post">
@@ -97,9 +105,14 @@ const Post = ({
         <Link to={`/feed/${data.feed_id}`}>
           <FaRegComment /> <span>{data.total_comments}</span>
         </Link>
-        <button onClick={edit ? () => deletePost(data.feed_id) : () => {}}>
-          {edit ? <MdDelete /> : <FiUpload />}
+        <button onClick={() => sharePost(data.feed_id)}>
+          <FiUpload />
         </button>
+        {canUserEdit() ? (
+          <button onClick={() => deletePost(data.feed_id)}>
+            <MdDelete />
+          </button>
+        ) : null}
       </div>
     </div>
   );
