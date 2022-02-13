@@ -13,6 +13,7 @@ const useProfile = () => {
           localStorage.setItem("handle", res.data.username);
           setUser({
             ...user,
+            id: res.data?.id,
             displayName: res.data?.display_name,
             username: res.data?.username,
             image: res.data.image_url,

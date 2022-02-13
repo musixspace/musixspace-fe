@@ -1,11 +1,14 @@
 import jwtDecode from "jwt-decode";
 import React, { useEffect, useState } from "react";
+import { FaPlus } from "react-icons/fa";
 import { useLocation } from "react-router-dom";
-import { useSetRecoilState } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import WebPlayer from "../../components/WebPlayer";
 import { alertAtom } from "../../recoil/alertAtom";
+import { userState } from "../../recoil/userAtom";
 import { axiosInstance } from "../../util/axiosConfig";
 import { setMediaSession } from "../../util/functions";
+import AddPost from "../Feed/AddPost";
 import Post from "../Feed/Post";
 
 const decodeJWT = () => {
@@ -13,8 +16,9 @@ const decodeJWT = () => {
   return jwtDecode(access_token);
 };
 
-const Musixpieces = ({ edit }) => {
+const Musixpieces = ({ handle }) => {
   const location = useLocation();
+  const user = useRecoilValue(userState);
   const setAlert = useSetRecoilState(alertAtom);
   const [posts, setPosts] = useState([]);
   const [pageIndex, setPageIndex] = useState(0);
@@ -26,6 +30,8 @@ const Musixpieces = ({ edit }) => {
     artists: "",
     imageUrl: null,
   });
+
+  const [showAddPost, setShowAddPost] = useState(false);
 
   const fetchPosts = () => {
     axiosInstance
@@ -64,7 +70,7 @@ const Musixpieces = ({ edit }) => {
     }
   }, [currentSong.audioUrl]);
 
-  const likePost = (feedId) => {
+  const handleLikePost = (feedId) => {
     axiosInstance
       .put(`/feed/${feedId}`)
       .then((res) => {
@@ -85,7 +91,7 @@ const Musixpieces = ({ edit }) => {
       });
   };
 
-  const deletePost = (feedId) => {
+  const handleDeletePost = (feedId) => {
     axiosInstance
       .delete(`/feed/${feedId}`)
       .then((res) => {
@@ -102,16 +108,20 @@ const Musixpieces = ({ edit }) => {
       });
   };
 
-  const playSong = (data) => {
-    setCurrentSong({
-      audioUrl: data.preview_url,
-      songName: data.name,
-      imageUrl: data.image_url,
-      artists: data.artists.map((item) => item.name).join(", "),
-    });
+  const handlePlaySong = (data) => {
+    if (currentSong.audioUrl) {
+      handleStopSong();
+    } else {
+      setCurrentSong({
+        audioUrl: data.preview_url,
+        songName: data.name,
+        imageUrl: data.image_url,
+        artists: data.artists.map((item) => item.name).join(", "),
+      });
+    }
   };
 
-  const stopSong = () => {
+  const handleStopSong = () => {
     setCurrentSong({
       audioUrl: null,
       songName: "",
@@ -120,23 +130,51 @@ const Musixpieces = ({ edit }) => {
     });
   };
 
+  const handleAddPost = (data) => {
+    axiosInstance
+      .post("/feed", { vibe: data.comment, song_id: data.song_id })
+      .then((res) => {
+        setShowAddPost(false);
+        setAlert({ open: true, type: "success", message: "Post added!" });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   return (
-    <div className="feed-container">
+    <div className="feed-container ">
       <p className="title">Musixpieces</p>
       <div className="feed-wrapper">
+        {handle === localStorage.getItem("handle") ? (
+          <div className="ind-post">
+            <button
+              onClick={() => setShowAddPost(true)}
+              className="add-new-post"
+            >
+              <FaPlus /> Add New Post
+            </button>
+          </div>
+        ) : null}
         {posts.length > 0 &&
           posts.map((post) => (
             <Post
               key={post.feed_id}
               data={post}
               userId={userId}
-              playSong={playSong}
-              likePost={likePost}
+              playSong={handlePlaySong}
+              likePost={handleLikePost}
               audioUrl={currentSong.audioUrl}
-              edit={edit}
-              deletePost={deletePost}
+              edit={true}
+              deletePost={handleDeletePost}
             />
           ))}
+        {showAddPost ? (
+          <AddPost
+            closeModal={() => setShowAddPost(false)}
+            submitData={handleAddPost}
+          />
+        ) : null}
       </div>
       {loadMore ? (
         <div className="load-more">
@@ -148,7 +186,7 @@ const Musixpieces = ({ edit }) => {
       {currentSong.audioUrl && (
         <WebPlayer
           url={currentSong.audioUrl}
-          nextPlay={stopSong}
+          nextPlay={handleStopSong}
           noControls={true}
         />
       )}

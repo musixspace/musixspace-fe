@@ -3,6 +3,7 @@ import { atom, selector } from "recoil";
 export const userState = atom({
   key: "userState",
   default: {
+    id: null,
     displayName: null,
     image: null,
     username: null,

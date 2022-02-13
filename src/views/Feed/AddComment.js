@@ -9,7 +9,7 @@ import useDebounceCallback from "../../hooks/useDebounce";
 import { userState } from "../../recoil/userAtom";
 import { alertAtom } from "../../recoil/alertAtom";
 import { axiosInstance } from "../../util/axiosConfig";
-import { getContrastYIQ } from "../../util/functions";
+import { getContrastYIQ, setMediaSession } from "../../util/functions";
 
 const AddComment = ({ bgColor, closeModal, submitData }) => {
   const user = useRecoilValue(userState);
@@ -24,6 +24,7 @@ const AddComment = ({ bgColor, closeModal, submitData }) => {
     name: "",
     image_url: null,
     artists: null,
+    preview_url: null,
   });
 
   const [currentSong, setCurrentSong] = useState({
@@ -51,6 +52,18 @@ const AddComment = ({ bgColor, closeModal, submitData }) => {
     }
   }, [song.name]);
 
+  useEffect(() => {
+    if (currentSong.audioUrl) {
+      setMediaSession(
+        currentSong.songName,
+        currentSong.artists,
+        currentSong.imageUrl,
+        null,
+        null
+      );
+    }
+  }, [currentSong.audioUrl]);
+
   const toggleSong = () => {
     if (currentSong.audioUrl) {
       stopSong();
@@ -59,8 +72,7 @@ const AddComment = ({ bgColor, closeModal, submitData }) => {
         audioUrl: song.preview_url,
         songName: song.name,
         imageUrl: song.image_url,
-        // artists: song.artists.map((item) => item.name).join(", "),
-        artists: "",
+        artists: song.artists,
       });
     }
   };
@@ -159,6 +171,11 @@ const AddComment = ({ bgColor, closeModal, submitData }) => {
                       id: item.id,
                       name: item.name,
                       image_url: item.image_url,
+                      artists: item.artists
+                        .map((a) => a.name)
+                        .slice(0, 3)
+                        .join(", "),
+                      preview_url: item.preview_url,
                     });
                     setSongList([]);
                   }}
@@ -185,6 +202,7 @@ const AddComment = ({ bgColor, closeModal, submitData }) => {
           </div>
           <div className="song-info">
             <p>{song.name}</p>
+            <p>{song.artists}</p>
           </div>
         </div>
       ) : null}

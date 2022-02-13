@@ -11,10 +11,13 @@ import {
   FaRegHeart,
 } from "react-icons/fa";
 import { FiUpload } from "react-icons/fi";
+import { MdDelete } from "react-icons/md";
 import { VscCircleFilled } from "react-icons/vsc";
 import { Link, useLocation } from "react-router-dom";
+import { useSetRecoilState } from "recoil";
 import logo from "../../assets/images/logo-black.png";
 import WebPlayer from "../../components/WebPlayer";
+import { alertAtom } from "../../recoil/alertAtom";
 import { axiosInstance } from "../../util/axiosConfig";
 import {
   getContrastYIQ,
@@ -30,6 +33,7 @@ const decodeJWT = () => {
 
 const IndPost = () => {
   const location = useLocation();
+  const setAlert = useSetRecoilState(alertAtom);
   const [feedId, setFeedId] = useState(null);
   const [post, setPost] = useState(null);
   const [comments, setComments] = useState([]);
@@ -136,7 +140,7 @@ const IndPost = () => {
     }
   }, [currentSong.audioUrl]);
 
-  const likePost = () => {
+  const handleLikePost = () => {
     axiosInstance
       .put(`/feed/${post.feed_id}`)
       .then((res) => {
@@ -153,7 +157,7 @@ const IndPost = () => {
       });
   };
 
-  const likeComment = (commentId) => {
+  const handleLikeComment = (commentId) => {
     axiosInstance
       .put(`/feed/comment/${commentId}`)
       .then((res) => {
@@ -173,6 +177,21 @@ const IndPost = () => {
       });
   };
 
+  const handleDeleteComment = (commentId) => {
+    axiosInstance
+      .delete(`/feed/comment/${commentId}`)
+      .then((res) => {
+        const updatedComments = comments.filter(
+          (c) => c.comment_id !== commentId
+        );
+        setComments(updatedComments);
+        setAlert({ open: true, type: "success", message: "Comment deleted!" });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   const handleAddComment = (data) => {
     const payload = {
       ...data,
@@ -181,25 +200,34 @@ const IndPost = () => {
     axiosInstance
       .post("/feed/comment", payload)
       .then((res) => {
-        console.log(res.data);
         setComments([{ ...res.data }, ...comments]);
         setShowAddComment(false);
+        setAlert({ open: true, type: "success", message: "Comment added!" });
       })
       .catch((err) => {
         console.log(err);
       });
   };
 
-  const toggleSong = () => {
+  const toggleSong = (type, item) => {
     if (currentSong.audioUrl) {
       stopSong();
     } else {
-      setCurrentSong({
-        audioUrl: post.preview_url,
-        songName: post.name,
-        imageUrl: post.image_url,
-        artists: post.artists.map((item) => item.name).join(", "),
-      });
+      if (type === "post") {
+        setCurrentSong({
+          audioUrl: item.preview_url,
+          songName: item.name,
+          imageUrl: item.image_url,
+          artists: item.artists.map((item) => item.name).join(", "),
+        });
+      } else {
+        setCurrentSong({
+          audioUrl: item.song_preview_url,
+          songName: item.song_name,
+          imageUrl: item.song_image_url,
+          artists: item.song_artists.map((item) => item.name).join(", "),
+        });
+      }
     }
   };
 
@@ -248,7 +276,7 @@ const IndPost = () => {
                     ? "focus"
                     : ""
                 }`}
-                onClick={toggleSong}
+                onClick={() => toggleSong("post", post)}
               >
                 <div className="image-container">
                   <img src={post.image_url || logo} alt={post.name} />
@@ -272,7 +300,7 @@ const IndPost = () => {
                 </div>
               </div>
               <div className="post-socials">
-                <button onClick={likePost}>
+                <button onClick={handleLikePost}>
                   {userId && post.likes.includes(userId) ? (
                     <FaHeart />
                   ) : (
@@ -327,9 +355,46 @@ const IndPost = () => {
                           </div>
                         </Link>
                         <p className="comment-main">{comment.comment}</p>
+                        {comment.song_name ? (
+                          <div
+                            className="comment-song"
+                            className={`comment-song ${
+                              currentSong.audioUrl &&
+                              currentSong.audioUrl === comment.song_preview_url
+                                ? "focus"
+                                : ""
+                            }`}
+                            onClick={() => toggleSong("comment", comment)}
+                          >
+                            <div className="image-container">
+                              <img
+                                src={comment.song_image_url || logo}
+                                alt={`${comment.song_name}`}
+                              />
+                              {currentSong.audioUrl &&
+                              currentSong.audioUrl ===
+                                comment.song_preview_url ? (
+                                <FaPause />
+                              ) : (
+                                <FaPlay />
+                              )}
+                            </div>
+                            <div className="content-container">
+                              <p>{comment.song_name}</p>
+                              <p>
+                                {comment.song_artists
+                                  .map((item) => item.name)
+                                  .slice(0, 3)
+                                  .join(", ")}
+                              </p>
+                            </div>
+                          </div>
+                        ) : null}
                         <div className="comment-socials">
                           <button
-                            onClick={() => likeComment(comment.comment_id)}
+                            onClick={() =>
+                              handleLikeComment(comment.comment_id)
+                            }
                           >
                             {userId && comment.likes.includes(userId) ? (
                               <FaHeart />
@@ -338,11 +403,20 @@ const IndPost = () => {
                             )}
                             <p>{comment.likes.length}</p>
                           </button>
+                          {userId && userId === comment.user_id ? (
+                            <button
+                              onClick={() =>
+                                handleDeleteComment(comment.comment_id)
+                              }
+                            >
+                              <MdDelete />
+                            </button>
+                          ) : null}
                         </div>
                       </div>
                     </div>
                   ))}
-                {loadMoreComments ? (
+                {loadMoreComments && comments.length > 0 ? (
                   <div className="load-more">
                     <button
                       onClick={() => setCommentPageId((prev) => prev + 1)}
@@ -350,6 +424,12 @@ const IndPost = () => {
                       Load More Comments
                     </button>
                   </div>
+                ) : null}
+                {comments.length === 0 ? (
+                  <>
+                    <p>Start the conversation.</p>
+                    <p>No comments yet!</p>
+                  </>
                 ) : null}
               </div>
             </div>
