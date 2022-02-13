@@ -6,15 +6,17 @@ import { axiosInstance } from "../../util/axiosConfig";
 
 import { FaSmile } from "react-icons/fa";
 import { BsMusicNoteList } from "react-icons/bs";
-import { GrSend } from "react-icons/gr";
+import { IoMdSend } from "react-icons/io";
+import AddSongModal from "../MySpace/AddItemModal";
 
 const ChatWindow = ({ selectedChat }) => {
   const [messages, setMessages] = useState([]);
   const [pageId, setPageId] = useState(0);
   const [value, setValue] = useState("");
+  const [open, setOpen] = useState(false);
+
   const { chat_id, participants } = selectedChat;
   const user = useRecoilValue(userState);
-  console.log(user.userId);
   const { userId } = user;
 
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
@@ -36,7 +38,7 @@ const ChatWindow = ({ selectedChat }) => {
     (async () => {
       if (chat_id) {
         const resp = await axiosInstance.get(
-          `/chat/messages/${chat_id}/${pageId}`,
+          `/chat/messages/${chat_id}/${pageId}`
         );
         console.log(resp);
         setMessages(resp.data);
@@ -53,6 +55,10 @@ const ChatWindow = ({ selectedChat }) => {
     }
   };
 
+  const sendSong = (song) => {
+    console.log("Send song", song);
+  };
+
   const onEmojiClick = () => {};
   return (
     <div className="chattyWrapper">
@@ -67,27 +73,27 @@ const ChatWindow = ({ selectedChat }) => {
       ))} */}
       <div className="chatsMain"></div>
       <div className="inputBar">
-        <div className="emojiContainer">
+        <div className="iconContainer">
           <button
             onClick={() => {
               setShowEmojiPicker((prev) => !prev);
             }}
             className="emojiBtn"
           >
-            <FaSmile />
+            <FaSmile size={20} />
           </button>
         </div>
-        <div className="audioContainer">
+        <div className="iconContainer">
           <button
             onClick={() => {
-              setShowEmojiPicker((prev) => !prev);
+              setOpen(true);
             }}
             className="audioBtn"
           >
-            <BsMusicNoteList />
+            <BsMusicNoteList size={20} />
           </button>
         </div>
-        <div className="inputContainer">
+        <form className="inputContainer">
           <input
             value={value}
             onChange={(e) => {
@@ -96,11 +102,19 @@ const ChatWindow = ({ selectedChat }) => {
             placeholder="Type your message"
             className="inputMsg"
           />
-        </div>
-        <button className="sendMsgBtn" onClick={sendMessage}>
-          <GrSend />
-        </button>
+          <button className="sendMsgBtn" onClick={sendMessage}>
+            <IoMdSend size={24} />
+          </button>
+        </form>
       </div>
+      {open && (
+        <AddSongModal
+          submitData={sendSong}
+          title="Send A Song"
+          type="track"
+          close={() => setOpen(false)}
+        />
+      )}
     </div>
   );
 };

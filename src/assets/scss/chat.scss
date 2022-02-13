@@ -100,58 +100,39 @@
           padding: 0.5em 0.875em;
           display: flex;
           align-items: center;
-          .emojiContainer {
+          background: var(--clr-black-3);
+          .iconContainer {
+            display: flex;
+            align-items: center;
             margin-right: 1em;
-            .emojiBtn {
-              cursor: pointer;
-              height: 20px;
-              width: 20px;
-              > svg {
-                width: 100%;
-                height: 100%;
-                color: var(--clr-gray);
-              }
-            }
-          }
-          .audioContainer {
-            margin-right: 1em;
-            .audioBtn {
-              cursor: pointer;
-              height: 20px;
-              width: 20px;
-              > svg {
-                width: 100%;
-                height: 100%;
-                color: var(--clr-gray);
-              }
+            button {
+              color: var(--clr-gray-2);
             }
           }
           .inputContainer {
-            margin-right: 1em;
+            display: flex;
             flex: 1;
 
             .inputMsg {
-              padding: 0.5em 0.475em;
+              padding: 0.75em;
               width: 100%;
-              outline: none !important;
-              border-radius: 5px;
+              border: none;
+              outline: none;
+              border-radius: 8px;
               letter-spacing: 1.12px;
-              background-color: var(--clr-white);
-              color: var(--clr-black);
+              background-color: var(--clr-gray-3);
+              color: var(--clr-white);
+              font-family: var(--f-circ-pro);
+
+              &::placeholder {
+                color: var(--clr-gray-2);
+              }
             }
-          }
-          .sendMsgBtn {
-            border: none;
-            outline: none !important;
-            cursor: pointer;
-            height: 30px;
-            width: 40px;
-            padding: 5px;
-            border-radius: 5px;
-            background-color: dodgerblue;
-            > svg {
-              width: 100%;
-              height: 100%;
+
+            .sendMsgBtn {
+              margin-left: 1em;
+              border: none;
+              color: var(--clr-gray-2);
             }
           }
         }
