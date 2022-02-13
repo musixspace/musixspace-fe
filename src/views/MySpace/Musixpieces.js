@@ -6,7 +6,7 @@ import { useSetRecoilState } from "recoil";
 import WebPlayer from "../../components/WebPlayer";
 import { alertAtom } from "../../recoil/alertAtom";
 import { axiosInstance } from "../../util/axiosConfig";
-import { setMediaSession } from "../../util/functions";
+import { copyToClipboard, setMediaSession } from "../../util/functions";
 import AddPost from "../Feed/AddPost";
 import Post from "../Feed/Post";
 
@@ -108,12 +108,21 @@ const Musixpieces = ({ handle }) => {
 
   const handleSharePost = (feedId) => {
     const link = window.location.origin + "/feed/" + feedId;
-    navigator.clipboard.writeText(link);
-    setAlert({
-      open: true,
-      type: "info",
-      message: "Link to post copied to clipboard!",
-    });
+    copyToClipboard(link)
+      .then(() => {
+        setAlert({
+          open: true,
+          type: "info",
+          message: "Link to post copied to clipboard!",
+        });
+      })
+      .catch(() => {
+        setAlert({
+          open: true,
+          type: "error",
+          message: "Error in copying link to clipboard!",
+        });
+      });
   };
 
   const handlePlaySong = (data) => {

@@ -20,6 +20,7 @@ import WebPlayer from "../../components/WebPlayer";
 import { alertAtom } from "../../recoil/alertAtom";
 import { axiosInstance } from "../../util/axiosConfig";
 import {
+  copyToClipboard,
   getContrastYIQ,
   rgbToHex,
   setMediaSession,
@@ -211,12 +212,21 @@ const IndPost = () => {
 
   const handleSharePost = () => {
     const link = window.location.origin + "/feed/" + feedId;
-    navigator.clipboard.writeText(link);
-    setAlert({
-      open: true,
-      type: "info",
-      message: "Link to post copied to clipboard!",
-    });
+    copyToClipboard(link)
+      .then(() => {
+        setAlert({
+          open: true,
+          type: "info",
+          message: "Link to post copied to clipboard!",
+        });
+      })
+      .catch(() => {
+        setAlert({
+          open: true,
+          type: "error",
+          message: "Error in copying link to clipboard!",
+        });
+      });
   };
 
   const toggleSong = (type, item) => {

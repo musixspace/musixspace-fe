@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { axiosInstance } from "../../util/axiosConfig";
 import Post from "./Post";
 import WebPlayer from "../../components/WebPlayer";
-import { setMediaSession } from "../../util/functions";
+import { copyToClipboard, setMediaSession } from "../../util/functions";
 import Skeleton from "../../components/Skeleton";
 import { useSetRecoilState } from "recoil";
 import { alertAtom } from "../../recoil/alertAtom";
@@ -86,12 +86,21 @@ const Feed = () => {
 
   const handleSharePost = (feedId) => {
     const link = window.location.origin + "/feed/" + feedId;
-    navigator.clipboard.writeText(link);
-    setAlert({
-      open: true,
-      type: "info",
-      message: "Link to post copied to clipboard!",
-    });
+    copyToClipboard(link)
+      .then(() => {
+        setAlert({
+          open: true,
+          type: "info",
+          message: "Link to post copied to clipboard!",
+        });
+      })
+      .catch(() => {
+        setAlert({
+          open: true,
+          type: "error",
+          message: "Error in copying link to clipboard!",
+        });
+      });
   };
 
   const handlePlaySong = (data) => {
