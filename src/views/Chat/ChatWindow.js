@@ -3,13 +3,14 @@ import { useRecoilValue } from "recoil";
 import { useSocket } from "../../context/socketContext";
 import { userState } from "../../recoil/userAtom";
 import { axiosInstance } from "../../util/axiosConfig";
+import { BsArrowLeftShort } from "react-icons/bs";
 
 import { FaSmile } from "react-icons/fa";
 import { BsMusicNoteList } from "react-icons/bs";
 import { IoMdSend } from "react-icons/io";
 import AddSongModal from "../MySpace/AddItemModal";
 
-const ChatWindow = ({ selectedChat }) => {
+const ChatWindow = ({ isDesktop, setShowChat, selectedChat }) => {
   const [messages, setMessages] = useState([]);
   const [pageId, setPageId] = useState(0);
   const [value, setValue] = useState("");
@@ -46,32 +47,67 @@ const ChatWindow = ({ selectedChat }) => {
     })();
   }, [chat_id]);
 
-  const sendMessage = () => {
+  const sendMessage = (e) => {
+    e.preventDefault();
     if (socketContext.socket) {
+      const newMessage = {
+        timestamp: Date.now(),
+        content: { message: value },
+        to_id,
+        type: "text",
+      };
       socketContext.socket.emit("send_msg", {
-        msg: { timestamp: Date.now(), content: value, to_id, type: "text" },
+        msg: newMessage,
         chatId: chat_id,
       });
+      setMessages((prev) => [...prev, newMessage]);
     }
   };
 
   const sendSong = (song) => {
     console.log("Send song", song);
+    if (socketContext.socket) {
+      const newMessage = {
+        timestamp: Date.now(),
+        content: song,
+        to_id,
+        type: "song",
+      };
+      socketContext.socket.emit("send_msg", {
+        msg: newMessage,
+        chatId: chat_id,
+      });
+      setMessages((prev) => [...prev, newMessage]);
+    }
+    setOpen(false);
   };
 
   const onEmojiClick = () => {};
   return (
     <div className="chattyWrapper">
       <div className="chatHeader">
+        {!isDesktop && (
+          <button
+            onClick={() => {
+              setShowChat(false);
+            }}
+          >
+            <BsArrowLeftShort />
+          </button>
+        )}
         <div className="imageContainer">
           <img src={selectedChat.otherUser.image_url} className="userImg" />
         </div>
         <p>{selectedChat.otherUser.display_name}</p>
       </div>
-      {/* {messages.map((msg) => (
-        <div key={msg.message_id}>{JSON.stringify(msg.content)}</div>
-      ))} */}
-      <div className="chatsMain"></div>
+
+      <div className="chatsMain">
+        {messages.map((msg) => (
+          <div key={msg.message_id}>
+            {msg.type === "song" ? msg.content.name : msg.content.message}
+          </div>
+        ))}
+      </div>
       <div className="inputBar">
         <div className="iconContainer">
           <button
@@ -93,7 +129,7 @@ const ChatWindow = ({ selectedChat }) => {
             <BsMusicNoteList size={20} />
           </button>
         </div>
-        <form className="inputContainer">
+        <form className="inputContainer" onSubmit={sendMessage}>
           <input
             value={value}
             onChange={(e) => {
@@ -102,7 +138,7 @@ const ChatWindow = ({ selectedChat }) => {
             placeholder="Type your message"
             className="inputMsg"
           />
-          <button className="sendMsgBtn" onClick={sendMessage}>
+          <button type="submit" className="sendMsgBtn">
             <IoMdSend size={24} />
           </button>
         </form>

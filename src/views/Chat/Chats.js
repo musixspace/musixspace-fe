@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { axiosInstance } from "../../util/axiosConfig";
 
-const Chats = ({ setSelectedChat }) => {
+const Chats = ({ isDesktop, setSelectedChat, setShowChat }) => {
   const [chatList, setChatList] = useState([]);
 
   useEffect(() => {
@@ -23,6 +23,7 @@ const Chats = ({ setSelectedChat }) => {
           <div
             onClick={() => {
               setSelectedChat(item);
+              setShowChat(true);
             }}
             key={item.chat_id}
             className="chatListItem"
