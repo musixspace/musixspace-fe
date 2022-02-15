@@ -26,7 +26,7 @@ const themeSwitch = (str) => {
     case "/chat":
     case "/discover":
     case "/rolling":
-    case "/feed":
+    case String(str.match(/.*feed.*/)):
       return "--clr-black";
     case "/about":
     default:

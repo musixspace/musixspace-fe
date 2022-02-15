@@ -8,9 +8,13 @@ import useAuth from "./hooks/useAuth";
 import useProfile from "./hooks/useProfile";
 import { userNameSelector, userState } from "./recoil/userAtom";
 import PrivateRoute from "./routes/PrivateRoute";
+import { userNameSelector } from "./recoil/userAtom";
 import About from "./views/About";
+import ColorThief from "./views/ColorThief";
 import Discover from "./views/Discover";
 import Feed, { decodeJWT } from "./views/Feed/Feed";
+import Feed from "./views/Feed/Feed";
+import IndPost from "./views/Feed/IndPost";
 import Home from "./views/Home";
 import MySpace from "./views/MySpace/MySpace";
 import ReadyToRock from "./views/ReadyToRock";
@@ -106,9 +110,10 @@ const App = () => {
             <Route exact path="/readytorock" component={ReadyToRock} />
             <Route exact path="/rolling" component={Rolling} />
             <Route exact path="/" component={Home} />
-
             <Route exact path="/about" component={About} />
-
+            <Route exact path="/feed" component={Feed} />
+            <Route exact path="/feed/:id" component={IndPost} />
+            <Route exact path="/color" component={ColorThief} />
             <PrivateRoute exact path="/insights/mood" component={MoodRadio} />
             <PrivateRoute
               exact

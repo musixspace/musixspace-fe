@@ -1,4 +1,5 @@
 @import "../mixins/d-flex.scss";
+@import "../mixins/hide_scrollbar.scss";
 
 .playlist-modal-wrapper {
   background-color: transparent;
@@ -46,11 +47,7 @@
         max-height: 70vh;
         overflow-y: scroll;
 
-        &::-webkit-scrollbar {
-          display: none;
-        }
-
-        scrollbar-width: none;
+        @include hideScrollbar();
 
         > .image-controls {
           flex: 1 1 45%;
@@ -105,11 +102,8 @@
           max-height: 60vh;
           overflow-y: scroll;
 
-          &::-webkit-scrollbar {
-            display: none;
-          }
+          @include hideScrollbar();
 
-          scrollbar-width: none;
           @include d-flex(flex-start, center, column);
           gap: 0.2em;
 

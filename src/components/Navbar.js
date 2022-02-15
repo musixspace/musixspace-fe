@@ -17,6 +17,8 @@ const themeSwitch = (str) => {
   switch (str) {
     case String(str.match(/.*match.*/)):
       return "nav-match";
+    case String(str.match(/.*feed.*/)):
+      return "nav-feed";
     case "/readytorock":
       return "nav-transparent";
     case "/insights/toptracks":
@@ -30,8 +32,6 @@ const themeSwitch = (str) => {
     case "/discover":
     case "/rolling":
       return "nav-discover";
-    case "/feed":
-      return "nav-feed";
     case "/about":
     default:
       return "nav-about";

@@ -1,0 +1,11 @@
+@mixin hideScrollbar() {
+    &::-webkit-scrollbar {
+        display: none;
+    }
+
+    @supports (scrollbar-color: var(--clr-orange) var(--clr-gray)) {
+        * {
+            scrollbar-width: none;
+        }
+    }
+}
