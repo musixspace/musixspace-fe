@@ -1,14 +1,15 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useRecoilValue } from "recoil";
 import { useSocket } from "../../context/socketContext";
 import { userState } from "../../recoil/userAtom";
 import { axiosInstance } from "../../util/axiosConfig";
 import { BsArrowLeftShort } from "react-icons/bs";
-
+import moment from "moment";
 import { FaSmile } from "react-icons/fa";
 import { BsMusicNoteList } from "react-icons/bs";
 import { IoMdSend } from "react-icons/io";
 import AddSongModal from "../MySpace/AddItemModal";
+import Audio from "../../components/Audio";
 
 const ChatWindow = ({ isDesktop, setShowChat, selectedChat }) => {
   const [messages, setMessages] = useState([]);
@@ -39,19 +40,21 @@ const ChatWindow = ({ isDesktop, setShowChat, selectedChat }) => {
     (async () => {
       if (chat_id) {
         const resp = await axiosInstance.get(
-          `/chat/messages/${chat_id}/${pageId}`
+          `/chat/messages/${chat_id}/${pageId}`,
         );
-        console.log(resp);
-        setMessages(resp.data);
+        const arr = resp.data.reverse();
+        setMessages((prev) => {
+          return [...arr, ...prev];
+        });
       }
     })();
-  }, [chat_id]);
+  }, [chat_id, pageId]);
 
   const sendMessage = (e) => {
     e.preventDefault();
     if (socketContext.socket) {
       const newMessage = {
-        timestamp: Date.now(),
+        created_at: Date.now(),
         content: { message: value },
         to_id,
         type: "text",
@@ -60,7 +63,7 @@ const ChatWindow = ({ isDesktop, setShowChat, selectedChat }) => {
         msg: newMessage,
         chatId: chat_id,
       });
-      setMessages((prev) => [...prev, newMessage]);
+      setMessages((prev) => [...prev, { ...newMessage, from_id: userId }]);
     }
   };
 
@@ -68,7 +71,7 @@ const ChatWindow = ({ isDesktop, setShowChat, selectedChat }) => {
     console.log("Send song", song);
     if (socketContext.socket) {
       const newMessage = {
-        timestamp: Date.now(),
+        created_at: Date.now(),
         content: song,
         to_id,
         type: "song",
@@ -77,10 +80,37 @@ const ChatWindow = ({ isDesktop, setShowChat, selectedChat }) => {
         msg: newMessage,
         chatId: chat_id,
       });
-      setMessages((prev) => [...prev, newMessage]);
+      setMessages((prev) => [...prev, { ...newMessage, from_id: userId }]);
     }
     setOpen(false);
   };
+
+  const displayMessage = (msg) => {
+    switch (msg.type) {
+      case "song":
+        return (
+          <Audio
+            image_url={msg.content.image_url}
+            preview_url={msg.content.preview_url}
+            name={msg.content.name}
+            artists={msg.content.artists}
+          />
+        );
+      case "text":
+        return msg.content.message;
+      default:
+        return null;
+    }
+  };
+
+  const messageContainerRef = useRef(null);
+
+  useEffect(() => {
+    if (messageContainerRef.current) {
+      messageContainerRef.current.scrollTop =
+        messageContainerRef.current.scrollHeight;
+    }
+  }, [messages.length]);
 
   const onEmojiClick = () => {};
   return (
@@ -101,10 +131,26 @@ const ChatWindow = ({ isDesktop, setShowChat, selectedChat }) => {
         <p>{selectedChat.otherUser.display_name}</p>
       </div>
 
-      <div className="chatsMain">
+      <div className="chatsMain" ref={messageContainerRef}>
+        {(pageId + 1) * 20 > messages.length ? null : (
+          <button
+            onClick={() => {
+              setPageId((prev) => prev + 1);
+            }}
+          >
+            Load More
+          </button>
+        )}
         {messages.map((msg) => (
-          <div key={msg.message_id}>
-            {msg.type === "song" ? msg.content.name : msg.content.message}
+          <div
+            key={msg.created_at}
+            className={`${
+              msg.from_id === userId ? "fromUser" : "toUser"
+            } singleMsg `}
+          >
+            {/* {msg.type === "song" ? msg.content.name : msg.content.message} */}
+            {displayMessage(msg)}
+            <p>{moment(msg.created_at).format("MMMM Do YYYY, h:mm:ss a")}</p>
           </div>
         ))}
       </div>

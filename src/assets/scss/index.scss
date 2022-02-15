@@ -22,8 +22,8 @@
 @import "./components/addSongModal.scss";
 @import "./components/bottomNav.scss";
 @import "./components/betaImageSlider.scss";
-
-:root {
+@import "./components/audio.scss";
+:root  {
   /* Colors */
   --bg-top-tracks: #483048;
   --bg-insights: #ffc7cc;
