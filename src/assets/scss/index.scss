@@ -9,6 +9,7 @@
 @import "match.scss";
 @import "./feed.scss";
 @import "./landing.scss";
+@import "./chat.scss";
 @import "./components/navbar.scss";
 @import "./components//carousel.scss";
 @import "./components/tracklist.scss";
@@ -21,8 +22,8 @@
 @import "./components/addSongModal.scss";
 @import "./components/bottomNav.scss";
 @import "./components/betaImageSlider.scss";
-
-:root {
+@import "./components/audio.scss";
+:root  {
   /* Colors */
   --bg-top-tracks: #483048;
   --bg-insights: #ffc7cc;
@@ -43,11 +44,13 @@
 
   --clr-black: #000000;
   --clr-black-2: #444;
+  --clr-black-3: #202c33;
   --clr-white: #ffffff;
   --clr-white-2: #fafafa;
   --clr-green: #418671;
   --clr-gray: #ac91c1;
   --clr-gray-2: #c4c4c4;
+  --clr-gray-3: #2a3942;
   --clr-orange: #f18a21;
   --clr-pink: #fbc9cc;
   --clr-red: #ff5732;

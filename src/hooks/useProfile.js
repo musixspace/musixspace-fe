@@ -13,12 +13,14 @@ const useProfile = () => {
           localStorage.setItem("handle", res.data.username);
           setUser({
             ...user,
+            isAuthenticated: true,
             id: res.data?.id,
             displayName: res.data?.display_name,
             username: res.data?.username,
             image: res.data.image_url,
             traits: res.data.traits,
             anthem: res.data.anthem,
+            userId: res.data.user_id,
           });
         }
       })

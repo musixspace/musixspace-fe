@@ -6,6 +6,7 @@ export const userState = atom({
     id: null,
     displayName: null,
     image: null,
+    userId: null,
     username: null,
     traits: [],
     anthem: null,
@@ -38,6 +39,7 @@ export const userState = atom({
       images: null,
     },
     moodRadio: null,
+    isAuthenticated: false,
   },
 });
 

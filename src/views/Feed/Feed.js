@@ -8,7 +8,7 @@ import Skeleton from "../../components/Skeleton";
 import { useSetRecoilState } from "recoil";
 import { alertAtom } from "../../recoil/alertAtom";
 
-const decodeJWT = () => {
+export const decodeJWT = () => {
   const access_token = localStorage.getItem("accessToken");
   return jwtDecode(access_token);
 };

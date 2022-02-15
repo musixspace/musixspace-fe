@@ -10,6 +10,8 @@ const AddSongModal = ({ title, submitData, close, type }) => {
     id: null,
     name: "",
     image_url: null,
+    artists: [],
+    preview_url: null,
   });
 
   const [itemList, setItemList] = useState(null);
@@ -18,6 +20,7 @@ const AddSongModal = ({ title, submitData, close, type }) => {
     axiosInstance
       .post("/search", { query: value, type: type })
       .then((res) => {
+        console.log(res);
         setItemList(res.data);
       })
       .catch((err) => {
@@ -64,6 +67,8 @@ const AddSongModal = ({ title, submitData, close, type }) => {
                         id: item.id,
                         name: item.name,
                         image_url: item.image_url,
+                        preview_url: item.preview_url,
+                        artists: item.artists,
                       });
                       setItemList([]);
                     }}

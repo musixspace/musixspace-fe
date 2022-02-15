@@ -28,6 +28,7 @@ const themeSwitch = (str) => {
       return "nav-top-tracks";
     case "/insights":
       return "nav-insights";
+    case "/chat":
     case "/discover":
     case "/rolling":
       return "nav-discover";
