@@ -33,7 +33,7 @@ const Intro = ({
     e.preventDefault();
     let file = fileInput.current.files[0];
     let fileName = `${localStorage.getItem(
-      "handle",
+      "handle"
     )}-profile-${generateRandomString(5)}`;
     const config = {
       bucketName: "musixspace",
@@ -88,6 +88,11 @@ const Intro = ({
   const gotToMatch = (e) => {
     e.preventDefault();
     history.push(`/match/${user.username}`);
+  };
+
+  const gotToChat = (e) => {
+    e.preventDefault();
+    history.push(`/chat`);
   };
 
   return (
@@ -171,6 +176,11 @@ const Intro = ({
               <p>{user.username}</p>
               <div className="btn-divs">
                 <SendASong user={user} />
+                {user.username === localStorage.getItem("handle") && (
+                  <div className="button-container">
+                    <button onClick={gotToChat}>Chat</button>
+                  </div>
+                )}
                 {user.username !== localStorage.getItem("handle") && (
                   <div className="button-container">
                     <button onClick={gotToMatch}>Match</button>
@@ -257,7 +267,7 @@ const Intro = ({
                                 user.anthem.song_id,
                                 user.anthem.preview_url,
                                 1,
-                                null,
+                                null
                               )
                         }
                       >
