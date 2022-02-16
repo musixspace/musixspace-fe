@@ -28,6 +28,12 @@ const ChatWindow = ({ isDesktop, setShowChat, selectedChat }) => {
   const socketContext = useSocket();
 
   useEffect(() => {
+    return () => {
+      setMessages([]);
+    };
+  }, [chat_id]);
+
+  useEffect(() => {
     if (socketContext.socket) {
       socketContext.socket.on("recv_msg", (res) => {
         console.log(res);
@@ -40,7 +46,7 @@ const ChatWindow = ({ isDesktop, setShowChat, selectedChat }) => {
     (async () => {
       if (chat_id) {
         const resp = await axiosInstance.get(
-          `/chat/messages/${chat_id}/${pageId}`,
+          `/chat/messages/${chat_id}/${pageId}`
         );
         const arr = resp.data.reverse();
         setMessages((prev) => {
