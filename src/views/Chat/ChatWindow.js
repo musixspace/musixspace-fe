@@ -156,7 +156,7 @@ const ChatWindow = ({ isDesktop, setShowChat, selectedChat }) => {
           >
             {/* {msg.type === "song" ? msg.content.name : msg.content.message} */}
             {displayMessage(msg)}
-            <p>{moment(msg.created_at).format("MMMM Do YYYY, h:mm:ss a")}</p>
+            <p>{moment(msg.created_at).format("LT")}</p>
           </div>
         ))}
       </div>
