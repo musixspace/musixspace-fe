@@ -27,11 +27,11 @@ const ChatWindow = ({ isDesktop, setShowChat, selectedChat }) => {
 
   const socketContext = useSocket();
 
-  // useEffect(() => {
-  //   return () => {
-  //     setMessages([]);
-  //   };
-  // }, [chat_id]);
+  useEffect(() => {
+    return () => {
+      setMessages([]);
+    };
+  }, [chat_id]);
 
   useEffect(() => {
     if (socketContext.socket) {
