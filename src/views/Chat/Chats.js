@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { axiosInstance } from "../../util/axiosConfig";
 
+import Logo from "../../assets/images/logo-black.png";
+
 const Chats = ({ isDesktop, setSelectedChat, setShowChat }) => {
   const [chatList, setChatList] = useState([]);
 
@@ -29,7 +31,7 @@ const Chats = ({ isDesktop, setSelectedChat, setShowChat }) => {
             className="chatListItem"
           >
             <div className="imageContainer">
-              <img src={item.otherUser.image_url} className="userImg" />
+              <img src={item.otherUser.image_url || Logo} className="userImg" />
             </div>
             <p>{item.otherUser.display_name}</p>
           </div>
