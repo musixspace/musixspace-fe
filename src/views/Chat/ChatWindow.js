@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useRecoilValue } from "recoil";
 import { useSocket } from "../../context/socketContext";
 import { userState } from "../../recoil/userAtom";
@@ -55,7 +55,7 @@ const ChatWindow = ({ isDesktop, setShowChat }) => {
     (async () => {
       if (chat_id) {
         const resp = await axiosInstance.get(
-          `/chat/messages/${chat_id}/${pageId}`
+          `/chat/messages/${chat_id}/${pageId}`,
         );
         const arr = resp.data.reverse();
         setMessages((prev) => {
@@ -156,18 +156,30 @@ const ChatWindow = ({ isDesktop, setShowChat }) => {
             Load More
           </button>
         )}
-        {messages.map((msg) => (
-          <div
-            key={msg.created_at}
-            className={`${
-              msg.from_id === userId ? "fromUser" : "toUser"
-            } singleMsg `}
-          >
-            {/* {msg.type === "song" ? msg.content.name : msg.content.message} */}
-            {displayMessage(msg)}
-            <p>{moment(msg.created_at).format("LT")}</p>
-          </div>
-        ))}
+        {messages.map((msg, index) => {
+          let hasDayChanged;
+          if (index < messages.length - 1) {
+            const date = moment(messages[index]?.created_at);
+            const nextDate = moment(messages[index + 1]?.created_at);
+            hasDayChanged = nextDate.diff(date, "days") >= 1;
+          }
+
+          return (
+            <React.Fragment key={msg.created_at}>
+              <div
+                //key={msg.created_at}
+                className={`${
+                  msg.from_id === userId ? "fromUser" : "toUser"
+                } singleMsg `}
+              >
+                {/* {msg.type === "song" ? msg.content.name : msg.content.message} */}
+                {displayMessage(msg)}
+                <p>{moment(msg.created_at).format("LT")}</p>
+              </div>
+              {hasDayChanged && <div>Day change hua</div>}
+            </React.Fragment>
+          );
+        })}
       </div>
       <div className="inputBar">
         <div className="iconContainer">

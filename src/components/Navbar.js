@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { FiLogOut, FiMenu, FiRefreshCcw, FiX } from "react-icons/fi";
+import { FaRegBell } from "react-icons/fa";
 import { Link, useLocation } from "react-router-dom";
 import {
   useRecoilState,
@@ -12,6 +13,8 @@ import { alertAtom } from "../recoil/alertAtom";
 import { openSidebarAtom } from "../recoil/openSidebarAtom";
 import { userState } from "../recoil/userAtom";
 import { axiosInstance } from "../util/axiosConfig";
+import { useChat } from "../context/chatContext";
+import { useHistory } from "react-router-dom";
 
 const themeSwitch = (str) => {
   switch (str) {
@@ -54,6 +57,10 @@ const Navbar = () => {
   const resetUser = useResetRecoilState(userState);
 
   const [openProfile, setOpenProfile] = useState(false);
+  const [openNotification, setOpenNotification] = useState(false);
+  const history = useHistory();
+
+  const { notifications, setSelectedChat, setNotifications } = useChat();
 
   const toggleMenu = () => {
     setShowLinks((prev) => !prev);
@@ -106,6 +113,16 @@ const Navbar = () => {
       });
   };
 
+  const goToChat = (item) => {
+    console.log(item);
+    // setSelectedChat({
+    //   chat_id: item.chatId,
+    //   participants: [item.from_id, item.to_id],
+    // });
+    history.push("/chat", { chat_id: item.chatId });
+    setNotifications([]);
+  };
+
   return (
     <nav
       className={
@@ -153,6 +170,34 @@ const Navbar = () => {
               <Link to="/logout">Logout</Link>
             </li>
             <div className="profile">
+              <div
+                className="notification"
+                onClick={() => {
+                  setOpenNotification((prev) => !prev);
+                }}
+              >
+                {notifications.length > 0 && (
+                  <span>{notifications.length}</span>
+                )}
+                <FaRegBell />
+              </div>
+              {openNotification && (
+                <ul className="profile-ul">
+                  {notifications.map((item, index) => {
+                    return (
+                      <li className="profile-li">
+                        <div
+                          onClick={(e) => {
+                            goToChat(item);
+                          }}
+                        >
+                          tp
+                        </div>
+                      </li>
+                    );
+                  })}
+                </ul>
+              )}
               <div className="reload" onClick={handleReload}>
                 <FiRefreshCcw />
               </div>

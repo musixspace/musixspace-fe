@@ -3,7 +3,7 @@ import Logo from "../../assets/images/logo-black.png";
 import { useChat } from "../../context/chatContext";
 import { axiosInstance } from "../../util/axiosConfig";
 
-const Chats = ({ setShowChat }) => {
+const Chats = ({ setShowChat, selected_chat_id }) => {
   const { chats, setChats, setSelectedChat } = useChat();
 
   useEffect(() => {
@@ -11,6 +11,11 @@ const Chats = ({ setShowChat }) => {
       try {
         const resp = await axiosInstance.get("/chat");
         setChats(resp.data);
+        resp.data.forEach((item) => {
+          if (item.chat_id === selected_chat_id) {
+            setSelectedChat(item);
+          }
+        });
         console.log(resp.data);
       } catch (error) {
         console.log(error);

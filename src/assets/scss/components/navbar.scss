@@ -77,6 +77,28 @@ nav {
       @include d-flex(center, center, row);
       gap: 2em;
 
+      .notification {
+        cursor: pointer;
+        position: relative;
+        > svg {
+          font-size: calc(var(--base-font-size) * 2.5);
+        }
+        > span {
+          position: absolute;
+          top: -0.4rem;
+          right: -0.4rem;
+          height: 1rem;
+          font-size: calc(var(--base-font-size) * 1.35);
+          font-weight: 200;
+          display: grid;
+          place-items: center;
+          aspect-ratio: 1;
+          border-radius: 50%;
+          background-color: var(--clr-maroon);
+          color: var(--clr-white);
+        }
+      }
+
       @include reload();
 
       .profile-img {
@@ -213,7 +235,7 @@ nav {
       @include d-flex(center, center, row);
       gap: 1em;
 
-      button{
+      button {
         color: inherit;
       }
 
