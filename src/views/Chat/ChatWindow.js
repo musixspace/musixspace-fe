@@ -34,19 +34,22 @@ const ChatWindow = ({ isDesktop, setShowChat }) => {
       setMessages([]);
     };
   }, [chat_id]);
-  console.log(to_id);
 
   useEffect(() => {
     if (socketContext.socket) {
-      socketContext.socket.on("recv_msg", (res) => {
-        console.log("Received message", res.from_id, to_id);
+      const handler = ({ chatId, ...res }) => {
         if (res.from_id === to_id) {
-          console.log(res, "From Chat Window");
           setMessages((prev) => [...prev, res]);
         }
-      });
+      };
+      socketContext.socket.on("recv_msg", handler);
+
+      return () => {
+        // Unsubscribe event listeners to prevent multiple messages
+        socketContext.socket.off("recv_msg", handler);
+      };
     }
-  }, [socketContext.socket, selectedChat]);
+  }, [socketContext.socket, chat_id]);
 
   useEffect(() => {
     (async () => {

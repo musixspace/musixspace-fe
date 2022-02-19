@@ -105,11 +105,22 @@ const App = () => {
       socket.on("error", ({ err }) => {
         setAlert({ open: true, message: err, type: "error" });
       });
-      socket.on("recv_msg", (res) => {
-        console.log(res, "From App");
-      });
+
+      const receiveHandler = ({ chatId, ...res }) => {
+        if (!selectedChat) {
+          alert(JSON.stringify(res));
+        } else if (selectedChat.chatId !== chatId) {
+          alert(JSON.stringify(res));
+        }
+      };
+
+      socket.on("recv_msg", receiveHandler);
+
+      return () => {
+        socket.off("recv_msg", receiveHandler);
+      };
     }
-  }, [socket]);
+  }, [socket, selectedChat]);
 
   return (
     <SocketContext.Provider value={{ socket }}>

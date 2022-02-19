@@ -1,14 +1,14 @@
 import { createContext, useContext } from "react";
 
 export const ChatContext = createContext({
-  selectedChat:null,
+  selectedChat: null,
   notifications: [],
   chats: [],
-  requests:[],
-  setSelectedChat:null,
-  setRequests:null,
-  setNotifications:null,
-  setChats:null,
+  requests: [],
+  setSelectedChat: null,
+  setRequests: null,
+  setNotifications: null,
+  setChats: null,
 });
 
 export const useChat = () => {
