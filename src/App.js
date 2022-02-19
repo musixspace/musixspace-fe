@@ -109,7 +109,7 @@ const App = () => {
       const receiveHandler = ({ chatId, ...res }) => {
         if (!selectedChat) {
           alert(JSON.stringify(res));
-        } else if (selectedChat.chatId !== chatId) {
+        } else if (selectedChat.chat_id !== chatId) {
           alert(JSON.stringify(res));
         }
       };
