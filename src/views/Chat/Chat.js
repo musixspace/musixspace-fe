@@ -4,12 +4,14 @@ import Chats from "./Chats";
 import Tabs from "./Tabs";
 import ChatWindow from "./ChatWindow";
 import { useWindowSize } from "../../hooks/useWindowDimensions";
+import { useChat } from "../../context/chatContext";
 
 const Chat = () => {
   const [tab, setTab] = useState(0);
-  const [selectedChat, setSelectedChat] = useState(null);
   const [showChat, setShowChat] = useState(false);
   // const [isDesktop, setIsDesktop] = useState(false);
+
+  const { selectedChat } = useChat();
 
   const { width } = useWindowSize();
 
@@ -26,15 +28,7 @@ const Chat = () => {
               <Tabs tab={tab} setTab={setTab} />
             </div>
             <div className="chatList">
-              {tab === 1 ? (
-                <Requests />
-              ) : (
-                <Chats
-                  setShowChat={setShowChat}
-                  selectedChat={selectedChat}
-                  setSelectedChat={setSelectedChat}
-                />
-              )}
+              {tab === 1 ? <Requests /> : <Chats setShowChat={setShowChat} />}
             </div>
           </div>
         )}{" "}
@@ -42,11 +36,7 @@ const Chat = () => {
         {(showChat || isDesktop) && (
           <div className="chatWindow">
             {selectedChat && (
-              <ChatWindow
-                isDesktop={isDesktop}
-                setShowChat={setShowChat}
-                selectedChat={selectedChat}
-              />
+              <ChatWindow isDesktop={isDesktop} setShowChat={setShowChat} />
             )}
           </div>
         )}

@@ -10,13 +10,15 @@ import { BsMusicNoteList } from "react-icons/bs";
 import { IoMdSend } from "react-icons/io";
 import AddSongModal from "../MySpace/AddItemModal";
 import Audio from "../../components/Audio";
+import { useChat } from "../../context/chatContext";
 
-const ChatWindow = ({ isDesktop, setShowChat, selectedChat }) => {
+const ChatWindow = ({ isDesktop, setShowChat }) => {
   const [messages, setMessages] = useState([]);
   const [pageId, setPageId] = useState(0);
   const [value, setValue] = useState("");
   const [open, setOpen] = useState(false);
 
+  const { selectedChat } = useChat();
   const { chat_id, participants } = selectedChat;
   const user = useRecoilValue(userState);
   const { userId } = user;
@@ -35,12 +37,19 @@ const ChatWindow = ({ isDesktop, setShowChat, selectedChat }) => {
 
   useEffect(() => {
     if (socketContext.socket) {
-      socketContext.socket.on("recv_msg", (res) => {
-        console.log(res);
-        setMessages((prev) => [...prev, res]);
-      });
+      const handler = ({ chatId, ...res }) => {
+        if (res.from_id === to_id) {
+          setMessages((prev) => [...prev, res]);
+        }
+      };
+      socketContext.socket.on("recv_msg", handler);
+
+      return () => {
+        // Unsubscribe event listeners to prevent multiple messages
+        socketContext.socket.off("recv_msg", handler);
+      };
     }
-  }, [socketContext.socket]);
+  }, [socketContext.socket, chat_id]);
 
   useEffect(() => {
     (async () => {
