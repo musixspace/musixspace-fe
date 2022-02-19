@@ -108,10 +108,8 @@ const App = () => {
 
       const receiveHandler = ({ chatId, ...res }) => {
         if (!selectedChat) {
-          //alert(JSON.stringify(res));
           setNotifications((prev) => [...prev, { chatId, ...res }]);
         } else if (selectedChat.chat_id !== chatId) {
-          //alert(JSON.stringify(res));
           setNotifications((prev) => [...prev, { chatId, ...res }]);
         }
       };
