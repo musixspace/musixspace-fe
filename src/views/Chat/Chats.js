@@ -1,16 +1,16 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import Logo from "../../assets/images/logo-black.png";
+import { useChat } from "../../context/chatContext";
 import { axiosInstance } from "../../util/axiosConfig";
 
-import Logo from "../../assets/images/logo-black.png";
-
-const Chats = ({ isDesktop, setSelectedChat, setShowChat }) => {
-  const [chatList, setChatList] = useState([]);
+const Chats = ({ setShowChat }) => {
+  const { chats, setChats, setSelectedChat } = useChat();
 
   useEffect(() => {
     (async () => {
       try {
         const resp = await axiosInstance.get("/chat");
-        setChatList(resp.data);
+        setChats(resp.data);
         console.log(resp.data);
       } catch (error) {
         console.log(error);
@@ -20,7 +20,7 @@ const Chats = ({ isDesktop, setSelectedChat, setShowChat }) => {
 
   return (
     <>
-      {chatList.map((item) => {
+      {chats.map((item) => {
         return (
           <div
             onClick={() => {
@@ -37,7 +37,6 @@ const Chats = ({ isDesktop, setSelectedChat, setShowChat }) => {
           </div>
         );
       })}
-      {/* {selectedChat !== null && <ChatWindow selectedChat={selectedChat} />} */}
     </>
   );
 };

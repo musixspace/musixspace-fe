@@ -26,11 +26,19 @@ import Logout from "./components/Logout";
 import Match from "./views/Match";
 import Chat from "./views/Chat/Chat";
 import { alertAtom } from "./recoil/alertAtom";
+import { ChatContext } from "./context/chatContext";
 
 const code = new URLSearchParams(window.location.search).get("code");
 
 const App = () => {
   const [socket, setSocket] = useState(null);
+
+  // State for chat context
+  const [selectedChat, setSelectedChat] = useState(null);
+  const [chats, setChats] = useState([]);
+  const [notifications, setNotifications] = useState([]);
+  const [requests, setRequests] = useState([]);
+
   useAuth(code);
   const { isAuthenticated } = useRecoilValue(userState);
   const setAlert = useSetRecoilState(alertAtom);
@@ -59,7 +67,7 @@ const App = () => {
         window.innerHeight +
         "px, width=" +
         window.innerWidth +
-        "px, initial-scale=1.0",
+        "px, initial-scale=1.0"
     );
   }, []);
 
@@ -97,47 +105,67 @@ const App = () => {
       socket.on("error", ({ err }) => {
         setAlert({ open: true, message: err, type: "error" });
       });
+      socket.on("recv_msg", (res) => {
+        console.log(res, "From App");
+      });
     }
   }, [socket]);
 
   return (
     <SocketContext.Provider value={{ socket }}>
-      <Router>
-        <Wrapper>
-          <Switch>
-            <Route exact path="/readytorock" component={ReadyToRock} />
-            <Route exact path="/rolling" component={Rolling} />
-            <Route exact path="/" component={Home} />
-            <Route exact path="/about" component={About} />
-            <Route exact path="/feed" component={Feed} />
-            <Route exact path="/feed/:id" component={IndPost} />
-            <Route exact path="/color" component={ColorThief} />
-            <PrivateRoute exact path="/insights/mood" component={MoodRadio} />
-            <PrivateRoute
-              exact
-              path="/insights/surprise"
-              component={SurpriseMe}
-            />
-            <PrivateRoute
-              exact
-              path="/insights/topartists"
-              component={TopArtists}
-            />
-            <PrivateRoute
-              exact
-              path="/insights/toptracks"
-              component={TopTracks}
-            />
-            <PrivateRoute exact path="/insights" component={Insights} />
-            <PrivateRoute exact path="/feed" component={Feed} />
-            <PrivateRoute exact path="/discover" component={Discover} />
-            <PrivateRoute exact path="/match/:matchHandle" component={Match} />
-            <PrivateRoute exact path="/logout" component={Logout} />
-            <PrivateRoute exact path="/chat" component={Chat} />
-            <Route path="/:handle" component={MySpace} />
-          </Switch>
-        </Wrapper>
-      </Router>
+      <ChatContext.Provider
+        value={{
+          selectedChat,
+          chats,
+          requests,
+          notifications,
+          setChats,
+          setNotifications,
+          setRequests,
+          setSelectedChat,
+        }}
+      >
+        <Router>
+          <Wrapper>
+            <Switch>
+              <Route exact path="/readytorock" component={ReadyToRock} />
+              <Route exact path="/rolling" component={Rolling} />
+              <Route exact path="/" component={Home} />
+              <Route exact path="/about" component={About} />
+              <Route exact path="/feed" component={Feed} />
+              <Route exact path="/feed/:id" component={IndPost} />
+              <Route exact path="/color" component={ColorThief} />
+              <PrivateRoute exact path="/insights/mood" component={MoodRadio} />
+              <PrivateRoute
+                exact
+                path="/insights/surprise"
+                component={SurpriseMe}
+              />
+              <PrivateRoute
+                exact
+                path="/insights/topartists"
+                component={TopArtists}
+              />
+              <PrivateRoute
+                exact
+                path="/insights/toptracks"
+                component={TopTracks}
+              />
+              <PrivateRoute exact path="/insights" component={Insights} />
+              <PrivateRoute exact path="/feed" component={Feed} />
+              <PrivateRoute exact path="/discover" component={Discover} />
+              <PrivateRoute
+                exact
+                path="/match/:matchHandle"
+                component={Match}
+              />
+              <PrivateRoute exact path="/logout" component={Logout} />
+              <PrivateRoute exact path="/chat" component={Chat} />
+              <Route path="/:handle" component={MySpace} />
+            </Switch>
+          </Wrapper>
+        </Router>
+      </ChatContext.Provider>
     </SocketContext.Provider>
   );
 };
