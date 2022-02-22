@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
+import RequestListItem from "../../components/RequestListItem";
+import { useChat } from "../../context/chatContext";
 import { useSocket } from "../../context/socketContext";
 import { axiosInstance } from "../../util/axiosConfig";
 
 const Requests = () => {
-  const [requests, setRequests] = useState([]);
+  const { requests, setRequests } = useChat();
   const socketContext = useSocket();
 
   useEffect(() => {
@@ -25,24 +27,14 @@ const Requests = () => {
     }
   }, [socketContext.socket]);
 
-  const handleAccept = async (request_id) => {
-    try {
-      const resp = await axiosInstance.post("/chat/accept", { request_id });
-      console.log(resp);
-      const reqs = requests.filter((item) => item.request_id !== request_id);
-      setRequests(reqs);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   return (
     <ul>
       {requests.map((req, i) => (
-        <li key={i}>
-          <p>{req.username}</p>
-          <button onClick={() => handleAccept(req.request_id)}>Accept</button>
-        </li>
+        // <li key={i}>
+        //   <p>{req.username}</p>
+        //   <button onClick={() => handleAccept(req.request_id)}>Accept</button>
+        // </li>
+        <RequestListItem request={req} key={i} />
       ))}
     </ul>
   );

@@ -23,7 +23,8 @@
 @import "./components/bottomNav.scss";
 @import "./components/betaImageSlider.scss";
 @import "./components/audio.scss";
-:root  {
+@import "./components/requestListItem.scss";
+:root {
   /* Colors */
   --bg-top-tracks: #483048;
   --bg-insights: #ffc7cc;
@@ -41,10 +42,12 @@
   --clr-beta-brown: #cd845b;
   --clr-beta-dark-brown: #832333;
   --clr-beta-faded-white: #ffcdd3;
+  --clr-hover: #111213;
 
   --clr-black: #000000;
   --clr-black-2: #444;
   --clr-black-3: #202c33;
+  --clr-black-4: #4b4848;
   --clr-white: #ffffff;
   --clr-white-2: #fafafa;
   --clr-green: #418671;
@@ -199,7 +202,7 @@ button {
   background-color: transparent;
 }
 
-.colorThief{
+.colorThief {
   margin-top: 10vh;
   color: white;
 }
