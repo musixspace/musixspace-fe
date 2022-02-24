@@ -11,10 +11,16 @@ const Chat = (props) => {
   const [showChat, setShowChat] = useState(false);
   // const [isDesktop, setIsDesktop] = useState(false);
 
-  const { selectedChat } = useChat();
+  const { selectedChat, setSelectedChat } = useChat();
   const selected_chat_id = props.location.state?.chat_id;
 
   const { width } = useWindowSize();
+
+  useEffect(() => {
+    return () => {
+      setSelectedChat(null);
+    };
+  }, []);
 
   const isDesktop = useMemo(() => {
     return width > 976;

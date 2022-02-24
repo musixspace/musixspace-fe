@@ -1,7 +1,8 @@
 import { useEffect } from "react";
-import Logo from "../../assets/images/logo-black.png";
+import ChatItemList from "../../components/ChatListItem";
 import { useChat } from "../../context/chatContext";
 import { axiosInstance } from "../../util/axiosConfig";
+import songRequestImage from "../../assets/images/song-request.png";
 
 const Chats = ({ setShowChat, selected_chat_id }) => {
   const { chats, setChats, setSelectedChat } = useChat();
@@ -24,25 +25,18 @@ const Chats = ({ setShowChat, selected_chat_id }) => {
   }, []);
 
   return (
-    <>
-      {chats.map((item) => {
-        return (
-          <div
-            onClick={() => {
-              setSelectedChat(item);
-              setShowChat(true);
-            }}
-            key={item.chat_id}
-            className="chatListItem"
-          >
-            <div className="imageContainer">
-              <img src={item.otherUser.image_url || Logo} className="userImg" />
-            </div>
-            <p>{item.otherUser.display_name}</p>
-          </div>
-        );
-      })}
-    </>
+    <div className="requests-Wrapper">
+      <p className="request-title">RECENT MATCHES</p>
+      <div className="image-header">
+        <img src={songRequestImage} alt="chat with matches" />
+      </div>
+      <p className="request-title">CONVERSATIONS</p>
+      <ul>
+        {chats.map((item, i) => {
+          return <ChatItemList key={i} chat={item} setShowChat={setShowChat} />;
+        })}
+      </ul>
+    </div>
   );
 };
 export default Chats;

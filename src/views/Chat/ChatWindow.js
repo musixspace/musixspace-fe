@@ -18,7 +18,13 @@ const ChatWindow = ({ isDesktop, setShowChat }) => {
   const [value, setValue] = useState("");
   const [open, setOpen] = useState(false);
 
-  const { selectedChat } = useChat();
+  const {
+    chats,
+    setChats,
+    selectedChat,
+    updateLastMessageForChat,
+    setSelectedChat,
+  } = useChat();
   const { chat_id, participants } = selectedChat;
   const user = useRecoilValue(userState);
   const { userId } = user;
@@ -55,7 +61,7 @@ const ChatWindow = ({ isDesktop, setShowChat }) => {
     (async () => {
       if (chat_id) {
         const resp = await axiosInstance.get(
-          `/chat/messages/${chat_id}/${pageId}`,
+          `/chat/messages/${chat_id}/${pageId}`
         );
         const arr = resp.data.reverse();
         setMessages((prev) => {
@@ -79,6 +85,7 @@ const ChatWindow = ({ isDesktop, setShowChat }) => {
         chatId: chat_id,
       });
       setMessages((prev) => [...prev, { ...newMessage, from_id: userId }]);
+      updateLastMessageForChat(newMessage, chat_id);
     }
   };
 
@@ -96,6 +103,7 @@ const ChatWindow = ({ isDesktop, setShowChat }) => {
         chatId: chat_id,
       });
       setMessages((prev) => [...prev, { ...newMessage, from_id: userId }]);
+      updateLastMessageForChat(newMessage, chat_id);
     }
     setOpen(false);
   };
@@ -135,6 +143,7 @@ const ChatWindow = ({ isDesktop, setShowChat }) => {
           <button
             onClick={() => {
               setShowChat(false);
+              setSelectedChat(null);
             }}
           >
             <BsArrowLeftShort />

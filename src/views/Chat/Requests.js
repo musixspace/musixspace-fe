@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from "react";
+import RequestListItem from "../../components/RequestListItem";
+import { useChat } from "../../context/chatContext";
 import { useSocket } from "../../context/socketContext";
 import { axiosInstance } from "../../util/axiosConfig";
+import songRequestImage from "../../assets/images/song-request.png";
 
 const Requests = () => {
-  const [requests, setRequests] = useState([]);
+  const { requests, setRequests } = useChat();
   const socketContext = useSocket();
 
   useEffect(() => {
@@ -25,26 +28,18 @@ const Requests = () => {
     }
   }, [socketContext.socket]);
 
-  const handleAccept = async (request_id) => {
-    try {
-      const resp = await axiosInstance.post("/chat/accept", { request_id });
-      console.log(resp);
-      const reqs = requests.filter((item) => item.request_id !== request_id);
-      setRequests(reqs);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   return (
-    <ul>
-      {requests.map((req, i) => (
-        <li key={i}>
-          <p>{req.username}</p>
-          <button onClick={() => handleAccept(req.request_id)}>Accept</button>
-        </li>
-      ))}
-    </ul>
+    <div className="requests-Wrapper">
+      <div className="image-header">
+        <img src={songRequestImage} alt="song requests" />
+      </div>
+      <p className="request-title">WAITING FOR YOU TO LISTEN</p>
+      <ul>
+        {requests.map((req, i) => (
+          <RequestListItem request={req} key={i} />
+        ))}
+      </ul>
+    </div>
   );
 };
 

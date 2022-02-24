@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { Route, Switch, useLocation } from "react-router-dom";
 import { io } from "socket.io-client";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import Wrapper from "./components/Wrapper";
@@ -32,6 +32,9 @@ const code = new URLSearchParams(window.location.search).get("code");
 
 const App = () => {
   const [socket, setSocket] = useState(null);
+
+  const location = useLocation();
+  console.log(location);
 
   // State for chat context
   const [selectedChat, setSelectedChat] = useState(null);
@@ -67,7 +70,7 @@ const App = () => {
         window.innerHeight +
         "px, width=" +
         window.innerWidth +
-        "px, initial-scale=1.0",
+        "px, initial-scale=1.0"
     );
   }, []);
 
@@ -107,10 +110,15 @@ const App = () => {
       });
 
       const receiveHandler = ({ chatId, ...res }) => {
-        if (!selectedChat) {
+        if (location.pathname !== "/chat") {
           setNotifications((prev) => [...prev, { chatId, ...res }]);
-        } else if (selectedChat.chat_id !== chatId) {
-          setNotifications((prev) => [...prev, { chatId, ...res }]);
+        } else {
+          if (!selectedChat) {
+            setNotifications((prev) => [...prev, { chatId, ...res }]);
+          } else if (selectedChat.chat_id !== chatId) {
+            setNotifications((prev) => [...prev, { chatId, ...res }]);
+          }
+          updateLastMessageForChat(res, chatId);
         }
       };
 
@@ -121,6 +129,25 @@ const App = () => {
       };
     }
   }, [socket, selectedChat]);
+
+  const updateLastMessageForChat = (newMessage, chat_id) => {
+    const updatedChats = chats.map((chat) => {
+      if (chat.chat_id === chat_id) {
+        return {
+          ...chat,
+          lastMessage: {
+            content:
+              newMessage.type === "song"
+                ? "Sent a song"
+                : newMessage.content.message,
+            created_at: newMessage.created_at,
+          },
+        };
+      }
+      return chat;
+    });
+    setChats(updatedChats);
+  };
 
   return (
     <SocketContext.Provider value={{ socket }}>
@@ -134,48 +161,43 @@ const App = () => {
           setNotifications,
           setRequests,
           setSelectedChat,
+          updateLastMessageForChat,
         }}
       >
-        <Router>
-          <Wrapper>
-            <Switch>
-              <Route exact path="/readytorock" component={ReadyToRock} />
-              <Route exact path="/rolling" component={Rolling} />
-              <Route exact path="/" component={Home} />
-              <Route exact path="/about" component={About} />
-              <Route exact path="/feed" component={Feed} />
-              <Route exact path="/feed/:id" component={IndPost} />
-              <Route exact path="/color" component={ColorThief} />
-              <PrivateRoute exact path="/insights/mood" component={MoodRadio} />
-              <PrivateRoute
-                exact
-                path="/insights/surprise"
-                component={SurpriseMe}
-              />
-              <PrivateRoute
-                exact
-                path="/insights/topartists"
-                component={TopArtists}
-              />
-              <PrivateRoute
-                exact
-                path="/insights/toptracks"
-                component={TopTracks}
-              />
-              <PrivateRoute exact path="/insights" component={Insights} />
-              <PrivateRoute exact path="/feed" component={Feed} />
-              <PrivateRoute exact path="/discover" component={Discover} />
-              <PrivateRoute
-                exact
-                path="/match/:matchHandle"
-                component={Match}
-              />
-              <PrivateRoute exact path="/logout" component={Logout} />
-              <PrivateRoute exact path="/chat" component={Chat} />
-              <Route path="/:handle" component={MySpace} />
-            </Switch>
-          </Wrapper>
-        </Router>
+        <Wrapper>
+          <Switch>
+            <Route exact path="/readytorock" component={ReadyToRock} />
+            <Route exact path="/rolling" component={Rolling} />
+            <Route exact path="/" component={Home} />
+            <Route exact path="/about" component={About} />
+            <Route exact path="/feed" component={Feed} />
+            <Route exact path="/feed/:id" component={IndPost} />
+            <Route exact path="/color" component={ColorThief} />
+            <PrivateRoute exact path="/insights/mood" component={MoodRadio} />
+            <PrivateRoute
+              exact
+              path="/insights/surprise"
+              component={SurpriseMe}
+            />
+            <PrivateRoute
+              exact
+              path="/insights/topartists"
+              component={TopArtists}
+            />
+            <PrivateRoute
+              exact
+              path="/insights/toptracks"
+              component={TopTracks}
+            />
+            <PrivateRoute exact path="/insights" component={Insights} />
+            <PrivateRoute exact path="/feed" component={Feed} />
+            <PrivateRoute exact path="/discover" component={Discover} />
+            <PrivateRoute exact path="/match/:matchHandle" component={Match} />
+            <PrivateRoute exact path="/logout" component={Logout} />
+            <PrivateRoute exact path="/chat" component={Chat} />
+            <Route path="/:handle" component={MySpace} />
+          </Switch>
+        </Wrapper>
       </ChatContext.Provider>
     </SocketContext.Provider>
   );

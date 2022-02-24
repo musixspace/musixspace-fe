@@ -1,6 +1,6 @@
 import React from "react";
 
-const tabs = ["Chats", "Requests"];
+const tabs = ["Messages", "Song Requests"];
 
 const Tabs = ({ tab, setTab }) => {
   return (
