@@ -1,36 +1,18 @@
-import React, { useState } from "react";
+import React from "react";
 import { FaSpotify } from "react-icons/fa";
-
-import { loginUrl } from "../util/spotify";
 import banner1 from "../assets/images/banner1.png";
 import banner2 from "../assets/images/banner2.png";
 import banner3 from "../assets/images/banner3.png";
 import BetaImageSlider from "../components/BetaImageSlider";
-import { axiosInstance } from "../util/axiosConfig";
 import CustomHelmet from "../components/CustomHelmet";
+import { loginUrl } from "../util/spotify";
 
 const BetaLanding = () => {
-  const [ticketNo, setTicketNo] = useState(null);
-
-  const onSubmitData = (data) => {
-    axiosInstance
-      .post("/beta_users", data)
-      .then((res) => {
-        console.log(res.data);
-        if (res.status === 200) {
-          setTicketNo(res.data.ticket);
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
   return (
     <>
       <CustomHelmet
         title="Home"
-        description="Find people who have similar music taste"
+        description="Match your music taste with your friends, artists or even strangers"
         keywords="Home, Discover, Spaces, Community"
       />
       <div className="beta-landing">
@@ -46,7 +28,7 @@ const BetaLanding = () => {
               relationships with a shared taste in music.
             </div>
             <div className="button-container">
-              <a href={loginUrl}>
+              <a href={loginUrl} rel="noreferrer nofollow noopener">
                 <span>
                   <FaSpotify />
                 </span>
@@ -65,7 +47,7 @@ const BetaLanding = () => {
               relationships with a strong backing of a common taste in music.
             </div>
             <div className="button-container">
-              <a href={loginUrl}>
+              <a href={loginUrl} rel="noreferrer nofollow noopener">
                 <span>
                   <FaSpotify />
                 </span>
@@ -87,7 +69,7 @@ const BetaLanding = () => {
               you listen to.
             </div>
             <div className="button-container">
-              <a href={loginUrl}>
+              <a href={loginUrl} rel="noreferrer nofollow noopener">
                 <span>
                   <FaSpotify />
                 </span>
@@ -110,7 +92,7 @@ const BetaLanding = () => {
               more fun!
             </div>
             <div className="button-container">
-              <a href={loginUrl}>
+              <a href={loginUrl} rel="noreferrer nofollow noopener">
                 <span>
                   <FaSpotify />
                 </span>
