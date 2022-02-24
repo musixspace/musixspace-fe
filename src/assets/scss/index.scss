@@ -24,7 +24,8 @@
 @import "./components/betaImageSlider.scss";
 @import "./components/audio.scss";
 @import "./components/requestListItem.scss";
-:root {
+@import "./components/chatListItem.scss";
+:root  {
   /* Colors */
   --bg-top-tracks: #483048;
   --bg-insights: #ffc7cc;

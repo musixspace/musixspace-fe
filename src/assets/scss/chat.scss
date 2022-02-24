@@ -47,9 +47,21 @@
           background-color: var(--clr-black-4);
         }
 
-        ul {
-          max-height: 100%;
-          overflow-y: auto;
+        .requests-Wrapper {
+          display: flex;
+          flex-direction: column;
+          .image-header {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 10em;
+          }
+          ul {
+            flex: 1;
+            max-height: 100%;
+            overflow-y: auto;
+          }
         }
 
         .chatListItem {

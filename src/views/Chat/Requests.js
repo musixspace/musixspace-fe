@@ -3,6 +3,7 @@ import RequestListItem from "../../components/RequestListItem";
 import { useChat } from "../../context/chatContext";
 import { useSocket } from "../../context/socketContext";
 import { axiosInstance } from "../../util/axiosConfig";
+import songRequestImage from "../../assets/images/song-request.png";
 
 const Requests = () => {
   const { requests, setRequests } = useChat();
@@ -28,15 +29,21 @@ const Requests = () => {
   }, [socketContext.socket]);
 
   return (
-    <ul>
-      {requests.map((req, i) => (
-        // <li key={i}>
-        //   <p>{req.username}</p>
-        //   <button onClick={() => handleAccept(req.request_id)}>Accept</button>
-        // </li>
-        <RequestListItem request={req} key={i} />
-      ))}
-    </ul>
+    <div className="requests-Wrapper">
+      <div className="image-header">
+        <img src={songRequestImage} alt="song requests" />
+      </div>
+      <p>WAITING FOR YOU TO LISTEN</p>
+      <ul>
+        {requests.map((req, i) => (
+          // <li key={i}>
+          //   <p>{req.username}</p>
+          //   <button onClick={() => handleAccept(req.request_id)}>Accept</button>
+          // </li>
+          <RequestListItem request={req} key={i} />
+        ))}
+      </ul>
+    </div>
   );
 };
 

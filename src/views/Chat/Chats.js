@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import Logo from "../../assets/images/logo-black.png";
+import ChatItemList from "../../components/ChatListItem";
 import { useChat } from "../../context/chatContext";
 import { axiosInstance } from "../../util/axiosConfig";
 
@@ -24,25 +25,11 @@ const Chats = ({ setShowChat, selected_chat_id }) => {
   }, []);
 
   return (
-    <>
-      {chats.map((item) => {
-        return (
-          <div
-            onClick={() => {
-              setSelectedChat(item);
-              setShowChat(true);
-            }}
-            key={item.chat_id}
-            className="chatListItem"
-          >
-            <div className="imageContainer">
-              <img src={item.otherUser.image_url || Logo} className="userImg" />
-            </div>
-            <p>{item.otherUser.display_name}</p>
-          </div>
-        );
+    <div>
+      {chats.map((item, i) => {
+        return <ChatItemList key={i} chat={item} setShowChat={setShowChat} />;
       })}
-    </>
+    </div>
   );
 };
 export default Chats;
