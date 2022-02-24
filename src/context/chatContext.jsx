@@ -9,6 +9,7 @@ export const ChatContext = createContext({
   setRequests: null,
   setNotifications: null,
   setChats: null,
+  updateLastMessageForChat: null,
 });
 
 export const useChat = () => {

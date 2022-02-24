@@ -24,14 +24,20 @@
     flex: 1;
     .cli-user-container {
       flex: 1;
-      p {
-        color: var(--clr-white);
-        font-size: calc(var(--base-font-size) * 2.125);
-        line-height: 1.5;
-        letter-spacing: 1px;
+      div:nth-child(1) {
+        max-width: 15ch;
+        p {
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          color: var(--clr-white);
+          font-size: calc(var(--base-font-size) * 2.125);
+          line-height: 1.5;
+        }
       }
-      div {
-        max-width: 17ch;
+
+      div:nth-child(2) {
+        max-width: 15ch;
         p {
           color: var(--clr-black-4);
           font-size: calc(var(--base-font-size) * 2);
@@ -60,15 +66,30 @@
   &:focus {
     background: var(--clr-hover);
   }
+
+  &.selected-chat {
+    background: var(--clr-hover);
+  }
 }
 
 @media (max-width: 576px) {
   .cli-container {
-    padding: 0.75em 0.4em;
+    padding: 0.75em 0.5em;
   }
   .cli-image-container {
     height: 40px;
     width: 40px;
     margin-right: 0.2em;
+  }
+}
+
+@media (max-width: 320px) {
+  .cli-user-details-container {
+    .cli-user-container {
+      div:nth-child(1) {
+        width: 10ch;
+        background: pink;
+      }
+    }
   }
 }

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { FiLogOut, FiMenu, FiRefreshCcw, FiX } from "react-icons/fi";
 import { FaRegBell } from "react-icons/fa";
-import { Link, useLocation } from "react-router-dom";
+import { Link, Redirect, useLocation } from "react-router-dom";
 import {
   useRecoilState,
   useRecoilValue,
@@ -58,6 +58,7 @@ const Navbar = () => {
 
   const [openProfile, setOpenProfile] = useState(false);
   const [openNotification, setOpenNotification] = useState(false);
+  const [redirectChat, setRedirectChat] = useState(null);
   const history = useHistory();
 
   const { notifications, setSelectedChat, setNotifications } = useChat();
@@ -119,9 +120,16 @@ const Navbar = () => {
     //   chat_id: item.chatId,
     //   participants: [item.from_id, item.to_id],
     // });
-    history.push("/chat", { chat_id: item.chatId });
+    // history.push("/chat", { chat_id: item.chatId });
+    setRedirectChat(item.chatId);
     setNotifications([]);
   };
+
+  if (redirectChat) {
+    return (
+      <Redirect to={{ pathname: "/chat", state: { chat_id: redirectChat } }} />
+    );
+  }
 
   return (
     <nav

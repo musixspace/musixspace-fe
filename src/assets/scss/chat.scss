@@ -18,22 +18,28 @@
         width: 100%;
         align-items: center;
         height: 10%;
-        background-color: $skeletonHome;
+
         .chatTab {
           width: 100%;
           flex: 1;
-          padding: 1em;
-          border: 1px solid black;
-        }
+          color: var(--clr-black-4);
+          font-weight: 500;
+          font-family: var(--f-circ-pro);
+          font-size: calc(var(--base-font-size) * 2.5);
 
-        .selectedTab {
-          background: gray;
+          &:hover {
+            filter: brightness(1.2);
+          }
+
+          &.selectedTab {
+            color: var(--clr-white);
+          }
         }
       }
 
       .chatList {
-        overflow-y: auto;
         height: 90%;
+        overflow: hidden;
 
         ::-webkit-scrollbar {
           width: 10px;
@@ -50,16 +56,25 @@
         .requests-Wrapper {
           display: flex;
           flex-direction: column;
+          height: 100%;
+          padding: 0.5em;
+
           .image-header {
             width: 100%;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 10em;
+            padding: 1.5em 0;
           }
+
+          .request-title {
+            padding: 1.125em;
+            color: var(--clr-black-4);
+            font-size: calc(var(--base-font-size) * 1.75);
+          }
+
           ul {
             flex: 1;
-            max-height: 100%;
             overflow-y: auto;
           }
         }
@@ -67,7 +82,6 @@
         .chatListItem {
           display: flex;
           align-items: center;
-          padding: 0.5em;
 
           .imageContainer {
             height: 48px;

@@ -33,13 +33,9 @@ const Requests = () => {
       <div className="image-header">
         <img src={songRequestImage} alt="song requests" />
       </div>
-      <p>WAITING FOR YOU TO LISTEN</p>
+      <p className="request-title">WAITING FOR YOU TO LISTEN</p>
       <ul>
         {requests.map((req, i) => (
-          // <li key={i}>
-          //   <p>{req.username}</p>
-          //   <button onClick={() => handleAccept(req.request_id)}>Accept</button>
-          // </li>
           <RequestListItem request={req} key={i} />
         ))}
       </ul>

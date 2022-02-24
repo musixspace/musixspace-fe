@@ -1,4 +1,5 @@
 import jwt_decode from "jwt-decode";
+import moment from "moment";
 
 export const paddedNumbers = (num) => {
   if (num < 10) return `0${num}`;
@@ -114,4 +115,15 @@ export const copyToClipboard = (textToCopy) => {
       textArea.remove();
     });
   }
+};
+
+export const getFormattedTime = (date) => {
+  const today = moment();
+  const yesterday = today.clone().subtract(1, "days").startOf("day");
+  if (moment(today).isSame(date, "D")) {
+    return moment(date).format("LT");
+  } else if (moment(yesterday).isSame(date, "D")) {
+    return "yesterday";
+  }
+  return moment(date).format("DD/MM/YY");
 };
