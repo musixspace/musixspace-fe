@@ -5,11 +5,11 @@ import Tabs from "./Tabs";
 import ChatWindow from "./ChatWindow";
 import { useWindowSize } from "../../hooks/useWindowDimensions";
 import { useChat } from "../../context/chatContext";
+import CustomHelmet from "../../components/CustomHelmet";
 
 const Chat = (props) => {
   const [tab, setTab] = useState(0);
   const [showChat, setShowChat] = useState(false);
-  // const [isDesktop, setIsDesktop] = useState(false);
 
   const { selectedChat, setSelectedChat } = useChat();
   const selected_chat_id = props.location.state?.chat_id;
@@ -27,35 +27,42 @@ const Chat = (props) => {
   }, [width]);
 
   return (
-    <div className="chatRoot">
-      <div className="chatWrapper">
-        {(!showChat || isDesktop) && (
-          <div className="chatPanel">
-            <div className="chatTabs">
-              <Tabs tab={tab} setTab={setTab} />
+    <>
+      <CustomHelmet
+        title="Chat"
+        description="Real time chat, text/audio chat"
+        keywords="Chat, Real time chat, Text Message, Send Song"
+      />
+      <div className="chatRoot">
+        <div className="chatWrapper">
+          {(!showChat || isDesktop) && (
+            <div className="chatPanel">
+              <div className="chatTabs">
+                <Tabs tab={tab} setTab={setTab} />
+              </div>
+              <div className="chatList">
+                {tab === 1 ? (
+                  <Requests />
+                ) : (
+                  <Chats
+                    setShowChat={setShowChat}
+                    selected_chat_id={selected_chat_id}
+                  />
+                )}
+              </div>
             </div>
-            <div className="chatList">
-              {tab === 1 ? (
-                <Requests />
-              ) : (
-                <Chats
-                  setShowChat={setShowChat}
-                  selected_chat_id={selected_chat_id}
-                />
+          )}
+          :{" "}
+          {(showChat || isDesktop) && (
+            <div className="chatWindow">
+              {selectedChat && (
+                <ChatWindow isDesktop={isDesktop} setShowChat={setShowChat} />
               )}
             </div>
-          </div>
-        )}
-        :{" "}
-        {(showChat || isDesktop) && (
-          <div className="chatWindow">
-            {selectedChat && (
-              <ChatWindow isDesktop={isDesktop} setShowChat={setShowChat} />
-            )}
-          </div>
-        )}
+          )}
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

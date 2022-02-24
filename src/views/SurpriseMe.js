@@ -10,6 +10,7 @@ import { userState } from "../recoil/userAtom";
 import { axiosInstance } from "../util/axiosConfig";
 import { setMediaSession } from "../util/functions";
 import logo from "../assets/images/logo-black.png";
+import CustomHelmet from "../components/CustomHelmet";
 
 const SurpriseMe = () => {
   const user = useRecoilValue(userState);
@@ -128,41 +129,48 @@ const SurpriseMe = () => {
   };
 
   return (
-    <div className="dashboard-container">
-      <div className="dashboard">
-        <div>
-          <TrackList
-            currentTrack={currentTrack}
-            tracks={user && user.surpriseTracks && user.surpriseTracks.tracks}
-            changeTrack={handleTrackChange}
-          />
-          <WebPlayer
-            url={audioUrl}
-            prevPlay={handlePrevPlay}
-            nextPlay={handleNextPlay}
-            shufflePlay={handleShufflePlay}
-          />
-        </div>
-        <Carousel
-          data={user && user.surpriseTracks && user.surpriseTracks.images}
-          current={currentTrack}
-        />
-        <div className="heading">
-          <p>Surprise Tracks Radio</p>
+    <>
+      <CustomHelmet
+        title="Surprise Me | Recommendation"
+        description="Get recommended music acoording to your taste"
+        keywords="Surprise Me, Recommendation"
+      />
+      <div className="dashboard-container">
+        <div className="dashboard">
           <div>
-            <button id="export" onClick={(e) => setOpenModal(true)}>
-              Export
-            </button>
+            <TrackList
+              currentTrack={currentTrack}
+              tracks={user && user.surpriseTracks && user.surpriseTracks.tracks}
+              changeTrack={handleTrackChange}
+            />
+            <WebPlayer
+              url={audioUrl}
+              prevPlay={handlePrevPlay}
+              nextPlay={handleNextPlay}
+              shufflePlay={handleShufflePlay}
+            />
+          </div>
+          <Carousel
+            data={user && user.surpriseTracks && user.surpriseTracks.images}
+            current={currentTrack}
+          />
+          <div className="heading">
+            <p>Surprise Tracks Radio</p>
+            <div>
+              <button id="export" onClick={(e) => setOpenModal(true)}>
+                Export
+              </button>
+            </div>
           </div>
         </div>
+        {openModal && (
+          <ExportPlaylistModal
+            submitData={handleExport}
+            close={() => setOpenModal(false)}
+          />
+        )}
       </div>
-      {openModal && (
-        <ExportPlaylistModal
-          submitData={handleExport}
-          close={() => setOpenModal(false)}
-        />
-      )}
-    </div>
+    </>
   );
 };
 

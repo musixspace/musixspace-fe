@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import logo from "../assets/images/logo-black.png";
 import Carousel from "../components/Carousel";
+import CustomHelmet from "../components/CustomHelmet";
 import Skeleton from "../components/Skeleton";
 import WebPlayer from "../components/WebPlayer";
 import { alertAtom } from "../recoil/alertAtom";
@@ -131,64 +132,71 @@ const MoodRadio = () => {
   };
 
   return (
-    <div className="dashboard-container mood-radio-container">
-      <div className="dashboard">
-        <div>
-          {!user.moodRadio ? (
-            <div className="mood-tracker">
-              <div className="main">
-                <Skeleton type="text" />
-              </div>
-              <div className="inner">
-                <div className="dummy"></div>
-                <div className="content">
-                  <Skeleton type="text" />
-                  <Skeleton type="text" />
-                  <Skeleton type="text" />
-                  <Skeleton type="text" />
-                </div>
-              </div>
-            </div>
-          ) : (
-            user.moodRadio.length > 0 &&
-            currentTrack !== "" && (
+    <>
+      <CustomHelmet
+        title="Mood Radio"
+        description="Get your most acoustic, energetic, happiest dance tunes"
+        keywords="Mood Radio, Happy, Energy, Acoustic, Dance"
+      />
+      <div className="dashboard-container mood-radio-container">
+        <div className="dashboard">
+          <div>
+            {!user.moodRadio ? (
               <div className="mood-tracker">
                 <div className="main">
-                  <span>{user.moodRadio[currentTrack].total}% </span>
-                  <span>{user.moodRadio[currentTrack].type}</span>
+                  <Skeleton type="text" />
                 </div>
                 <div className="inner">
                   <div className="dummy"></div>
                   <div className="content">
-                    <p>
-                      Your <span>{user.moodRadio[currentTrack].phrase}</span>{" "}
-                      Song!
-                    </p>
-                    <p>{user.moodRadio[currentTrack].name}</p>
-                    <p>{user.moodRadio[currentTrack].artist}</p>
-                    <p>
-                      {user.moodRadio[currentTrack].value}
-                      {"% "}
-                      <span>{user.moodRadio[currentTrack].type}</span>
-                    </p>
+                    <Skeleton type="text" />
+                    <Skeleton type="text" />
+                    <Skeleton type="text" />
+                    <Skeleton type="text" />
                   </div>
                 </div>
               </div>
-            )
-          )}
-          <WebPlayer
-            url={audioUrl}
-            prevPlay={handlePrevPlay}
-            nextPlay={handleNextPlay}
-            shufflePlay={handleShufflePlay}
-          />
-        </div>
-        <Carousel data={user.moodRadio} current={currentTrack} />
-        <div className="heading">
-          <p>Your Mood Radio</p>
+            ) : (
+              user.moodRadio.length > 0 &&
+              currentTrack !== "" && (
+                <div className="mood-tracker">
+                  <div className="main">
+                    <span>{user.moodRadio[currentTrack].total}% </span>
+                    <span>{user.moodRadio[currentTrack].type}</span>
+                  </div>
+                  <div className="inner">
+                    <div className="dummy"></div>
+                    <div className="content">
+                      <p>
+                        Your <span>{user.moodRadio[currentTrack].phrase}</span>{" "}
+                        Song!
+                      </p>
+                      <p>{user.moodRadio[currentTrack].name}</p>
+                      <p>{user.moodRadio[currentTrack].artist}</p>
+                      <p>
+                        {user.moodRadio[currentTrack].value}
+                        {"% "}
+                        <span>{user.moodRadio[currentTrack].type}</span>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )
+            )}
+            <WebPlayer
+              url={audioUrl}
+              prevPlay={handlePrevPlay}
+              nextPlay={handleNextPlay}
+              shufflePlay={handleShufflePlay}
+            />
+          </div>
+          <Carousel data={user.moodRadio} current={currentTrack} />
+          <div className="heading">
+            <p>Your Mood Radio</p>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

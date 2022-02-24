@@ -1,32 +1,31 @@
 import { useEffect, useState } from "react";
 import { Route, Switch, useLocation } from "react-router-dom";
-import { io } from "socket.io-client";
 import { useRecoilValue, useSetRecoilState } from "recoil";
+import { io } from "socket.io-client";
+import Logout from "./components/Logout";
 import Wrapper from "./components/Wrapper";
+import { ChatContext } from "./context/chatContext";
 import { SocketContext } from "./context/socketContext";
 import useAuth from "./hooks/useAuth";
 import useProfile from "./hooks/useProfile";
+import { alertAtom } from "./recoil/alertAtom";
 import { userState } from "./recoil/userAtom";
 import PrivateRoute from "./routes/PrivateRoute";
 import About from "./views/About";
-import ColorThief from "./views/ColorThief";
+import Chat from "./views/Chat/Chat";
 import Discover from "./views/Discover";
 import Feed, { decodeJWT } from "./views/Feed/Feed";
 import IndPost from "./views/Feed/IndPost";
 import Home from "./views/Home";
+import Insights from "./views/Insights";
+import Match from "./views/Match";
+import MoodRadio from "./views/MoodRadio";
 import MySpace from "./views/MySpace/MySpace";
 import ReadyToRock from "./views/ReadyToRock";
 import Rolling from "./views/Rolling";
 import SurpriseMe from "./views/SurpriseMe";
 import TopArtists from "./views/TopArtists";
 import TopTracks from "./views/TopTracks";
-import MoodRadio from "./views/MoodRadio";
-import Insights from "./views/Insights";
-import Logout from "./components/Logout";
-import Match from "./views/Match";
-import Chat from "./views/Chat/Chat";
-import { alertAtom } from "./recoil/alertAtom";
-import { ChatContext } from "./context/chatContext";
 
 const code = new URLSearchParams(window.location.search).get("code");
 
@@ -172,7 +171,6 @@ const App = () => {
             <Route exact path="/about" component={About} />
             <Route exact path="/feed" component={Feed} />
             <Route exact path="/feed/:id" component={IndPost} />
-            <Route exact path="/color" component={ColorThief} />
             <PrivateRoute exact path="/insights/mood" component={MoodRadio} />
             <PrivateRoute
               exact

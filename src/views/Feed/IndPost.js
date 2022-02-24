@@ -16,6 +16,7 @@ import { VscCircleFilled } from "react-icons/vsc";
 import { Link, useLocation } from "react-router-dom";
 import { useSetRecoilState } from "recoil";
 import logo from "../../assets/images/logo-black.png";
+import CustomHelmet from "../../components/CustomHelmet";
 import WebPlayer from "../../components/WebPlayer";
 import { alertAtom } from "../../recoil/alertAtom";
 import { axiosInstance } from "../../util/axiosConfig";
@@ -265,216 +266,238 @@ const IndPost = () => {
   };
 
   return (
-    <div className="ind-post-container">
-      <div className="ind-post-wrapper">
-        {post ? (
-          <div id={`post-${post.feed_id}`} className="ind-post">
-            <div className="post-container">
-              <Link to={`/${post.username}`} className="post-header">
-                <div className="image-container">
-                  <img
-                    src={post.user_url || logo}
-                    alt={`${post.display_name}'s Profile`}
-                  />
-                </div>
-                <div className="content-container">
-                  <p>{post.display_name}</p>
-                  <div className="meta">
-                    <p>@{post.username}</p>
-                    <p>
-                      <span>
-                        <VscCircleFilled />
-                      </span>{" "}
-                      {moment(post.created_at).fromNow()}
-                    </p>
+    <>
+      {post ? (
+        <CustomHelmet
+          title={`Post | ${post.name}`}
+          description={`${post.name} - ${post.artists
+            .map((i) => i.name)
+            .join(", ")}`}
+          keywords={`Post, ${post.name} - ${post.artists
+            .map((i) => i.name)
+            .join(", ")}`}
+        />
+      ) : (
+        <CustomHelmet
+          title="Post"
+          description="Song Post"
+          keywords="Feed, Song, Artists"
+        />
+      )}
+      <div className="ind-post-container">
+        <div className="ind-post-wrapper">
+          {post ? (
+            <div id={`post-${post.feed_id}`} className="ind-post">
+              <div className="post-container">
+                <Link to={`/${post.username}`} className="post-header">
+                  <div className="image-container">
+                    <img
+                      src={post.user_url || logo}
+                      alt={`${post.display_name}'s Profile`}
+                    />
                   </div>
-                </div>
-              </Link>
-              <div className="post-content">
-                <p>{post.vibe}</p>
-              </div>
-              <div
-                className={`post-song ${
-                  currentSong.audioUrl &&
-                  currentSong.audioUrl === post.preview_url
-                    ? "focus"
-                    : ""
-                }`}
-                onClick={() => toggleSong("post", post)}
-              >
-                <div className="image-container">
-                  <img src={post.image_url || logo} alt={post.name} />
-                  {currentSong.audioUrl &&
-                  currentSong.audioUrl === post.preview_url ? (
-                    <FaPause />
-                  ) : (
-                    <FaPlay />
-                  )}
-                </div>
-                <div className="content-container">
-                  <p>{post.name}</p>
-                  <div className="meta">
-                    <p>
-                      {post.artists
-                        .map((item) => item.name)
-                        .slice(0, 3)
-                        .join(", ")}
-                    </p>
+                  <div className="content-container">
+                    <p>{post.display_name}</p>
+                    <div className="meta">
+                      <p>@{post.username}</p>
+                      <p>
+                        <span>
+                          <VscCircleFilled />
+                        </span>{" "}
+                        {moment(post.created_at).fromNow()}
+                      </p>
+                    </div>
                   </div>
-                </div>
-              </div>
-              <div className="post-socials">
-                <button onClick={handleLikePost}>
-                  {userId && post.likes.includes(userId) ? (
-                    <FaHeart />
-                  ) : (
-                    <FaRegHeart />
-                  )}
-                  <span>{post.likes.length}</span>
-                </button>
-                <Link to={`/feed/${post.feed_id}`}>
-                  <FaRegComment /> <span>{comments.length}</span>
                 </Link>
-                <button onClick={handleSharePost}>
-                  <FiUpload />
-                </button>
-              </div>
-            </div>
-            <div className="comments-container">
-              <div className="comments-header">
-                <p>Comments</p>
-                <div className="load-more add-comment">
-                  <button onClick={() => setShowAddComment(true)}>
-                    <span>
-                      <FaPlus></FaPlus>
-                    </span>
-                    Add Comment
+                <div className="post-content">
+                  <p>{post.vibe}</p>
+                </div>
+                <div
+                  className={`post-song ${
+                    currentSong.audioUrl &&
+                    currentSong.audioUrl === post.preview_url
+                      ? "focus"
+                      : ""
+                  }`}
+                  onClick={() => toggleSong("post", post)}
+                >
+                  <div className="image-container">
+                    <img src={post.image_url || logo} alt={post.name} />
+                    {currentSong.audioUrl &&
+                    currentSong.audioUrl === post.preview_url ? (
+                      <FaPause />
+                    ) : (
+                      <FaPlay />
+                    )}
+                  </div>
+                  <div className="content-container">
+                    <p>{post.name}</p>
+                    <div className="meta">
+                      <p>
+                        {post.artists
+                          .map((item) => item.name)
+                          .slice(0, 3)
+                          .join(", ")}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div className="post-socials">
+                  <button onClick={handleLikePost}>
+                    {userId && post.likes.includes(userId) ? (
+                      <FaHeart />
+                    ) : (
+                      <FaRegHeart />
+                    )}
+                    <span>{post.likes.length}</span>
+                  </button>
+                  <Link to={`/feed/${post.feed_id}`}>
+                    <FaRegComment /> <span>{comments.length}</span>
+                  </Link>
+                  <button onClick={handleSharePost}>
+                    <FiUpload />
                   </button>
                 </div>
               </div>
-              <div className="comments-list">
-                {comments.length > 0 &&
-                  comments.map((comment) => (
-                    <div key={comment.comment_id} className="comment">
-                      <div className="image-container">
-                        <img
-                          src={comment.image_url || logo}
-                          alt={`${comment.display_name}'s Profile`}
-                        />
-                      </div>
-                      <div className="content-container">
-                        <Link
-                          to={`/${comment.username}`}
-                          className="content-header"
-                        >
-                          <p>{comment.display_name}</p>
-                          <div className="meta">
-                            <p>@{comment.username}</p>
-                            <p>
-                              <span>
-                                <VscCircleFilled />
-                              </span>{" "}
-                              {moment(comment.created_at).fromNow()}
-                            </p>
-                          </div>
-                        </Link>
-                        <p className="comment-main">{comment.comment}</p>
-                        {comment.song_name ? (
-                          <div
-                            className="comment-song"
-                            className={`comment-song ${
-                              currentSong.audioUrl &&
-                              currentSong.audioUrl === comment.song_preview_url
-                                ? "focus"
-                                : ""
-                            }`}
-                            onClick={() => toggleSong("comment", comment)}
-                          >
-                            <div className="image-container">
-                              <img
-                                src={comment.song_image_url || logo}
-                                alt={`${comment.song_name}`}
-                              />
-                              {currentSong.audioUrl &&
-                              currentSong.audioUrl ===
-                                comment.song_preview_url ? (
-                                <FaPause />
-                              ) : (
-                                <FaPlay />
-                              )}
-                            </div>
-                            <div className="content-container">
-                              <p>{comment.song_name}</p>
-                              <p>
-                                {comment.song_artists
-                                  .map((item) => item.name)
-                                  .slice(0, 3)
-                                  .join(", ")}
-                              </p>
-                            </div>
-                          </div>
-                        ) : null}
-                        <div className="comment-socials">
-                          <button
-                            onClick={() =>
-                              handleLikeComment(comment.comment_id)
-                            }
-                          >
-                            {userId && comment.likes.includes(userId) ? (
-                              <FaHeart />
-                            ) : (
-                              <FaRegHeart />
-                            )}
-                            <p>{comment.likes.length}</p>
-                          </button>
-                          {userId && userId === comment.user_id ? (
-                            <button
-                              onClick={() =>
-                                handleDeleteComment(comment.comment_id)
-                              }
-                            >
-                              <MdDelete />
-                            </button>
-                          ) : null}
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                {loadMoreComments && comments.length > 0 ? (
-                  <div className="load-more">
-                    <button
-                      onClick={() => setCommentPageId((prev) => prev + 1)}
-                    >
-                      Load More Comments
+              <div className="comments-container">
+                <div className="comments-header">
+                  <p>Comments</p>
+                  <div className="load-more add-comment">
+                    <button onClick={() => setShowAddComment(true)}>
+                      <span>
+                        <FaPlus></FaPlus>
+                      </span>
+                      Add Comment
                     </button>
                   </div>
-                ) : null}
-                {comments.length === 0 ? (
-                  <>
-                    <p>Start the conversation.</p>
-                    <p>No comments yet!</p>
-                  </>
-                ) : null}
+                </div>
+                <div className="comments-list">
+                  {comments.length > 0 &&
+                    comments.map((comment) => (
+                      <div key={comment.comment_id} className="comment">
+                        <div className="image-container">
+                          <img
+                            src={comment.image_url || logo}
+                            alt={`${comment.display_name}'s Profile`}
+                          />
+                        </div>
+                        <div className="content-container">
+                          <Link
+                            to={`/${comment.username}`}
+                            className="content-header"
+                          >
+                            <p>{comment.display_name}</p>
+                            <div className="meta">
+                              <p>@{comment.username}</p>
+                              <p>
+                                <span>
+                                  <VscCircleFilled />
+                                </span>{" "}
+                                {moment(comment.created_at).fromNow()}
+                              </p>
+                            </div>
+                          </Link>
+                          <p className="comment-main">{comment.comment}</p>
+                          {comment.song_name ? (
+                            <div
+                              className="comment-song"
+                              className={`comment-song ${
+                                currentSong.audioUrl &&
+                                currentSong.audioUrl ===
+                                  comment.song_preview_url
+                                  ? "focus"
+                                  : ""
+                              }`}
+                              onClick={() => toggleSong("comment", comment)}
+                            >
+                              <div className="image-container">
+                                <img
+                                  src={comment.song_image_url || logo}
+                                  alt={`${comment.song_name}`}
+                                />
+                                {currentSong.audioUrl &&
+                                currentSong.audioUrl ===
+                                  comment.song_preview_url ? (
+                                  <FaPause />
+                                ) : (
+                                  <FaPlay />
+                                )}
+                              </div>
+                              <div className="content-container">
+                                <p>{comment.song_name}</p>
+                                <p>
+                                  {comment.song_artists
+                                    .map((item) => item.name)
+                                    .slice(0, 3)
+                                    .join(", ")}
+                                </p>
+                              </div>
+                            </div>
+                          ) : null}
+                          <div className="comment-socials">
+                            <button
+                              onClick={() =>
+                                handleLikeComment(comment.comment_id)
+                              }
+                            >
+                              {userId && comment.likes.includes(userId) ? (
+                                <FaHeart />
+                              ) : (
+                                <FaRegHeart />
+                              )}
+                              <p>{comment.likes.length}</p>
+                            </button>
+                            {userId && userId === comment.user_id ? (
+                              <button
+                                onClick={() =>
+                                  handleDeleteComment(comment.comment_id)
+                                }
+                              >
+                                <MdDelete />
+                              </button>
+                            ) : null}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  {loadMoreComments &&
+                  comments.length > 0 &&
+                  (commentPageId + 1) * 20 < comments.length ? (
+                    <div className="load-more">
+                      <button
+                        onClick={() => setCommentPageId((prev) => prev + 1)}
+                      >
+                        Load More Comments
+                      </button>
+                    </div>
+                  ) : null}
+                  {comments.length === 0 ? (
+                    <>
+                      <p>Start the conversation.</p>
+                      <p>No comments yet!</p>
+                    </>
+                  ) : null}
+                </div>
               </div>
             </div>
-          </div>
-        ) : null}
-        {showAddComment ? (
-          <AddComment
-            bgColor={bgc}
-            closeModal={() => setShowAddComment(false)}
-            submitData={handleAddComment}
+          ) : null}
+          {showAddComment ? (
+            <AddComment
+              bgColor={bgc}
+              closeModal={() => setShowAddComment(false)}
+              submitData={handleAddComment}
+            />
+          ) : null}
+        </div>
+        {currentSong.audioUrl && (
+          <WebPlayer
+            url={currentSong.audioUrl}
+            nextPlay={stopSong}
+            noControls={true}
           />
-        ) : null}
+        )}
       </div>
-      {currentSong.audioUrl && (
-        <WebPlayer
-          url={currentSong.audioUrl}
-          nextPlay={stopSong}
-          noControls={true}
-        />
-      )}
-    </div>
+    </>
   );
 };
 

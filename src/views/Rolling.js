@@ -9,6 +9,7 @@ import lonewolf from "../assets/images/bgs/lonewolf.png";
 import party from "../assets/images/bgs/party.png";
 import quiet from "../assets/images/bgs/quiet.png";
 import weirdo from "../assets/images/bgs/weirdo.png";
+import CustomHelmet from "../components/CustomHelmet";
 import { axiosInstance } from "../util/axiosConfig";
 
 const traits = [
@@ -73,42 +74,49 @@ const Rolling = () => {
   };
 
   return (
-    <div className="rolling">
-      <div className="container">
-        <p>Choose 3 personality traits</p>
-        <div className="traits-container">
-          {traits.length > 0 ? (
-            traits.map((trait) => (
-              <div
-                key={trait.id}
-                className="trait"
-                onClick={() => handleSelectTrait(trait.id)}
-              >
-                {selectedTraits.includes(trait.id) ? (
-                  <div className="check">
-                    <FiCheck />
+    <>
+      <CustomHelmet
+        title="Rolling"
+        description="List your personality"
+        keywords="Rolling, Traits, Introvert, Easy Going, Extrovert, Party Animal, Ambivert, Lone Wolf, Quiet, Weirdo"
+      />
+      <div className="rolling">
+        <div className="container">
+          <p>Choose 3 personality traits</p>
+          <div className="traits-container">
+            {traits.length > 0 ? (
+              traits.map((trait) => (
+                <div
+                  key={trait.id}
+                  className="trait"
+                  onClick={() => handleSelectTrait(trait.id)}
+                >
+                  {selectedTraits.includes(trait.id) ? (
+                    <div className="check">
+                      <FiCheck />
+                    </div>
+                  ) : null}
+                  <div className="image-container">
+                    <img src={trait.img} alt={trait.name} />
                   </div>
-                ) : null}
-                <div className="image-container">
-                  <img src={trait.img} alt={trait.name} />
+                  <p>{trait.name}</p>
                 </div>
-                <p>{trait.name}</p>
-              </div>
-            ))
-          ) : (
-            <div className="empty">No results found</div>
-          )}
-        </div>
-        <div className="button-container">
-          <button
-            onClick={onHandleSubmit}
-            className={`${selectedTraits.length < 3 ? "hide" : ""}`}
-          >
-            Get me rolling
-          </button>
+              ))
+            ) : (
+              <div className="empty">No results found</div>
+            )}
+          </div>
+          <div className="button-container">
+            <button
+              onClick={onHandleSubmit}
+              className={`${selectedTraits.length < 3 ? "hide" : ""}`}
+            >
+              Get me rolling
+            </button>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

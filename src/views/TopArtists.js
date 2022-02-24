@@ -7,6 +7,7 @@ import useTopArtists from "../hooks/useTopArtists";
 import { userState } from "../recoil/userAtom";
 import { setMediaSession } from "../util/functions";
 import logo from "../assets/images/logo-black.png";
+import CustomHelmet from "../components/CustomHelmet";
 
 const TopArtists = () => {
   const user = useRecoilValue(userState);
@@ -107,30 +108,39 @@ const TopArtists = () => {
   };
 
   return (
-    <div className="dashboard-container">
-      <div className="dashboard">
-        <div>
-          <ArtistList
-            currentArtist={currentArtist}
-            artists={user && user.topArtistsLong && user.topArtistsLong.artists}
-            changeArtist={handleArtistChange}
+    <>
+      <CustomHelmet
+        title="Top Artists"
+        description="Get your top artists"
+        keywords="Top Artists"
+      />
+      <div className="dashboard-container">
+        <div className="dashboard">
+          <div>
+            <ArtistList
+              currentArtist={currentArtist}
+              artists={
+                user && user.topArtistsLong && user.topArtistsLong.artists
+              }
+              changeArtist={handleArtistChange}
+            />
+            <WebPlayer
+              url={audioUrl}
+              prevPlay={handlePrevPlay}
+              nextPlay={handleNextPlay}
+              shufflePlay={handleShufflePlay}
+            />
+          </div>
+          <Carousel
+            data={user && user.topArtistsLong && user.topArtistsLong.images}
+            current={currentArtist}
           />
-          <WebPlayer
-            url={audioUrl}
-            prevPlay={handlePrevPlay}
-            nextPlay={handleNextPlay}
-            shufflePlay={handleShufflePlay}
-          />
-        </div>
-        <Carousel
-          data={user && user.topArtistsLong && user.topArtistsLong.images}
-          current={currentArtist}
-        />
-        <div className="heading">
-          <p>Your Top Artists Radio</p>
+          <div className="heading">
+            <p>Your Top Artists Radio</p>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

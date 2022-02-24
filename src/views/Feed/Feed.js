@@ -7,6 +7,7 @@ import { copyToClipboard, setMediaSession } from "../../util/functions";
 import Skeleton from "../../components/Skeleton";
 import { useSetRecoilState } from "recoil";
 import { alertAtom } from "../../recoil/alertAtom";
+import CustomHelmet from "../../components/CustomHelmet";
 
 export const decodeJWT = () => {
   const access_token = localStorage.getItem("accessToken");
@@ -126,64 +127,71 @@ const Feed = () => {
   };
 
   return (
-    <div className="feed-container">
-      <div className="feed-wrapper">
-        {posts.length > 0
-          ? posts.map((post) => (
-              <Post
-                key={post.feed_id}
-                data={post}
-                userId={userId}
-                playSong={handlePlaySong}
-                likePost={handleLikePost}
-                audioUrl={currentSong.audioUrl}
-                sharePost={handleSharePost}
-              />
-            ))
-          : [0, 1, 2, 3, 4, 5].map((item) => (
-              <div className="ind-post" key={item}>
-                <div className="post-header">
-                  <div className="image-container" style={{ border: "none" }}>
+    <>
+      <CustomHelmet
+        title="Feed"
+        description="See what other people post"
+        keywords="Feed, Post, Explore"
+      />
+      <div className="feed-container">
+        <div className="feed-wrapper">
+          {posts.length > 0
+            ? posts.map((post) => (
+                <Post
+                  key={post.feed_id}
+                  data={post}
+                  userId={userId}
+                  playSong={handlePlaySong}
+                  likePost={handleLikePost}
+                  audioUrl={currentSong.audioUrl}
+                  sharePost={handleSharePost}
+                />
+              ))
+            : [0, 1, 2, 3, 4, 5].map((item) => (
+                <div className="ind-post" key={item}>
+                  <div className="post-header">
+                    <div className="image-container" style={{ border: "none" }}>
+                      <Skeleton type="text" />
+                    </div>
+                    <div className="content-container">
+                      <Skeleton type="text" />
+                      <Skeleton type="text" />
+                    </div>
+                  </div>
+                  <div className="post-content">
                     <Skeleton type="text" />
                   </div>
-                  <div className="content-container">
-                    <Skeleton type="text" />
+                  <div className="post-song">
+                    <div className="image-container">
+                      <Skeleton type="text" />
+                    </div>
+                    <div className="content-container">
+                      <Skeleton type="text" />
+                      <Skeleton type="text" />
+                    </div>
+                  </div>
+                  <div className="post-socials">
                     <Skeleton type="text" />
                   </div>
                 </div>
-                <div className="post-content">
-                  <Skeleton type="text" />
-                </div>
-                <div className="post-song">
-                  <div className="image-container">
-                    <Skeleton type="text" />
-                  </div>
-                  <div className="content-container">
-                    <Skeleton type="text" />
-                    <Skeleton type="text" />
-                  </div>
-                </div>
-                <div className="post-socials">
-                  <Skeleton type="text" />
-                </div>
-              </div>
-            ))}
-      </div>
-      {loadMore && posts.length > 0 ? (
-        <div className="load-more">
-          <button onClick={() => setPageIndex((prev) => prev + 1)}>
-            Load More Posts
-          </button>
+              ))}
         </div>
-      ) : null}
-      {currentSong.audioUrl && (
-        <WebPlayer
-          url={currentSong.audioUrl}
-          nextPlay={handleStopSong}
-          noControls={true}
-        />
-      )}
-    </div>
+        {loadMore && posts.length > 0 && (pageIndex + 1) * 20 < posts.length ? (
+          <div className="load-more">
+            <button onClick={() => setPageIndex((prev) => prev + 1)}>
+              Load More Posts
+            </button>
+          </div>
+        ) : null}
+        {currentSong.audioUrl && (
+          <WebPlayer
+            url={currentSong.audioUrl}
+            nextPlay={handleStopSong}
+            noControls={true}
+          />
+        )}
+      </div>
+    </>
   );
 };
 

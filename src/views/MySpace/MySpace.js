@@ -3,6 +3,7 @@ import { IoMdClose } from "react-icons/io";
 import { MdEdit, MdSave } from "react-icons/md";
 import { useParams } from "react-router";
 import { useRecoilState, useSetRecoilState } from "recoil";
+import CustomHelmet from "../../components/CustomHelmet";
 import WebPlayer from "../../components/WebPlayer";
 import { alertAtom } from "../../recoil/alertAtom";
 import { userState } from "../../recoil/userAtom";
@@ -57,10 +58,12 @@ const MySpace = () => {
     }
   }, [modal.open]);
 
-  useEffect(async () => {
-    if (handle && handle !== "myspace") {
-      apiCall();
-    }
+  useEffect(() => {
+    (async () => {
+      if (handle && handle !== "myspace") {
+        await apiCall();
+      }
+    })();
   }, [handle]);
 
   useEffect(() => {
@@ -364,85 +367,100 @@ const MySpace = () => {
   };
 
   return (
-    <div className="mySpace">
-      <Intro
-        user={data.currentUser}
-        currentSong={currentSong}
-        edit={editMode}
-        editData={editData}
-        setEditData={setEditData}
-        handlePause={handlePause}
-        handlePlaySong={handlePlaySong}
-      />
-      <TrackList
-        data={data && data.tracks}
-        currentSong={currentSong}
-        songNumber={currentSong.trackNumber}
-        handlePause={handlePause}
-        handleSetAndPlayTrack={handlePlaySong}
-        onLeftClicked={onLeftClicked}
-        onRightClicked={onRightClicked}
-        edit={editMode}
-        editData={editData}
-        setEditData={setEditData}
-      />
-      <ArtistList
-        data={data && data.artists}
-        currentSong={currentSong}
-        songNumber={currentSong.artistNumber}
-        handlePause={handlePause}
-        handleSetAndPlayArtist={handlePlayArtist}
-        onLeftClicked={onLeftClicked}
-        onRightClicked={onRightClicked}
-        edit={editMode}
-        editData={editData}
-        setEditData={setEditData}
-      />
-      {data && data.playlists && (
-        <Playlist
-          data={data && data.playlists}
+    <>
+      {handle ? (
+        <CustomHelmet
+          title={`My Space | ${handle}`}
+          description={`${handle} | Your personal music space`}
+          keywords={`My Space, ${handle}`}
+        />
+      ) : (
+        <CustomHelmet
+          title="My Space"
+          description="Your persona; music space"
+          keywords="My Space"
+        />
+      )}
+      <div className="mySpace">
+        <Intro
+          user={data.currentUser}
+          currentSong={currentSong}
+          edit={editMode}
+          editData={editData}
+          setEditData={setEditData}
+          handlePause={handlePause}
+          handlePlaySong={handlePlaySong}
+        />
+        <TrackList
+          data={data && data.tracks}
+          currentSong={currentSong}
+          songNumber={currentSong.trackNumber}
+          handlePause={handlePause}
+          handleSetAndPlayTrack={handlePlaySong}
           onLeftClicked={onLeftClicked}
           onRightClicked={onRightClicked}
-          openPlaylistModal={openPlaylistModal}
           edit={editMode}
           editData={editData}
           setEditData={setEditData}
         />
-      )}
-      {handle && <Musixpieces handle={handle} />}
-      {currentSong.audioUrl && (
-        <WebPlayer
-          url={currentSong.audioUrl}
-          nextPlay={handleNextPlay}
-          noControls={true}
+        <ArtistList
+          data={data && data.artists}
+          currentSong={currentSong}
+          songNumber={currentSong.artistNumber}
+          handlePause={handlePause}
+          handleSetAndPlayArtist={handlePlayArtist}
+          onLeftClicked={onLeftClicked}
+          onRightClicked={onRightClicked}
+          edit={editMode}
+          editData={editData}
+          setEditData={setEditData}
         />
-      )}
-      {currentSong.songId && !currentSong.audioUrl && handleNextPlay()}
-      {modal.open && (
-        <PlaylistModal
-          data={modal.data}
-          close={() => setModal({ ...modal, data: null, open: false })}
-          isEdit={false}
-        />
-      )}
-      {!editMode && handle === localStorage.getItem("handle") && (
-        <div className="floating-buttons">
-          <button onClick={() => setEditMode(true)}>
-            <MdEdit />
-          </button>
-        </div>
-      )}
-      {editMode && (
-        <div className="floating-buttons">
-          <button onClick={() => setEditMode(false)}>
-            <IoMdClose />
-          </button>
-          <button onClick={handleSave}>
-            <MdSave />
-          </button>
-        </div>
-      )}
-    </div>
+        {data && data.playlists && (
+          <Playlist
+            data={data && data.playlists}
+            onLeftClicked={onLeftClicked}
+            onRightClicked={onRightClicked}
+            openPlaylistModal={openPlaylistModal}
+            edit={editMode}
+            editData={editData}
+            setEditData={setEditData}
+          />
+        )}
+        {handle && <Musixpieces handle={handle} />}
+        {currentSong.audioUrl && (
+          <WebPlayer
+            url={currentSong.audioUrl}
+            nextPlay={handleNextPlay}
+            noControls={true}
+          />
+        )}
+        {currentSong.songId && !currentSong.audioUrl && handleNextPlay()}
+        {modal.open && (
+          <PlaylistModal
+            data={modal.data}
+            close={() => setModal({ ...modal, data: null, open: false })}
+            isEdit={false}
+          />
+        )}
+        {!editMode && handle === localStorage.getItem("handle") && (
+          <div className="floating-buttons">
+            <button onClick={() => setEditMode(true)}>
+              <MdEdit />
+            </button>
+          </div>
+        )}
+        {editMode && (
+          <div className="floating-buttons">
+            <button onClick={() => setEditMode(false)}>
+              <IoMdClose />
+            </button>
+            <button onClick={handleSave}>
+              <MdSave />
+            </button>
+          </div>
+        )}
+      </div>
+    </>
   );
 };
 

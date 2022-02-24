@@ -6,6 +6,7 @@ import useDebounceCallback from "../hooks/useDebounce";
 import { axiosInstance } from "../util/axiosConfig";
 import { useSetRecoilState } from "recoil";
 import { alertAtom } from "../recoil/alertAtom";
+import CustomHelmet from "../components/CustomHelmet";
 
 const ReadyToRock = () => {
   const history = useHistory();
@@ -85,77 +86,84 @@ const ReadyToRock = () => {
   };
 
   return (
-    <div className="readyToRock">
-      <form className="container" onSubmit={handleSubmit}>
-        <div className="title">Ready to rock your space?</div>
-        <div className="input-fields">
-          <div>
-            <GoMail />
-            <input
-              value={data.email}
-              onChange={(e) => setData({ ...data, email: e.target.value })}
-              type="text"
-              placeholder="Your rocking email"
-            />
+    <>
+      <CustomHelmet
+        title="Ready To Rock"
+        description="Get started with your music journey"
+        keywords="Ready To Rock, Sign Up"
+      />
+      <div className="readyToRock">
+        <form className="container" onSubmit={handleSubmit}>
+          <div className="title">Ready to rock your space?</div>
+          <div className="input-fields">
+            <div>
+              <GoMail />
+              <input
+                value={data.email}
+                onChange={(e) => setData({ ...data, email: e.target.value })}
+                type="text"
+                placeholder="Your rocking email"
+              />
+            </div>
+            <div>
+              <GoPencil />
+              <input
+                value={data.username}
+                onChange={(e) => setData({ ...data, username: e.target.value })}
+                type="text"
+                placeholder="A cool username"
+              />
+            </div>
+            <div>
+              <FaMusic />
+              <input
+                value={data.anthem.name}
+                onChange={(e) =>
+                  setData({
+                    ...data,
+                    anthem: { id: null, name: e.target.value },
+                  })
+                }
+                type="text"
+                placeholder="Your Anthem"
+              />
+            </div>
+            {anthemStore.length > 0 && (
+              <ul className="anthem-options">
+                {!data.anthem.id &&
+                  anthemStore.map((item) => (
+                    <li
+                      key={item.id}
+                      onClick={() => {
+                        setData({
+                          ...data,
+                          anthem: { id: item.id, name: item.name },
+                        });
+                        setAnthemStore([]);
+                      }}
+                    >
+                      <div className="image-container">
+                        <img src={item.image_url} alt={item.name} />
+                      </div>
+                      <span>{item.name}</span>
+                    </li>
+                  ))}
+              </ul>
+            )}
           </div>
-          <div>
-            <GoPencil />
-            <input
-              value={data.username}
-              onChange={(e) => setData({ ...data, username: e.target.value })}
-              type="text"
-              placeholder="A cool username"
-            />
+          <div className="button-div">
+            <button
+              type="submit"
+              className={`${
+                data.username && data.anthem.id && data.email ? "" : "hide"
+              }`}
+            >
+              I'm Ready
+            </button>
           </div>
-          <div>
-            <FaMusic />
-            <input
-              value={data.anthem.name}
-              onChange={(e) =>
-                setData({
-                  ...data,
-                  anthem: { id: null, name: e.target.value },
-                })
-              }
-              type="text"
-              placeholder="Your Anthem"
-            />
-          </div>
-          {anthemStore.length > 0 && (
-            <ul className="anthem-options">
-              {!data.anthem.id &&
-                anthemStore.map((item) => (
-                  <li
-                    key={item.id}
-                    onClick={() => {
-                      setData({
-                        ...data,
-                        anthem: { id: item.id, name: item.name },
-                      });
-                      setAnthemStore([]);
-                    }}
-                  >
-                    <div className="image-container">
-                      <img src={item.image_url} alt={item.name} />
-                    </div>
-                    <span>{item.name}</span>
-                  </li>
-                ))}
-            </ul>
-          )}
-        </div>
-        <div className="button-div">
-          <button
-            type="submit"
-            className={`${
-              data.username && data.anthem.id && data.email ? "" : "hide"
-            }`}
-          >
-            I'm Ready
-          </button>
-        </div>
-      </form>
-    </div>
+        </form>
+      </div>
+    </>
   );
 };
 
