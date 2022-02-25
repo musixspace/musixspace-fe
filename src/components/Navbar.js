@@ -121,7 +121,8 @@ const Navbar = () => {
     //   participants: [item.from_id, item.to_id],
     // });
     // history.push("/chat", { chat_id: item.chatId });
-    setRedirectChat(item.chatId);
+    if (item.notification_type === "chat") setRedirectChat(item.chatId);
+    else setRedirectChat("req");
     setNotifications([]);
   };
 

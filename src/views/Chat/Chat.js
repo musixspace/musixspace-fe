@@ -14,6 +14,12 @@ const Chat = (props) => {
   const { selectedChat, setSelectedChat } = useChat();
   const selected_chat_id = props.location.state?.chat_id;
 
+  useEffect(() => {
+    if (selected_chat_id === "req") {
+      setTab(1);
+    }
+  }, [selected_chat_id]);
+
   const { width } = useWindowSize();
 
   useEffect(() => {
@@ -46,7 +52,9 @@ const Chat = (props) => {
                 ) : (
                   <Chats
                     setShowChat={setShowChat}
-                    selected_chat_id={selected_chat_id}
+                    selected_chat_id={
+                      selected_chat_id === "req" ? null : selected_chat_id
+                    }
                   />
                 )}
               </div>

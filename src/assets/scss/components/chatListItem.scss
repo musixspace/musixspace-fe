@@ -53,12 +53,28 @@
   .cli-time-container {
     justify-self: flex-end;
     align-self: flex-start;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 
     height: 100%;
-    span {
+    p:nth-child(1) {
       color: var(--clr-black-4);
       font-size: calc(var(--base-font-size) * 2);
       font-family: var(--f-circ-pro);
+    }
+    p:nth-child(2) {
+      color: var(--clr-white);
+      font-size: calc(var(--base-font-size) * 1.4);
+      font-family: var(--f-circ-pro);
+      height: 22px;
+      width: 22px;
+      border-radius: 50%;
+      background: $skeletonDiscover;
+      padding: 0.5em;
+      display: grid;
+      place-items: center;
     }
   }
 

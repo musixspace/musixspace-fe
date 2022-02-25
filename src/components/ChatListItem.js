@@ -1,11 +1,28 @@
 import moment from "moment";
+import { useMemo } from "react";
 
 import logo from "../assets/images/logo-black.png";
 import { useChat } from "../context/chatContext";
 import { getFormattedTime } from "../util/functions";
 
 const ChatItemList = ({ chat, setShowChat }) => {
-  const { selectedChat, setSelectedChat } = useChat();
+  const { selectedChat, setSelectedChat, setChats } = useChat();
+
+  const handleClick = () => {
+    setShowChat(true);
+    setSelectedChat(chat);
+    setChats((prev) => {
+      return prev.map((item) => {
+        if (item.chat_id === chat.chat_id) {
+          return {
+            ...item,
+            unread_count: 0,
+          };
+        }
+        return { ...item };
+      });
+    });
+  };
 
   return (
     <div
@@ -13,8 +30,7 @@ const ChatItemList = ({ chat, setShowChat }) => {
         selectedChat?.chat_id === chat?.chat_id && "selected-chat"
       }`}
       onClick={() => {
-        setShowChat(true);
-        setSelectedChat(chat);
+        handleClick();
       }}
     >
       <div className="cli-image-container">
@@ -30,7 +46,8 @@ const ChatItemList = ({ chat, setShowChat }) => {
           </div>
         </div>
         <div className="cli-time-container">
-          <span>{getFormattedTime(chat.lastMessage.created_at)}</span>
+          <p>{getFormattedTime(chat.lastMessage.created_at)}</p>
+          {chat.unread_count > 0 && <p>{chat.unread_count || ""}</p>}
         </div>
       </div>
     </div>
