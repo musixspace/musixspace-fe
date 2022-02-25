@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Route, Switch, useLocation } from "react-router-dom";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { io } from "socket.io-client";
@@ -33,7 +33,6 @@ const App = () => {
   const [socket, setSocket] = useState(null);
 
   const location = useLocation();
-  console.log(location);
 
   // State for chat context
   const [selectedChat, setSelectedChat] = useState(null);
@@ -69,7 +68,7 @@ const App = () => {
         window.innerHeight +
         "px, width=" +
         window.innerWidth +
-        "px, initial-scale=1.0"
+        "px, initial-scale=1.0",
     );
   }, []);
 
@@ -102,6 +101,48 @@ const App = () => {
     };
   }, [isAuthenticated]);
 
+  const updateLastMessageForChat = (newMessage, chat_id) => {
+    console.log(chats, "ppppp");
+    setChats((prev) => {
+      const updatedChats = prev.map((chat) => {
+        if (chat.chat_id === chat_id) {
+          return {
+            ...chat,
+            lastMessage: {
+              content:
+                newMessage.type === "song"
+                  ? "Sent a song"
+                  : newMessage.content.message,
+              created_at: newMessage.created_at,
+            },
+          };
+        }
+        return { ...chat };
+      });
+
+      const newestChat = updatedChats.find((chat) => chat.chat_id === chat_id);
+
+      const newUpdatedChats = updatedChats.filter(
+        (chat) => chat.chat_id != chat_id,
+      );
+      return [newestChat, ...newUpdatedChats];
+    });
+  };
+
+  const updateUnread_count = (chat_id, flag) => {
+    setChats((prev) => {
+      return prev.map((item) => {
+        if (item.chat_id === chat_id && flag) {
+          return {
+            ...item,
+            unread_count: item.unread_count ? item.unread_count + 1 : 1,
+          };
+        }
+        return { ...item };
+      });
+    });
+  };
+
   useEffect(() => {
     if (socket) {
       socket.on("error", ({ err }) => {
@@ -109,44 +150,48 @@ const App = () => {
       });
 
       const receiveHandler = ({ chatId, ...res }) => {
+        let flag = false;
         if (location.pathname !== "/chat") {
-          setNotifications((prev) => [...prev, { chatId, ...res }]);
+          setNotifications((prev) => [
+            ...prev,
+            { chatId, ...res, notification_type: "chat" },
+          ]);
+          flag = true;
         } else {
           if (!selectedChat) {
-            setNotifications((prev) => [...prev, { chatId, ...res }]);
+            setNotifications((prev) => [
+              ...prev,
+              { chatId, ...res, notification_type: "chat" },
+            ]);
+            flag = true;
           } else if (selectedChat.chat_id !== chatId) {
-            setNotifications((prev) => [...prev, { chatId, ...res }]);
+            setNotifications((prev) => [
+              ...prev,
+              { chatId, ...res, notification_type: "chat" },
+            ]);
+            flag = true;
           }
           updateLastMessageForChat(res, chatId);
         }
+        updateUnread_count(chatId, flag);
+      };
+
+      const receiveRequestHandler = (req) => {
+        setNotifications((prev) => [
+          ...prev,
+          { ...req, notification_type: "request" },
+        ]);
       };
 
       socket.on("recv_msg", receiveHandler);
+      socket.on("receive-request", receiveRequestHandler);
 
       return () => {
         socket.off("recv_msg", receiveHandler);
+        socket.off("receive-request", receiveRequestHandler);
       };
     }
   }, [socket, selectedChat]);
-
-  const updateLastMessageForChat = (newMessage, chat_id) => {
-    const updatedChats = chats.map((chat) => {
-      if (chat.chat_id === chat_id) {
-        return {
-          ...chat,
-          lastMessage: {
-            content:
-              newMessage.type === "song"
-                ? "Sent a song"
-                : newMessage.content.message,
-            created_at: newMessage.created_at,
-          },
-        };
-      }
-      return chat;
-    });
-    setChats(updatedChats);
-  };
 
   return (
     <SocketContext.Provider value={{ socket }}>

@@ -17,7 +17,6 @@ const Chats = ({ setShowChat, selected_chat_id }) => {
             setSelectedChat(item);
           }
         });
-        console.log(resp.data);
       } catch (error) {
         console.log(error);
       }
