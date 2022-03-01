@@ -2,4 +2,4 @@
 User-agent: *
 Disallow:
 
-Sitemap: http://35.154.242.251/sitemap.xml
+Sitemap: https://musixspace.com/sitemap.xml
