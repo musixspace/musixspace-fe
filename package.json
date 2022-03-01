@@ -29,10 +29,10 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "CI=false react-scripts build",
+    "sitemap": "babel-node ./sitemap-generator.js",
+    "build": "yarn run sitemap && CI=false react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "sitemap": "babel-node ./sitemap-generator.js"
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": [

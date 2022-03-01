@@ -9,10 +9,10 @@ const Sitemap = require("react-router-sitemap").default;
 
 const generateSitemap = async () => {
   const users = await axios.get(
-    "http://35.154.242.251/api/sitemap/getAllUsers"
+    "https://musixspace.com/api/sitemap/getAllUsers",
   );
   const feeds = await axios.get(
-    "http://35.154.242.251/api/sitemap/getAllFeeds"
+    "https://musixspace.com/api/sitemap/getAllFeeds",
   );
 
   const handleMap = [],
@@ -36,7 +36,7 @@ const generateSitemap = async () => {
 
   return new Sitemap(router)
     .applyParams(paramsConfig)
-    .build("http://35.154.242.251")
+    .build("https://musixspace.com")
     .save("./public/sitemap.xml");
 };
 
