@@ -26,6 +26,7 @@ import Rolling from "./views/Rolling";
 import SurpriseMe from "./views/SurpriseMe";
 import TopArtists from "./views/TopArtists";
 import TopTracks from "./views/TopTracks";
+import { setUs } from "./util/recoilAccesor";
 
 const code = new URLSearchParams(window.location.search).get("code");
 
@@ -47,6 +48,7 @@ const App = () => {
   const { getUserProfile } = useProfile();
 
   useEffect(() => {
+    setUs(setAlert);
     if (
       localStorage.getItem("accessToken") &&
       !window.location.href.includes("insights") &&

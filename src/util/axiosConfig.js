@@ -1,4 +1,5 @@
 import axios from "axios";
+import { _fn } from "./recoilAccesor";
 
 export const axiosInstance = axios.create({
   baseURL: `${process.env.REACT_APP_BACKEND_URI}`,
@@ -20,7 +21,7 @@ axiosInstance.interceptors.request.use(
   function (error) {
     console.log(error);
     return Promise.reject(error);
-  }
+  },
 );
 
 axiosInstance.interceptors.response.use(
@@ -29,9 +30,18 @@ axiosInstance.interceptors.response.use(
   },
   function (error) {
     console.log(error.response);
-    // if (error.response.status === 401 || error.response.status === 403) {
-    //   window.location.href = window.location.origin + "/logout";
-    // }
+    if (error.response.status === 401) {
+      if ((error.response.data.msg = "Session Expired!")) {
+        _fn({
+          open: true,
+          message: "Session Expired",
+          type: "error",
+        });
+        setTimeout(() => {
+          window.location.href = window.location.origin + "/logout";
+        }, 0);
+      }
+    }
     return Promise.reject(error);
-  }
+  },
 );
