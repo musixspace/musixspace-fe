@@ -25,7 +25,7 @@
 @import "./components/audio.scss";
 @import "./components/requestListItem.scss";
 @import "./components/chatListItem.scss";
-:root  {
+:root {
   /* Colors */
   --bg-top-tracks: #483048;
   --bg-insights: #ffc7cc;
@@ -206,4 +206,8 @@ button {
 .colorThief {
   margin-top: 10vh;
   color: white;
+}
+
+iframe {
+  pointer-events: none;
 }

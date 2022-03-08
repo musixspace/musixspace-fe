@@ -8,6 +8,7 @@ import Skeleton from "../../components/Skeleton";
 import { useSetRecoilState } from "recoil";
 import { alertAtom } from "../../recoil/alertAtom";
 import CustomHelmet from "../../components/CustomHelmet";
+import { useHistory } from "react-router-dom";
 
 export const decodeJWT = () => {
   const access_token = localStorage.getItem("accessToken");
@@ -15,6 +16,7 @@ export const decodeJWT = () => {
 };
 
 const Feed = () => {
+  const history = useHistory();
   const [posts, setPosts] = useState([]);
   const [pageIndex, setPageIndex] = useState(0);
   const [loadMore, setLoadMore] = useState(true);
@@ -64,7 +66,8 @@ const Feed = () => {
     }
   }, [currentSong.audioUrl]);
 
-  const handleLikePost = (feedId) => {
+  const handleLikePost = (e, feedId) => {
+    e.stopPropagation();
     axiosInstance
       .put(`/feed/${feedId}`)
       .then((res) => {
@@ -85,7 +88,8 @@ const Feed = () => {
       });
   };
 
-  const handleSharePost = (feedId) => {
+  const handleSharePost = (e, feedId) => {
+    e.stopPropagation();
     const link = window.location.origin + "/feed/" + feedId;
     copyToClipboard(link)
       .then(() => {
@@ -102,6 +106,11 @@ const Feed = () => {
           message: "Error in copying link to clipboard!",
         });
       });
+  };
+
+  const handleOpenPost = (e, feed_id) => {
+    e.preventDefault();
+    history.push(`/feed/${feed_id}`);
   };
 
   const handlePlaySong = (data) => {
@@ -145,6 +154,7 @@ const Feed = () => {
                   likePost={handleLikePost}
                   audioUrl={currentSong.audioUrl}
                   sharePost={handleSharePost}
+                  openPost={handleOpenPost}
                 />
               ))
             : [0, 1, 2, 3, 4, 5].map((item) => (

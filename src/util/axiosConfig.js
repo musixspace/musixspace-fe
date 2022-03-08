@@ -21,7 +21,7 @@ axiosInstance.interceptors.request.use(
   function (error) {
     console.log(error);
     return Promise.reject(error);
-  },
+  }
 );
 
 axiosInstance.interceptors.response.use(
@@ -29,8 +29,7 @@ axiosInstance.interceptors.response.use(
     return response;
   },
   function (error) {
-    console.log(error.response);
-    if (error.response.status === 401) {
+    if (error?.response?.status === 401) {
       if ((error.response.data.msg = "Session Expired!")) {
         _fn({
           open: true,
@@ -43,5 +42,5 @@ axiosInstance.interceptors.response.use(
       }
     }
     return Promise.reject(error);
-  },
+  }
 );

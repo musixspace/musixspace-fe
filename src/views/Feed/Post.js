@@ -25,6 +25,7 @@ const Post = ({
   edit,
   deletePost,
   handle,
+  openPost,
 }) => {
   useLayoutEffect(() => {
     const div = document.querySelector(`div#post-${data.feed_id}`);
@@ -51,8 +52,16 @@ const Post = ({
   };
 
   return (
-    <div id={`post-${data.feed_id}`} className="ind-post">
-      <Link to={`/${data.username}`} className="post-header">
+    <div
+      id={`post-${data.feed_id}`}
+      className="ind-post"
+      onClick={(e) => openPost(e, data.feed_id)}
+    >
+      <Link
+        to={`/${data.username}`}
+        onClick={(e) => e.stopPropagation()}
+        className="post-header"
+      >
         <div className="image-container">
           <img
             src={data.user_url || logo}
@@ -79,7 +88,10 @@ const Post = ({
         className={`post-song ${
           audioUrl && audioUrl === data.preview_url ? "focus" : ""
         }`}
-        onClick={() => playSong(data)}
+        onClick={(e) => {
+          e.stopPropagation();
+          playSong(data);
+        }}
       >
         <div className="image-container">
           <img src={data.image_url || logo} alt={data.name} />
@@ -98,18 +110,18 @@ const Post = ({
         </div>
       </div>
       <div className="post-socials">
-        <button onClick={() => likePost(data.feed_id)}>
+        <button onClick={(e) => likePost(e, data.feed_id)}>
           {userId && data.likes.includes(userId) ? <FaHeart /> : <FaRegHeart />}
           <span>{data.likes.length}</span>
         </button>
-        <Link to={`/feed/${data.feed_id}`}>
+        <button onClick={(e) => openPost(e, data.feed_id)}>
           <FaRegComment /> <span>{data.total_comments}</span>
-        </Link>
-        <button onClick={() => sharePost(data.feed_id)}>
+        </button>
+        <button onClick={(e) => sharePost(e, data.feed_id)}>
           <FiUpload />
         </button>
         {canUserEdit() ? (
-          <button onClick={() => deletePost(data.feed_id)}>
+          <button onClick={(e) => deletePost(e, data.feed_id)}>
             <MdDelete />
           </button>
         ) : null}

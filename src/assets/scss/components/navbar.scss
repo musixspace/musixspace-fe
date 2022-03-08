@@ -127,7 +127,7 @@ nav {
 
         .profile-li {
           font-family: var(--f-circ-pro);
-          font-size: calc(var(--base-font-size) * 2.25);
+          font-size: calc(var(--base-font-size) * 2);
           width: 100%;
           color: inherit;
           cursor: pointer;
@@ -151,6 +151,19 @@ nav {
           width: 12px;
           height: 12px;
           transform: rotate(45deg);
+        }
+
+        &.notification-ul {
+          right: 25px;
+          &::after {
+            right: calc(50% - 12px);
+          }
+
+          .profile-li {
+            padding: 1em;
+            width: 200px;
+            text-align: left;
+          }
         }
       }
     }

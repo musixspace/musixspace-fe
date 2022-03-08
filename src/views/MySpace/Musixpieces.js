@@ -1,7 +1,7 @@
 import jwtDecode from "jwt-decode";
 import React, { useEffect, useState } from "react";
 import { FaPlus } from "react-icons/fa";
-import { useLocation } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import { useSetRecoilState } from "recoil";
 import WebPlayer from "../../components/WebPlayer";
 import { alertAtom } from "../../recoil/alertAtom";
@@ -17,6 +17,7 @@ const decodeJWT = () => {
 
 const Musixpieces = ({ handle }) => {
   const location = useLocation();
+  const history = useHistory();
   const setAlert = useSetRecoilState(alertAtom);
   const [posts, setPosts] = useState([]);
   const [pageIndex, setPageIndex] = useState(0);
@@ -68,7 +69,8 @@ const Musixpieces = ({ handle }) => {
     }
   }, [currentSong.audioUrl]);
 
-  const handleLikePost = (feedId) => {
+  const handleLikePost = (e, feedId) => {
+    e.stopPropagation();
     axiosInstance
       .put(`/feed/${feedId}`)
       .then((res) => {
@@ -89,7 +91,8 @@ const Musixpieces = ({ handle }) => {
       });
   };
 
-  const handleDeletePost = (feedId) => {
+  const handleDeletePost = (e, feedId) => {
+    e.stopPropagation();
     axiosInstance
       .delete(`/feed/${feedId}`)
       .then((res) => {
@@ -106,7 +109,8 @@ const Musixpieces = ({ handle }) => {
       });
   };
 
-  const handleSharePost = (feedId) => {
+  const handleSharePost = (e, feedId) => {
+    e.stopPropagation();
     const link = window.location.origin + "/feed/" + feedId;
     copyToClipboard(link)
       .then(() => {
@@ -123,6 +127,11 @@ const Musixpieces = ({ handle }) => {
           message: "Error in copying link to clipboard!",
         });
       });
+  };
+
+  const handleOpenPost = (e, feed_id) => {
+    e.preventDefault();
+    history.push(`/feed/${feed_id}`);
   };
 
   const handlePlaySong = (data) => {
@@ -159,7 +168,7 @@ const Musixpieces = ({ handle }) => {
       });
   };
 
-  return (
+  return posts.length > 0 || showAddPost ? (
     <div className="feed-container ">
       <p className="title">Musixpieces</p>
       <div className="feed-wrapper">
@@ -186,6 +195,7 @@ const Musixpieces = ({ handle }) => {
               edit={true}
               deletePost={handleDeletePost}
               handle={handle}
+              openPost={handleOpenPost}
             />
           ))}
         {showAddPost ? (
@@ -195,7 +205,7 @@ const Musixpieces = ({ handle }) => {
           />
         ) : null}
       </div>
-      {loadMore && posts.length > 0 ? (
+      {loadMore && posts.length > 0 && (pageIndex + 1) * 20 < posts.length ? (
         <div className="load-more">
           <button onClick={() => setPageIndex((prev) => prev + 1)}>
             Load More Posts
@@ -210,7 +220,7 @@ const Musixpieces = ({ handle }) => {
         />
       )}
     </div>
-  );
+  ) : null;
 };
 
 export default Musixpieces;

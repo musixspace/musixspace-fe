@@ -2,13 +2,15 @@
 @import "./mixins/d-flex.scss";
 @import "./mixins/hide_scrollbar.scss";
 
-.ind-post-container{
+.ind-post-container {
   height: 90vh;
 }
 
-.feed-container, .ind-post-container {
+.feed-container,
+.ind-post-container {
   margin-top: 10vh;
   padding: 2em 6em;
+  min-height: 90vh;
   @include d-flex(center, center, column);
   width: 100%;
   font-family: var(--f-circ-pro);
@@ -17,14 +19,15 @@
     background-color: $skeletonFeed;
   }
 
-  .feed-wrapper, .ind-post-wrapper{
+  .feed-wrapper,
+  .ind-post-wrapper {
     width: 100%;
     height: 100%;
     @include d-flex(space-around, center, row);
     flex-wrap: wrap;
     gap: 2em;
 
-    .ind-post{
+    .ind-post {
       width: 345px;
       height: calc(var(--base-font-size) * 45);
       border: 2px solid var(--clr-white);
@@ -36,7 +39,7 @@
       position: relative;
       overflow: hidden;
 
-      button.add-new-post{
+      button.add-new-post {
         width: 100%;
         height: 100%;
         left: 0;
@@ -48,16 +51,17 @@
         @include d-flex(center, center, row);
         gap: 10px;
 
-        svg{
+        svg {
           font-size: calc(var(--base-font-size) * 2);
         }
       }
 
-      .post-header, .post-song{
+      .post-header,
+      .post-song {
         @include d-flex(flex-start, center, row);
         gap: 1em;
         width: 100%;
-        .image-container{
+        .image-container {
           width: 48px;
           height: 48px;
           min-width: 48px;
@@ -65,7 +69,8 @@
           border: 2px solid var(--clr-white);
           border-radius: 50%;
           overflow: hidden;
-          img, .skeleton{
+          img,
+          .skeleton {
             width: 100%;
             height: 100%;
             object-fit: cover;
@@ -73,19 +78,19 @@
           }
         }
 
-        .content-container{
+        .content-container {
           @include d-flex(center, flex-start, column);
           width: 100%;
           > p {
             font-size: calc(var(--base-font-size) * 2);
           }
 
-          .skeleton{
+          .skeleton {
             width: 100%;
             height: 10px;
           }
 
-          .meta{
+          .meta {
             margin-top: calc(var(--base-font-size) * 0.5);
             @include d-flex(flex-start, center, row);
             flex-wrap: wrap;
@@ -95,13 +100,13 @@
             > p {
               font-family: inherit;
               @include d-flex(center, center, row);
-              > span{
+              > span {
                 margin-right: calc(var(--base-font-size) * 0.5);
                 height: 100%;
                 display: grid;
                 place-items: center;
 
-                svg{
+                svg {
                   font-size: calc(var(--base-font-size) * 1);
                 }
               }
@@ -110,17 +115,17 @@
         }
       }
 
-      .post-song{
+      .post-song {
         cursor: pointer;
         width: 100%;
-        .image-container{
+        .image-container {
           min-width: 64px;
           min-height: 64px;
           border-radius: 5px;
           border: none;
           position: relative;
 
-          svg{
+          svg {
             position: absolute;
             left: 50%;
             top: 50%;
@@ -131,52 +136,55 @@
           }
         }
 
-        &.focus, &:hover, &:focus{
+        &.focus,
+        &:hover,
+        &:focus {
           border-radius: 5px;
           background-color: rgba($color: #000000, $alpha: 0.1);
 
-          .image-container{
-            svg{
+          .image-container {
+            svg {
               display: block;
             }
           }
         }
       }
 
-      .post-socials{
+      .post-socials {
         width: 100%;
         @include d-flex(space-around, center, row);
-        button, a{
+        button,
+        a {
           color: inherit;
           display: grid;
           place-items: center;
           grid-template-columns: 1fr 1fr;
           gap: calc(var(--base-font-size) * 0.5);
-          svg{
+          svg {
             color: inherit;
             font-size: calc(var(--base-font-size) * 2.5);
           }
 
-          span{
+          span {
             font-size: calc(var(--base-font-size) * 1.75);
           }
         }
       }
 
-      .post-content{
+      .post-content {
         width: 100%;
 
-        .skeleton{
+        .skeleton {
           width: 100%;
           height: 40px;
         }
-        p{
+        p {
           font-size: calc(var(--base-font-size) * 2);
         }
       }
     }
 
-    .add-post-wrapper{
+    .add-post-wrapper {
       position: fixed;
       left: 0;
       top: 0;
@@ -186,7 +194,7 @@
       backdrop-filter: blur(5px);
       z-index: 100;
 
-      .add-post-container{
+      .add-post-container {
         position: absolute;
         left: 50%;
         top: 50%;
@@ -204,12 +212,12 @@
     }
   }
 
-  .load-more{
+  .load-more {
     width: 100%;
     display: grid;
     place-items: center;
     margin-top: 2em;
-    button{
+    button {
       width: 345px;
       max-width: 100%;
       border: 2px solid var(--clr-white);
@@ -219,74 +227,74 @@
       color: var(--clr-white);
       padding: 0.6em;
 
-      &:hover{
+      &:hover {
         background-color: rgba($color: #000000, $alpha: 0.1);
       }
     }
   }
 
-  .ind-post-wrapper{
+  .ind-post-wrapper {
     position: relative;
-    .ind-post{
+    .ind-post {
       width: 585px;
       height: 100%;
       padding: 2em;
       gap: 1em;
       justify-content: space-evenly;
 
-      .post-container{
+      .post-container {
         width: 100%;
         height: 45%;
         @include d-flex(space-between, flex-start, column);
       }
 
-      .comments-container{
+      .comments-container {
         width: 100%;
         height: 45%;
 
         @include d-flex(flex-start, space-evenly, column);
         gap: 1em;
 
-        .comments-header{
+        .comments-header {
           @include d-flex(space-between, center, row);
-          p{
+          p {
             text-transform: uppercase;
             font-size: calc(var(--base-font-size) * 2);
           }
 
-          .load-more{
+          .load-more {
             width: 160px;
-            button{
+            button {
               @include d-flex(center, center, row);
               gap: calc(var(--base-font-size) * 1);
               font-size: calc(var(--base-font-size) * 1.75);
               text-transform: unset;
 
-              svg{
+              svg {
                 font-size: calc(var(--base-font-size) * 1.5);
               }
 
-              &:hover{
+              &:hover {
                 background-color: rgba($color: #000000, $alpha: 0.1);
               }
             }
           }
         }
 
-        .comments-list{
+        .comments-list {
           overflow-y: auto;
           height: 220px;
           width: 100%;
 
           @include hideScrollbar();
 
-          .comment{
+          .comment {
             width: 100%;
             @include d-flex(flex-start, flex-start, row);
             gap: 1em;
             padding: 1em 0;
 
-            .image-container{
+            .image-container {
               width: 48px;
               height: 48px;
               min-width: 48px;
@@ -294,29 +302,29 @@
               border: 2px solid var(--clr-white);
               border-radius: 50%;
               overflow: hidden;
-            
-              img{
+
+              img {
                 object-fit: cover;
                 width: 100%;
                 height: 100%;
               }
             }
 
-            .content-container{
+            .content-container {
               width: 100%;
               @include d-flex(flex-start, flex-start, column);
               gap: calc(var(--base-font-size) * 1);
-              .content-header{
+              .content-header {
                 @include d-flex(flex-start, center, row);
                 flex-wrap: wrap;
                 gap: calc(var(--base-font-size) * 0.5);
 
-                > p{
+                > p {
                   font-size: calc(var(--base-font-size) * 1.75);
                   font-family: var(--f-circ-spotify);
                 }
 
-                .meta{
+                .meta {
                   @include d-flex(flex-start, center, row);
                   flex-wrap: wrap;
                   gap: calc(var(--base-font-size) * 0.5);
@@ -325,13 +333,13 @@
                   > p {
                     font-family: inherit;
                     @include d-flex(center, center, row);
-                    > span{
+                    > span {
                       margin-right: calc(var(--base-font-size) * 0.5);
                       height: 100%;
                       display: grid;
                       place-items: center;
-      
-                      svg{
+
+                      svg {
                         font-size: calc(var(--base-font-size) * 1);
                       }
                     }
@@ -339,17 +347,17 @@
                 }
               }
 
-              p.comment-main{
+              p.comment-main {
                 font-family: var(--f-circ-pro);
                 font-size: calc(var(--base-font-size) * 2);
               }
 
-              .comment-song{
+              .comment-song {
                 width: 100%;
                 @include d-flex(flex-start, center, row);
                 gap: 1em;
-                
-                .image-container{
+
+                .image-container {
                   position: relative;
                   width: 64px;
                   height: 64px;
@@ -359,13 +367,13 @@
                   border: none;
                   overflow: hidden;
 
-                  img{
+                  img {
                     width: 100%;
                     height: 100%;
                     object-fit: cover;
                   }
 
-                  svg{
+                  svg {
                     position: absolute;
                     left: 50%;
                     top: 50%;
@@ -376,47 +384,49 @@
                   }
                 }
 
-                .content-container{
-                  p{
-                    &:first-child{
+                .content-container {
+                  p {
+                    &:first-child {
                       font-size: calc(var(--base-font-size) * 1.75);
                     }
 
-                    &:nth-child(2){
+                    &:nth-child(2) {
                       font-size: calc(var(--base-font-size) * 1.5);
                     }
                   }
                 }
 
-                &.focus, &:hover, &:focus{
+                &.focus,
+                &:hover,
+                &:focus {
                   cursor: pointer;
                   border-radius: 5px;
                   background-color: rgba($color: #000000, $alpha: 0.1);
-        
-                  .image-container{
-                    svg{
+
+                  .image-container {
+                    svg {
                       display: block;
                     }
                   }
                 }
               }
 
-              .comment-socials{
+              .comment-socials {
                 width: 100%;
                 @include d-flex(flex-start, center, row);
                 gap: 1em;
-                button{
+                button {
                   color: inherit;
                   @include d-flex(center, center, row);
                   gap: calc(var(--base-font-size) * 1);
                   grid-template-columns: 1fr 1fr;
 
-                  svg{
+                  svg {
                     color: inherit;
                     font-size: calc(var(--base-font-size) * 2);
                   }
 
-                  p{
+                  p {
                     font-size: calc(var(--base-font-size) * 1.5);
                   }
                 }
@@ -424,15 +434,15 @@
             }
           }
 
-          > p{
+          > p {
             text-align: center;
           }
         }
       }
 
-      .load-more{
+      .load-more {
         margin-top: 0;
-        button{
+        button {
           width: 100%;
         }
       }
@@ -440,9 +450,7 @@
   }
 }
 
-
-
-.new-comment{
+.new-comment {
   position: absolute;
   left: 50%;
   top: 52%;
@@ -458,72 +466,73 @@
   gap: 1.75em;
 }
 
-.new-comment-header, .new-post-header{
+.new-comment-header,
+.new-post-header {
   width: 100%;
   @include d-flex(space-between, center, row);
 
-  p{
+  p {
     font-size: calc(var(--base-font-size) * 2);
     font-family: var(--f-circ-pro);
     text-transform: uppercase;
   }
 
-  button{
-    svg{
+  button {
+    svg {
       color: var(--clr-white);
       font-size: calc(var(--base-font-size) * 2.5);
     }
   }
 }
 
-
-.new-comment-subheading, .new-post-subheading{
+.new-comment-subheading,
+.new-post-subheading {
   width: 100%;
   @include d-flex(space-between, center, row);
 
-  .user-info{
+  .user-info {
     @include d-flex(flex-start, center, row);
     gap: 1em;
-    .image-container{
+    .image-container {
       width: 48px;
       height: 48px;
       border-radius: 50%;
       border: 2px solid var(--clr-white);
       overflow: hidden;
 
-      img{
+      img {
         width: 100%;
         height: 100%;
         object-fit: cover;
       }
     }
 
-    .user-meta{
-      p{
-        &:first-child{
+    .user-meta {
+      p {
+        &:first-child {
           font-family: var(--f-circ-spotify);
           font-size: calc(var(--base-font-size) * 2);
         }
 
-        &:nth-child(2){
+        &:nth-child(2) {
           font-size: calc(var(--base-font-size) * 1.5);
         }
       }
     }
   }
 
-  .load-more{
+  .load-more {
     margin-top: 0;
     @include d-flex(flex-end, center, row);
     width: 100px;
   }
 }
 
-
-.new-comment-input, .new-post-input{
+.new-comment-input,
+.new-post-input {
   width: 100%;
 
-  textarea{
+  textarea {
     background-color: transparent;
     width: 100%;
     border: 2px solid var(--clr-white);
@@ -534,43 +543,44 @@
     font-family: var(--f-circ-pro);
     font-size: calc(var(--base-font-size) * 2);
 
-    &::placeholder{
+    &::placeholder {
       color: inherit;
     }
   }
 }
 
-.new-post-input{
-  label{
+.new-post-input {
+  label {
     text-transform: uppercase;
     font-family: var(--f-circ-pro);
     font-size: calc(var(--base-font-size) * 2);
   }
 
-  textarea{
+  textarea {
     margin-top: 0.5em;
     color: var(--clr-white);
 
-    &::placeholder{
+    &::placeholder {
       color: var(--clr-white-2);
     }
   }
 }
 
-.new-comment-song, .new-post-song{
+.new-comment-song,
+.new-post-song {
   width: 100%;
   position: relative;
-  p{
+  p {
     text-transform: uppercase;
     font-family: var(--f-circ-pro);
     font-size: calc(var(--base-font-size) * 2);
   }
 
-  .song-container{
+  .song-container {
     margin-top: 0.5em;
     width: 100%;
 
-    input{
+    input {
       width: 100%;
       background-color: transparent;
       border: 2px solid var(--clr-white);
@@ -579,8 +589,8 @@
       font-size: calc(var(--base-font-size) * 2);
       outline: none;
       padding: 6px 12px;
-      
-      &::placeholder{
+
+      &::placeholder {
         color: inherit;
       }
     }
@@ -637,26 +647,27 @@
   }
 }
 
-.new-comment-preview-song, .new-post-preview-song{
+.new-comment-preview-song,
+.new-post-preview-song {
   width: 100%;
   border-radius: 5px;
   @include d-flex(flex-start, center, row);
   gap: 1em;
 
-  .image-container{
+  .image-container {
     width: 64px;
     height: 64px;
     border-radius: 5px;
     overflow: hidden;
     position: relative;
-    
-    img{
+
+    img {
       width: 100%;
       height: 100%;
       object-fit: cover;
     }
 
-    svg{
+    svg {
       position: absolute;
       left: 50%;
       top: 50%;
@@ -667,25 +678,27 @@
     }
   }
 
-  .song-info{
-    p{
-      &:first-child{
+  .song-info {
+    p {
+      &:first-child {
         font-size: calc(var(--base-font-size) * 2);
       }
 
-      &:nth-child(2){
+      &:nth-child(2) {
         font-size: calc(var(--base-font-size) * 1.5);
       }
     }
   }
 
-  &.focus, &:hover, &:focus{
+  &.focus,
+  &:hover,
+  &:focus {
     cursor: pointer;
     border-radius: 5px;
     background-color: rgba($color: #000000, $alpha: 0.1);
 
-    .image-container{
-      svg{
+    .image-container {
+      svg {
         display: block;
       }
     }
@@ -693,41 +706,43 @@
 }
 
 @media (max-width: 767px) {
-  .feed-container, .ind-post-container {
+  .feed-container,
+  .ind-post-container {
     padding: 1em 1.5em;
     margin-bottom: 10vh;
 
-    .feed-wrapper{
+    .feed-wrapper {
       .add-post-wrapper {
-        .add-post-container{
+        .add-post-container {
           width: 90%;
           padding: 2em 1.5em;
         }
       }
     }
 
-    .load-more{
-      button{
+    .load-more {
+      button {
         width: 100%;
       }
     }
   }
 
-  .ind-post-container{
+  .ind-post-container {
     height: 80vh;
-    .ind-post-wrapper{
-      .ind-post, .new-comment{
+    .ind-post-wrapper {
+      .ind-post,
+      .new-comment {
         width: 100%;
         padding: 1em;
         height: 100%;
         justify-content: space-evenly;
       }
 
-      .new-comment{
+      .new-comment {
         padding: 2em 1em;
       }
 
-      .new-comment{
+      .new-comment {
         justify-content: flex-start;
       }
     }

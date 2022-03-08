@@ -12,6 +12,7 @@ import Skeleton from "../components/Skeleton";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { discoverNumber, userState } from "../recoil/userAtom";
 import CustomHelmet from "../components/CustomHelmet";
+import CustomImage from "../components/CustomImage";
 
 const Discover = () => {
   const history = useHistory();
@@ -201,6 +202,10 @@ const Discover = () => {
                       src={item.image_url || logo}
                       alt={`${item.display_name}'s Profile'`}
                     />
+                    {/* <CustomImage
+                      src={item.image_url}
+                      alt={`${item.display_name}'s Profile'`}
+                    /> */}
                   </div>
                   <div className="name">{item.display_name}</div>
                 </li>

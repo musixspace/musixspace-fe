@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { FiLogOut, FiMenu, FiRefreshCcw, FiX } from "react-icons/fi";
 import { FaRegBell } from "react-icons/fa";
-import { Link, Redirect, useLocation } from "react-router-dom";
+import { FiLogOut, FiMenu, FiRefreshCcw, FiX } from "react-icons/fi";
+import { Link, Redirect, useHistory, useLocation } from "react-router-dom";
 import {
   useRecoilState,
   useRecoilValue,
@@ -9,12 +9,11 @@ import {
   useSetRecoilState,
 } from "recoil";
 import profile from "../assets/images/logo-black.png";
+import { useChat } from "../context/chatContext";
 import { alertAtom } from "../recoil/alertAtom";
 import { openSidebarAtom } from "../recoil/openSidebarAtom";
 import { userState } from "../recoil/userAtom";
 import { axiosInstance } from "../util/axiosConfig";
-import { useChat } from "../context/chatContext";
-import { useHistory } from "react-router-dom";
 
 const themeSwitch = (str) => {
   switch (str) {
@@ -89,6 +88,11 @@ const Navbar = () => {
       loggedInLinks[3].path = `/${username || localStorage.getItem("handle")}`;
     }
   }, [username, location.pathname]);
+
+  useEffect(() => {
+    console.log("here are the notifications");
+    console.log(notifications);
+  }, [notifications]);
 
   const handleReload = () => {
     const reloadSvgList = document.querySelectorAll(".reload>svg");
@@ -190,21 +194,21 @@ const Navbar = () => {
                 )}
                 <FaRegBell />
               </div>
-              {openNotification && (
-                <ul className="profile-ul">
-                  {notifications.map((item, index) => {
-                    return (
-                      <li className="profile-li">
-                        <div
-                          onClick={(e) => {
-                            goToChat(item);
-                          }}
-                        >
-                          tp
-                        </div>
-                      </li>
-                    );
-                  })}
+              {openNotification && notifications.length > 0 && (
+                <ul className="profile-ul notification-ul">
+                  {notifications.map((item, index) => (
+                    <li key={item.created_at} className="profile-li">
+                      <div
+                        onClick={(e) => {
+                          goToChat(item);
+                        }}
+                      >
+                        {item.type === "text"
+                          ? `Someone sent you a message : ${item.content.message}`
+                          : `Someone sent you a song : ${item.content.name}`}
+                      </div>
+                    </li>
+                  ))}
                 </ul>
               )}
               <div className="reload" onClick={handleReload}>
@@ -262,6 +266,30 @@ const Navbar = () => {
       <div className="ham">
         {localStorage.getItem("accessToken") ? (
           <>
+            <div
+              className="notification"
+              onClick={() => {
+                setOpenNotification((prev) => !prev);
+              }}
+            >
+              {notifications.length > 0 && <span>{notifications.length}</span>}
+              <FaRegBell />
+            </div>
+            {openNotification && (
+              <ul className="profile-ul notification-ul">
+                {notifications.map((item, index) => (
+                  <li className="profile-li">
+                    <div
+                      onClick={(e) => {
+                        goToChat(item);
+                      }}
+                    >
+                      Someone sent you a message : {item.content.message}
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            )}
             <button className="reload" onClick={handleReload}>
               <FiRefreshCcw />
             </button>
