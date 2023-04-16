@@ -2,12 +2,13 @@
   height: 90vh;
   margin-top: 10vh;
   padding: 2em 6em;
+  color:#000000;
 
   .chatWrapper {
     display: flex;
     height: 100%;
     width: 100%;
-    box-shadow: rgba(107, 107, 107, 0.384) 0px 4px 12px;
+    // box-shadow: rgba(107, 107, 107, 0.384) 0px 4px 12px;
 
     .chatPanel {
       flex: 1 1 30%;
@@ -101,7 +102,7 @@
 
     .chatWindow {
       flex: 1 1 70%;
-      background: orchid;
+      background: transparent;
 
       .chattyWrapper {
         display: flex;
@@ -111,11 +112,12 @@
         background-color: $skeletonDashboard;
 
         .chatHeader {
-          background-color: deepskyblue;
+          background-color: transparentize($color: #000000, $amount: 0);
           display: flex;
           align-items: center;
           height: 10%;
           padding: 0.5em 0.875em;
+          color: #fff;
 
           .imageContainer {
             height: 40px;
@@ -132,68 +134,109 @@
         }
 
         .chatsMain {
-          background-color: palegreen;
+          background-color: #000;
           height: 80%;
           width: 100%;
           overflow-y: auto;
           display: flex;
           flex-direction: column;
 
-          .singleMsg {
-            padding: 1em 0.5em;
+          .fromTime{
+            align-self: flex-end;
+            display: flex;
+            flex-direction: column ;
+            gap:12px;
+          }
+
+          .toTime{
+            align-self: flex-start;
+            display: flex;
+            flex-direction: column ;
+            gap:12px;
+          }
+
+          .chatTime{
+            color: grey;
             margin: 1em;
-            background-color: $skeletonFeed;
-            color: #fff;
-            max-width: 65%;
+            margin-top: -0.5em;
+            background-color: transparent;
+            font-family: var(--f-slate-medium);
+          }
+
+          .singleMsg {
+            padding: 1em;
+            margin: 1em;
+            background-color: #ffffff;
+            color: #000;
+            display: flex;
+            flex-direction: column;
+            gap:24px;
+            max-width: 75%;
             min-width: 220px;
+            font-family: var(--f-slate-medium);
           }
           .fromUser {
             align-self: flex-end;
+            display: flex;
+            flex-direction: column ;
+            gap:12px;
+            border-radius: 24px 24px 0px 24px;
+            background-color: #DAC195;
+            color: #000000;
           }
           .toUser {
             align-self: flex-start;
+            display: flex;
+            flex-direction: column ;
+            gap:12px;
+            border-radius: 24px 24px 24px 0px;
+            background-color: #ffffff;
+            color: #000000;
           }
         }
 
         .inputBar {
-          height: 10%;
+          height: 15%;
           width: 100%;
           padding: 0.5em 0.875em;
           display: flex;
           align-items: center;
-          background: var(--clr-black-3);
+          background: #000000;
+          font-family: var(--f-slate-medium);
           .iconContainer {
             display: flex;
             align-items: center;
             margin-right: 1em;
             button {
-              color: var(--clr-gray-2);
+              color:  #ffffff;
             }
           }
           .inputContainer {
             display: flex;
             flex: 1;
+            height: auto;
 
             .inputMsg {
-              padding: 0.75em;
+              padding: 1em;
               width: 100%;
               border: none;
               outline: none;
-              border-radius: 8px;
+              // border: 1px solid white;
+              // border-radius: 8px;
               letter-spacing: 1.12px;
-              background-color: var(--clr-gray-3);
+              background-color: #000000;
               color: var(--clr-white);
-              font-family: var(--f-circ-pro);
+              font-family: var(--f-slate-medium);
 
               &::placeholder {
-                color: var(--clr-gray-2);
+                color: #ffffff;
               }
             }
 
             .sendMsgBtn {
               margin-left: 1em;
               border: none;
-              color: var(--clr-gray-2);
+              color:  #ffffff;
             }
           }
         }

@@ -25,10 +25,10 @@ const Chats = ({ setShowChat, selected_chat_id }) => {
 
   return (
     <div className="requests-Wrapper">
-      <p className="request-title">RECENT MATCHES</p>
+      {/* <p className="request-title">RECENT MATCHES</p>
       <div className="image-header">
         <img src={songRequestImage} alt="chat with matches" />
-      </div>
+      </div> */}
       <p className="request-title">CONVERSATIONS</p>
       <ul>
         {chats.map((item, i) => {

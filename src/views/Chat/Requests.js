@@ -30,9 +30,9 @@ const Requests = () => {
 
   return (
     <div className="requests-Wrapper">
-      <div className="image-header">
+      {/* <div className="image-header">
         <img src={songRequestImage} alt="song requests" />
-      </div>
+      </div> */}
       <p className="request-title">WAITING FOR YOU TO LISTEN</p>
       <ul>
         {requests.map((req, i) => (

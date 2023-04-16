@@ -3,7 +3,7 @@ import { useRecoilValue } from "recoil";
 import { useSocket } from "../../context/socketContext";
 import { userState } from "../../recoil/userAtom";
 import { axiosInstance } from "../../util/axiosConfig";
-import { BsArrowLeftShort } from "react-icons/bs";
+import { BsArrowLeftShort, BsMusicPlayer } from "react-icons/bs";
 import moment from "moment";
 import { FaSmile } from "react-icons/fa";
 import { BsMusicNoteList } from "react-icons/bs";
@@ -175,6 +175,7 @@ const ChatWindow = ({ isDesktop, setShowChat }) => {
 
           return (
             <React.Fragment key={msg.created_at}>
+              <>
               <div
                 //key={msg.created_at}
                 className={`${
@@ -183,15 +184,17 @@ const ChatWindow = ({ isDesktop, setShowChat }) => {
               >
                 {/* {msg.type === "song" ? msg.content.name : msg.content.message} */}
                 {displayMessage(msg)}
-                <p>{moment(msg.created_at).format("LT")}</p>
               </div>
-              {hasDayChanged && <div>Day change hua</div>}
+              <p className={`${msg.from_id === userId ? "fromTime" : "toTime"
+                } chatTime `}>{moment(msg.created_at).format("LT")}</p>
+              {/* {hasDayChanged && <div>{}</div>} */}
+              </>
             </React.Fragment>
           );
         })}
       </div>
       <div className="inputBar">
-        <div className="iconContainer">
+        {/* <div className="iconContainer">
           <button
             onClick={() => {
               setShowEmojiPicker((prev) => !prev);
@@ -200,7 +203,7 @@ const ChatWindow = ({ isDesktop, setShowChat }) => {
           >
             <FaSmile size={20} />
           </button>
-        </div>
+        </div> */}
         <div className="iconContainer">
           <button
             onClick={() => {
@@ -208,7 +211,7 @@ const ChatWindow = ({ isDesktop, setShowChat }) => {
             }}
             className="audioBtn"
           >
-            <BsMusicNoteList size={20} />
+            <BsMusicPlayer size={20} />
           </button>
         </div>
         <form className="inputContainer" onSubmit={sendMessage}>

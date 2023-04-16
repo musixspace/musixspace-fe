@@ -31,6 +31,7 @@ const themeSwitch = (str) => {
     case "/insights":
       return "nav-insights";
     case "/chat":
+      return "nav-transparent";
     case "/discover":
     case "/rolling":
       return "nav-discover";
@@ -44,6 +45,7 @@ const loggedInLinks = [
   { name: "Insights", path: "/insights" },
   { name: "Feed", path: "/feed" },
   { name: "Discover", path: "/discover" },
+  { name: "Inbox", path:"/chat"},
   { name: "My Space", path: "/myspace" },
   // { name: "Discord", path: "/discord" },
 ];

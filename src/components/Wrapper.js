@@ -24,6 +24,7 @@ const themeSwitch = (str) => {
     case "/insights":
       return "--bg-insights";
     case "/chat":
+      return "--bg-match";
     case "/discover":
     case "/rolling":
     case String(str.match(/.*feed.*/)):

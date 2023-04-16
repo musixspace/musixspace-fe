@@ -16,7 +16,7 @@ const Chat = (props) => {
 
   useEffect(() => {
     if (selected_chat_id === "req") {
-      setTab(1);
+      setTab(0);
     }
   }, [selected_chat_id]);
 
@@ -60,7 +60,7 @@ const Chat = (props) => {
               </div>
             </div>
           )}
-          :{" "}
+          :{""}
           {(showChat || isDesktop) && (
             <div className="chatWindow">
               {selectedChat && (

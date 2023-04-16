@@ -30,23 +30,29 @@
           white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;
-          color: var(--clr-white);
+          color: #DAC195;
           font-size: calc(var(--base-font-size) * 2.125);
           line-height: 1.5;
+          font-family: var(--f-slate-medium);
         }
       }
 
       div:nth-child(2) {
         max-width: 15ch;
         p {
-          color: var(--clr-black-4);
+          color: #DAC195;
           font-size: calc(var(--base-font-size) * 2);
           white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;
-          font-family: var(--f-circ-pro);
+          font-family: var(--f-slate-medium);
         }
       }
+    }
+
+    &.selected-chat {
+      // background: var(--clr-hover);
+      color: #DAC195;
     }
   }
 
@@ -60,14 +66,14 @@
 
     height: 100%;
     p:nth-child(1) {
-      color: var(--clr-black-4);
+      color: #DAC195;
       font-size: calc(var(--base-font-size) * 2);
-      font-family: var(--f-circ-pro);
+      font-family: var(--f-slate-medium);
     }
     p:nth-child(2) {
-      color: var(--clr-white);
+      color: #DAC195;
       font-size: calc(var(--base-font-size) * 1.4);
-      font-family: var(--f-circ-pro);
+      font-family: var(--f-slate-medium);
       height: 22px;
       width: 22px;
       border-radius: 50%;
@@ -84,7 +90,8 @@
   }
 
   &.selected-chat {
-    background: var(--clr-hover);
+    // background: var(--clr-hover);
+    color: #DAC195;
   }
 }
 
