@@ -60,7 +60,7 @@ const Wrapper = (props) => {
       ) : (
         props.children
       )}
-      <BottomNav />
+      {(location.pathname !=='/readytorock' || location.pathname !=='/rolling') ? <BottomNav /> : null}
       <Alert />
     </div>
   );
