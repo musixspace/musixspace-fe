@@ -36,9 +36,8 @@ const Intro = ({
       "handle"
     )}-profile-${generateRandomString(5)}`;
     const config = {
-      bucketName: "musixspace",
-      dirName: "users",
-      region: "us-east-2",
+      bucketName: "musixspace-dev",
+      region: "ap-south-1",
       accessKeyId: process.env.REACT_APP_AWS_ACCESS_KEY_ID,
       secretAccessKey: process.env.REACT_APP_SECRET_ACCESS_KEY,
     };
@@ -50,6 +49,7 @@ const Intro = ({
     });
 
     const ReactS3Client = new S3(config);
+    console.log(ReactS3Client);
     ReactS3Client.uploadFile(file, fileName).then((data) => {
       if (data.status === 204) {
         console.log(data);
