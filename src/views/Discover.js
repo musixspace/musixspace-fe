@@ -53,6 +53,7 @@ const Discover = () => {
       );
     }
   }, [audioUrl]);
+  
 
   useEffect(() => {
     if (touch.start && touch.end) {
@@ -143,6 +144,7 @@ const Discover = () => {
       common_arr: common_arr,
     };
     setUser({ ...payload });
+    setAudioUrl(payload.anthem.preview_url);
   };
 
   const handleViewProfile = () => {

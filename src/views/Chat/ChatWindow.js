@@ -73,7 +73,7 @@ const ChatWindow = ({ isDesktop, setShowChat }) => {
 
   const sendMessage = (e) => {
     e.preventDefault();
-    if (socketContext.socket) {
+    if (socketContext.socket && value.length>0) {
       const newMessage = {
         created_at: Date.now(),
         content: { message: value },
@@ -86,6 +86,7 @@ const ChatWindow = ({ isDesktop, setShowChat }) => {
       });
       setMessages((prev) => [...prev, { ...newMessage, from_id: userId }]);
       updateLastMessageForChat(newMessage, chat_id);
+      setValue("");
     }
   };
 

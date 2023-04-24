@@ -1,5 +1,5 @@
 import React from "react";
-import { FiHome, FiMessageSquare, FiSearch, FiUser } from "react-icons/fi";
+import { FiHome, FiMessageSquare, FiPlayCircle, FiSearch, FiUser } from "react-icons/fi";
 import { Link, useLocation } from "react-router-dom";
 
 const themeSwitch = (str) => {
@@ -41,13 +41,19 @@ const BottomNav = () => {
           to="/feed"
           className={location.pathname === "/feed" ? "selected" : ""}
         >
-          <FiMessageSquare />
+          <FiPlayCircle/>
         </Link>
         <Link
           to="/discover"
           className={location.pathname === "/discover" ? "selected" : ""}
         >
           <FiSearch />
+        </Link>
+        <Link
+          to="/chat"
+          className={location.pathname === "/chat" ? "selected" : ""}
+        >
+          <FiMessageSquare/>
         </Link>
         <Link
           to={`/${localStorage.getItem("handle")}`}
