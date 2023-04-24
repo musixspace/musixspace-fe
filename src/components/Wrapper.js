@@ -53,7 +53,7 @@ const Wrapper = (props) => {
         backgroundColor: `var(${themeSwitch(location.pathname)})`,
       }}
     >
-      <Navbar />
+      {location.pathname !=="/no_listening_history" ? (<Navbar />) : null}
       {sidebarOpen && <div className="dark-overlay"></div>}
       {loading ? (
         <Loading bg={`${themeSwitch(location.pathname)}`} />

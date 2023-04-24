@@ -1,0 +1,55 @@
+@import "./mixins/d-flex.scss";
+
+.no-data {
+  background-color: black;
+  color: var(--clr-pink);
+  padding: 1em 6em;
+  height: 100vh;
+  overflow-y: scroll;
+  scroll-snap-type: y mandatory;
+  justify-content: center;
+}
+
+@media (max-width: 1256px) {
+  .about {
+    .person {
+      .person-img {
+        > p {
+          display: none;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 776px) {
+  .about {
+    padding: 1em 1em 1em 1.5em;
+
+    .person {
+      flex-direction: column;
+      justify-content: center;
+
+      .content {
+        width: 100%;
+        > p {
+          font-size: calc(var(--base-font-size) * 4);
+        }
+
+        > p:last-child {
+          font-size: calc(var(--base-font-size) * 3);
+        }
+      }
+
+      .person-img {
+        margin-left: 0;
+        gap: 0;
+        width: 100%;
+
+        img {
+          width: 100%;
+        }
+      }
+    }
+  }
+}

@@ -7,15 +7,9 @@ const people = [
   {
     id: 1,
     name: "Amaya Srivastava",
-    position: "Hipster, Rockstar, Design",
+    position: "Music Hacker",
     img: img1,
-  },
-  {
-    id: 2,
-    name: "Ayush Srivastava",
-    position: "Founder",
-    img: img2,
-  },
+  }
 ];
 
 const About = () => {

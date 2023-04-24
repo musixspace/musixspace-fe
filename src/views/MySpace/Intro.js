@@ -176,11 +176,6 @@ const Intro = ({
               <p>{user.username}</p>
               <div className="btn-divs">
                 <SendASong user={user} />
-                {user.username === localStorage.getItem("handle") && (
-                  <div className="button-container">
-                    <button onClick={gotToChat}>Chat</button>
-                  </div>
-                )}
                 {user.username !== localStorage.getItem("handle") && (
                   <div className="button-container">
                     <button onClick={gotToMatch}>Match</button>

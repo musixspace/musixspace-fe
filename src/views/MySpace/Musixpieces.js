@@ -168,7 +168,7 @@ const Musixpieces = ({ handle }) => {
       });
   };
 
-  return posts.length > 0 || showAddPost ? (
+  return posts.length >= 0 || showAddPost ? (
     <div className="feed-container ">
       <p className="title">Musixpieces</p>
       <div className="feed-wrapper">

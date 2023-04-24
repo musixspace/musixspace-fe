@@ -44,8 +44,8 @@ const themeSwitch = (str) => {
 const loggedInLinks = [
   { name: "Insights", path: "/insights" },
   { name: "Feed", path: "/feed" },
-  { name: "Discover", path: "/discover" },
   { name: "Inbox", path:"/chat"},
+  { name: "Discover", path: "/discover" },
   { name: "My Space", path: "/myspace" },
   // { name: "Discord", path: "/discord" },
 ];
@@ -85,11 +85,11 @@ const Navbar = () => {
     };
   }, [showLinks, openProfile]);
 
-  useEffect(() => {
-    if (username || localStorage.getItem("handle")) {
-      loggedInLinks[3].path = `/${username || localStorage.getItem("handle")}`;
-    }
-  }, [username, location.pathname]);
+  // useEffect(() => {
+  //   if (username || localStorage.getItem("handle")) {
+  //     loggedInLinks[3].path = `/${username || localStorage.getItem("handle")}`;
+  //   }
+  // }, [username, location.pathname]);
 
   useEffect(() => {
     console.log("here are the notifications");
@@ -162,9 +162,9 @@ const Navbar = () => {
                 <FiX />
               </div>
             </div>
-            {location.pathname !== "/readytorock" &&
-              location.pathname !== "/rolling" &&
-              loggedInLinks.map((item) => (
+            {/* {location.pathname !== "/readytorock" &&
+              location.pathname !== "/rolling" && */}
+              {loggedInLinks.map((item) => (
                 <li
                   key={item.name}
                   className={`nav-li ${
@@ -194,7 +194,7 @@ const Navbar = () => {
                 {notifications.length > 0 && (
                   <span>{notifications.length}</span>
                 )}
-                <FaRegBell />
+                {/* <FaRegBell /> */}
               </div>
               {openNotification && notifications.length > 0 && (
                 <ul className="profile-ul notification-ul">
@@ -275,7 +275,7 @@ const Navbar = () => {
               }}
             >
               {notifications.length > 0 && <span>{notifications.length}</span>}
-              <FaRegBell />
+              {/* <FaRegBell /> */}
             </div>
             {openNotification && (
               <ul className="profile-ul notification-ul">

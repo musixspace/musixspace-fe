@@ -5,6 +5,7 @@ export default (
     <Switch>
         <Route path='/' />
         <Route path='/about' />
+        <Route path='/no_listening_history' />
         <Route path='/readytorock' />
         <Route path='/rolling' />
         <Route path='/insights' />

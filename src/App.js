@@ -14,6 +14,7 @@ import PrivateRoute from "./routes/PrivateRoute";
 import About from "./views/About";
 import Chat from "./views/Chat/Chat";
 import Discover from "./views/Discover";
+import NoData from "./views/NoData";
 import Feed, { decodeJWT } from "./views/Feed/Feed";
 import IndPost from "./views/Feed/IndPost";
 import Home from "./views/Home";
@@ -212,6 +213,7 @@ const App = () => {
       >
         <Wrapper>
           <Switch>
+            <Route exact path="/no_listening_history" component={NoData} />
             <Route exact path="/readytorock" component={ReadyToRock} />
             <Route exact path="/rolling" component={Rolling} />
             <Route exact path="/" component={Home} />
