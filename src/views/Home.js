@@ -21,7 +21,7 @@ const BetaLanding = () => {
             <BetaImageSlider />
           </div>
           <div className="content-wrapper">
-            <div className="title">Welcome to the Music Metaverse.</div>
+            <div className="title">Welcome to Musixspace.</div>
             <div className="sub">
               A place where your only identity is your taste in music. That's
               what defines you and that's how you connect. Build cross border
