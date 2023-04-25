@@ -31,9 +31,10 @@ const Chats = ({ setShowChat, selected_chat_id }) => {
       </div> */}
       <p className="request-title">CONVERSATIONS</p>
       <ul>
-        {chats.map((item, i) => {
+        {chats.length <=0 ? <p style={{color: '#ffffff',fontStyle:'italic', marginTop: '50%'}}>No conversations in this jukebox, please send a song to start one!</p> : (
+        chats.map((item, i) => {
           return <ChatItemList key={i} chat={item} setShowChat={setShowChat} />;
-        })}
+        }))}
       </ul>
     </div>
   );

@@ -415,7 +415,7 @@ const MySpace = () => {
           editData={editData}
           setEditData={setEditData}
         />
-        {data && data.playlists && (
+        {/* {data && data.playlists && (
           <Playlist
             data={data && data.playlists}
             onLeftClicked={onLeftClicked}
@@ -425,7 +425,7 @@ const MySpace = () => {
             editData={editData}
             setEditData={setEditData}
           />
-        )}
+        )} */}
         {handle && <Musixpieces handle={handle} />}
         {currentSong.audioUrl && (
           <WebPlayer
