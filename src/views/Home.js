@@ -1,8 +1,8 @@
 import React from "react";
 import { FaSpotify } from "react-icons/fa";
-import banner1 from "../assets/images/banner1.png";
-import banner2 from "../assets/images/banner2.png";
-import banner3 from "../assets/images/banner3.png";
+import banner1 from "../assets/images/banner1.svg";
+import banner2 from "../assets/images/banner2.svg";
+import banner3 from "../assets/images/banner3.svg";
 import BetaImageSlider from "../components/BetaImageSlider";
 import CustomHelmet from "../components/CustomHelmet";
 import { loginUrl } from "../util/spotify";
@@ -56,7 +56,7 @@ const BetaLanding = () => {
             </div>
           </div>
           <div className="image-container">
-            <img src={banner3} alt="Banner 1" />
+            <img src={banner1} alt="Banner 1" />
           </div>
         </div>
         <div className="second-page third-page">
@@ -101,7 +101,7 @@ const BetaLanding = () => {
             </div>
           </div>
           <div className="image-container">
-            <img src={banner1} alt="Banner 2" />
+            <img src={banner3} alt="Banner 2" />
           </div>
         </div>
       </div>
