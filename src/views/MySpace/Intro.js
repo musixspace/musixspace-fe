@@ -101,15 +101,11 @@ const Intro = ({
         {user && user.display_name ? (
           <>
             <img
-              src={
-                edit
-                  ? editData.currentUser.image_url || logo
-                  : user.image_url || logo
-              }
+              src={user.image_url || logo}
               alt={`${user.display_name.split(" ")[0]}'s Image'`}
             />
 
-            {edit && (
+            {/* {edit && (
               <div className="uploadContainer">
                 <input
                   type="file"
@@ -122,7 +118,7 @@ const Intro = ({
                   <span>Upload Image</span>
                 </div>
               </div>
-            )}
+            )} */}
           </>
         ) : (
           <Skeleton type="text" />
