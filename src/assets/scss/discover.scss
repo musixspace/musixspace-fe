@@ -5,6 +5,7 @@
 .discover-container {
   margin-top: 10vh;
   height: 90vh;
+  margin-bottom: 5vh;
   padding: 1em 6em;
   font-family: var(--f-circ-pro);
   color: var(--clr-white);
@@ -344,8 +345,8 @@
             }
 
             .common {
-              margin-top: 1em;
               text-align: center;
+              align-self: center;
             }
 
             .skeleton {
@@ -489,7 +490,7 @@
 @media (max-width: 776px) {
   .discover-container {
     padding: 1em 1.5em;
-    height: 85vh;
+    height: 100vh;
   }
 }
 

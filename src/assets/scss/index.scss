@@ -75,7 +75,8 @@
 
   /* Fonts */
   --f-circ-spotify-bold: "Circular Spotify Tx T Bold", sans-serif;
-  --f-circ-spotify: "Circular Spotify Tx T Black", sans-serif;
+  --f-circ-spotify: "Circular Spotify Tx T Bold", sans-serif;
+  --f-circ-spotify-medium: "Circular Std Medium Regular", sans-serif;
   --f-circ-pro: "Circular Std Medium Regular", sans-serif;
   --f-slate-regular: "Slate Regular, sans-serif";
   --f-slate-medium : "Slate Medium";
@@ -100,6 +101,8 @@ body {
   font-family: var(--f-circ-spotify);
   font-weight: normal;
   font-size: calc(var(--base-font-size) * 2);
+  overflow: auto;
+  height: 100%;
   // overflow-y: scroll;
   // scroll-snap-type: y mandatory;
 }

@@ -1,3 +1,4 @@
+import { BsHeart } from "react-icons/bs";
 import logo from "../assets/images/logo-black.png";
 const Audio = ({ image_url, name, artists, preview_url }) => {
   return (

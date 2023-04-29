@@ -31,7 +31,7 @@ const themeSwitch = (str) => {
     case "/insights":
       return "nav-insights";
     case "/chat":
-      return "nav-transparent";
+      return "nav-match";
     case "/discover":
     case "/rolling":
       return "nav-discover";

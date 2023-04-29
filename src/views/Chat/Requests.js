@@ -3,6 +3,8 @@ import RequestListItem from "../../components/RequestListItem";
 import { useChat } from "../../context/chatContext";
 import { useSocket } from "../../context/socketContext";
 import { axiosInstance } from "../../util/axiosConfig";
+import { BsX } from "react-icons/bs";
+
 import songRequestImage from "../../assets/images/song-request.png";
 
 const Requests = () => {

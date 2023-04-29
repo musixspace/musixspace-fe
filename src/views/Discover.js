@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
+import { useWindowSize } from "../hooks/useWindowDimensions";
 import { AiFillCaretRight, AiOutlinePause } from "react-icons/ai";
 import { FiSearch, FiSkipBack, FiSkipForward, FiX } from "react-icons/fi";
 import logo from "../assets/images/logo-black.png";
@@ -28,6 +29,12 @@ const Discover = () => {
     start: null,
     end: null,
   });
+
+  const { width } = useWindowSize();
+
+  const isDesktop = useMemo(() => {
+    return width > 976;
+  }, [width]);
 
   useEffect(() => {
     stopAudio();
@@ -337,6 +344,7 @@ const Discover = () => {
                           <div className="title">{user.firstname} X You</div>
                           <div className="list">
                             {user.common_arr.map((item) => (
+                              <>
                               <div key={item.name} className="artist">
                                 <div>
                                   <img
@@ -346,11 +354,12 @@ const Discover = () => {
                                 </div>
                                 <span>{item.name}</span>
                               </div>
+                              </>
                             ))}
-                          </div>
-                          <div className="common">
-                            {user.total > 0 &&
-                              `+${user.total} common interests`}
+                            <div className="common">
+                                {user.total > 0 &&
+                                  `+${user.total} common interests`}
+                            </div>
                           </div>
                         </>
                       )

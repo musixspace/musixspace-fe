@@ -33,7 +33,7 @@
           color: #DAC195;
           font-size: calc(var(--base-font-size) * 2.125);
           line-height: 1.5;
-          font-family: var(--f-slate-medium);
+          font-family: var(--f-circ-spotify-medium);
         }
       }
 
@@ -45,7 +45,7 @@
           white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;
-          font-family: var(--f-slate-medium);
+          font-family: var(---f-circ-spotify-medium);
         }
       }
     }
@@ -68,12 +68,12 @@
     p:nth-child(1) {
       color: #DAC195;
       font-size: calc(var(--base-font-size) * 2);
-      font-family: var(--f-slate-medium);
+      font-family: var(--f-circ-spotify-medium);
     }
     p:nth-child(2) {
       color: #DAC195;
       font-size: calc(var(--base-font-size) * 1.4);
-      font-family: var(--f-slate-medium);
+      font-family: var(--f-circ-spotify-medium);
       height: 22px;
       width: 22px;
       border-radius: 50%;

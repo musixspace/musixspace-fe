@@ -3,14 +3,16 @@ import { useRecoilValue } from "recoil";
 import { useSocket } from "../../context/socketContext";
 import { userState } from "../../recoil/userAtom";
 import { axiosInstance } from "../../util/axiosConfig";
-import { BsArrowLeftShort, BsMusicPlayer } from "react-icons/bs";
+import { BsArrowLeft, BsArrowLeftShort, BsMusicPlayer } from "react-icons/bs";
 import moment from "moment";
 import { FaSmile } from "react-icons/fa";
 import { BsMusicNoteList } from "react-icons/bs";
+import { BsX } from "react-icons/bs";
 import { IoMdSend } from "react-icons/io";
 import AddSongModal from "../MySpace/AddItemModal";
 import Audio from "../../components/Audio";
 import { useChat } from "../../context/chatContext";
+import {IoIosArrowBack} from "react-icons/io";
 
 const ChatWindow = ({ isDesktop, setShowChat }) => {
   const [messages, setMessages] = useState([]);
@@ -63,6 +65,7 @@ const ChatWindow = ({ isDesktop, setShowChat }) => {
         const resp = await axiosInstance.get(
           `/chat/messages/${chat_id}/${pageId}`
         );
+        console.log("resp", resp);
         const arr = resp.data.reverse();
         setMessages((prev) => {
           return [...arr, ...prev];
@@ -147,7 +150,7 @@ const ChatWindow = ({ isDesktop, setShowChat }) => {
               setSelectedChat(null);
             }}
           >
-            <BsArrowLeftShort />
+            <IoIosArrowBack size={20} color="white" style={{marginRight:"12px"}} />
           </button>
         )}
         <div className="imageContainer">

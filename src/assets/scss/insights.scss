@@ -1,8 +1,8 @@
 @import "./mixins/d-flex.scss";
 
 .insights {
-  height: 90vh;
   margin-top: 10vh;
+  height: 90vh;
   @include d-flex(center, center, row);
   padding: 1em 6em;
 
@@ -74,7 +74,7 @@
   }
 
   @media (max-width: 776px) {
-    height: 84vh;
+    height: 100vh;
   }
 
   @media (max-width: 576px) {
