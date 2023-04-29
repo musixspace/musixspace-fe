@@ -60,7 +60,7 @@ const Wrapper = (props) => {
       ) : (
         props.children
       )}
-      {(location.pathname !=='/readytorock' || location.pathname !=='/rolling') ? <BottomNav /> : null}
+      {(location.pathname !=='/readytorock' || location.pathname !=='/rolling' || location.pathname !=='/chat' ) ? <BottomNav /> : null}
       <Alert />
     </div>
   );
