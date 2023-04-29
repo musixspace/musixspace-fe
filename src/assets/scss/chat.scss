@@ -140,7 +140,7 @@
               width: 100%;
               object-fit: cover;
               border-radius: 12px;
-              border: transparent;
+              border: tr;
             }
           }
         }
@@ -287,8 +287,8 @@
     height: 101vh;
 
     .chatWrapper{
-      position: fixed;
-      height: 68vh;
+      position: relative;
+      height: 83vh;
     }
 
     .chatsMain{
