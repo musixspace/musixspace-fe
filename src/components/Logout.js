@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useHistory } from "react-router";
+import { useHistory } from "react-router-dom";
 import { useResetRecoilState, useSetRecoilState } from "recoil";
 import { alertAtom } from "../recoil/alertAtom";
 import { loadingAtom } from "../recoil/loadingAtom";

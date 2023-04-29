@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { FiChevronDown } from "react-icons/fi";
-import { useParams } from "react-router";
+import { useParams } from "react-router-dom";
 import logo from "../assets/images/logo-black.png";
 import { axiosInstance } from "../util/axiosConfig";
 import { AiFillCaretRight, AiOutlinePause } from "react-icons/ai";

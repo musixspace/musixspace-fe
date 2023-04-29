@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useLocation } from "react-router";
+import { useLocation } from "react-router-dom";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { loadingAtom } from "../recoil/loadingAtom";
 import { openSidebarAtom } from "../recoil/openSidebarAtom";

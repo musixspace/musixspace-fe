@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { IoMdClose } from "react-icons/io";
 import { MdEdit, MdSave } from "react-icons/md";
-import { useParams } from "react-router";
+import { useParams } from "react-router-dom";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import CustomHelmet from "../../components/CustomHelmet";
 import WebPlayer from "../../components/WebPlayer";

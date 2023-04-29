@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { FiCheck } from "react-icons/fi";
-import { useHistory } from "react-router";
+import { useHistory } from "react-router-dom";
 import ambivert from "../assets/images/bgs/ambi.png";
 import easy from "../assets/images/bgs/easy.png";
 import extrovert from "../assets/images/bgs/extrovert.png";

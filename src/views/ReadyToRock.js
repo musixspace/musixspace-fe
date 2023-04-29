@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { FaMusic } from "react-icons/fa";
 import { GoMail, GoPencil } from "react-icons/go";
-import { useHistory, withRouter } from "react-router";
+import { useHistory, withRouter } from "react-router-dom";
 import useDebounceCallback from "../hooks/useDebounce";
 import { axiosInstance } from "../util/axiosConfig";
 import { useSetRecoilState } from "recoil";
