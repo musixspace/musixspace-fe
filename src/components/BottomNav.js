@@ -36,24 +36,28 @@ const BottomNav = () => {
           className={location.pathname === "/insights" ? "selected" : ""}
         >
           <FiHome />
+          <p >Insights</p>
         </Link>
         <Link
           to="/feed"
           className={location.pathname === "/feed" ? "selected" : ""}
         >
           <FiPlayCircle/>
+          <p >Feed</p>
         </Link>
         <Link
           to="/discover"
           className={location.pathname === "/discover" ? "selected" : ""}
         >
           <FiSearch />
+          <p >Discovery</p>
         </Link>
         <Link
           to="/chat"
           className={location.pathname === "/chat" ? "selected" : ""}
         >
           <FiMessageSquare/>
+          <p >Inbox</p>
         </Link>
         <Link
           to={`/${localStorage.getItem("handle")}`}
@@ -64,6 +68,7 @@ const BottomNav = () => {
           }
         >
           <FiUser />
+          <p >My Space</p>
         </Link>
       </ul>
     </nav>

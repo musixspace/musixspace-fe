@@ -66,11 +66,21 @@
   > ul > a > svg {
     color: var(--clr-dark-blue);
   }
+
+  > ul > a > p {
+    margin-top: 6px;
+    color: var(--clr-dark-blue);
+  }
 }
 
 .bottom-nav-discover {
   background-color: $skeletonDiscover;
   > ul > a > svg {
+    color: var(--clr-white);
+  }
+
+  > ul > a > p {
+    margin-top: 6px;
     color: var(--clr-white);
   }
 }
@@ -80,11 +90,22 @@
   > ul > a > svg {
     color: var(--clr-pink);
   }
+
+  > ul > a > p {
+    margin-top: 6px;
+    color: var(--clr-pink);
+  }
+
 }
 
 .bottom-nav-feed {
   background-color: $skeletonFeed;
   > ul > a > svg {
+    color: var(--clr-white);
+  }
+
+  > ul > a > p {
+    margin-top: 6px;
     color: var(--clr-white);
   }
 }
