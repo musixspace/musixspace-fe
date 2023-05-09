@@ -38,7 +38,7 @@ const useAuth = (code) => {
             console.log(window.location.origin);
             window.location.href = window.location.origin + "/readytorock";
           } else {
-            window.location.href = window.location.origin + "/"+response.data.handle;
+            window.location.href = window.location.origin + "/discover";
           }
           setLoading(false);
         })
